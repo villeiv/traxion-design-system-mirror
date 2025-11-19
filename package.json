@@ -13,6 +13,6 @@
   "license": "ISC",
   "description": "",
   "publishConfig": {
-    "@YOUR-USERNAME:registry": "https://npm.pkg.github.com"
+    "@traxion-global:registry": "https://npm.pkg.github.com"
   }
 }
