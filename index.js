@@ -1,1 +1,1 @@
-console.log("Hello, World! version 0.0.4");
+export const dsVersion = "0.0.5";
