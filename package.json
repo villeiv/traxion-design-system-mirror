@@ -1,15 +1,27 @@
 {
   "name": "@traxion-global/design-system",
   "version": "0.0.9",
+  "description": "Design system de Traxion",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./tailwind-preset": "./dist/tailwind-preset.cjs",
+    "./theme.css": "./dist/theme.css",
+    "./tokens.json": "./dist/tokens.json"
+  },
   "files": [
     "dist"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "dist/theme.css"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts && node scripts/copy-extras.js",
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit",
     "test": "exit 0"
@@ -20,7 +32,6 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "Design system de Traxion",
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
