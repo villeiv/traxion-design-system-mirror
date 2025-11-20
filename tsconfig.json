@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    // Para generar tipos correctos
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "declarationMap": false,
+    // Resolución moderna
+    "moduleResolution": "Bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    // Paths relativos limpios
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    // Buen soporte de JSX React
+    "jsx": "react-jsx",
+    // Salida (tsup se encarga de generar dist)
+    "outDir": "dist",
+    // Evitar sorpresas
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    // Esto es importante para que tsup funcione sin problemas
+    "noEmit": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

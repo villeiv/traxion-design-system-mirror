@@ -1,3 +1,3 @@
 export const dsVersion = "0.0.5";
 
-export { Button } from "src/Button";
+export { Button } from "design-system/src/components/Button";
