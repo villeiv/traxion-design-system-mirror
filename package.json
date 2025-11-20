@@ -1,6 +1,6 @@
 {
   "name": "@traxion-global/design-system",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Design system de Traxion",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
