@@ -1,20 +1,27 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@repo/typescript-config/react-library.json",
+
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    /* Browser + Vite */
+    "types": ["vite/client", "node"],
+
+    /* Always no-emit for Storybook/Vite workspaces */
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    /* Optional lint-like TS rules (you can remove them if ESLint handles it) */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "erasableSyntaxOnly": true
   },
+
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "next-env.d.ts",
-    "next.config.js",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
+    "src",
+    ".storybook",
+    "vite.config.ts"
   ]
 }

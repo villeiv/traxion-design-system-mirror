@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Storybook – Documentation Workspace
 
-## Getting Started
+Este workspace contiene la instancia de Storybook utilizada para documentar y visualizar los componentes del Design System del monorepo. Su propósito es ofrecer un entorno aislado para desarrollar, revisar y documentar UI sin depender de aplicaciones de producción.
 
-First, run the development server:
+---
+
+## Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run storybook      # Inicia Storybook en modo desarrollo
+npm run build-storybook # Genera la versión estática en /storybook-static
+npm run lint            # Ejecuta ESLint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estructura
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+```
+apps/docs/
+ ├─ .storybook/        # Configuración de Storybook
+ ├─ src/stories/       # Historias y documentación en MDX
+ ├─ tsconfig.json      # Configuración TypeScript integrada con el monorepo
+ ├─ eslint.config.mjs  # Extiende la configuración ESLint del monorepo
+ └─ package.json
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Integración con el Design System
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Este workspace consume el paquete del Design System vía workspaces:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```json
+"dependencies": {
+  "@traxion-global/design-system": "workspace:*"
+}
+```
 
-## Deploy on Vercel
+Los componentes pueden importarse desde las historias, por ejemplo:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```tsx
+import { Button } from "@traxion-global/design-system/button";
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## TypeScript
+
+El archivo `tsconfig.json` extiende la configuración compartida:
+
+```json
+"extends": "@repo/typescript-config/react-library.json"
+```
+
+Incluye los ajustes necesarios para Vite y Storybook, así como compatibilidad con entornos de navegador y Node.
+
+---
+
+## ESLint
+
+La configuración (`eslint.config.mjs`) extiende la configuración interna del monorepo y añade reglas específicas de Storybook para archivos `.stories.*` y `.storybook/**`.
+
+---
+
+## Notas
+
+- Este workspace no es una aplicación de producción.
+- No utiliza Vite como aplicación; únicamente como builder interno de Storybook.

@@ -29,11 +29,18 @@ dist
 
 
 # Debug
+logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # Misc
 .DS_Store
 *.pem
 .idea/
+*storybook.log
+storybook-static
+.vscode/*
+!.vscode/extensions.json
