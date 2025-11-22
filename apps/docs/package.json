@@ -11,8 +11,8 @@
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "@traxion-global/design-system": "workspace:*",
-    "@repo/typescript-config": "workspace:*"
+    "@traxion-global/design-system": "*",
+    "@repo/typescript-config": "*"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.3",
