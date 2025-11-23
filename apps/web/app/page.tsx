@@ -1,6 +1,7 @@
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
+import { Button as ButtonDS } from "@traxion-global/design-system";
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -66,6 +67,7 @@ export default function Home() {
         <Button appName="web" className={styles.secondary}>
           Open alert
         </Button>
+        <ButtonDS>Button from ds</ButtonDS>
       </main>
       <footer className={styles.footer}>
         <a
