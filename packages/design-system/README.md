@@ -50,6 +50,7 @@ El proyecto debe cumplir:
 - Tener Tailwind CSS `^3.4` correctamente configurado según la documentación oficial.
 - Tener instalado `tailwindcss-animate`.
 - Tener un archivo de estilos global (por ejemplo `app/globals.css` en Next.js o `src/index.css` en React).
+- Tener instalada la librería de iconos `lucide-react`. Algunos componentes del Design System dependen de estos iconos y se recomienda su uso generalizado.
 
 Nota sobre PostCSS y Autoprefixer:
 - El Design System en sí no depende directamente de PostCSS ni Autoprefixer.
