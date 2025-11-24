@@ -67,7 +67,18 @@ export default function Home() {
         <Button appName="web" className={styles.secondary}>
           Open alert
         </Button>
-        <ButtonDS>Button from ds</ButtonDS>
+        <ButtonDS >Button from ds</ButtonDS>
+        <div className="bg-red-500 text-white p-4 rounded">
+          Test Tailwind
+        </div>
+        <div className="p-4 space-y-4">
+          <div className="bg-primary text-primary-foreground p-4 rounded-lg">
+            bg-primary / text-primary-foreground
+          </div>
+          <div className="bg-background text-foreground border border-border p-4 rounded-lg">
+            background / foreground / border
+          </div>
+        </div>
       </main>
       <footer className={styles.footer}>
         <a
