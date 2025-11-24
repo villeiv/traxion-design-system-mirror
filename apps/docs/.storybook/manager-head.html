@@ -1,0 +1,32 @@
+<!-- .storybook/manager-head.html -->
+<style>
+    /* color de svg en el menu lateral */
+    nav[aria-label="Global"] svg {
+        color: rgb(83, 86, 90);
+        fill: currentColor;
+    }
+    /* Oculta el botón "Create a new story" en el header de la barra lateral */
+    [data-testid="sidebar-header"] button[title*="Create"],
+    nav[aria-label="Storybook"] button[title*="Create"],
+    button[aria-label="Create a new story"],
+    [data-action="create-story"],
+    [data-testid="create-story-button"] {
+        display: none !important;
+    }
+    /* Oculta el botón de Settings en la toolbar */
+    /* Varias heurísticas, por si cambia el atributo según la versión */
+    button[title*="Shortcuts"],
+    button[title*="Settings"],
+    button[aria-label*="Settings"],
+    [data-action="settings"],
+    [data-testid="settings"] {
+        display: none !important;
+    }
+
+    /* Si además aparece en el header del sidebar (menú de tres puntos) */
+    [data-testid="sidebar-header"] [aria-label*="Settings"],
+    [data-testid="sidebar-header"] [title*="Settings"],
+    [data-testid="sidebar-header"] [title*="Shortcuts"]{
+        display: none !important;
+    }
+</style>

@@ -2,7 +2,6 @@
 import React from "react";
 import { Button, Card, CardDescription, CardHeader } from "@traxion-global/design-system";
 import {Plus, Mail} from "lucide-react";
-import {fn} from "storybook/test";
 
 function WithIconAndTextDecorator(Story, context){
 
