@@ -22,6 +22,8 @@
     "jsx": "react-jsx",
     // Salida (tsup se encarga de generar dist)
     "outDir": "dist",
+    // Raíz clara del proyecto (evita TS2209)
+    "rootDir": "src",
     // Evitar sorpresas
     "strict": true,
     "forceConsistentCasingInFileNames": true,
