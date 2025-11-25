@@ -4,6 +4,7 @@ import {
     toast as sonnerToast,
     type ToasterProps as SonnerToasterProps,
 } from "sonner";
+import {CheckCircle, Info, Loader2, OctagonX, TriangleAlert} from "lucide-react";
 
 export type ToastPosition =
     | "top-left"
@@ -27,6 +28,13 @@ export function Toaster({ position = "top-right", closeButton = true }: ToasterP
         <SonnerToaster
             position={position as SonnerToasterProps["position"]}
             closeButton={closeButton}
+            icons={{
+                success: <CheckCircle className="size-4" />,
+                error: <OctagonX className="size-4" />,
+                warning: <TriangleAlert className="size-4" />,
+                info: <Info className="size-4" />,
+                loading: <Loader2 className="size-4 animate-spin" />,
+            }}
         />
     )
 }
@@ -49,8 +57,8 @@ export const toast: { success: ToastFn, error: ToastFn, info: ToastFn, warning: 
         sonnerToast.error(message, { description }),
 
     info: (message, description) =>
-        sonnerToast(message, { description }),
+        sonnerToast.info(message, { description }),
 
     warning: (message, description) =>
-        sonnerToast(message, { description }),
+        sonnerToast.warning(message, { description }),
 }
