@@ -1,0 +1,210 @@
+import * as React from "react";
+import {Calendar} from "@traxion-global/design-system";
+import {es, enUS} from "date-fns/locale";
+import CalendarRange from "./sources/Calendar.range";
+import CalendarRangeCode from "./sources/Calendar.range?raw";
+import CalendarWithTodayButton from "./sources/Calendar.withTodayButton";
+import CalendarWithTodayButtonCode from "./sources/Calendar.withTodayButton?raw";
+import CalendarInputForm from "./sources/Calendar.inputForm";
+import CalendarInputFormCode from "./sources/Calendar.inputForm?raw";
+import CalendarBookedDays from "./sources/Calendar.bookedDays";
+import CalendarBookedDaysCode from "./sources/Calendar.bookedDays?raw";
+
+const meta = {
+    title: "Calendar",
+    component: Calendar,
+    tags: ["autodocs"],
+    parameters: {
+        docs:{
+            description: {
+                component: "Componente de calendario para seleccionar fechas, con soporte para selección única, múltiple o por rangos. Incluye opciones de personalización y localización."
+            }
+        }
+    },
+    argTypes: {
+        buttonVariant: {
+            control: {type: "select"},
+            options: ["default", "ghost", "link", "outline", "secondary", "destructive"],
+            table: {category: "Customization"},
+            description: "Variante visual de los botones de navegación del calendario."
+        },
+        mode: {
+            control: {type: "radio"},
+            options: ["single", "multiple", "range"],
+            description: "Modo de selección.",
+            table: {category: "Selection"},
+        },
+        startMonth: {control: "date", description: "Primer mes navegable.", table: {category: "Navigation"}},
+        endMonth: {control: "date", description: "Último mes navegable.", table: {category: "Navigation"}},
+        numberOfMonths: {
+            control: {type: "number", min: 1, max: 12},
+            table: {category: "Navigation"},
+            description: "Cantidad de meses visibles simultáneamente."
+        },
+        weekStartsOn: {
+            control: {type: "select"},
+            options: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            mapping: {"Domingo": 0, "Lunes": 1, "Martes": 2, "Miércoles": 3, "Jueves": 4, "Viernes": 5, "Sábado": 6},
+            table: {category: "Localization"},
+            description: "Día en que inicia la semana."
+        },
+        showOutsideDays: {
+            control: "boolean",
+            table: {category: "Customization"},
+            description: "Muestra días del mes anterior/siguiente dentro de la cuadrícula."
+        },
+        hideNavigation: {
+            control: "boolean",
+            table: {category: "Navigation"},
+            description: "Oculta los controles de navegación (prev/next/selector)."
+        },
+        captionLayout: {
+            control: {type: "select"},
+            options: ["label", "dropdown", "dropdown-months", "dropdown-years"],
+            table: {category: "Navigation"},
+            description: "Diseño del encabezado para mostrar/navegar mes y año."
+        },
+        disabled: {
+            control: {type: "select"},
+            options: [
+                "No deshabilitar ninguna fecha",
+                "Ej.: Deshabilitar todas las fechas anteriores a hoy y posteriores a 10 días desde hoy",
+                "Ej.: Deshabilitar el rango desde hoy hasta dentro de 3 días (inclusive)",
+                "Ej.: Deshabilitar todos los domingos y martes"
+            ],
+            mapping: {
+                "No deshabilitar ninguna fecha": undefined,
+                "Ej.: Deshabilitar todas las fechas anteriores a hoy y posteriores a 10 días desde hoy": {before: new Date(), after: new Date().setDate(new Date().getDate() + 10)},
+                "Ej.: Deshabilitar el rango desde hoy hasta dentro de 3 días (inclusive)": {from: new Date(), to: new Date().setDate(new Date().getDate() + 3)},
+                "Ej.: Deshabilitar todos los domingos y martes": {dayOfWeek: [0, 2]}
+            },
+            description: "Matchers para deshabilitar fechas: { before, after } para límites (e.g., { before: new Date() }), { from, to } para rangos (e.g., { from: d1, to: d2 }), { dayOfWeek } para días específicos (e.g., { dayOfWeek: [0,6] }), o una función (date) => boolean (e.g., date.getDay() === 2).",
+            table: {category: "Selection"},
+        },
+        locale: {
+            control: {type: "select"},
+            options: ["es", "enUS"],
+            description: "Define el idioma y formato de fechas del calendario. Usa los locales de date-fns (por ejemplo, es para español o enUS para inglés estadounidense).",
+            mapping: {es: es, enUS: enUS},
+            table: {category: "Localization"},
+        },
+        hidden: {
+            control: {type: "select"},
+            options: [
+                "No esconder ninguna fecha",
+                "Ej.: Esconder todas las fechas anteriores a hoy y posteriores a 10 días desde hoy",
+                "Ej.: Esconder el rango desde hoy hasta dentro de 3 días (inclusive)",
+                "Ej.: Esconder todos los domingos y martes"
+            ],
+            mapping: {
+                "No esconder ninguna fecha": undefined,
+                "Ej.: Esconder todas las fechas anteriores a hoy y posteriores a 10 días desde hoy": {before: new Date(), after: new Date().setDate(new Date().getDate() + 10)},
+                "Ej.: Esconder el rango desde hoy hasta dentro de 3 días (inclusive)": {from: new Date(), to: new Date().setDate(new Date().getDate() + 3)},
+                "Ej.: Esconder todos los domingos y martes": {dayOfWeek: [0, 2]}
+            },
+            description: "Matcher(es) para ocultar fechas (e.g., [{ before }, { after }]).",
+            table: {category: "Selection"},
+        },
+        className: {
+            control: "text",
+            table: {category: "Customization"},
+            description: "Clases CSS adicionales para el contenedor del componente."
+        }
+    },
+    args: {
+        locale: "es",
+    }
+};
+
+export default meta;
+
+export const Playground = {
+    name: "Área de pruebas",
+    tags: ["!autodocs"],
+    parameters: {
+        actions: {disable: true},
+        a11y: {disable: true},
+        docs: {
+            codePanel: false
+        }
+    },
+    args: {
+        mode: "single",
+        className: "rounded-md border shadow bg-background p-2",
+        showOutsideDays: true,
+        hideNavigation: false,
+        numberOfMonths: 1,
+    },
+};
+
+export const RangeWithTwoMonths = {
+    name: "Selección rango con dos meses",
+    parameters: {
+        actions: {disable: true},
+        a11y: {disable: true},
+        controls:{disable: true},
+        docs: {
+            description: {
+                story: "Ejemplo de calendario con selección de rango y mostrando dos meses simultáneamente."
+            },
+            source: {
+                code: CalendarRangeCode
+            }
+        }
+    },
+    render:CalendarRange
+}
+
+export const CalendarWithTodayBtn = {
+    name: "Calendario con botón 'Hoy'",
+    parameters: {
+        actions: {disable: true},
+        a11y: {disable: true},
+        controls:{disable: true},
+        docs: {
+            description: {
+                story: "Ejemplo de calendario con botón 'Hoy' para navegar rápidamente al mes actual."
+            },
+            source: {
+                code: CalendarWithTodayButtonCode
+            }
+        }
+    },
+    render:CalendarWithTodayButton
+}
+
+export const InputWithCalendar = {
+    name: "Campo de texto con calendario desplegable",
+    parameters: {
+        actions: {disable: true},
+        a11y: {disable: true},
+        controls:{disable: true},
+        docs: {
+            description: {
+                story: "Ejemplo de un input que despliega un calendario al hacer foco, permitiendo seleccionar fechas."
+            },
+            source: {
+                code: CalendarInputFormCode
+            }
+        }
+    },
+    render:CalendarInputForm
+}
+
+export const BookedDaysWithModifiers = {
+    name: "Días reservados con modificadores",
+    parameters: {
+        actions: {disable: true},
+        a11y: {disable: true},
+        controls:{disable: true},
+        docs: {
+            description: {
+                story: "Ejemplo de calendario que muestra días reservados usando modificadores para estilos personalizados."
+            },
+            source: {
+                code: CalendarBookedDaysCode
+            }
+        }
+    },
+    render:CalendarBookedDays
+}
