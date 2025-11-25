@@ -1,5 +1,5 @@
-import {Button, AlertDialogTrigger, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle} from "@traxion-global/design-system";
-import {toast} from "sonner";
+import {Button, AlertDialogTrigger, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, toast} from "@traxion-global/design-system";
 
 export default function AlertDialogBasic() {
     return (

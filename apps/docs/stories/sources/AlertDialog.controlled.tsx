@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Trash } from "lucide-react"
-import {toast} from "sonner";
-import { Badge, Button, Table,TableHeader,TableRow,TableHead,TableBody,TableCell, AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@traxion-global/design-system";
+import { Badge, Button, Table,TableHeader,TableRow,TableHead,TableBody,TableCell, AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, toast } from "@traxion-global/design-system";
 
 export default function UsersTableWithDeleteDialog() {
     const [open, setOpen] = useState(false)
