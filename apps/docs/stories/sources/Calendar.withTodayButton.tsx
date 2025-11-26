@@ -1,6 +1,5 @@
 import {useState} from "react";
 import {Button, Calendar, Card, CardContent, CardDescription, CardHeader, CardTitle} from "@traxion-global/design-system";
-import {es} from "date-fns/locale";
 
 export default function CalendarWithTodayButton() {
     const [date, setDate] = useState(new Date(1986, 5, 12))
@@ -24,7 +23,6 @@ export default function CalendarWithTodayButton() {
             </CardHeader>
             <CardContent>
                 <Calendar
-                    locale={es}
                     mode="single"
                     month={month}
                     onMonthChange={setMonth}

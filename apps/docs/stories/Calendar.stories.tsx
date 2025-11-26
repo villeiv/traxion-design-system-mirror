@@ -1,6 +1,5 @@
 import * as React from "react";
 import {Calendar} from "@traxion-global/design-system";
-import {es, enUS} from "date-fns/locale";
 import CalendarRange from "./sources/Calendar.range";
 import CalendarRangeCode from "./sources/Calendar.range?raw";
 import CalendarWithTodayButton from "./sources/Calendar.withTodayButton";
@@ -22,6 +21,10 @@ const meta = {
         }
     },
     argTypes: {
+        //escondemos locale
+        locale: {
+            table: {disable: true}
+        },
         buttonVariant: {
             control: {type: "select"},
             options: ["default", "ghost", "link", "outline", "secondary", "destructive"],
@@ -81,11 +84,10 @@ const meta = {
             description: "Matchers para deshabilitar fechas: { before, after } para límites (e.g., { before: new Date() }), { from, to } para rangos (e.g., { from: d1, to: d2 }), { dayOfWeek } para días específicos (e.g., { dayOfWeek: [0,6] }), o una función (date) => boolean (e.g., date.getDay() === 2).",
             table: {category: "Selection"},
         },
-        locale: {
+        localeCode: {
             control: {type: "select"},
-            options: ["es", "enUS"],
-            description: "Define el idioma y formato de fechas del calendario. Usa los locales de date-fns (por ejemplo, es para español o enUS para inglés estadounidense).",
-            mapping: {es: es, enUS: enUS},
+            options: ["es", "en"],
+            description: "El prop localeCode acepta 'es' y 'en' (locales internos del componente). Si necesitas otro idioma, puedes importar cualquier locale de date-fns/locale y pasarlo directamente al prop locale, ignorando localeCode.",
             table: {category: "Localization"},
         },
         hidden: {
@@ -110,9 +112,6 @@ const meta = {
             table: {category: "Customization"},
             description: "Clases CSS adicionales para el contenedor del componente."
         }
-    },
-    args: {
-        locale: "es",
     }
 };
 
@@ -125,7 +124,7 @@ export const Playground = {
         actions: {disable: true},
         a11y: {disable: true},
         docs: {
-            codePanel: false
+            codePanel: true
         }
     },
     args: {

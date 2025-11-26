@@ -1,6 +1,5 @@
 import {Popover, PopoverTrigger, Button, PopoverContent, Calendar, Label} from "@traxion-global/design-system";
 import {CalendarIcon} from "lucide-react";
-import {es} from "date-fns/locale";
 import {useState} from "react";
 
 export default function CalendarInputForm() {
@@ -37,7 +36,7 @@ export default function CalendarInputForm() {
                 mode="single"
                 selected={value ? new Date(value) : undefined}
                 onSelect={onSelect}
-                locale={es}
+                localeCode={"en"}
             />
         </PopoverContent>
     </Popover>

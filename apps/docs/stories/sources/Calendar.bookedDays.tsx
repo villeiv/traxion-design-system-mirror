@@ -1,6 +1,5 @@
 import {useState} from "react";
 import {Calendar} from "@traxion-global/design-system";
-import {es} from "date-fns/locale";
 
 export default function CalendarBookedDays() {
     const [date, setDate] = useState(new Date(2025, 6, 12))
@@ -11,7 +10,7 @@ export default function CalendarBookedDays() {
     return (
         <Calendar
             showOutsideDays={false}
-            locale={es}
+            localeCode={"es"}
             mode="single"
             defaultMonth={date}
             selected={date}
