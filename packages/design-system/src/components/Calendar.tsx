@@ -5,9 +5,17 @@ import {
   ChevronRightIcon,
 } from "lucide-react"
 import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker"
+import { es, enUS } from "date-fns/locale"
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "./Button"
+
+const localeMap = {
+  es: es,
+  en: enUS,
+} as const
+
+type LocaleCode = keyof typeof localeMap
 
 function Calendar({
   className,
@@ -17,9 +25,11 @@ function Calendar({
   buttonVariant = "ghost",
   formatters,
   components,
+  localeCode = "es",
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"]
+  localeCode?: LocaleCode
 }) {
   const defaultClassNames = getDefaultClassNames()
 
@@ -28,14 +38,17 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn(
         "bg-background group/calendar p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
-        String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
-        String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
+        String.raw`rtl:**:[.rdp-button_next>svg]:rotate-180`,
+        String.raw`rtl:**:[.rdp-button_previous>svg]:rotate-180`,
         className
       )}
       captionLayout={captionLayout}
+      locale={localeMap[localeCode]}
       formatters={{
         formatMonthDropdown: (date) =>
-          date.toLocaleString("default", { month: "short" }),
+          date.toLocaleString(localeCode === "es" ? "es-MX" : "en-US", {
+            month: "short",
+          }), // 🆕 respeta ES/EN
         ...formatters,
       }}
       classNames={{
