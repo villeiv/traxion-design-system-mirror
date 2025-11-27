@@ -1,135 +1,73 @@
-# Turborepo starter
+# Monorepo – Design System 
 
-This Turborepo starter is maintained by the Turborepo core team.
+Este monorepo contiene el **Design System** y la documentación mediante **Storybook**.
 
-## Using this example
+## Estructura del proyecto
 
-Run the following command:
+    apps/
+      └─ docs/               # Storybook (documentación y playground de componentes)
+    packages/
+      └─ design-system/      # Paquete del Design System (componentes, tokens, utils)
 
-```sh
-npx create-turbo@latest
-```
+- **apps/**  
+  Contiene aplicaciones o herramientas internas.  
+  Actualmente incluye `docs/`, que ejecuta Storybook con los componentes del Design System.
 
-## What's inside?
+- **packages/**  
+  Contiene el Design System, configuraciones compartidas y cualquier paquete reutilizable futuro.
 
-This Turborepo includes the following packages/apps:
+## Tecnologías principales
 
-### Apps and Packages
+- React
+- Storybook 9
+- npm workspaces
+- Turborepo
+- Tailwind CSS 3.4
+- TypeScript
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## Scripts principales
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+Los siguientes comandos se ejecutan desde el root del monorepo:
 
-### Utilities
+    npm install
+    npm run dev           # Levanta las apps en modo desarrollo
+    npm run storybook     # Abre Storybook desde apps/docs
+    npm run build         # Construye los packages y apps
 
-This Turborepo has some additional tools already setup for you:
+## Design System
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+El Design System vive en:
 
-### Build
+    packages/design-system/
 
-To build all apps and packages, run the following command:
+Cuyo contenido es:
 
-```
-cd my-turborepo
+- `tokens/` con los tokens de diseño 
+- `styles/` con las variables CSS globales
+- `tailwind/` con la configuración de Tailwind
+- `src/` con los componentes para React
+- `README.md` del paquete
+- `CHANGELOG.md`
+- `package.json` con la configuración del package
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+## Documentación (Storybook)
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+Storybook está en:
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+    apps/docs/
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+Para ejecutarlo:
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+    npm run storybook
 
-### Develop
+Esto abre la documentación del Design System, incluyendo ejemplos, playgrounds y especificaciones de componentes.
 
-To develop all apps and packages, run the following command:
+## Convenciones
 
-```
-cd my-turborepo
+- Versionado: SemVer
+- Ramas: `main` → estable
+- Design System: cambios incompatibles marcados en MINOR mientras estemos en `0.x.y`
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+## Licencia
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+UNLICENSED

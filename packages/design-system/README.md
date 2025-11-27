@@ -24,6 +24,26 @@ Representación estructurada de los tokens del sistema en formato JSON. Útil pa
 **Ruta:** `@traxion-global/design-system/tailwind-preset`  
 Preset de Tailwind que mapea las variables del tema a la configuración de Tailwind, permitiendo que las utilidades (`bg-primary`, `text-foreground`, `border`, etc.) se basen en los tokens oficiales del sistema de diseño.
 
+## Versionado
+
+Este design system sigue [Semantic Versioning](https://semver.org/) y, mientras estemos en la serie `0.x.y`, aplicamos estas reglas:
+
+### **PATCH (`0.1.x`)**
+Cambios no incompatibles:
+- Fixes de estilos
+- Corrección de bugs
+- Refactors internos sin modificar la API pública
+- Mejoras de performance
+
+### **MINOR (`0.x.0`)**
+Cambios funcionales o potencialmente incompatibles:
+- Nuevos componentes
+- Nuevas variantes o props compatibles
+- Cambios visuales o estructurales que no afectan la API
+- **Cualquier cambio incompatible mientras estemos en `0.x`**  
+  (en esta fase, tratamos `MINOR` como si fuera un “MAJOR”)
+
+
 ## 0. Acceso al paquete privado (.npmrc)
 
 El Design System se distribuye mediante GitHub Packages. Antes de instalarlo, configure su `.npmrc` en la raíz del proyecto:
