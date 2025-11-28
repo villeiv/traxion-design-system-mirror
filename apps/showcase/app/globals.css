@@ -3,3 +3,124 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/*
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+        font-family: var(--font-sans);
+    }
+
+    html {
+        font-size: 16px;
+    }
+
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 0 0% 10%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 3.9%;
+
+        --primary: 64 100% 44%;
+        --primary-light: 62 80% 56%;
+        --primary-dark: 63 100% 37%;
+        --primary-foreground: 214 3% 40%;
+
+        --secondary: 214 3% 40%;
+        --secondary-light: 60 2% 81%;
+        --secondary-medium: 210 2% 60%;
+        --secondary-foreground: 0 0% 100%;
+
+        --muted: 0 0% 96.1%;
+        --muted-foreground: 0 0% 45.1%;
+        --accent: 0 0% 96.1%;
+        --accent-foreground: 0 0% 9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 89.8%;
+        --input: 0 0% 89.8%;
+        --ring: 65 100% 41%;
+
+        --radius: 0.5rem;
+        --font-sans: "Roboto", sans-serif;
+    }
+
+    ::selection {
+        background: hsl(var(--primary-light)/ 1 );
+    }
+}
+
+@layer components {
+    .link-style {
+        @apply text-primary-dark underline-offset-4 hover:underline;
+    }
+}
+
+@layer utilities {
+
+    .text-display {
+        @apply text-5xl font-bold tracking-tight;
+    }
+
+    .text-h1 {
+        @apply text-4xl font-bold tracking-tight;
+    }
+
+    .text-h2 {
+        @apply text-3xl font-bold tracking-tight;
+    }
+
+    .text-h3 {
+        @apply text-2xl font-bold tracking-tight;
+    }
+
+    .text-h4 {
+        @apply text-xl font-bold tracking-tight;
+    }
+
+    .text-h5 {
+        @apply text-lg font-bold tracking-tight;
+    }
+
+    .text-h6 {
+        @apply text-base font-bold tracking-tight;
+    }
+
+    .text-body-lg {
+        @apply text-lg leading-7;
+    }
+
+    .text-body {
+        @apply text-base leading-6;
+    }
+
+    .text-body-sm {
+        @apply text-sm leading-5;
+    }
+
+    .text-caption {
+        @apply text-xs leading-4;
+    }
+
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .text-pretty {
+        text-wrap: pretty;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}*/
