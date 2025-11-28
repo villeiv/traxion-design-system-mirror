@@ -12,7 +12,6 @@ const ThemeImage = (props: Props) => {
   return (
     <>
       <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
     </>
   );
 };
@@ -32,7 +31,7 @@ export default function Home() {
         />
         <ol>
           <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
+            Get started by editing <code>apps/web/app/page</code>
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
