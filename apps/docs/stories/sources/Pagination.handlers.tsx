@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious} from "@traxion-global/design-system";
+import {Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious} from "@traxion-global/design-system/react";
 
 export default function PaginationHandlers(){
     const [currentPage, setCurrentPage] = useState(1);

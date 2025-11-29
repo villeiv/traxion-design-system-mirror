@@ -1,4 +1,4 @@
-import {Popover, PopoverTrigger, Button, PopoverContent, Calendar, Label} from "@traxion-global/design-system";
+import {Popover, PopoverTrigger, Button, PopoverContent, Calendar, Label} from "@traxion-global/design-system/react";
 import {CalendarIcon} from "lucide-react";
 import {useState} from "react";
 

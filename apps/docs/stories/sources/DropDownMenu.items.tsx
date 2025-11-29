@@ -1,4 +1,4 @@
-import { toast, Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@traxion-global/design-system";
+import { toast, Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@traxion-global/design-system/react";
 
 export default function DropDownMenuItems() {
     function handleSelect(value) {

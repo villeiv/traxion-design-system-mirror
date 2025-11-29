@@ -2,7 +2,7 @@ import {
     Button, Badge,
     Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
     SheetContent, SheetHeader, Sheet, SheetTitle, SheetDescription, SheetTrigger
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 
 export default function SheetList() {
     return (

@@ -1,4 +1,4 @@
-import {Button, Label, Input, Popover, PopoverContent, PopoverTrigger} from "@traxion-global/design-system";
+import {Button, Label, Input, Popover, PopoverContent, PopoverTrigger} from "@traxion-global/design-system/react";
 import {PopoverAnatomy} from "./sources/Popover.anatomy";
 import PopoverControlled from "./sources/Popover.controlled";
 import PopoverControlledCode from "./sources/Popover.controlled?raw";

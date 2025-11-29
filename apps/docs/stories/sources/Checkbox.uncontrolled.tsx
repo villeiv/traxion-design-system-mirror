@@ -1,4 +1,4 @@
-import {Checkbox, toast} from "@traxion-global/design-system";
+import {Checkbox, toast} from "@traxion-global/design-system/react";
 
 export default function CheckboxUncontrolled() {
     function onCheckedChange(value) {

@@ -2,7 +2,7 @@ import {useState} from "react";
 import {Button, DropdownMenuGroup, DropdownMenuPortal, DropdownMenuRadioGroup, DropdownMenuSub, DropdownMenu,
     DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioItem,
     DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 import {ChevronDown, Ellipsis, Mail, Smartphone} from "lucide-react";
 
 export default function DropdownMenuRich() {

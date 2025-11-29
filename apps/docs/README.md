@@ -33,14 +33,14 @@ Este workspace consume el paquete del Design System vía workspaces:
 
 ```json
 "dependencies": {
-  "@traxion-global/design-system": "workspace:*"
+  "@traxion-global/design-system": "*"
 }
 ```
 
 Los componentes pueden importarse desde las historias, por ejemplo:
 
 ```tsx
-import { Button } from "@traxion-global/design-system/button";
+import { Button } from "@traxion-global/design-system/react";
 ```
 
 ---

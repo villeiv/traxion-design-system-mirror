@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Showcase – Visualización de Componentes
 
-## Getting Started
+Este workspace contiene una aplicación mínima cuyo único propósito es **mostrar visualmente los componentes disponibles en el Design System**.  
+Sirve como referencia rápida para revisar el aspecto actual de la UI y comprobar su estado en cada versión del paquete.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Scripts
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    npm run dev     # Inicia el showcase en modo desarrollo
+    npm run build   # Genera el build de producción
+    npm run start   # Ejecuta la versión compilada
+    npm run lint    # Ejecuta ESLint
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+## Uso del Design System
 
-## Learn More
+El showcase consume el Design System vía workspaces:
 
-To learn more about Next.js, take a look at the following resources:
+    "dependencies": {
+      "@traxion-global/design-system": "*"
+    }
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Los componentes se importan desde:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    import { Button } from "@traxion-global/design-system/react";
 
-## Deploy on Vercel
+El tema global se importa en `app/globals.css`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    @import "@traxion-global/design-system/theme.css";
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Propósito del Showcase
+
+- Permitir ver rápidamente todos los componentes del Design System.
+- Actuar como una “galería visual”.
+- Facilitar verificaciones rápidas del aspecto y estado de cada componente.
+- Servir como referencia básica al navegar en el monorepo.
+
+---
+
+## Notas
+
+- Esta aplicación **no es un ejemplo de integración**.
+- No está pensada para producción.
+- Puede cambiar con frecuencia según evoluciona el Design System.

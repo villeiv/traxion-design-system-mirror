@@ -1,4 +1,4 @@
-import {Command} from "@traxion-global/design-system";
+import {Command} from "@traxion-global/design-system/react";
 import {CommandAnatomy} from "./sources/Command.anatomy";
 import ToasterDecorator from "./decorators/ToasterDecorator";
 import CommandInDialog from "./sources/Command.InDialog";

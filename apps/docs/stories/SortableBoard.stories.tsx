@@ -1,4 +1,4 @@
-import { SortableBoard } from "@traxion-global/design-system";
+import { SortableBoard } from "@traxion-global/design-system/react";
 import {SortableBoardSizing} from "./sources/SortableBoard.sizing";
 import SortableBoardRenderItem from "./sources/SortableBoard.renderItem.tsx";
 import SortableBoardRenderItemRaw from "./sources/SortableBoard.renderItem.tsx?raw";

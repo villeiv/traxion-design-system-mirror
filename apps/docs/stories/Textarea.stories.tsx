@@ -1,4 +1,4 @@
-import { Textarea } from "@traxion-global/design-system";
+import { Textarea } from "@traxion-global/design-system/react";
 
 export default {
     title: 'Textarea',

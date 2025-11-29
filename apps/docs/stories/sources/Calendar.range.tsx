@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Calendar} from "@traxion-global/design-system";
+import {Calendar} from "@traxion-global/design-system/react";
 
 export default function CalendarRange() {
     const [selectedRange, setSelectedRange] = useState(null);

@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Command, CommandEmpty, CommandInput, CommandItem, CommandList, InlineLoader} from "@traxion-global/design-system";
+import {Command, CommandEmpty, CommandInput, CommandItem, CommandList, InlineLoader} from "@traxion-global/design-system/react";
 
 export default function CommandLoading() {
     const [loading, setLoading] = React.useState(true);

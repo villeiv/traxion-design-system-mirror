@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast} from "@traxion-global/design-system";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast} from "@traxion-global/design-system/react";
 
 export default function SelectControlled() {
     const [selectedValue, setSelectedValue] = useState("");

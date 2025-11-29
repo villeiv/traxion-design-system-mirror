@@ -1,4 +1,4 @@
-import {Switch, Label} from "@traxion-global/design-system";
+import {Switch, Label} from "@traxion-global/design-system/react";
 import {useState} from "react";
 
 export default function SwitchWithLabel() {

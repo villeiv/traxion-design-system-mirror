@@ -1,6 +1,6 @@
 //InfoCard.stories.tsx
 import React from "react";
-import {InfoCard} from "@traxion-global/design-system";
+import {InfoCard} from "@traxion-global/design-system/react";
 import {Calendar, CreditCard, DollarSign, Package, Truck, Users} from "lucide-react";
 
 const ICONS = {

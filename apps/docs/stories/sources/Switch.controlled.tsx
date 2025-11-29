@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Switch, toast } from "@traxion-global/design-system";
+import { Switch, toast } from "@traxion-global/design-system/react";
 
 export default function SwitchControlled() {
     const [checked, setChecked] = useState(false);

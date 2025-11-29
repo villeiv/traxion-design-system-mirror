@@ -1,4 +1,4 @@
-import {toast, Switch} from "@traxion-global/design-system";
+import {toast, Switch} from "@traxion-global/design-system/react";
 
 export default function SwitchUncontrolled() {
     function onCheckedChange(value) {

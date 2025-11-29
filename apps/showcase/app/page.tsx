@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import {ReactNode, useState} from "react";
+import {cn} from "@traxion-global/design-system";
 import {
     Accordion, AccordionContent, AccordionItem, AccordionTrigger,
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
@@ -21,7 +22,7 @@ import {
     Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
     Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Switch, toast, Textarea,
     InfoCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 
 import {
     Ban, BatteryLow, Calendar1Icon, CalendarIcon, ClockAlert, DollarSign, DoorOpen, MapPin, PackageOpen, RouteOff, Tag, ThermometerSnowflake, User, XIcon,
@@ -71,7 +72,7 @@ type ColorSwatchProps = {
 
 function ColorSwatch({name, color, className }: ColorSwatchProps) {
     return (
-        <div className={`flex flex-col h-16 sm:h-20 rounded-md flex items-center justify-center ` + className}>
+        <div className={cn(`flex flex-col h-16 sm:h-20 rounded-md flex items-center justify-center `, className)}>
             <span className="sm:text-lg">{name}</span>
             <span className="text-sm opacity-80">{color}</span>
         </div>

@@ -1,4 +1,4 @@
-import {Progress} from "@traxion-global/design-system";
+import {Progress} from "@traxion-global/design-system/react";
 
 export default {
     title: "Progress",

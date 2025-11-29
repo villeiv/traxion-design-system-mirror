@@ -1,4 +1,4 @@
-import {Command, CommandEmpty, CommandInput, CommandItem, CommandList, toast} from "@traxion-global/design-system";
+import {Command, CommandEmpty, CommandInput, CommandItem, CommandList, toast} from "@traxion-global/design-system/react";
 import React from "react";
 
 export default function CommandKeywords() {

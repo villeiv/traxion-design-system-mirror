@@ -8,9 +8,13 @@ Este documento describe los pasos mínimos para consumir el Design System en un 
 
 El paquete `@traxion-global/design-system` expone los siguientes artefactos principales:
 
-### Componentes React
+### Utilidades server-safe
 **Ruta:** `@traxion-global/design-system`  
-Conjunto de componentes UI implementados en React, diseñados según los lineamientos visuales y de interacción de Traxion. Incluye elementos básicos y patrones reutilizables listos para integrarse en proyectos React o Next.js.
+Entry point pensado para utilidades que pueden importarse (por ejemplo, `cn`).
+
+### Componentes React
+**Ruta:** `@traxion-global/design-system/react`  
+Conjunto de componentes UI implementados en React, diseñados según los lineamientos visuales y de interacción de Traxion.
 
 ### Tema global (CSS)
 **Ruta:** `@traxion-global/design-system/theme.css`  
@@ -165,7 +169,7 @@ Notas:
 
 Ejemplo básico de uso en un componente React:
 
-    import { Button } from "@traxion-global/design-system";
+    import { Button } from "@traxion-global/design-system/react";
 
     export function Example() {
       return (

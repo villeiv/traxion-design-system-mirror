@@ -2,7 +2,7 @@ import {
     Badge, NoDataMessage,
     Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,
     Card, CardContent, CardDescription, CardHeader, CardTitle
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 import TableMobileDesktopCode from "./sources/Table.mobileDesktop?raw";
 import TableMobileDesktop from "./sources/Table.mobileDesktop";
 import {TableAnatomy} from "./sources/Table.anatomy";

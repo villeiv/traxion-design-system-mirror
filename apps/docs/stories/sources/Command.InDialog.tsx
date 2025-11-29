@@ -1,6 +1,6 @@
 import React from "react";
 import {Plus} from "lucide-react";
-import {CommandDialog, CommandEmpty, CommandInput, CommandItem, CommandList, Button, toast} from "@traxion-global/design-system";
+import {CommandDialog, CommandEmpty, CommandInput, CommandItem, CommandList, Button, toast} from "@traxion-global/design-system/react";
 
 export default function CommandInDialog() {
     const [open, setOpen] = React.useState(false);

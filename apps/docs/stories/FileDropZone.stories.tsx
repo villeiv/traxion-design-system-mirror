@@ -1,4 +1,4 @@
-import {FileDropZone} from "@traxion-global/design-system";
+import {FileDropZone} from "@traxion-global/design-system/react";
 import FileDropZoneWithPreviewCode from "./sources/FileDropZone.withPreview.tsx?raw"
 import FileDropZoneWithPreview from "./sources/FileDropZone.withPreview.tsx";
 import FileDropZoneInFormCode from "./sources/FileDropZone.inForm.tsx?raw"

@@ -1,4 +1,4 @@
-import {Select, SelectContent, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, SelectGroup} from "@traxion-global/design-system";
+import {Select, SelectContent, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, SelectGroup} from "@traxion-global/design-system/react";
 import {SelectAnatomy} from "./sources/Select.anatomy";
 import ToasterDecorator from "./decorators/ToasterDecorator";
 import SelectControlled from "./sources/Select.controlled";

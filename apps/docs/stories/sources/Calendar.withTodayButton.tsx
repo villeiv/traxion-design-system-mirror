@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Button, Calendar, Card, CardContent, CardDescription, CardHeader, CardTitle} from "@traxion-global/design-system";
+import {Button, Calendar, Card, CardContent, CardDescription, CardHeader, CardTitle} from "@traxion-global/design-system/react";
 
 export default function CalendarWithTodayButton() {
     const [date, setDate] = useState(new Date(1986, 5, 12))

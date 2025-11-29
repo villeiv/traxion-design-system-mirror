@@ -1,6 +1,6 @@
 // Switch.stories.jsx
 import { useArgs } from "storybook/preview-api";
-import { Switch } from "@traxion-global/design-system";
+import { Switch } from "@traxion-global/design-system/react";
 import SwitchWithLabel from "./sources/Switch.withLabel";
 import SwitchWithLabelCode from "./sources/Switch.withLabel?raw";
 import SwitchControlled from "./sources/Switch.controlled";

@@ -1,4 +1,4 @@
-import {Label, toast, Switch} from "@traxion-global/design-system";
+import {Label, toast, Switch} from "@traxion-global/design-system/react";
 
 const styles = {
     label: "hover:bg-accent/50 flex items-center gap-6 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/5",

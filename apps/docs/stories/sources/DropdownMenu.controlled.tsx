@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger} from "@traxion-global/design-system";
+import {Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger} from "@traxion-global/design-system/react";
 
 export default function DropdownMenuControlled() {
     const [open, setOpen] = useState(false);

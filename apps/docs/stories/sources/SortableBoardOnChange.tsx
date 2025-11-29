@@ -1,4 +1,4 @@
-import { SortableBoard, ColumnType, toast } from "@traxion-global/design-system";
+import { SortableBoard, ColumnType, toast } from "@traxion-global/design-system/react";
 import * as React from "react";
 
 export default function SortableBoardOnChange(){

@@ -1,4 +1,4 @@
-import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut} from "@traxion-global/design-system";
+import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut} from "@traxion-global/design-system/react";
 import React from "react";
 
 export default function CommandGroups() {

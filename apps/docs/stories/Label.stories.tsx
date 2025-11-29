@@ -1,4 +1,4 @@
-import {Input, Checkbox, Label} from "@traxion-global/design-system";
+import {Input, Checkbox, Label} from "@traxion-global/design-system/react";
 
 export default {
     title: 'Label',

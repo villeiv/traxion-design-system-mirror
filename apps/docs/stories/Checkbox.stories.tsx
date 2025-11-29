@@ -1,4 +1,4 @@
-import {Checkbox} from "@traxion-global/design-system";
+import {Checkbox} from "@traxion-global/design-system/react";
 import {useArgs} from "storybook/preview-api";
 import CheckboxWithLabel from "./sources/Checkbox.withLabel";
 import CheckboxWithLabelCode from "./sources/Checkbox.withLabel?raw";

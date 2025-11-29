@@ -1,4 +1,4 @@
-import {Button, PopoverContent,Popover } from "@traxion-global/design-system";
+import {Button, PopoverContent,Popover } from "@traxion-global/design-system/react";
 import {useState} from "react";
 import {PopoverTrigger} from "@radix-ui/react-popover";
 

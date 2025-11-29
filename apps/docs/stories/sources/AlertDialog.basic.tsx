@@ -1,5 +1,5 @@
 import {Button, AlertDialogTrigger, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
-    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, toast} from "@traxion-global/design-system";
+    AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, toast} from "@traxion-global/design-system/react";
 
 export default function AlertDialogBasic() {
     return (

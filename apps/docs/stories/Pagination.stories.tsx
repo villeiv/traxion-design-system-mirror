@@ -1,4 +1,4 @@
-import {Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious} from "@traxion-global/design-system";
+import {Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious} from "@traxion-global/design-system/react";
 import PaginationHandlers from "./sources/Pagination.handlers";
 import PaginationHandlersCode from "./sources/Pagination.handlers?raw";
 import {PaginationAnatomy} from "./sources/Pagination.anatomy";

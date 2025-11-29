@@ -2,7 +2,7 @@ import {
     Button, Label, Input,
     Select, SelectValue, SelectContent, SelectItem, SelectTrigger,
     Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose,
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 
 export default function DialogBasic() {
     return (

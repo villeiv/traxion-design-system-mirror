@@ -1,4 +1,4 @@
-import {Toaster} from "@traxion-global/design-system";
+import {Toaster} from "@traxion-global/design-system/react";
 
 export default function ToasterDecorator(Story: any) {
     return <>

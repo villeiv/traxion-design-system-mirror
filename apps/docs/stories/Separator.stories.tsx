@@ -1,4 +1,4 @@
-import {Separator} from "@traxion-global/design-system";
+import {Separator} from "@traxion-global/design-system/react";
 import {Activity, Car, Users} from "lucide-react";
 
 export default {

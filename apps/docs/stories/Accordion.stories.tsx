@@ -1,4 +1,4 @@
-import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@traxion-global/design-system";
+import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@traxion-global/design-system/react";
 import AccordionControlled from "./sources/Accordion.controlled";
 import AccordionControlledCode from "./sources/Accordion.controlled?raw";
 import {AccordionAnatomy} from "./sources/Accordion.anatomy";

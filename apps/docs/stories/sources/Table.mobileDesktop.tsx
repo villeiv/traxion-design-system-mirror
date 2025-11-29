@@ -1,4 +1,4 @@
-import {Badge, Table, TableBody, TableCell, TableRow} from "@traxion-global/design-system";
+import {Badge, Table, TableBody, TableCell, TableRow} from "@traxion-global/design-system/react";
 
 export default function TableMobileDesktop(){
     return (

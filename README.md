@@ -42,10 +42,14 @@ El Design System vive en:
 
 Cuyo contenido es:
 
+
 - `tokens/` con los tokens de diseño 
 - `styles/` con las variables CSS globales
-- `tailwind/` con la configuración de Tailwind
-- `src/` con los componentes para React
+- `tailwind/` con la configuración del preset de Tailwind
+- `src/` con el código fuente del design system  
+  - `index.ts` (entrypoint utilidades como `cn`)  
+  - `react.ts` (entrypoint client-only que exporta todos los componentes)
+- `dist/` generado por la build (componentes, entrypoints, tokens y css procesados)
 - `README.md` del paquete
 - `CHANGELOG.md`
 - `package.json` con la configuración del package

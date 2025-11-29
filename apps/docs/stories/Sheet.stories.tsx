@@ -1,4 +1,4 @@
-import {Button, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@traxion-global/design-system";
+import {Button, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@traxion-global/design-system/react";
 import {SheetAnatomy} from "./sources/Sheet.anatomy";
 import SheetControlled from "./sources/Sheet.controlled";
 import SheetControlledCode from "./sources/Sheet.controlled?raw";

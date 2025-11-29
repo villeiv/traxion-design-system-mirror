@@ -1,4 +1,4 @@
-import { Dialog } from "@traxion-global/design-system";
+import { Dialog } from "@traxion-global/design-system/react";
 import DialogBasic from "./sources/Dialog.basic";
 import DialogBasicCode from "./sources/Dialog.basic?raw";
 import DialogControlled from "./sources/Dialog.controlled";

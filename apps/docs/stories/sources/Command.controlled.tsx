@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Command, CommandEmpty, CommandInput, CommandItem, CommandList} from "@traxion-global/design-system";
+import {Command, CommandEmpty, CommandInput, CommandItem, CommandList} from "@traxion-global/design-system/react";
 
 export default function CommandControlled() {
     const [value, setValue] = useState("2");

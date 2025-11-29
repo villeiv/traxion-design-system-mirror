@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button, Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@traxion-global/design-system"
+import { Button, Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@traxion-global/design-system/react"
 
 export default function AccordionControlledWithSidebar() {
     const [value, setValue] = useState(["item-1"])

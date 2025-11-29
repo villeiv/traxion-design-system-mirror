@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,
     Popover, PopoverTrigger, PopoverContent
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 import {ChevronsUpDown} from "lucide-react";
 
 const states = [

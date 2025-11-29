@@ -1,4 +1,4 @@
-import {NoDataMessage} from "@traxion-global/design-system";
+import {NoDataMessage} from "@traxion-global/design-system/react";
 
 export default {
     title: "NoDataMessage",

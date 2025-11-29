@@ -1,4 +1,4 @@
-import {Label, RadioGroup, RadioGroupItem} from "@traxion-global/design-system";
+import {Label, RadioGroup, RadioGroupItem} from "@traxion-global/design-system/react";
 import {useState} from "react";
 
 export default function RadioGroupControlled() {

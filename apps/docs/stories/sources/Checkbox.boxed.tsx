@@ -1,4 +1,4 @@
-import {Checkbox, Label, toast} from "@traxion-global/design-system";
+import {Checkbox, Label, toast} from "@traxion-global/design-system/react";
 
 const styles = {
     label: "hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/5",

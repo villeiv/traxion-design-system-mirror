@@ -1,4 +1,4 @@
-import {Label, RadioGroup, RadioGroupItem} from "@traxion-global/design-system";
+import {Label, RadioGroup, RadioGroupItem} from "@traxion-global/design-system/react";
 import RadioGroupControlled from "./sources/RadioGroup.controlled";
 import RadioGroupControlledCode from "./sources/RadioGroup.controlled?raw";
 import {RadioGroupAnatomy} from "./sources/RadioGroup.anatomy";

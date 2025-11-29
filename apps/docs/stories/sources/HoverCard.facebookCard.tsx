@@ -1,4 +1,4 @@
-import {Avatar, AvatarFallback, AvatarImage} from "@traxion-global/design-system";
+import {Avatar, AvatarFallback, AvatarImage} from "@traxion-global/design-system/react";
 
 export default function FacebookHoverCard() {
     return <div className="flex justify-between gap-4">

@@ -1,4 +1,4 @@
-import {Card, CardContent, CardDescription, CardHeader, CardTitle, FullPageOverlayLoader} from "@traxion-global/design-system";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle, FullPageOverlayLoader} from "@traxion-global/design-system/react";
 
 export default {
     title: 'FullPageOverlayLoader',

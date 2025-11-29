@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Calendar} from "@traxion-global/design-system";
+import {Calendar} from "@traxion-global/design-system/react";
 
 export default function CalendarBookedDays() {
     const [date, setDate] = useState(new Date(2025, 6, 12))

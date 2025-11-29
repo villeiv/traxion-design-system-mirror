@@ -2,7 +2,7 @@ import * as React from "react";
 import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
     Button, Label, Input
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 import {useState} from "react";
 import {Copy} from "lucide-react";
 

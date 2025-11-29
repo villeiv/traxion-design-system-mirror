@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {FileDropZone} from "@traxion-global/design-system";
+import {FileDropZone} from "@traxion-global/design-system/react";
 
 export default function FileDropZoneWithPreview() {
     const [files, setFiles] = useState([]);

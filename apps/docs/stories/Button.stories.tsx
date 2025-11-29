@@ -1,6 +1,6 @@
 // Button.stories.jsx
 import React from "react";
-import { Button, Card, CardDescription, CardHeader } from "@traxion-global/design-system";
+import { Button, Card, CardDescription, CardHeader } from "@traxion-global/design-system/react";
 import {Plus, Mail} from "lucide-react";
 
 function WithIconAndTextDecorator(Story, context){

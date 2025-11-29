@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Checkbox, toast} from "@traxion-global/design-system";
+import {Checkbox, toast} from "@traxion-global/design-system/react";
 
 export default function CheckboxControlled() {
     const [checked, setChecked] = useState(false);

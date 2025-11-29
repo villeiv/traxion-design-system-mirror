@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {
     Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
     toast, Button, FileDropZone
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 import {X} from "lucide-react";
 
 export default function FileDropZoneInForm() {

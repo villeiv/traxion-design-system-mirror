@@ -1,7 +1,7 @@
 import {
     Button,
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 import {DropdownMenuAnatomy} from "./sources/DropdownMenu.anatomy";
 import DropdownMenuControlled from "./sources/DropdownMenu.controlled";
 import DropdownMenuControlledCode from "./sources/DropdownMenu.controlled?raw";

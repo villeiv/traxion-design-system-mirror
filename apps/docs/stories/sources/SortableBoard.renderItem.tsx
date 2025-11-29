@@ -1,4 +1,4 @@
-import {SortableBoard, Card, CardDescription, CardHeader, CardTitle} from "@traxion-global/design-system";
+import {SortableBoard, Card, CardDescription, CardHeader, CardTitle} from "@traxion-global/design-system/react";
 import {CalendarIcon, MapPin, Tag} from "lucide-react";
 import * as React from "react";
 

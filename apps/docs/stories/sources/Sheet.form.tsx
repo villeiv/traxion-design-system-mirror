@@ -1,4 +1,4 @@
-import { Button, Label, Input, Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger} from "@traxion-global/design-system";
+import { Button, Label, Input, Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger} from "@traxion-global/design-system/react";
 
 export default function SheetForm() {
     return <Sheet>

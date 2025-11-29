@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Calendar} from "@traxion-global/design-system";
+import {Calendar} from "@traxion-global/design-system/react";
 import CalendarRange from "./sources/Calendar.range";
 import CalendarRangeCode from "./sources/Calendar.range?raw";
 import CalendarWithTodayButton from "./sources/Calendar.withTodayButton";

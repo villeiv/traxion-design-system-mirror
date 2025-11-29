@@ -1,6 +1,6 @@
 import {Button, Card, CardTitle,
     SheetContent, SheetHeader, Sheet, SheetTitle, SheetDescription, SheetTrigger
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 import {CheckCircle, FileText, MessageCircle} from "lucide-react";
 
 export default function SheetNotifications() {

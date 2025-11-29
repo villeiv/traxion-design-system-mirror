@@ -2,7 +2,7 @@ import {
     Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
     Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
     Button, Input, toast
-} from "@traxion-global/design-system";
+} from "@traxion-global/design-system/react";
 import ToasterDecorator from "./decorators/ToasterDecorator";
 import {ArrowRight, Plus} from "lucide-react";
 import {CardAnatomy} from "./sources/Card.anatomy";

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Button, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@traxion-global/design-system";
+import {Button, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@traxion-global/design-system/react";
 
 export default function SheetControlled() {
     const [open, setOpen] = useState(false);

@@ -1,4 +1,4 @@
-import { Button, Input } from "@traxion-global/design-system";
+import { Button, Input } from "@traxion-global/design-system/react";
 import { Search } from "lucide-react";
 
 export default {

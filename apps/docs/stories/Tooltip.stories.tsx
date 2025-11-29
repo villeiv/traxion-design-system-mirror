@@ -1,4 +1,4 @@
-import {Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Table, TableBody, TableCell, TableHeader, TableRow} from "@traxion-global/design-system";
+import {Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Table, TableBody, TableCell, TableHeader, TableRow} from "@traxion-global/design-system/react";
 import {Pen, Trash} from "lucide-react";
 import {TooltipAnatomy} from "./sources/Tooltip.anatomy";
 

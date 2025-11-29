@@ -1,4 +1,4 @@
-import {AlertDialog} from "@traxion-global/design-system";
+import {AlertDialog} from "@traxion-global/design-system/react";
 import AlertDialogBasic from "./sources/AlertDialog.basic";
 import AlertDialogBasicCode from "./sources/AlertDialog.basic?raw";
 import AlertDialogControlled from "./sources/AlertDialog.controlled";

@@ -1,4 +1,4 @@
-import {Avatar, AvatarFallback, AvatarImage} from "@traxion-global/design-system";
+import {Avatar, AvatarFallback, AvatarImage} from "@traxion-global/design-system/react";
 import {AvatarAnatomy} from "./sources/Avatar.anatomy";
 import {User} from "lucide-react";
 

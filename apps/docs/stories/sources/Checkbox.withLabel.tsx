@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Label, Checkbox} from "@traxion-global/design-system";
+import {Label, Checkbox} from "@traxion-global/design-system/react";
 
 export default function CheckboxWithLabel() {
     const [ checked, setChecked ] = useState(false);

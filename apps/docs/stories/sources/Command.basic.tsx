@@ -1,5 +1,5 @@
 import React from "react";
-import {Command, CommandEmpty, CommandInput, CommandItem, CommandList} from "@traxion-global/design-system";
+import {Command, CommandEmpty, CommandInput, CommandItem, CommandList} from "@traxion-global/design-system/react";
 
 export default function CommandBasic() {
     return <Command className={"border w-96 rounded-lg"}>

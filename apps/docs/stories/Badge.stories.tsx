@@ -1,6 +1,6 @@
 // Badge.stories.tsx
 import React from "react";
-import {Badge, Card, CardDescription, CardHeader, CardTitle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@traxion-global/design-system";
+import {Badge, Card, CardDescription, CardHeader, CardTitle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@traxion-global/design-system/react";
 import {Plus} from "lucide-react";
 
 const VARIANT_OPTIONS = [

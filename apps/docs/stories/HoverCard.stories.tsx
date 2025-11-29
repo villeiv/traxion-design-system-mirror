@@ -1,4 +1,4 @@
-import {Button, HoverCard, HoverCardContent, HoverCardTrigger} from "@traxion-global/design-system";
+import {Button, HoverCard, HoverCardContent, HoverCardTrigger} from "@traxion-global/design-system/react";
 import {Car, ChevronDown, Pin} from "lucide-react";
 import FacebookHoverCard from "./sources/HoverCard.facebookCard";
 import HoverCardControlled from "./sources/HoverCard.controlled";
