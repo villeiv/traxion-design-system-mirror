@@ -8,7 +8,7 @@ Este documento describe los pasos mínimos para consumir el Design System en un 
 
 El paquete `@traxion-global/design-system` expone los siguientes artefactos principales:
 
-### Utilidades server-safe
+### Utilidades
 **Ruta:** `@traxion-global/design-system`  
 Entry point pensado para utilidades que pueden importarse (por ejemplo, `cn`).
 
