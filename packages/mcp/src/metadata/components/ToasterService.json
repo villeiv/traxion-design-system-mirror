@@ -1,0 +1,53 @@
+{
+  "name": "ToasterService",
+  "slug": "toaster-service",
+  "description": "A toast notification system built on the Sonner library. Consists of two exports: a Toaster component that mounts the toast container infrastructure, and a toast API object with methods for triggering success, error, info, and warning notifications. Each toast type has a corresponding Lucide icon (CheckCircle, OctagonX, Info, TriangleAlert, and a spinning Loader2 for loading).",
+  "category": "feedback",
+  "tags": ["toast", "notification", "alert", "feedback", "sonner", "toaster"],
+  "props": [
+    { "name": "position", "type": "\"top-left\" | \"top-center\" | \"top-right\" | \"bottom-left\" | \"bottom-center\" | \"bottom-right\"", "default": "\"top-right\"", "description": "The screen position where toast notifications appear." },
+    { "name": "closeButton", "type": "boolean", "default": "true", "description": "When true, each toast displays a close button." }
+  ],
+  "subComponents": [
+    {
+      "name": "Toaster",
+      "description": "The container component that must be mounted once in your app (typically in a root layout). Renders the Sonner Toaster with custom Lucide icons for each toast type.",
+      "props": [
+        { "name": "position", "type": "ToastPosition", "default": "\"top-right\"", "description": "Screen corner or edge where toasts appear." },
+        { "name": "closeButton", "type": "boolean", "default": "true", "description": "Whether toasts show a close button." }
+      ]
+    },
+    {
+      "name": "toast",
+      "description": "An API object (not a component) with four methods for dispatching notifications: toast.success(), toast.error(), toast.info(), and toast.warning(). Each accepts a message string and an optional description string.",
+      "props": [
+        { "name": "toast.success", "type": "(message: string, description?: string) => void", "default": "N/A", "description": "Displays a success toast with a CheckCircle icon." },
+        { "name": "toast.error", "type": "(message: string, description?: string) => void", "default": "N/A", "description": "Displays an error toast with an OctagonX icon." },
+        { "name": "toast.info", "type": "(message: string, description?: string) => void", "default": "N/A", "description": "Displays an info toast with an Info icon." },
+        { "name": "toast.warning", "type": "(message: string, description?: string) => void", "default": "N/A", "description": "Displays a warning toast with a TriangleAlert icon." }
+      ]
+    }
+  ],
+  "dependencies": ["sonner", "lucide-react"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "status / alert (managed by Sonner)",
+    "keyboard": "Toasts can be dismissed via close button (Tab to focus, Enter/Space to activate). Escape may dismiss the most recent toast depending on Sonner configuration.",
+    "aria": "Sonner manages aria-live regions for toast announcements. Success/info toasts use polite announcements; error/warning toasts use assertive announcements.",
+    "notes": "Mount the Toaster component once in your application root. Each toast type has a distinct icon for visual differentiation. The loading state uses a spinning Loader2 icon."
+  },
+  "examples": [
+    {
+      "title": "Mount the Toaster in a Layout",
+      "code": "import { Toaster } from \"./ToasterService\";\n\nexport default function RootLayout({ children }) {\n  return (\n    <html>\n      <body>\n        {children}\n        <Toaster position=\"top-right\" />\n      </body>\n    </html>\n  );\n}"
+    },
+    {
+      "title": "Trigger Toast Notifications",
+      "code": "import { toast } from \"./ToasterService\";\n\nfunction handleSave() {\n  toast.success(\"Saved!\", \"Your changes have been saved.\");\n}\n\nfunction handleError() {\n  toast.error(\"Error\", \"Something went wrong. Please try again.\");\n}\n\nfunction handleInfo() {\n  toast.info(\"Heads up\", \"A new version is available.\");\n}\n\nfunction handleWarning() {\n  toast.warning(\"Warning\", \"This action cannot be undone.\");\n}"
+    },
+    {
+      "title": "Bottom-center Positioned Toaster",
+      "code": "<Toaster position=\"bottom-center\" closeButton={false} />"
+    }
+  ]
+}

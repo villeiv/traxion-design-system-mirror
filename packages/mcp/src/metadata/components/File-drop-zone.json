@@ -1,0 +1,49 @@
+{
+  "name": "FileDropZone",
+  "slug": "file-drop-zone",
+  "description": "A drag-and-drop file upload zone that also supports click-to-browse. Validates files against an optional accept filter and supports single or multiple file selection.",
+  "category": "forms",
+  "tags": ["file", "upload", "drag-and-drop", "drop-zone", "input"],
+  "props": [
+    {
+      "name": "onFiles",
+      "type": "(files: File[]) => void",
+      "default": null,
+      "description": "Callback invoked with the array of accepted File objects after a drop or file-browse selection."
+    },
+    {
+      "name": "accept",
+      "type": "string",
+      "default": "undefined",
+      "description": "Comma-separated MIME types, wildcard MIME types (e.g. \"image/*\"), or file extensions (e.g. \".pdf\") used to filter dropped and selected files."
+    },
+    {
+      "name": "multiple",
+      "type": "boolean",
+      "default": "true",
+      "description": "When true, allows multiple files to be dropped or selected at once. When false, only the first file is accepted."
+    }
+  ],
+  "dependencies": ["lucide-react"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "button",
+    "keyboard": "Enter or Space activates the hidden file input to open the file browser dialog.",
+    "aria": "aria-label is set to describe the upload action.",
+    "notes": "The component uses a hidden file input triggered by click or keyboard. The outer div has role=\"button\" and tabIndex={0} for focusability."
+  },
+  "examples": [
+    {
+      "title": "Basic usage",
+      "code": "<FileDropZone onFiles={(files) => console.log(files)} />"
+    },
+    {
+      "title": "Accept only images",
+      "code": "<FileDropZone onFiles={(files) => console.log(files)} accept=\"image/*\" />"
+    },
+    {
+      "title": "Single file only",
+      "code": "<FileDropZone onFiles={(files) => console.log(files)} multiple={false} accept=\".pdf\" />"
+    }
+  ]
+}

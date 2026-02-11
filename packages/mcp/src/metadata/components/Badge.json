@@ -1,0 +1,49 @@
+{
+  "name": "Badge",
+  "slug": "badge",
+  "description": "A small inline label rendered as a rounded-full pill with color-coded variants. Uses class-variance-authority (CVA) for variant management. Includes both shadcn legacy variants (default, secondary, destructive, outline) and Traxion-specific color variants (primary, green, yellow, red, gray, cyan, violet, blue, teal, orange, pink, fuchsia).",
+  "category": "data-display",
+  "tags": ["badge", "label", "tag", "status", "chip", "pill"],
+  "props": [
+    { "name": "variant", "type": "\"default\" | \"secondary\" | \"destructive\" | \"outline\" | \"primary\" | \"green\" | \"yellow\" | \"red\" | \"gray\" | \"cyan\" | \"violet\" | \"blue\" | \"teal\" | \"orange\" | \"pink\" | \"fuchsia\"", "default": "\"default\"", "description": "The visual style variant of the badge. Legacy shadcn variants use solid backgrounds with hover states. Traxion variants use a colored border and text with a 10% opacity background." },
+    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged via cn()." },
+    { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The badge content (typically text)." }
+  ],
+  "dependencies": ["class-variance-authority"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Renders as a div element. No implicit ARIA role. If the badge conveys status information, consider adding role='status' or an aria-label.",
+    "keyboard": "Not interactive by default. Supports focus ring styles via focus:ring-2 for cases where it is made focusable.",
+    "aria": "No built-in ARIA attributes. Add aria-label if the badge color alone conveys meaning that is not reflected in the text content.",
+    "notes": "Color should not be the only means of conveying information. Ensure badge text provides sufficient context."
+  },
+  "examples": [
+    {
+      "title": "Default badge",
+      "code": "<Badge>Default</Badge>"
+    },
+    {
+      "title": "Destructive badge",
+      "code": "<Badge variant=\"destructive\">Error</Badge>"
+    },
+    {
+      "title": "Traxion green status badge",
+      "code": "<Badge variant=\"green\">Active</Badge>"
+    },
+    {
+      "title": "Outline badge",
+      "code": "<Badge variant=\"outline\">Draft</Badge>"
+    },
+    {
+      "title": "Multiple color variants",
+      "code": "<div className=\"flex gap-2\">\n  <Badge variant=\"primary\">Primary</Badge>\n  <Badge variant=\"cyan\">Info</Badge>\n  <Badge variant=\"yellow\">Warning</Badge>\n  <Badge variant=\"red\">Critical</Badge>\n  <Badge variant=\"gray\">Inactive</Badge>\n</div>"
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "dont",
+      "description": "No colocar íconos dentro de un badge. El badge debe ser pequeño y simple. Incluir íconos puede hacerlo parecer un botón o un componente de acción.",
+      "code": "<Badge><Plus />En tránsito</Badge>"
+    }
+  ]
+}

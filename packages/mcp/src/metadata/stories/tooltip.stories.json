@@ -1,0 +1,5 @@
+{
+  "component": "tooltip",
+  "anatomy": "<TooltipProvider>\n    <Tooltip>\n        <TooltipTrigger></TooltipTrigger>\n        <TooltipContent></TooltipContent>\n    </Tooltip>\n</TooltipProvider>",
+  "stories": []
+}

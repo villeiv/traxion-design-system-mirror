@@ -1,0 +1,30 @@
+{
+  "component": "calendar",
+  "anatomy": null,
+  "stories": [
+    {
+      "name": "Range",
+      "description": "Calendar with range selection showing two months simultaneously for selecting date ranges.",
+      "sourceFile": "Calendar.range.tsx",
+      "tags": ["range", "date-picker", "multi-month"]
+    },
+    {
+      "name": "WithTodayButton",
+      "description": "Calendar with a 'Today' button for quickly navigating to the current month.",
+      "sourceFile": "Calendar.withTodayButton.tsx",
+      "tags": ["navigation", "today"]
+    },
+    {
+      "name": "InputForm",
+      "description": "Text field with dropdown calendar that opens on focus, allowing date selection from an input.",
+      "sourceFile": "Calendar.inputForm.tsx",
+      "tags": ["input", "form", "dropdown"]
+    },
+    {
+      "name": "BookedDays",
+      "description": "Calendar showing booked days using modifiers for custom styling of specific dates.",
+      "sourceFile": "Calendar.bookedDays.tsx",
+      "tags": ["modifiers", "custom-styling", "booked"]
+    }
+  ]
+}

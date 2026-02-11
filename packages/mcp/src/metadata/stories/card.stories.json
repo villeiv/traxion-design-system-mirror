@@ -1,0 +1,5 @@
+{
+  "component": "card",
+  "anatomy": "<Card>\n    <CardHeader>\n        <CardTitle></CardTitle>\n        <CardDescription></CardDescription>\n    </CardHeader>\n    <CardContent></CardContent>\n    <CardFooter></CardFooter>\n</Card>",
+  "stories": []
+}

@@ -1,0 +1,12 @@
+{
+  "component": "hover-card",
+  "anatomy": "<HoverCard>\n    <HoverCardTrigger></HoverCardTrigger>\n    <HoverCardContent></HoverCardContent>\n</HoverCard>",
+  "stories": [
+    {
+      "name": "Controlled",
+      "description": "HoverCard controlled externally via `open` and `onOpenChange` properties for full control over the open/close state.",
+      "sourceFile": "HoverCard.controlled.tsx",
+      "tags": ["controlled", "state-management"]
+    }
+  ]
+}

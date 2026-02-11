@@ -1,0 +1,12 @@
+{
+  "component": "table",
+  "anatomy": "<Table>\n  <TableCaption></TableCaption>\n  <TableHeader>\n    <TableRow>\n      <TableHead></TableHead>\n      <TableHead></TableHead>\n      <TableHead></TableHead>\n      <TableHead></TableHead>\n    </TableRow>\n  </TableHeader>\n  <TableBody>\n    <TableRow>\n      <TableCell></TableCell>\n      <TableCell></TableCell>\n      <TableCell></TableCell>\n      <TableCell></TableCell>\n    </TableRow>\n  </TableBody>\n</Table>",
+  "stories": [
+    {
+      "name": "CardsForMobile",
+      "description": "Responsive table that switches to stacked card blocks on small screens to improve readability and avoid horizontal scrolling.",
+      "sourceFile": "Table.mobileDesktop.tsx",
+      "tags": ["responsive", "mobile", "cards"]
+    }
+  ]
+}

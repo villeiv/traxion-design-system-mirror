@@ -1,0 +1,18 @@
+{
+  "component": "sortable-board",
+  "anatomy": null,
+  "stories": [
+    {
+      "name": "CustomItemRender",
+      "description": "Customizing the rendering of items within columns using the renderItem prop.",
+      "sourceFile": "SortableBoard.renderItem.tsx",
+      "tags": ["custom-render", "renderItem"]
+    },
+    {
+      "name": "ReactingToChanges",
+      "description": "Using the onChange callback to react to changes in columns or items, triggering a toast and logging state on each change.",
+      "sourceFile": "SortableBoardOnChange.tsx",
+      "tags": ["onChange", "callback", "events"]
+    }
+  ]
+}

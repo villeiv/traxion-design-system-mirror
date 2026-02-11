@@ -1,0 +1,98 @@
+{
+  "name": "Command",
+  "slug": "command",
+  "description": "A command palette / search interface built on the cmdk library. Provides a filterable list of options with keyboard navigation. Includes a CommandDialog variant that wraps Command inside a Dialog for modal usage. Sub-components provide structured input, list, grouping, items, separators, and keyboard shortcut display.",
+  "category": "navigation",
+  "tags": ["command", "palette", "search", "autocomplete", "combobox", "cmdk"],
+  "props": [
+    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes for the root Command container." },
+    { "name": "filter", "type": "(value: string, search: string) => number", "default": "undefined", "description": "Custom filter function. Return 1 for match, 0 for no match." },
+    { "name": "value", "type": "string", "default": "undefined", "description": "Controlled value of the selected item." },
+    { "name": "onValueChange", "type": "(value: string) => void", "default": "undefined", "description": "Callback when the selected item changes." },
+    { "name": "loop", "type": "boolean", "default": "false", "description": "Whether keyboard navigation loops from last to first item and vice versa." }
+  ],
+  "subComponents": [
+    {
+      "name": "CommandDialog",
+      "description": "A convenience wrapper that renders Command inside a Dialog with DialogContent. Accepts all DialogProps (open, onOpenChange, etc.). Content is styled with overflow-hidden and no padding.",
+      "props": [
+        { "name": "open", "type": "boolean", "default": "undefined", "description": "Controlled open state of the dialog." },
+        { "name": "onOpenChange", "type": "(open: boolean) => void", "default": "undefined", "description": "Callback when the dialog open state changes." },
+        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "Command sub-components (CommandInput, CommandList, etc.)." }
+      ]
+    },
+    {
+      "name": "CommandInput",
+      "description": "A search input field with a Search icon. Renders inside a bordered wrapper with the cmdk-input-wrapper attribute. Styled as h-10 with transparent background.",
+      "props": [
+        { "name": "placeholder", "type": "string", "default": "undefined", "description": "Placeholder text for the search input." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    },
+    {
+      "name": "CommandList",
+      "description": "The scrollable container for command items. Max height is 300px with overflow-y-auto.",
+      "props": [
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    },
+    {
+      "name": "CommandEmpty",
+      "description": "Content displayed when no results match the search query. Centered text with py-6.",
+      "props": [
+        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The empty state message." }
+      ]
+    },
+    {
+      "name": "CommandGroup",
+      "description": "Groups related command items under a heading. The heading is styled as text-xs font-medium text-muted-foreground.",
+      "props": [
+        { "name": "heading", "type": "string", "default": "undefined", "description": "The group heading text." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    },
+    {
+      "name": "CommandItem",
+      "description": "A selectable item in the command list. Highlights on selection with bg-accent. Supports disabled state.",
+      "props": [
+        { "name": "value", "type": "string", "default": "undefined", "description": "The value used for filtering and selection." },
+        { "name": "onSelect", "type": "(value: string) => void", "default": "undefined", "description": "Callback when the item is selected." },
+        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the item, reducing opacity and preventing interaction." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    },
+    {
+      "name": "CommandSeparator",
+      "description": "A visual separator between command groups. Renders as a 1px horizontal line with bg-border.",
+      "props": [
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    },
+    {
+      "name": "CommandShortcut",
+      "description": "Displays a keyboard shortcut hint aligned to the right of a CommandItem. Styled as text-xs tracking-widest text-muted-foreground.",
+      "props": [
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
+        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The shortcut text, e.g., a key combination." }
+      ]
+    }
+  ],
+  "dependencies": ["cmdk", "lucide-react"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "The Command root uses role='listbox' semantics internally (via cmdk). CommandItems are role='option'. CommandInput is a standard text input.",
+    "keyboard": "Arrow Up/Down navigates between items. Enter selects the highlighted item. Escape closes the CommandDialog. Type to filter items. Home/End move to first/last item when loop is false.",
+    "aria": "aria-selected is set on the currently highlighted item. aria-disabled is set on disabled items. The input is associated with the listbox via aria-controls.",
+    "notes": "When used as CommandDialog, focus is trapped inside the dialog. The cmdk library handles all search filtering and keyboard navigation automatically."
+  },
+  "examples": [
+    {
+      "title": "Basic command palette",
+      "code": "<Command>\n  <CommandInput placeholder=\"Type a command or search...\" />\n  <CommandList>\n    <CommandEmpty>No results found.</CommandEmpty>\n    <CommandGroup heading=\"Suggestions\">\n      <CommandItem>Calendar</CommandItem>\n      <CommandItem>Search Emoji</CommandItem>\n      <CommandItem>Calculator</CommandItem>\n    </CommandGroup>\n    <CommandSeparator />\n    <CommandGroup heading=\"Settings\">\n      <CommandItem>Profile</CommandItem>\n      <CommandItem>Billing</CommandItem>\n      <CommandItem>Settings</CommandItem>\n    </CommandGroup>\n  </CommandList>\n</Command>"
+    },
+    {
+      "title": "Command in a dialog",
+      "code": "<CommandDialog open={open} onOpenChange={setOpen}>\n  <CommandInput placeholder=\"Search...\" />\n  <CommandList>\n    <CommandEmpty>No results.</CommandEmpty>\n    <CommandGroup heading=\"Actions\">\n      <CommandItem onSelect={() => handleSelect('new')}>New File</CommandItem>\n      <CommandItem onSelect={() => handleSelect('open')}>Open File</CommandItem>\n    </CommandGroup>\n  </CommandList>\n</CommandDialog>"
+    }
+  ]
+}

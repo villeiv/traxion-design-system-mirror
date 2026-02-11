@@ -1,0 +1,61 @@
+{
+  "name": "Accordion",
+  "slug": "accordion",
+  "description": "A vertically stacked set of interactive headings that each reveal an associated section of content. Built on @radix-ui/react-accordion with animated expand/collapse transitions and a chevron indicator.",
+  "category": "navigation",
+  "tags": ["accordion", "collapsible", "expandable", "disclosure", "faq"],
+  "props": [
+    { "name": "type", "type": "\"single\" | \"multiple\"", "default": "undefined", "description": "Determines whether one or multiple items can be opened at the same time. Inherited from Radix AccordionPrimitive.Root." },
+    { "name": "collapsible", "type": "boolean", "default": "false", "description": "When type is 'single', allows closing content when clicking the trigger of an open item." },
+    { "name": "value", "type": "string | string[]", "default": "undefined", "description": "The controlled value of the item(s) to expand." },
+    { "name": "defaultValue", "type": "string | string[]", "default": "undefined", "description": "The default value of the item(s) to expand when uncontrolled." },
+    { "name": "onValueChange", "type": "(value: string | string[]) => void", "default": "undefined", "description": "Event handler called when the expanded state of an item changes." },
+    { "name": "disabled", "type": "boolean", "default": "false", "description": "When true, prevents the user from interacting with the accordion and all its items." },
+    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes applied to AccordionItem, AccordionTrigger, or AccordionContent wrappers." }
+  ],
+  "subComponents": [
+    {
+      "name": "AccordionItem",
+      "description": "Wraps a single collapsible section. Renders with a bottom border by default.",
+      "props": [
+        { "name": "value", "type": "string", "default": "undefined", "description": "A unique string value for the item, used to control open/close state." },
+        { "name": "disabled", "type": "boolean", "default": "false", "description": "When true, prevents the user from interacting with this item." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged via cn()." }
+      ]
+    },
+    {
+      "name": "AccordionTrigger",
+      "description": "The clickable heading that toggles the associated content. Displays a ChevronDown icon that rotates 180 degrees when the item is open.",
+      "props": [
+        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The trigger label content." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged via cn()." }
+      ]
+    },
+    {
+      "name": "AccordionContent",
+      "description": "The collapsible content area revealed when its parent AccordionItem is expanded. Uses animate-accordion-up/down for smooth transitions.",
+      "props": [
+        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The content to reveal." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes applied to the inner div wrapper." }
+      ]
+    }
+  ],
+  "dependencies": ["@radix-ui/react-accordion", "lucide-react"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Uses native Radix accordion roles: the root has no explicit role; each trigger has role='button' inside a heading element; content regions use role='region' with aria-labelledby pointing to the trigger.",
+    "keyboard": "Space/Enter toggles the focused trigger. Arrow Up/Down moves focus between triggers. Home/End moves to first/last trigger.",
+    "aria": "aria-expanded on triggers reflects open state. aria-controls on triggers references the content id. aria-labelledby on content references the trigger id.",
+    "notes": "Radix handles all ARIA attributes automatically. The component follows the WAI-ARIA Accordion Pattern."
+  },
+  "examples": [
+    {
+      "title": "Single collapsible accordion",
+      "code": "<Accordion type=\"single\" collapsible>\n  <AccordionItem value=\"item-1\">\n    <AccordionTrigger>Is it accessible?</AccordionTrigger>\n    <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>\n  </AccordionItem>\n  <AccordionItem value=\"item-2\">\n    <AccordionTrigger>Is it styled?</AccordionTrigger>\n    <AccordionContent>Yes. It comes with default styles matching the Traxion design system.</AccordionContent>\n  </AccordionItem>\n</Accordion>"
+    },
+    {
+      "title": "Multiple items open simultaneously",
+      "code": "<Accordion type=\"multiple\" defaultValue={[\"item-1\", \"item-2\"]}>\n  <AccordionItem value=\"item-1\">\n    <AccordionTrigger>Section One</AccordionTrigger>\n    <AccordionContent>Content for section one.</AccordionContent>\n  </AccordionItem>\n  <AccordionItem value=\"item-2\">\n    <AccordionTrigger>Section Two</AccordionTrigger>\n    <AccordionContent>Content for section two.</AccordionContent>\n  </AccordionItem>\n</Accordion>"
+    }
+  ]
+}

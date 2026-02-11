@@ -1,0 +1,57 @@
+{
+  "name": "HoverCard",
+  "slug": "hover-card",
+  "description": "A compound component built on @radix-ui/react-hover-card that displays rich content in a floating card when the user hovers over a trigger element. Includes animated enter/exit transitions.",
+  "category": "overlay",
+  "tags": ["hover", "card", "tooltip", "popover", "radix"],
+  "props": [
+    {
+      "name": "HoverCard (Root)",
+      "type": "HoverCardPrimitive.Root props",
+      "default": null,
+      "description": "Wrapper component. Accepts openDelay, closeDelay, open, onOpenChange, and defaultOpen from Radix HoverCard.Root."
+    },
+    {
+      "name": "HoverCardTrigger",
+      "type": "HoverCardPrimitive.Trigger props",
+      "default": null,
+      "description": "The element that triggers the hover card on hover. Renders as a child element."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged via cn() onto HoverCardContent."
+    },
+    {
+      "name": "align",
+      "type": "\"start\" | \"center\" | \"end\"",
+      "default": "\"center\"",
+      "description": "The preferred alignment of the content relative to the trigger."
+    },
+    {
+      "name": "sideOffset",
+      "type": "number",
+      "default": "4",
+      "description": "Distance in pixels between the content and the trigger."
+    }
+  ],
+  "dependencies": ["@radix-ui/react-hover-card", "@/lib/utils"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Managed by Radix HoverCard primitive.",
+    "keyboard": "Content is shown on hover; Radix manages focus and dismissal.",
+    "aria": "Radix primitives handle aria attributes automatically for hover card semantics.",
+    "notes": "The content panel includes animated transitions (fade and zoom) and supports directional slide-in based on the side placement."
+  },
+  "examples": [
+    {
+      "title": "Basic hover card",
+      "code": "<HoverCard>\n  <HoverCardTrigger asChild>\n    <a href=\"#\">Hover me</a>\n  </HoverCardTrigger>\n  <HoverCardContent>\n    <p>Additional information displayed on hover.</p>\n  </HoverCardContent>\n</HoverCard>"
+    },
+    {
+      "title": "Custom alignment and offset",
+      "code": "<HoverCard>\n  <HoverCardTrigger>Trigger</HoverCardTrigger>\n  <HoverCardContent align=\"start\" sideOffset={8}>\n    <p>Start-aligned content with extra offset.</p>\n  </HoverCardContent>\n</HoverCard>"
+    }
+  ]
+}

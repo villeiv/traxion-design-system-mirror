@@ -1,0 +1,107 @@
+{
+  "name": "Select",
+  "slug": "select",
+  "description": "A dropdown select component built on Radix UI Select primitive. Supports grouped items, labels, separators, scroll buttons, and a popper-positioned content panel with entrance/exit animations.",
+  "category": "forms",
+  "tags": ["select", "dropdown", "form", "picker", "radix"],
+  "props": [
+    { "name": "value", "type": "string", "default": "undefined", "description": "The controlled value of the select." },
+    { "name": "defaultValue", "type": "string", "default": "undefined", "description": "The uncontrolled default value." },
+    { "name": "onValueChange", "type": "(value: string) => void", "default": "undefined", "description": "Callback invoked when the selected value changes." },
+    { "name": "open", "type": "boolean", "default": "undefined", "description": "Controlled open state of the select content." },
+    { "name": "onOpenChange", "type": "(open: boolean) => void", "default": "undefined", "description": "Callback invoked when open state changes." },
+    { "name": "disabled", "type": "boolean", "default": "false", "description": "When true, prevents the user from interacting with the select." },
+    { "name": "name", "type": "string", "default": "undefined", "description": "The name of the select for form submission." },
+    { "name": "required", "type": "boolean", "default": "false", "description": "When true, the select is required for form submission." },
+    { "name": "dir", "type": "\"ltr\" | \"rtl\"", "default": "undefined", "description": "The reading direction." }
+  ],
+  "subComponents": [
+    {
+      "name": "SelectTrigger",
+      "description": "The button that toggles the select dropdown. Displays the selected value and a chevron-down icon. Styled with h-9 height, rounded border, and focus ring.",
+      "props": [
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with default trigger styles." },
+        { "name": "children", "type": "ReactNode", "default": "undefined", "description": "Content to render inside the trigger, typically a SelectValue." }
+      ]
+    },
+    {
+      "name": "SelectValue",
+      "description": "Displays the currently selected value text. Renders placeholder text when no value is selected.",
+      "props": [
+        { "name": "placeholder", "type": "string", "default": "undefined", "description": "Text shown when no value is selected." }
+      ]
+    },
+    {
+      "name": "SelectContent",
+      "description": "The dropdown content panel rendered via a portal. Includes scroll-up and scroll-down buttons and animate-in/animate-out transitions.",
+      "props": [
+        { "name": "position", "type": "\"popper\" | \"item-aligned\"", "default": "\"popper\"", "description": "The positioning mode. 'popper' positions relative to the trigger." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
+        { "name": "children", "type": "ReactNode", "default": "undefined", "description": "Select items, groups, labels, and separators." }
+      ]
+    },
+    {
+      "name": "SelectGroup",
+      "description": "Groups related select items together. Used with SelectLabel for accessibility.",
+      "props": [
+        { "name": "children", "type": "ReactNode", "default": "undefined", "description": "SelectLabel and SelectItem elements." }
+      ]
+    },
+    {
+      "name": "SelectLabel",
+      "description": "A non-interactive label for a group of items. Styled with semibold font weight.",
+      "props": [
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    },
+    {
+      "name": "SelectItem",
+      "description": "An individual selectable item. Shows a check icon when selected. Styled with focus highlight.",
+      "props": [
+        { "name": "value", "type": "string", "default": "undefined", "description": "The value submitted when this item is selected." },
+        { "name": "disabled", "type": "boolean", "default": "false", "description": "When true, the item cannot be selected." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
+        { "name": "children", "type": "ReactNode", "default": "undefined", "description": "The display text for this item." }
+      ]
+    },
+    {
+      "name": "SelectSeparator",
+      "description": "A visual separator between groups or items. Renders as a horizontal line.",
+      "props": [
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    },
+    {
+      "name": "SelectScrollUpButton",
+      "description": "A button that appears at the top of the content when scrolling is available. Displays a chevron-up icon.",
+      "props": [
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    },
+    {
+      "name": "SelectScrollDownButton",
+      "description": "A button that appears at the bottom of the content when scrolling is available. Displays a chevron-down icon.",
+      "props": [
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+      ]
+    }
+  ],
+  "dependencies": ["@radix-ui/react-select", "lucide-react"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "listbox (content) and option (items)",
+    "keyboard": "Space/Enter opens the select and selects focused item. Arrow keys navigate items. Escape closes the dropdown. Type-ahead character search is supported.",
+    "aria": "Managed by Radix UI: aria-expanded on trigger, aria-selected on items, role=listbox on content.",
+    "notes": "Placeholder text is styled with muted foreground color via data-[placeholder] attribute. Disabled items receive pointer-events-none and reduced opacity."
+  },
+  "examples": [
+    {
+      "title": "Basic Select",
+      "code": "<Select>\n  <SelectTrigger className=\"w-[180px]\">\n    <SelectValue placeholder=\"Select a fruit\" />\n  </SelectTrigger>\n  <SelectContent>\n    <SelectItem value=\"apple\">Apple</SelectItem>\n    <SelectItem value=\"banana\">Banana</SelectItem>\n    <SelectItem value=\"orange\">Orange</SelectItem>\n  </SelectContent>\n</Select>"
+    },
+    {
+      "title": "Grouped Select with Labels",
+      "code": "<Select>\n  <SelectTrigger className=\"w-[240px]\">\n    <SelectValue placeholder=\"Select a food\" />\n  </SelectTrigger>\n  <SelectContent>\n    <SelectGroup>\n      <SelectLabel>Fruits</SelectLabel>\n      <SelectItem value=\"apple\">Apple</SelectItem>\n      <SelectItem value=\"banana\">Banana</SelectItem>\n    </SelectGroup>\n    <SelectSeparator />\n    <SelectGroup>\n      <SelectLabel>Vegetables</SelectLabel>\n      <SelectItem value=\"carrot\">Carrot</SelectItem>\n      <SelectItem value=\"celery\">Celery</SelectItem>\n    </SelectGroup>\n  </SelectContent>\n</Select>"
+    }
+  ]
+}

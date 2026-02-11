@@ -1,0 +1,42 @@
+{
+  "name": "SortableBoard",
+  "slug": "sortable-board",
+  "description": "A drag-and-drop Kanban-style board component built on @dnd-kit. Renders columns with draggable items that can be reordered within a column or moved between columns. Supports custom item rendering via a renderItem prop. Columns auto-fit to fill available width using CSS grid.",
+  "category": "data-display",
+  "tags": ["sortable", "kanban", "board", "drag-and-drop", "dnd-kit", "columns"],
+  "props": [
+    { "name": "defaultColumns", "type": "DefaultColumnType[]", "default": "undefined", "description": "The initial column definitions. Each column has a title, items array of string IDs, and an optional id (auto-generated as 'col-{index}' if omitted)." },
+    { "name": "onChange", "type": "(columns: ColumnType[]) => void", "default": "undefined", "description": "Callback invoked when items are reordered or moved between columns. Receives the full updated columns array." },
+    { "name": "renderItem", "type": "(id: string) => ReactNode", "default": "undefined", "description": "Custom render function for each draggable item. Receives the item's string ID. When omitted, items display their ID as plain text." }
+  ],
+  "types": [
+    {
+      "name": "DefaultColumnType",
+      "definition": "{ id?: string; title: string; items: string[] }",
+      "description": "Column definition for initial setup. id is optional and auto-generated if not provided."
+    },
+    {
+      "name": "ColumnType",
+      "definition": "{ id: string; title: string; items: string[] }",
+      "description": "Column definition as returned by onChange. id is always present."
+    }
+  ],
+  "dependencies": ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities", "lucide-react"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Application-level drag-and-drop region",
+    "keyboard": "Provided by @dnd-kit: Space/Enter to pick up and drop items. Arrow keys to move items. Escape to cancel drag.",
+    "aria": "Managed by @dnd-kit: aria-grabbed, aria-dropeffect, live region announcements for drag start, over, and end events.",
+    "notes": "Each item has a dedicated drag handle (GripVertical icon) with touch-action: none for mobile compatibility. Items display a grip icon on the right side as a visual drag affordance. Empty columns show a placeholder message."
+  },
+  "examples": [
+    {
+      "title": "Basic SortableBoard",
+      "code": "<SortableBoard\n  defaultColumns={[\n    { title: \"To Do\", items: [\"task-1\", \"task-2\", \"task-3\"] },\n    { title: \"In Progress\", items: [\"task-4\"] },\n    { title: \"Done\", items: [\"task-5\", \"task-6\"] }\n  ]}\n  onChange={(columns) => console.log(columns)}\n/>"
+    },
+    {
+      "title": "SortableBoard with Custom Item Rendering",
+      "code": "<SortableBoard\n  defaultColumns={[\n    { id: \"backlog\", title: \"Backlog\", items: [\"PROJ-1\", \"PROJ-2\"] },\n    { id: \"active\", title: \"Active\", items: [\"PROJ-3\"] }\n  ]}\n  renderItem={(id) => (\n    <div className=\"flex flex-col gap-1\">\n      <span className=\"font-medium\">{id}</span>\n      <span className=\"text-xs text-muted-foreground\">Task description</span>\n    </div>\n  )}\n  onChange={(columns) => console.log(columns)}\n/>"
+    }
+  ]
+}

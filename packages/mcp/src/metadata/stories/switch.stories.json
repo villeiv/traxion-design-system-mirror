@@ -1,0 +1,30 @@
+{
+  "component": "switch",
+  "anatomy": null,
+  "stories": [
+    {
+      "name": "Controlled",
+      "description": "Controlled switch using parent state with `checked` and `onCheckedChange` props.",
+      "sourceFile": "Switch.controlled.tsx",
+      "tags": ["controlled", "state-management"]
+    },
+    {
+      "name": "Uncontrolled",
+      "description": "Uncontrolled switch managing its own internal state. Initial state can be set with `defaultChecked`.",
+      "sourceFile": "Switch.uncontrolled.tsx",
+      "tags": ["uncontrolled", "default-state"]
+    },
+    {
+      "name": "WithLabel",
+      "description": "Switch accompanied by a text label, recommended for improving accessibility and action comprehension.",
+      "sourceFile": "Switch.withLabel.tsx",
+      "tags": ["label", "accessibility"]
+    },
+    {
+      "name": "Boxed",
+      "description": "Switch integrated inside a box with title, description, and an icon for a richer layout.",
+      "sourceFile": "Switch.boxed.tsx",
+      "tags": ["boxed", "variant", "icon"]
+    }
+  ]
+}

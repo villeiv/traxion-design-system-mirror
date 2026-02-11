@@ -1,0 +1,45 @@
+{
+  "name": "Label",
+  "slug": "label",
+  "description": "An accessible label component built on @radix-ui/react-label. Uses class-variance-authority for variant-based styling. Automatically disables visual appearance when its associated peer input is disabled.",
+  "category": "forms",
+  "tags": ["label", "form", "radix", "accessibility"],
+  "props": [
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged with the label variant styles via cn()."
+    },
+    {
+      "name": "htmlFor",
+      "type": "string",
+      "default": "undefined",
+      "description": "The id of the form element this label is associated with. Inherited from Radix LabelPrimitive.Root."
+    },
+    {
+      "name": "...props",
+      "type": "React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & VariantProps<typeof labelVariants>",
+      "default": null,
+      "description": "All Radix Label primitive props and class-variance-authority variant props are forwarded."
+    }
+  ],
+  "dependencies": ["@radix-ui/react-label", "class-variance-authority", "@/lib/utils"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Renders a native <label> element via Radix, providing implicit label semantics.",
+    "keyboard": "Clicking the label focuses or activates the associated form control.",
+    "aria": "Radix Label handles the htmlFor/id association automatically when used with Radix form primitives.",
+    "notes": "When a peer input is disabled (peer-disabled), the label reduces opacity to 70% and shows a not-allowed cursor. Base style is text-sm font-medium leading-none."
+  },
+  "examples": [
+    {
+      "title": "Basic label with input",
+      "code": "<div>\n  <Label htmlFor=\"name\">Full Name</Label>\n  <Input id=\"name\" type=\"text\" />\n</div>"
+    },
+    {
+      "title": "Label with disabled input",
+      "code": "<div>\n  <Label htmlFor=\"disabled-field\">Disabled Field</Label>\n  <Input id=\"disabled-field\" disabled />\n</div>"
+    }
+  ]
+}

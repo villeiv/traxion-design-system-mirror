@@ -1,0 +1,18 @@
+{
+  "component": "dialog",
+  "anatomy": "<Dialog>\n    <DialogTrigger></DialogTrigger>\n    <DialogContent>\n        <DialogHeader>\n            <DialogTitle></DialogTitle>\n            <DialogDescription></DialogDescription>\n        </DialogHeader>\n    </DialogContent>\n</Dialog>",
+  "stories": [
+    {
+      "name": "Basic",
+      "description": "Basic uncontrolled Dialog with an internal trigger. Click to show a modal with title, description, and actions.",
+      "sourceFile": "Dialog.basic.tsx",
+      "tags": ["basic", "uncontrolled"]
+    },
+    {
+      "name": "Controlled",
+      "description": "Externally controlled Dialog where the open/close state is managed via `open` and `onOpenChange` props for syncing with other components.",
+      "sourceFile": "Dialog.controlled.tsx",
+      "tags": ["controlled", "state-management"]
+    }
+  ]
+}

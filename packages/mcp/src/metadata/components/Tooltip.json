@@ -1,0 +1,74 @@
+{
+  "name": "Tooltip",
+  "slug": "tooltip",
+  "description": "A popup that displays informational text when hovering over or focusing a trigger element. Built on Radix UI Tooltip primitive. The content is portaled and features entrance/exit animations with directional slide-in based on placement side.",
+  "category": "overlay",
+  "tags": ["tooltip", "popover", "hint", "hover", "radix"],
+  "props": [
+    { "name": "open", "type": "boolean", "default": "undefined", "description": "Controlled open state of the tooltip." },
+    { "name": "defaultOpen", "type": "boolean", "default": "false", "description": "The uncontrolled default open state." },
+    { "name": "onOpenChange", "type": "(open: boolean) => void", "default": "undefined", "description": "Callback invoked when the open state changes." },
+    { "name": "delayDuration", "type": "number", "default": "700", "description": "The delay in milliseconds before the tooltip opens on hover (set on TooltipProvider)." }
+  ],
+  "subComponents": [
+    {
+      "name": "TooltipProvider",
+      "description": "Wraps your application or a section of it to provide shared tooltip configuration (e.g., delay duration, skip delay). Must be an ancestor of all Tooltip instances.",
+      "props": [
+        { "name": "delayDuration", "type": "number", "default": "700", "description": "The global delay in milliseconds before tooltips open." },
+        { "name": "skipDelayDuration", "type": "number", "default": "300", "description": "How much time a user has to enter another trigger without incurring a delay again." },
+        { "name": "disableHoverableContent", "type": "boolean", "default": "false", "description": "When true, the tooltip closes immediately when the pointer leaves the trigger." }
+      ]
+    },
+    {
+      "name": "Tooltip",
+      "description": "The root component that manages the open/closed state of an individual tooltip.",
+      "props": [
+        { "name": "open", "type": "boolean", "default": "undefined", "description": "Controlled open state." },
+        { "name": "defaultOpen", "type": "boolean", "default": "false", "description": "Uncontrolled default open state." },
+        { "name": "onOpenChange", "type": "(open: boolean) => void", "default": "undefined", "description": "Callback when open state changes." },
+        { "name": "delayDuration", "type": "number", "default": "undefined", "description": "Override the provider's delay for this specific tooltip." }
+      ]
+    },
+    {
+      "name": "TooltipTrigger",
+      "description": "The element that triggers the tooltip on hover or focus. Renders as a Radix Tooltip Trigger.",
+      "props": [
+        { "name": "asChild", "type": "boolean", "default": "false", "description": "When true, merges props onto the child element instead of rendering a button." }
+      ]
+    },
+    {
+      "name": "TooltipContent",
+      "description": "The content popup displayed when the tooltip is open. Rendered via a portal with animations (fade-in, zoom-in, directional slide-in based on side). Styled with rounded-md border, bg-popover, shadow-md, and text-sm.",
+      "props": [
+        { "name": "sideOffset", "type": "number", "default": "4", "description": "The distance in pixels between the trigger and the tooltip content." },
+        { "name": "side", "type": "\"top\" | \"right\" | \"bottom\" | \"left\"", "default": "\"top\"", "description": "The preferred side of the trigger to render the content." },
+        { "name": "align", "type": "\"start\" | \"center\" | \"end\"", "default": "\"center\"", "description": "The alignment of the content relative to the trigger." },
+        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with default content styles." },
+        { "name": "children", "type": "ReactNode", "default": "undefined", "description": "The tooltip text or content." }
+      ]
+    }
+  ],
+  "dependencies": ["@radix-ui/react-tooltip"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "tooltip",
+    "keyboard": "Tab to focus the trigger element, which opens the tooltip. Escape closes the tooltip. The tooltip also opens on hover.",
+    "aria": "Managed by Radix UI: role=tooltip on content, aria-describedby on trigger linking to the tooltip content.",
+    "notes": "TooltipProvider must wrap all Tooltip instances. Use asChild on TooltipTrigger when wrapping custom elements like buttons or icons. The content is portaled to avoid clipping."
+  },
+  "examples": [
+    {
+      "title": "Basic Tooltip",
+      "code": "<TooltipProvider>\n  <Tooltip>\n    <TooltipTrigger asChild>\n      <Button variant=\"outline\">Hover me</Button>\n    </TooltipTrigger>\n    <TooltipContent>\n      <p>This is a tooltip</p>\n    </TooltipContent>\n  </Tooltip>\n</TooltipProvider>"
+    },
+    {
+      "title": "Tooltip with Side and Offset",
+      "code": "<TooltipProvider>\n  <Tooltip>\n    <TooltipTrigger asChild>\n      <Button variant=\"ghost\" size=\"icon\">\n        <Info className=\"h-4 w-4\" />\n      </Button>\n    </TooltipTrigger>\n    <TooltipContent side=\"right\" sideOffset={8}>\n      <p>More information here</p>\n    </TooltipContent>\n  </Tooltip>\n</TooltipProvider>"
+    },
+    {
+      "title": "Controlled Tooltip",
+      "code": "<TooltipProvider>\n  <Tooltip open={isOpen} onOpenChange={setIsOpen}>\n    <TooltipTrigger asChild>\n      <span>Controlled trigger</span>\n    </TooltipTrigger>\n    <TooltipContent>\n      <p>Controlled tooltip content</p>\n    </TooltipContent>\n  </Tooltip>\n</TooltipProvider>"
+    }
+  ]
+}

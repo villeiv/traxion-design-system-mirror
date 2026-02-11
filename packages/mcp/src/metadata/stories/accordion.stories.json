@@ -1,0 +1,12 @@
+{
+  "component": "accordion",
+  "anatomy": "<Accordion>\n  <AccordionItem>\n    <AccordionTrigger></AccordionTrigger>\n    <AccordionContent></AccordionContent>\n  </AccordionItem>\n</Accordion>",
+  "stories": [
+    {
+      "name": "Controlled",
+      "description": "Controlled Accordion where the open/close state of items is managed from a parent component. Useful when you need to sync state with the URL, local storage, or global state.",
+      "sourceFile": "Accordion.controlled.tsx",
+      "tags": ["controlled", "state-management"]
+    }
+  ]
+}

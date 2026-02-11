@@ -1,0 +1,39 @@
+{
+  "name": "Switch",
+  "slug": "switch",
+  "description": "A toggle switch control built on Radix UI Switch primitive. Renders as a small track (h-5 w-9) with a sliding circular thumb that transitions between checked and unchecked states. Supports primary color when checked and input color when unchecked.",
+  "category": "forms",
+  "tags": ["switch", "toggle", "form", "boolean", "radix"],
+  "props": [
+    { "name": "checked", "type": "boolean", "default": "undefined", "description": "The controlled checked state of the switch." },
+    { "name": "defaultChecked", "type": "boolean", "default": "false", "description": "The uncontrolled default checked state." },
+    { "name": "onCheckedChange", "type": "(checked: boolean) => void", "default": "undefined", "description": "Callback invoked when the checked state changes." },
+    { "name": "disabled", "type": "boolean", "default": "false", "description": "When true, prevents the user from interacting with the switch. Applies opacity-50 and cursor-not-allowed." },
+    { "name": "required", "type": "boolean", "default": "false", "description": "When true, indicates that the switch must be checked before the owning form can be submitted." },
+    { "name": "name", "type": "string", "default": "undefined", "description": "The name of the switch for form submission." },
+    { "name": "value", "type": "string", "default": "\"on\"", "description": "The value submitted with the form when checked." },
+    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with default track styles (inline-flex, rounded-full, border-2, shadow-sm, transition-colors)." }
+  ],
+  "dependencies": ["@radix-ui/react-switch"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "switch",
+    "keyboard": "Space toggles the switch state. Tab moves focus to/from the switch. The switch has focus-visible ring styling.",
+    "aria": "Automatically managed by Radix UI: role=switch, aria-checked reflecting the current state.",
+    "notes": "Pair the Switch with a Label element for proper accessibility. The thumb has pointer-events-none and uses translate-x to animate between states."
+  },
+  "examples": [
+    {
+      "title": "Basic Switch",
+      "code": "<div className=\"flex items-center space-x-2\">\n  <Switch id=\"airplane-mode\" />\n  <Label htmlFor=\"airplane-mode\">Airplane Mode</Label>\n</div>"
+    },
+    {
+      "title": "Controlled Switch",
+      "code": "<div className=\"flex items-center space-x-2\">\n  <Switch\n    checked={enabled}\n    onCheckedChange={setEnabled}\n    id=\"notifications\"\n  />\n  <Label htmlFor=\"notifications\">Enable notifications</Label>\n</div>"
+    },
+    {
+      "title": "Disabled Switch",
+      "code": "<div className=\"flex items-center space-x-2\">\n  <Switch disabled id=\"disabled-switch\" />\n  <Label htmlFor=\"disabled-switch\">Disabled</Label>\n</div>"
+    }
+  ]
+}

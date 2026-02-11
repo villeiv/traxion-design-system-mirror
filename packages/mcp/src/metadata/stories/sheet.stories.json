@@ -1,0 +1,30 @@
+{
+  "component": "sheet",
+  "anatomy": "<Sheet>\n    <SheetTrigger></SheetTrigger>\n    <SheetContent>\n        <SheetHeader>\n            <SheetTitle></SheetTitle>\n            <SheetDescription></SheetDescription>\n        </SheetHeader>\n    </SheetContent>\n    <SheetFooter></SheetFooter>\n</Sheet>",
+  "stories": [
+    {
+      "name": "Controlled",
+      "description": "Sheet controlled externally via `open` and `onOpenChange` props, allowing it to be opened or closed from outside the component.",
+      "sourceFile": "Sheet.controlled.tsx",
+      "tags": ["controlled", "state-management"]
+    },
+    {
+      "name": "Form",
+      "description": "Sheet containing a form, ideal for entering data without leaving the current page.",
+      "sourceFile": "Sheet.form.tsx",
+      "tags": ["form", "data-entry"]
+    },
+    {
+      "name": "List",
+      "description": "Sheet used to display lists or tables in a slide-over panel.",
+      "sourceFile": "Sheet.list.tsx",
+      "tags": ["list", "table", "data-display"]
+    },
+    {
+      "name": "Notifications",
+      "description": "Sheet functioning as a notification panel for displaying alerts and messages.",
+      "sourceFile": "Sheet.notifications.tsx",
+      "tags": ["notifications", "panel"]
+    }
+  ]
+}

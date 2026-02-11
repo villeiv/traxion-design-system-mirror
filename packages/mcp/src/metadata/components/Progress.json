@@ -1,0 +1,49 @@
+{
+  "name": "Progress",
+  "slug": "progress",
+  "description": "A progress bar component built on @radix-ui/react-progress. Displays a horizontal bar that fills proportionally to the given value (0-100). The indicator animates via CSS translateX transitions.",
+  "category": "feedback",
+  "tags": ["progress", "progress-bar", "loading", "radix", "indicator"],
+  "props": [
+    {
+      "name": "value",
+      "type": "number | null",
+      "default": "0",
+      "description": "The current progress value from 0 to 100. The indicator bar translates to show the corresponding fill percentage. When null or undefined, defaults to 0."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged with the default root styles via cn()."
+    },
+    {
+      "name": "...props",
+      "type": "React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>",
+      "default": null,
+      "description": "All Radix Progress.Root props are forwarded (max, getValueLabel, etc.)."
+    }
+  ],
+  "dependencies": ["@radix-ui/react-progress", "@/lib/utils"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Radix renders a progressbar role automatically on the root element.",
+    "keyboard": "No keyboard interaction; purely visual indicator.",
+    "aria": "Radix Progress automatically sets aria-valuenow, aria-valuemin (0), and aria-valuemax (100). Custom value labels can be provided via getValueLabel prop.",
+    "notes": "The root has a height of h-2, full width, rounded-full corners, and a bg-primary/20 background track. The indicator uses bg-primary with transition-all for smooth animation."
+  },
+  "examples": [
+    {
+      "title": "Basic progress bar",
+      "code": "<Progress value={50} />"
+    },
+    {
+      "title": "Full progress",
+      "code": "<Progress value={100} />"
+    },
+    {
+      "title": "Dynamic progress with state",
+      "code": "const [progress, setProgress] = useState(0);\n\n<Progress value={progress} className=\"w-[60%]\" />"
+    }
+  ]
+}

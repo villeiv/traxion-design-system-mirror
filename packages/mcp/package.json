@@ -1,0 +1,26 @@
+{
+  "name": "@traxion-global/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "traxion-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup src/index.ts --format esm --clean",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@traxion-global/design-system": "*",
+    "@repo/typescript-config": "*",
+    "tsx": "^4.19.2",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.2"
+  }
+}

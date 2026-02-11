@@ -1,0 +1,12 @@
+{
+  "component": "select",
+  "anatomy": "<Select>\n    <SelectTrigger>\n        <SelectValue/>\n    </SelectTrigger>\n    <SelectContent>\n        <SelectItem></SelectItem>\n        <SelectItem></SelectItem>\n        <SelectItem></SelectItem>\n    </SelectContent>\n</Select>",
+  "stories": [
+    {
+      "name": "Controlled",
+      "description": "Controlled Select where both the selected value and the dropdown open state are managed via parent state.",
+      "sourceFile": "Select.controlled.tsx",
+      "tags": ["controlled", "state-management"]
+    }
+  ]
+}

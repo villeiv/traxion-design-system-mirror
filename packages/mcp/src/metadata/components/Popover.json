@@ -1,0 +1,69 @@
+{
+  "name": "Popover",
+  "slug": "popover",
+  "description": "A compound popover component built on @radix-ui/react-popover. Provides Popover (root), PopoverTrigger, PopoverAnchor, and PopoverContent sub-components. Content is rendered through a portal with animated enter/exit transitions.",
+  "category": "overlay",
+  "tags": ["popover", "popup", "overlay", "radix", "portal"],
+  "props": [
+    {
+      "name": "Popover (Root)",
+      "type": "PopoverPrimitive.Root props",
+      "default": null,
+      "description": "Wrapper component. Accepts open, onOpenChange, defaultOpen, and modal from Radix Popover.Root."
+    },
+    {
+      "name": "PopoverTrigger",
+      "type": "PopoverPrimitive.Trigger props",
+      "default": null,
+      "description": "The interactive element that toggles the popover open/closed. Supports asChild to compose with custom trigger elements."
+    },
+    {
+      "name": "PopoverAnchor",
+      "type": "PopoverPrimitive.Anchor props",
+      "default": null,
+      "description": "An optional anchor element that the popover content is positioned relative to, when different from the trigger."
+    },
+    {
+      "name": "PopoverContent.className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged with the default content styles via cn()."
+    },
+    {
+      "name": "PopoverContent.align",
+      "type": "\"start\" | \"center\" | \"end\"",
+      "default": "\"center\"",
+      "description": "The preferred alignment of the content relative to the trigger or anchor."
+    },
+    {
+      "name": "PopoverContent.sideOffset",
+      "type": "number",
+      "default": "4",
+      "description": "Distance in pixels between the content and the trigger/anchor."
+    },
+    {
+      "name": "PopoverContent...props",
+      "type": "React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>",
+      "default": null,
+      "description": "All additional Radix Popover.Content props are forwarded (side, sideOffset, alignOffset, avoidCollisions, etc.)."
+    }
+  ],
+  "dependencies": ["@radix-ui/react-popover", "@/lib/utils"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Managed by Radix Popover primitive. The trigger receives aria-expanded and aria-controls attributes.",
+    "keyboard": "Enter/Space toggles the popover. Escape closes it. Focus is trapped inside the content when open.",
+    "aria": "Radix handles aria-expanded, aria-controls, and aria-haspopup automatically. Content is rendered in a portal for proper stacking.",
+    "notes": "Content includes animated fade and zoom transitions on open/close, and directional slide-in animations based on placement side (top, bottom, left, right). Default width is w-72."
+  },
+  "examples": [
+    {
+      "title": "Basic popover",
+      "code": "<Popover>\n  <PopoverTrigger asChild>\n    <Button variant=\"outline\">Open Popover</Button>\n  </PopoverTrigger>\n  <PopoverContent>\n    <p>Popover content goes here.</p>\n  </PopoverContent>\n</Popover>"
+    },
+    {
+      "title": "Popover with custom anchor",
+      "code": "<Popover>\n  <PopoverAnchor asChild>\n    <div className=\"inline-block\">Anchor element</div>\n  </PopoverAnchor>\n  <PopoverTrigger asChild>\n    <Button>Toggle</Button>\n  </PopoverTrigger>\n  <PopoverContent align=\"start\" sideOffset={8}>\n    <p>Positioned relative to the anchor.</p>\n  </PopoverContent>\n</Popover>"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "Pagination",
+  "slug": "pagination",
+  "description": "A compound pagination component for navigating multi-page content. Composed of Pagination (nav wrapper), PaginationContent (list), PaginationItem (list item), PaginationLink (page link), PaginationPrevious, PaginationNext, and PaginationEllipsis sub-components. Uses Button variants for link styling.",
+  "category": "navigation",
+  "tags": ["pagination", "navigation", "paging", "pages"],
+  "props": [
+    {
+      "name": "Pagination (nav)",
+      "type": "React.ComponentProps<\"nav\">",
+      "default": null,
+      "description": "Root nav element with role=\"navigation\" and aria-label=\"pagination\". Accepts className and all nav attributes."
+    },
+    {
+      "name": "PaginationContent",
+      "type": "React.ComponentProps<\"ul\">",
+      "default": null,
+      "description": "An unordered list (ul) that wraps PaginationItem elements. Accepts ref and className."
+    },
+    {
+      "name": "PaginationItem",
+      "type": "React.ComponentProps<\"li\">",
+      "default": null,
+      "description": "A list item (li) wrapper for each pagination element. Adds cursor-pointer styling."
+    },
+    {
+      "name": "PaginationLink.isActive",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, renders the link with the \"outline\" button variant and sets aria-current=\"page\". Otherwise uses the \"ghost\" variant."
+    },
+    {
+      "name": "PaginationLink.size",
+      "type": "ButtonProps[\"size\"]",
+      "default": "\"icon\"",
+      "description": "The button size variant applied to the anchor element."
+    },
+    {
+      "name": "PaginationPrevious",
+      "type": "PaginationLink props",
+      "default": null,
+      "description": "Renders a left-chevron icon with optional children text. Automatically uses size=\"sm\" when children are provided, size=\"icon\" otherwise."
+    },
+    {
+      "name": "PaginationNext",
+      "type": "PaginationLink props",
+      "default": null,
+      "description": "Renders a right-chevron icon with optional children text. Automatically uses size=\"sm\" when children are provided, size=\"icon\" otherwise."
+    },
+    {
+      "name": "PaginationEllipsis",
+      "type": "React.ComponentProps<\"span\">",
+      "default": null,
+      "description": "A non-interactive ellipsis indicator (MoreHorizontal icon) with aria-hidden and a sr-only \"More pages\" label."
+    }
+  ],
+  "dependencies": ["lucide-react", "./Button", "@/lib/utils"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "The root Pagination renders a <nav> element with role=\"navigation\".",
+    "keyboard": "Standard anchor keyboard navigation: Tab to focus links, Enter to activate.",
+    "aria": "aria-label=\"pagination\" on the nav. PaginationLink uses aria-current=\"page\" when isActive is true. PaginationPrevious has aria-label=\"Go to previous page\". PaginationNext has aria-label=\"Go to next page\". PaginationEllipsis uses aria-hidden with a sr-only \"More pages\" text.",
+    "notes": "Links are rendered as <a> elements styled with buttonVariants. The active page link uses the \"outline\" variant while inactive pages use \"ghost\"."
+  },
+  "examples": [
+    {
+      "title": "Basic pagination",
+      "code": "<Pagination>\n  <PaginationContent>\n    <PaginationItem>\n      <PaginationPrevious href=\"#\" />\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationLink href=\"#\" isActive>1</PaginationLink>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationLink href=\"#\">2</PaginationLink>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationLink href=\"#\">3</PaginationLink>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationEllipsis />\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationNext href=\"#\" />\n    </PaginationItem>\n  </PaginationContent>\n</Pagination>"
+    },
+    {
+      "title": "Previous/Next with text labels",
+      "code": "<Pagination>\n  <PaginationContent>\n    <PaginationItem>\n      <PaginationPrevious href=\"#\">Previous</PaginationPrevious>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationNext href=\"#\">Next</PaginationNext>\n    </PaginationItem>\n  </PaginationContent>\n</Pagination>"
+    }
+  ]
+}

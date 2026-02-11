@@ -1,0 +1,47 @@
+{
+  "name": "Calendar",
+  "slug": "calendar",
+  "description": "A date picker calendar component built on react-day-picker (DayPicker). Supports single date selection, date ranges, and multiple date selection. Features locale support for Spanish (es) and English (en) via date-fns, configurable caption layouts (label or dropdown), and custom day button rendering with range highlighting. Navigation buttons use the Traxion Button component.",
+  "category": "forms",
+  "tags": ["calendar", "date-picker", "date", "range", "day-picker", "locale"],
+  "props": [
+    { "name": "localeCode", "type": "\"es\" | \"en\"", "default": "\"es\"", "description": "The locale code for date formatting and month/weekday names. Maps to date-fns locale objects." },
+    { "name": "buttonVariant", "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"", "default": "\"ghost\"", "description": "The Button variant used for the previous/next navigation arrows." },
+    { "name": "captionLayout", "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"", "default": "\"label\"", "description": "How the month/year caption is displayed. 'label' shows static text, 'dropdown' shows selectable month and year dropdowns." },
+    { "name": "showOutsideDays", "type": "boolean", "default": "true", "description": "Whether to show days from the previous and next months in the calendar grid." },
+    { "name": "mode", "type": "\"single\" | \"range\" | \"multiple\"", "default": "undefined", "description": "The selection mode. Inherited from react-day-picker DayPicker." },
+    { "name": "selected", "type": "Date | DateRange | Date[]", "default": "undefined", "description": "The currently selected date(s). Controlled prop." },
+    { "name": "onSelect", "type": "(date: Date | DateRange | Date[] | undefined) => void", "default": "undefined", "description": "Callback fired when a date is selected." },
+    { "name": "disabled", "type": "Matcher | Matcher[]", "default": "undefined", "description": "Days that should be disabled and unselectable." },
+    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes for the calendar root." },
+    { "name": "classNames", "type": "Partial<ClassNames>", "default": "undefined", "description": "Override class names for individual calendar parts (root, months, day, etc.)." },
+    { "name": "formatters", "type": "Partial<Formatters>", "default": "undefined", "description": "Custom formatter functions. The default formatMonthDropdown respects the localeCode." },
+    { "name": "components", "type": "Partial<Components>", "default": "undefined", "description": "Override internal components (Root, Chevron, DayButton, WeekNumber). The default DayButton is CalendarDayButton with range-aware data attributes." }
+  ],
+  "dependencies": ["react-day-picker", "date-fns", "lucide-react"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "The calendar uses a table-based layout with appropriate table, thead, tbody, tr, td semantics provided by react-day-picker.",
+    "keyboard": "Arrow keys navigate between days. Home/End move to start/end of the week. PageUp/PageDown move between months. Enter/Space select a day. Focus management is handled automatically by CalendarDayButton.",
+    "aria": "Day buttons include aria-disabled for disabled days. Selected days are indicated via data-selected attributes. Outside days use aria-selected for range selections.",
+    "notes": "The CalendarDayButton sub-component uses data attributes (data-selected-single, data-range-start, data-range-end, data-range-middle) for styling different selection states. A focus effect is triggered via React.useEffect when modifiers.focused is true."
+  },
+  "examples": [
+    {
+      "title": "Basic single date selection",
+      "code": "<Calendar mode=\"single\" selected={date} onSelect={setDate} />"
+    },
+    {
+      "title": "Date range picker in English",
+      "code": "<Calendar mode=\"range\" localeCode=\"en\" selected={dateRange} onSelect={setDateRange} />"
+    },
+    {
+      "title": "Calendar with dropdown navigation",
+      "code": "<Calendar mode=\"single\" captionLayout=\"dropdown\" selected={date} onSelect={setDate} />"
+    },
+    {
+      "title": "Calendar with disabled past dates",
+      "code": "<Calendar mode=\"single\" selected={date} onSelect={setDate} disabled={{ before: new Date() }} />"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "traxion-design-system": {
+      "command": "npm",
+      "args": ["run", "dev", "--workspace=@traxion-global/mcp"],
+      "cwd": "C:/Apps y websites/8-traxion-global-design-system"
+    }
+  }
+}

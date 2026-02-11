@@ -1,0 +1,65 @@
+{
+  "name": "Input",
+  "slug": "input",
+  "description": "A styled text input component that extends the native HTML input element. Supports all standard input attributes via React.ComponentProps<\"input\"> and merges custom classes via the cn utility. Includes focus ring, placeholder, disabled, and file-input styles.",
+  "category": "forms",
+  "tags": ["input", "text", "form", "field"],
+  "props": [
+    {
+      "name": "type",
+      "type": "React.HTMLInputTypeAttribute",
+      "default": "undefined",
+      "description": "The HTML input type (e.g. \"text\", \"email\", \"password\", \"number\", \"file\")."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged with the default input styles via cn()."
+    },
+    {
+      "name": "...props",
+      "type": "React.ComponentProps<\"input\">",
+      "default": null,
+      "description": "All standard HTML input attributes are forwarded (placeholder, disabled, value, onChange, name, etc.)."
+    }
+  ],
+  "dependencies": ["@/lib/utils"],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Native input element with implicit textbox role.",
+    "keyboard": "Standard input keyboard behavior: Tab to focus, type to enter text.",
+    "aria": "Supports all standard aria-* attributes via spread props. Pair with a Label component for accessible labelling.",
+    "notes": "Disabled state reduces opacity to 50% and changes cursor to not-allowed. Focus ring uses ring-2 with ring-ring color and ring-offset-2."
+  },
+  "examples": [
+    {
+      "title": "Basic text input",
+      "code": "<Input type=\"text\" placeholder=\"Enter your name\" />"
+    },
+    {
+      "title": "Email input with label",
+      "code": "<div>\n  <Label htmlFor=\"email\">Email</Label>\n  <Input id=\"email\" type=\"email\" placeholder=\"user@example.com\" />\n</div>"
+    },
+    {
+      "title": "Disabled input",
+      "code": "<Input type=\"text\" placeholder=\"Cannot edit\" disabled />"
+    },
+    {
+      "title": "File input",
+      "code": "<Input type=\"file\" accept=\".pdf,.docx\" />"
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "El componente Input debe ir acompañado de una etiqueta (Label) para describir su propósito.",
+      "code": "<div className=\"flex flex-col gap-1\">\n  <Label htmlFor=\"email\">Email</Label>\n  <Input id=\"email\" type=\"email\" placeholder=\"user@example.com\" />\n</div>"
+    },
+    {
+      "type": "dont",
+      "description": "Evitar agregar un ícono dentro del Input si no aporta valor significativo o en formularios donde hay demasiados campos.",
+      "code": "<div className=\"relative\">\n  <Search className=\"absolute left-3 top-1/2 -translate-y-1/2 size-4 pointer-events-none\" />\n  <Input placeholder=\"Buscar\" className=\"pl-10\" />\n</div>"
+    }
+  ]
+}
