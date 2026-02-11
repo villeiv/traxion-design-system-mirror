@@ -44,3 +44,6 @@ lerna-debug.log*
 storybook-static
 .vscode/*
 !.vscode/extensions.json
+
+# lock
+package-lock.json
