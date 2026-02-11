@@ -8,6 +8,7 @@ This MCP server helps developers use the `@traxion-global/design-system` npm pac
 
 ## Key Features
 
+- **Installation Setup** - Guides developers through installing and configuring the design system
 - **Component Discovery** - Search and browse 32 React components
 - **Smart Documentation** - Get props, accessibility info, and usage examples
 - **Code Generation** - Scaffold features with proper npm imports
