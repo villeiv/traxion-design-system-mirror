@@ -14,7 +14,7 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 ┌─────────────────────────────────────────────────────────────┐
 │                   Traxion Design System                     │
 ├─────────────────────────┬───────────────────────────────────┤
-│   NPM Package           │   MCP Server                      │
+│   GitHub Package        │   MCP Server                      │
 │   (Source of Truth)     │   (Smart Documentation Layer)     │
 ├─────────────────────────┼───────────────────────────────────┤
 │ • 32 React components   │ • Component discovery             │
@@ -27,7 +27,7 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 
 ### The Two Layers
 
-#### Layer 1: NPM Package (Traditional Distribution)
+#### Layer 1: GitHub Package (Traditional Distribution)
 
 **Location:** `packages/design-system/`
 
