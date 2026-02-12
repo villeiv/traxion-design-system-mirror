@@ -78,11 +78,11 @@ Este servidor actúa como una **capa de documentación inteligente** para el Des
 
 ### ¿Qué hace el MCP?
 
-- ✅ **Descubrimiento de componentes** - Encuentra componentes relevantes por palabra clave
-- ✅ **Documentación contextual** - Proporciona props, ejemplos y guías de uso
-- ✅ **Scaffolding de código** - Genera código inicial con imports correctos del paquete npm
-- ✅ **Validación de uso** - Verifica que el código siga los patrones del Design System
-- ✅ **Sugerencias inteligentes** - Recomienda componentes según el caso de uso
+- **Descubrimiento de componentes** - Encuentra componentes relevantes por palabra clave
+- **Documentación contextual** - Proporciona props, ejemplos y guías de uso
+- **Scaffolding de código** - Genera código inicial con imports correctos del paquete
+- **Validación de uso** - Verifica que el código siga los patrones del Design System
+- **Sugerencias inteligentes** - Recomienda componentes según el caso de uso
 
 ### Configuración
 
@@ -102,12 +102,39 @@ Para usar el MCP con Claude Code, crea un archivo `.mcp.json` en tu proyecto:
 
 ### Arquitectura Híbrida
 
-El Traxion Design System usa una **arquitectura híbrida**:
+El Traxion Design System usa una **arquitectura híbrida** que combina distribución tradicional con asistencia AI:
 
-- **Paquete NPM** (`@traxion-global/design-system`) - Fuente de verdad (componentes reales)
-- **Servidor MCP** (`@traxion-global/mcp`) - Asistente AI (documentación inteligente)
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Traxion Design System                     │
+├─────────────────────────┬───────────────────────────────────┤
+│   Paquete NPM           │   Servidor MCP                    │
+│   (Fuente de verdad)    │   (Capa de documentación IA)      │
+├─────────────────────────┼───────────────────────────────────┤
+│ • Componentes React     │ • Descubrimiento de componentes   │
+│ • Publicado en GitHub   │ • Scaffolding asistido por IA     │
+│ • Componentes bloqueados│ • Validación de uso               │
+│ • Versionado semántico  │ • Sugerencias contextuales        │
+│ • Import tradicional    │ • Ejemplos personalizados         │
+└─────────────────────────┴───────────────────────────────────┘
+```
 
-Ver [VISION.md](./VISION.md) para más detalles sobre la arquitectura.
+**Capas:**
+
+1. **Paquete NPM** (`@traxion-global/design-system`)
+   - Los componentes React reales (fuente de verdad)
+   - Publicado en GitHub Packages para distribución
+   - Componentes bloqueados para garantizar consistencia
+
+2. **Servidor MCP** (`@traxion-global/mcp`)
+   - Asistente AI que ayuda a usar el Design System
+   - Lee directamente del paquete (mismo monorepo)
+   - Genera código que IMPORTA del paquete
+   - Siempre sincronizado (misma versión, mismo repo)
+
+**Principio clave:** El MCP genera código que **usa** los componentes del paquete, nunca copia su código fuente.
+
+**Para más detalles sobre el MCP, arquitectura híbrida, beneficios y workflows completos, ver [packages/mcp/README.md](./packages/mcp/README.md)**
 
 ### Scripts del MCP
 

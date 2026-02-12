@@ -205,7 +205,7 @@ Do **not** hide the table entirely — keep the header visible so users understa
 
 All icons across the application must come from `lucide-react`. Never use:
 - Unicode escape sequences (`\u2639`, `\u27A4`)
-- Emoji characters (❌, ✅, ➡️, 📦)
+- Emoji characters (cross marks, check marks, arrows, etc.)
 - Icon fonts (FontAwesome, Material Icons)
 - Inline SVG strings
 
@@ -221,7 +221,7 @@ import { Truck, MapPin, AlertCircle } from "lucide-react";
 </TableCell>
 
 // Bad: emoji or unicode
-<TableCell>🚛 {carrier.name}</TableCell>
+<TableCell>[truck emoji] {carrier.name}</TableCell>
 <TableCell>{"\u{1F69B}"} {carrier.name}</TableCell>
 ```
 

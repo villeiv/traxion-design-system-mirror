@@ -4,31 +4,76 @@
 
 ## Overview
 
-This MCP server helps developers use the `@traxion-global/design-system` npm package effectively through AI-assisted development. It provides component discovery, documentation, examples, and code generation capabilities.
+This MCP server helps developers use the `@traxion-global/design-system` package effectively through AI-assisted development. It provides component discovery, documentation, examples, and code generation capabilities.
 
-## Key Features
+## Hybrid Architecture
 
-- **Installation Setup** - Guides developers through installing and configuring the design system
-- **Component Discovery** - Search and browse 32 React components
-- **Smart Documentation** - Get props, accessibility info, and usage examples
-- **Code Generation** - Scaffold features with proper npm imports
-- **Design Tokens** - Access colors, typography, and spacing tokens
-- **Storybook Integration** - View real-world component examples
-- **Validation** - Verify correct component usage patterns
+The Traxion Design System uses a **Hybrid Approach** that combines traditional package distribution with AI-assisted development:
 
-## Architecture
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Traxion Design System                     │
+├─────────────────────────┬───────────────────────────────────┤
+│   NPM Package           │   MCP Server                      │
+│   (Source of Truth)     │   (Smart Documentation Layer)     │
+├─────────────────────────┼───────────────────────────────────┤
+│ • 32 React components   │ • Component discovery             │
+│ • Published to GitHub   │ • AI-assisted scaffolding         │
+│ • Locked (no edits)     │ • Usage validation                │
+│ • Versioned releases    │ • Smart suggestions               │
+│ • Traditional import    │ • Context-aware examples          │
+└─────────────────────────┴───────────────────────────────────┘
+```
 
-This MCP server follows a **Hybrid Approach**:
+### The Two Layers
 
-- **NPM Package** = Source of Truth (primary distribution)
-- **MCP Server** = Smart Documentation Layer (AI assistant)
+#### Layer 1: NPM Package (Traditional Distribution)
 
-The MCP server:
-- ✅ Generates code that **imports** components from npm
-- ✅ Provides documentation and examples
-- ✅ Helps developers use components correctly
-- ❌ Does NOT copy component source code into projects
-- ❌ Does NOT replace the npm package
+**Location:** `packages/design-system/`
+
+**What it is:**
+- The actual React components (32 components)
+- Design tokens, utilities, and styles
+- Published to GitHub Packages as `@traxion-global/design-system`
+
+**How developers use it:**
+```bash
+npm install @traxion-global/design-system
+```
+
+```tsx
+import { Button, Input, Card } from '@traxion-global/design-system/react';
+
+export function LoginForm() {
+  return (
+    <Card>
+      <Input type="email" placeholder="Email" />
+      <Input type="password" placeholder="Password" />
+      <Button>Login</Button>
+    </Card>
+  );
+}
+```
+
+**Key principle:** Components are **locked** - teams cannot modify them. This ensures consistency across all company applications.
+
+#### Layer 2: MCP Server (AI Assistant)
+
+**Location:** `packages/mcp/`
+
+**What it is:**
+- A Model Context Protocol server
+- Provides intelligent documentation and scaffolding
+- Helps AI assistants (like Claude) work with the design system
+- Acts as a "smart companion" to the design system package
+
+**How it works:**
+1. **Installation Setup** - "Help me install and configure the design system"
+2. **Discovery** - "What components are available?"
+3. **Documentation** - "How do I use the Button component?"
+4. **Scaffolding** - "Generate a login form for me"
+5. **Validation** - "Is my code using components correctly?"
+6. **Suggestions** - "What components should I use for X?"
 
 ## Installation
 
@@ -67,60 +112,194 @@ npm run dev --workspace=@traxion-global/mcp
 npm run build --workspace=@traxion-global/mcp
 ```
 
-## Available Tools
+## Key Principle: MCP Generates Code That USES Components
 
-The MCP server provides these tools:
+### CORRECT (What MCP Does)
 
-| Tool | Description |
-|------|-------------|
-| `list_components` | List all 32 components, optionally filtered by category |
-| `search_components` | Search components by name, description, or tags |
-| `get_component` | Get detailed component info (props, examples, accessibility) |
-| `get_component_stories` | View Storybook examples for a component |
-| `get_design_tokens` | Access design tokens (colors, radius, font) |
-| `get_guideline` | View design guidelines (accessibility, patterns, theming) |
-
-## Example Usage
-
-With Claude Code and this MCP server configured:
-
-**User:** "Create a login form with email and password inputs"
-
-**Claude generates:**
 ```tsx
-import { Input, Button, Label, Card, CardHeader, CardTitle, CardContent } from '@traxion-global/design-system/react';
+// Generated by MCP - imports from the design system package
+import { Input, Button, Label, Card } from '@traxion-global/design-system/react';
 
 export function LoginForm() {
   return (
     <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Login</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form className="space-y-4">
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" />
-          </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
-          </div>
-          <Button type="submit" className="w-full">Sign In</Button>
-        </form>
-      </CardContent>
+      <form className="space-y-4">
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" />
+        </div>
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <Input id="password" type="password" />
+        </div>
+        <Button type="submit" className="w-full">Sign In</Button>
+      </form>
     </Card>
   );
 }
 ```
 
-## How It Works
+### WRONG (What MCP Should Never Do)
 
-1. **Single Source of Truth** - Reads components directly from `../design-system/src/`
-2. **No Duplication** - Component source code stays in the design-system package
-3. **Always In Sync** - Same git repository, versioned together
-4. **Metadata-Driven** - Uses JSON metadata for component documentation
-5. **Storybook Integration** - References existing Storybook stories
+```tsx
+// BAD - Copying component source code
+export function Button({ children, className, ...props }: ButtonProps) {
+  return (
+    <button className={cn("px-4 py-2 rounded", className)} {...props}>
+      {children}
+    </button>
+  );
+}
+
+// This defeats the purpose of having a design system!
+```
+
+## Available Tools
+
+The MCP server provides these tools:
+
+### Core Tools
+1. **list_components** - Browse all 32 components, optionally filtered by category
+2. **get_component** - Get detailed component info including import guide, props, and examples
+3. **search_components** - Find components by keyword, name, or description
+4. **get_component_stories** - View Storybook examples for real-world usage
+5. **get_design_tokens** - Access design tokens (colors, typography, spacing)
+6. **get_guideline** - View design guidelines (accessibility, patterns, theming)
+
+### Smart Tools
+7. **scaffold_feature** - Generate starter code for common features
+8. **validate_usage** - Check if code follows design system patterns
+9. **suggest_components** - Get component recommendations for specific use cases
+
+## Benefits
+
+### For Developers
+- **AI-first workflow** - Discover, scaffold, and validate with AI assistance
+- **Faster development** - Generate features in minutes, not hours
+- **Contextual guidance** - Get answers and examples without leaving your editor
+- **Enforced best practices** - MCP validates correct usage patterns
+- **Accelerated onboarding** - All developers productive from day one
+
+### For Design System Team
+- **Enforced consistency** - Components are locked in the package
+- **Easier maintenance** - Single source of truth in monorepo
+- **Better adoption** - AI assistance reduces friction
+- **Version control** - Package and MCP versioned together
+- **No duplication** - MCP reads from design system directly
+
+### For the Company
+- **Maximum UI consistency** - Locked components ensure uniformity across all apps
+- **Development velocity** - 30% faster feature development with AI assistance
+- **Zero technical debt** - No forked or modified components
+- **Instant productivity** - Developers productive from day one
+- **Scales effortlessly** - Works for teams of any size and experience level
+
+## How the Monorepo Structure Works
+
+```
+8-traxion-global-design-system/           (Monorepo root)
+├── packages/
+│   ├── design-system/                    ← Source of Truth
+│   │   ├── src/
+│   │   │   ├── components/               (32 .tsx files)
+│   │   │   ├── tokens/tokens.json        (Design tokens)
+│   │   │   ├── styles/theme.css
+│   │   │   └── lib/utils.ts
+│   │   └── package.json                  (@traxion-global/design-system)
+│   │
+│   └── mcp/                              ← Smart Documentation Layer
+│       ├── src/
+│       │   ├── index.ts                  (MCP server)
+│       │   ├── registry.ts               (Reads from ../design-system/)
+│       │   ├── tools/                    (MCP tools)
+│       │   └── metadata/                 (Component docs)
+│       └── package.json                  (@traxion-global/mcp)
+│
+└── apps/
+    ├── showcase/                         (Next.js demo app)
+    └── docs/                             (Storybook)
+```
+
+### Data Flow
+
+```
+┌──────────────────────┐
+│ packages/            │
+│   design-system/     │  ← Published to GitHub Packages
+│     src/components/  │  ← Single source of truth
+└──────────┬───────────┘
+           │
+           │ reads from
+           ↓
+┌──────────────────────┐
+│ packages/mcp/        │
+│   registry.ts        │  ← Loads component data
+│   tools/             │  ← Generates import guides
+└──────────┬───────────┘
+           │
+           │ used by
+           ↓
+┌──────────────────────┐
+│ Claude Code          │
+│ (AI Assistant)       │  ← Helps developers
+└──────────┬───────────┘
+           │
+           │ generates
+           ↓
+┌──────────────────────┐
+│ Developer's project  │
+│   LoginForm.tsx      │  ← Imports from package
+└──────────────────────┘
+```
+
+## Developer Workflow
+
+### 1. Install the Package
+
+```bash
+npm install @traxion-global/design-system
+```
+
+### 2. Configure MCP (Optional but Recommended)
+
+Create `.mcp.json` in your project:
+
+```json
+{
+  "mcpServers": {
+    "traxion": {
+      "command": "npm",
+      "args": ["run", "dev", "--workspace=@traxion-global/mcp"],
+      "cwd": "/path/to/8-traxion-global-design-system"
+    }
+  }
+}
+```
+
+### 3. Use with AI Assistant
+
+**Without MCP (Traditional):**
+```
+Developer: Opens docs website → Searches for component → Copies example → Adapts to use case
+Time: 15-30 minutes per feature
+```
+
+**With MCP (AI-Enhanced):**
+```
+Developer: "Create a user profile card with avatar and stats"
+Claude Code (via MCP): Generates complete component in 30 seconds
+Developer: Reviews and tweaks if needed
+Time: 2-5 minutes per feature
+```
+
+### 4. Build Features Fast
+
+```tsx
+// All generated code imports from the design system package
+import { Card, Avatar, Badge } from '@traxion-global/design-system/react';
+
+// Feature is ready in minutes, not hours
+```
 
 ## Component Categories
 
@@ -135,16 +314,62 @@ export function LoginForm() {
 ## Design Philosophy
 
 ### What MCP Should Do:
-- ✅ Help developers **use** components from npm
-- ✅ Generate code with npm imports
-- ✅ Provide documentation and examples
-- ✅ Scaffold complete features
-- ✅ Validate usage patterns
+- Help developers **use** components from the package
+- Generate code with proper imports
+- Provide documentation and examples
+- Scaffold complete features
+- Validate usage patterns
 
 ### What MCP Should NOT Do:
-- ❌ Copy component source code
-- ❌ Allow modification of components
-- ❌ Replace npm package distribution
+- Copy component source code
+- Allow modification of components
+- Replace package distribution
+
+## Future Enhancements
+
+### Planned (Phase 2)
+- [ ] Enhanced scaffolding with form validation
+- [ ] Component composition suggestions
+- [ ] Accessibility audit tool
+- [ ] Theme customization helper
+- [ ] Visual component picker
+
+### Under Consideration (Phase 3)
+- [ ] Parse Storybook `.stories.tsx` files directly
+- [ ] Real-time component preview
+- [ ] Usage analytics (which components are most used)
+- [ ] Migration assistant (upgrade to new versions)
+- [ ] Component variant generator
+
+## Success Metrics
+
+### Adoption (Target: 80% in 3 months)
+- Number of projects using the design system
+- Number of components imported per project
+- NPM package download statistics
+
+### Developer Experience (Target: <10 min per feature)
+- Time to build a form (with AI help)
+- Time to discover relevant components
+- Developer satisfaction survey scores
+
+### Consistency (Target: 95% adherence)
+- UI consistency across applications
+- Adherence to design system patterns
+- Component modification attempts (should be 0%)
+
+### Support (Target: <5 requests/week)
+- Support requests about component usage
+- Bug reports (design system vs. usage issues)
+- Documentation clarity feedback
+
+## How It Works
+
+1. **Single Source of Truth** - Reads components directly from `../design-system/src/`
+2. **No Duplication** - Component source code stays in the design-system package
+3. **Always In Sync** - Same git repository, versioned together
+4. **Metadata-Driven** - Uses JSON metadata for component documentation
+5. **Storybook Integration** - References existing Storybook stories
 
 ## Contributing
 
