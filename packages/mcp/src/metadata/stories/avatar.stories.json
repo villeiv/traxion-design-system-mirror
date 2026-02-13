@@ -1,5 +1,0 @@
-{
-  "component": "avatar",
-  "anatomy": "<Avatar>\n    <AvatarImage />\n    <AvatarFallback></AvatarFallback>\n</Avatar>",
-  "stories": []
-}

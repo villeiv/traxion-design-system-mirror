@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { StorybookParser } from './parsers/storybook-parser.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -175,37 +176,44 @@ export class ComponentRegistry {
       return;
     }
 
-    // For now, we'll load story metadata from our metadata directory
-    // In a future enhancement, we could parse .stories.tsx files directly
-    const storiesMetadataPath = join(this.METADATA_PATH, 'stories');
+    // Parse .stories.tsx files directly from the Storybook directory
+    // This maintains single source of truth instead of duplicating stories
+    const storyFiles = readdirSync(this.STORYBOOK_PATH).filter(f => f.endsWith('.stories.tsx'));
 
-    if (!existsSync(storiesMetadataPath)) {
-      console.error('[MCP Registry] Stories metadata not found');
-      return;
-    }
-
-    const jsonFiles = readdirSync(storiesMetadataPath).filter(f => f.endsWith('.stories.json'));
-    const sourcesDir = join(storiesMetadataPath, 'sources');
-
-    for (const jsonFile of jsonFiles) {
+    for (const storyFile of storyFiles) {
       try {
-        const meta: ComponentStories = JSON.parse(
-          readFileSync(join(storiesMetadataPath, jsonFile), 'utf-8')
-        );
+        const storyPath = join(this.STORYBOOK_PATH, storyFile);
+        const parsed = StorybookParser.parseStoryFile(storyPath);
+
+        if (!parsed) {
+          continue;
+        }
 
         const sources = new Map<string, string>();
 
-        // Load each story's source file
-        for (const story of meta.stories) {
-          const srcPath = join(sourcesDir, story.sourceFile);
-          if (existsSync(srcPath)) {
-            sources.set(story.sourceFile, readFileSync(srcPath, 'utf-8'));
+        // Load each story's source file from the sources directory
+        for (const story of parsed.stories) {
+          const sourceContent = StorybookParser.loadSourceFile(this.STORYBOOK_PATH, story.sourceFile);
+          if (sourceContent) {
+            sources.set(story.sourceFile, sourceContent);
           }
         }
 
-        this.stories.set(meta.component, { meta, sources });
+        // Build ComponentStories object matching expected interface
+        const meta: ComponentStories = {
+          component: parsed.component,
+          anatomy: parsed.anatomy,
+          stories: parsed.stories.map(s => ({
+            name: s.name,
+            description: s.description,
+            sourceFile: s.sourceFile,
+            tags: s.tags,
+          })),
+        };
+
+        this.stories.set(parsed.component, { meta, sources });
       } catch (err) {
-        console.error(`[MCP Registry] Failed to load stories ${jsonFile}:`, err);
+        console.error(`[MCP Registry] Failed to load stories from ${storyFile}:`, err);
       }
     }
   }

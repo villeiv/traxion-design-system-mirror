@@ -211,6 +211,8 @@ The MCP server provides these tools:
 │       ├── src/
 │       │   ├── index.ts                  (MCP server)
 │       │   ├── registry.ts               (Reads from ../design-system/)
+│       │   ├── parsers/
+│       │   │   └── storybook-parser.ts   (Parses .stories.tsx files)
 │       │   ├── tools/                    (MCP tools)
 │       │   └── metadata/                 (Component docs)
 │       └── package.json                  (@traxion-global/mcp)
@@ -223,19 +225,19 @@ The MCP server provides these tools:
 ### Data Flow
 
 ```
-┌──────────────────────┐
-│ packages/            │
-│   design-system/     │  ← Published to GitHub Packages
-│     src/components/  │  ← Single source of truth
-└──────────┬───────────┘
-           │
-           │ reads from
-           ↓
-┌──────────────────────┐
-│ packages/mcp/        │
-│   registry.ts        │  ← Loads component data
-│   tools/             │  ← Generates import guides
-└──────────┬───────────┘
+┌──────────────────────┐       ┌──────────────────────┐
+│ packages/            │       │ apps/docs/           │
+│   design-system/     │       │   stories/           │
+│     src/components/  │       │     *.stories.tsx    │  ← Usage examples
+└──────────┬───────────┘       └──────────┬───────────┘
+           │                              │
+           │ reads from                   │ parses
+           ↓                              ↓
+┌────────────────────────────────────────────────────┐
+│ packages/mcp/                                      │
+│   registry.ts + storybook-parser.ts                │  ← Loads component data
+│   tools/                                           │  ← Generates import guides
+└──────────┬─────────────────────────────────────────┘
            │
            │ used by
            ↓
@@ -335,7 +337,6 @@ import { Card, Avatar, Badge } from '@traxion-global/design-system/react';
 - [ ] Visual component picker
 
 ### Under Consideration (Phase 3)
-- [ ] Parse Storybook `.stories.tsx` files directly
 - [ ] Real-time component preview
 - [ ] Usage analytics (which components are most used)
 - [ ] Migration assistant (upgrade to new versions)
@@ -369,7 +370,7 @@ import { Card, Avatar, Badge } from '@traxion-global/design-system/react';
 2. **No Duplication** - Component source code stays in the design-system package
 3. **Always In Sync** - Same git repository, versioned together
 4. **Metadata-Driven** - Uses JSON metadata for component documentation
-5. **Storybook Integration** - References existing Storybook stories
+5. **Storybook Integration** - Parses `.stories.tsx` files directly to extract usage examples
 
 ## Contributing
 
