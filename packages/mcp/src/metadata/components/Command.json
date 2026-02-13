@@ -57,6 +57,7 @@
       "props": [
         { "name": "value", "type": "string", "default": "undefined", "description": "The value used for filtering and selection." },
         { "name": "onSelect", "type": "(value: string) => void", "default": "undefined", "description": "Callback when the item is selected." },
+        { "name": "keywords", "type": "string[]", "default": "undefined", "description": "Additional search keywords to match against. Useful for alternate terms, translations, or synonyms that should trigger this item in search results." },
         { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the item, reducing opacity and preventing interaction." },
         { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
       ]
