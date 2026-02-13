@@ -102,19 +102,37 @@ export class StorybookParser {
   private static extractStories(content: string, storiesDir: string): ParsedStory[] {
     const stories: ParsedStory[] = [];
 
-    // Find all named exports (stories)
-    // Pattern: export const StoryName = { ... }
-    const storyPattern = /export\s+const\s+(\w+)\s*=\s*{([^}]+(?:{[^}]*}[^}]*)*?)};/g;
+    // Find all named exports (stories) using brace counting for proper nesting support
+    // Pattern: export const StoryName = { ... };
+    const exportPattern = /export\s+const\s+(\w+)\s*=\s*{/g;
 
     let match;
-    while ((match = storyPattern.exec(content)) !== null) {
+    while ((match = exportPattern.exec(content)) !== null) {
       const exportName = match[1];
-      const storyBody = match[2];
 
       // Skip if this is not a story (e.g., default export)
-      if (!exportName || !storyBody || exportName === 'default') {
+      if (!exportName || exportName === 'default') {
         continue;
       }
+
+      // Find the matching closing brace by counting braces
+      const startPos = match.index + match[0].length - 1; // Position of opening {
+      let braceCount = 1;
+      let endPos = startPos + 1;
+
+      while (braceCount > 0 && endPos < content.length) {
+        const char = content[endPos];
+        if (char === '{') braceCount++;
+        else if (char === '}') braceCount--;
+        endPos++;
+      }
+
+      if (braceCount !== 0) {
+        // Couldn't find matching brace
+        continue;
+      }
+
+      const storyBody = content.substring(startPos + 1, endPos - 1);
 
       // Extract story name
       const nameMatch = storyBody.match(/name:\s*["']([^"']+)["']/);
