@@ -47,3 +47,5 @@ storybook-static
 
 # lock
 package-lock.json
+# Claude Code
+.claude/settings.local.json
