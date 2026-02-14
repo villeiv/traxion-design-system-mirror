@@ -9,6 +9,7 @@ import { registerGetGuideline } from './get-guideline.js';
 import { registerScaffoldFeature } from './scaffold-feature.js';
 import { registerValidateUsage } from './validate-usage.js';
 import { registerSuggestComponents } from './suggest-components.js';
+import { registerInstallDesignSystem } from './install-design-system.js';
 
 export function registerTools(server: McpServer, registry: ComponentRegistry): void {
   // Existing tools (from POC)
@@ -23,4 +24,5 @@ export function registerTools(server: McpServer, registry: ComponentRegistry): v
   registerScaffoldFeature(server, registry);
   registerValidateUsage(server, registry);
   registerSuggestComponents(server, registry);
+  registerInstallDesignSystem(server, registry);
 }

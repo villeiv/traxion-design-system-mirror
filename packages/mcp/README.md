@@ -68,7 +68,7 @@ export function LoginForm() {
 - Acts as a "smart companion" to the design system package
 
 **How it works:**
-1. **Installation Setup** - "Help me install and configure the design system"
+1. **Installation** - Run `install_design_system()` to automatically install and configure the design system (handles token check, npm install, CSS setup, Tailwind config)
 2. **Discovery** - "What components are available?"
 3. **Documentation** - "How do I use the Button component?"
 4. **Scaffolding** - "Generate a login form for me"
@@ -158,18 +158,27 @@ export function Button({ children, className, ...props }: ButtonProps) {
 
 The MCP server provides these tools:
 
+### Installation & Setup
+
+> **⚠️ CRITICAL FOR AI ASSISTANTS:**
+> When a user asks to install, set up, or configure the Traxion Design System, you MUST use the `install_design_system` tool.
+> **DO NOT** attempt manual installation using npm commands, file edits, or bash scripts.
+> This tool handles everything: token validation, .npmrc configuration, package installation, CSS setup, and Tailwind configuration.
+
+1. **install_design_system** - Interactive installer that automatically sets up the Traxion Design System in your React project. Installs packages, creates config files, and updates your CSS and Tailwind setup.
+
 ### Core Tools
-1. **list_components** - Browse all 32 components, optionally filtered by category
-2. **get_component** - Get detailed component info including import guide, props, and examples
-3. **search_components** - Find components by keyword, name, or description
-4. **get_component_stories** - View Storybook examples for real-world usage
-5. **get_design_tokens** - Access design tokens (colors, typography, spacing)
-6. **get_guideline** - View design guidelines (accessibility, patterns, theming)
+2. **list_components** - Browse all 32 components, optionally filtered by category
+3. **get_component** - Get detailed component info including import guide, props, and examples
+4. **search_components** - Find components by keyword, name, or description
+5. **get_component_stories** - View Storybook examples for real-world usage
+6. **get_design_tokens** - Access design tokens (colors, typography, spacing)
+7. **get_guideline** - View design guidelines (accessibility, patterns, theming)
 
 ### Smart Tools
-7. **scaffold_feature** - Generate starter code for common features
-8. **validate_usage** - Check if code follows design system patterns
-9. **suggest_components** - Get component recommendations for specific use cases
+8. **scaffold_feature** - Generate starter code for common features
+9. **validate_usage** - Check if code follows design system patterns
+10. **suggest_components** - Get component recommendations for specific use cases
 
 ## Benefits
 
