@@ -1,28 +1,28 @@
 # @traxion-global/mcp
 
-**Traxion Design System MCP Server** - A Model Context Protocol server that acts as a smart documentation layer for the Traxion Design System.
+**Traxion Design System MCP Server** — A Model Context Protocol server that acts as a smart documentation layer for the Traxion Design System.
 
 ## Overview
 
-This MCP server helps developers use the `@traxion-global/design-system` package effectively through AI-assisted development. It provides component discovery, documentation, examples, and code generation capabilities.
+This MCP server helps developers use the `@traxion-global/design-system` package effectively through AI-assisted development. It provides component discovery, documentation, real-world Storybook examples, and code generation capabilities.
 
 ## Hybrid Architecture
 
 The Traxion Design System uses a **Hybrid Approach** that combines traditional package distribution with AI-assisted development:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                   Traxion Design System                     │
-├─────────────────────────┬───────────────────────────────────┤
-│   GitHub Package        │   MCP Server                      │
-│   (Source of Truth)     │   (Smart Documentation Layer)     │
-├─────────────────────────┼───────────────────────────────────┤
-│ • 32 React components   │ • Component discovery             │
-│ • Published to GitHub   │ • AI-assisted scaffolding         │
-│ • Locked (no edits)     │ • Usage validation                │
-│ • Versioned releases    │ • Smart suggestions               │
-│ • Traditional import    │ • Context-aware examples          │
-└─────────────────────────┴───────────────────────────────────┘
++-------------------------------------------------------------+
+|                   Traxion Design System                       |
++-----------------------------+-------------------------------+
+|   GitHub Package            |   MCP Server                   |
+|   (Source of Truth)         |   (Smart Documentation Layer)  |
++-----------------------------+-------------------------------+
+| - 32 React components       | - Component discovery          |
+| - Published to GitHub        | - AI-assisted scaffolding      |
+| - Locked (no edits)         | - Usage validation             |
+| - Versioned releases        | - Smart suggestions            |
+| - Traditional import        | - Context-aware examples       |
++-----------------------------+-------------------------------+
 ```
 
 ### The Two Layers
@@ -31,12 +31,8 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 
 **Location:** `packages/design-system/`
 
-**What it is:**
-- The actual React components (32 components)
-- Design tokens, utilities, and styles
-- Published to GitHub Packages as `@traxion-global/design-system`
+The actual React components (32 components), design tokens, utilities, and styles. Published to GitHub Packages as `@traxion-global/design-system`.
 
-**How developers use it:**
 ```bash
 npm install @traxion-global/design-system
 ```
@@ -55,25 +51,419 @@ export function LoginForm() {
 }
 ```
 
-**Key principle:** Components are **locked** - teams cannot modify them. This ensures consistency across all company applications.
+**Key principle:** Components are **locked** — teams cannot modify them. This ensures consistency across all company applications.
 
 #### Layer 2: MCP Server (AI Assistant)
 
 **Location:** `packages/mcp/`
 
-**What it is:**
-- A Model Context Protocol server
-- Provides intelligent documentation and scaffolding
-- Helps AI assistants (like Claude) work with the design system
-- Acts as a "smart companion" to the design system package
+A Model Context Protocol server that provides intelligent documentation and scaffolding, helping AI assistants (like Claude) work with the design system as a "smart companion".
 
 **How it works:**
-1. **Installation** - Run `install_design_system()` to automatically install and configure the design system (handles token check, npm install, CSS setup, Tailwind config)
-2. **Discovery** - "What components are available?"
-3. **Documentation** - "How do I use the Button component?"
-4. **Scaffolding** - "Generate a login form for me"
-5. **Validation** - "Is my code using components correctly?"
-6. **Suggestions** - "What components should I use for X?"
+1. **Installation** — Run `install_design_system()` to automatically install and configure the design system
+2. **Discovery** — "What components are available?"
+3. **Documentation** — "How do I use the Button component?"
+4. **Scaffolding** — "Generate a login form for me"
+5. **Validation** — "Is my code using components correctly?"
+6. **Suggestions** — "What components should I use for X?"
+
+---
+
+## Architecture Diagram
+
+```
++-----------------------------------------------------------+
+|                   FILESYSTEM (Source of Truth)             |
++------------------------+----------------------------------+
+| metadata/              | apps/docs/stories/               |
+|  components/*.json     |  *.stories.tsx  (31 files)       |
+|  guidelines/*.md       |  sources/*.tsx  (59 files)       |
+|                        |  sources/*.anatomy.tsx           |
+| design-system/         |                                  |
+|  components/*.tsx      |                                  |
+|  tokens/tokens.json    |                                  |
++----------+-------------+--------------+-------------------+
+           |                            |
+           |   new ComponentRegistry()  |
+           |   ------- load() -------   |
+           v                            v
++-----------------------------------------------------------+
+|          ComponentRegistry (In-Memory Cache)               |
++-----------------------------------------------------------+
+|                                                           |
+|  components: Map<slug, {meta, source}>    (32 entries)    |
+|  tokens: Record<category, data>           (3 categories)  |
+|  guidelines: Map<name, markdown>          (4 entries)     |
+|  stories: Map<slug, {meta, sources}>      (31 entries)    |
+|                                                           |
+|  Public API:                                              |
+|  +-- getComponent(slug)  listComponents()                 |
+|  +-- searchComponents(query)  getComponentsByCategory()   |
+|  +-- getStories(slug)  hasStories()                       |
+|  +-- getTokens()  getTokenCategory()                      |
+|  +-- getGuideline(name)  listGuidelines()                 |
++------------------------+----------------------------------+
+                         |
+                  registerTools()
+                         |
+     +-----------+-------+-------+--------------+
+     v           v       v       v              v
++---------++---------++------++----------++----------+
+|Discovery|| Details ||Tokens||  Smart   || Install  |
+|         ||         ||Guide ||  Tools   ||          |
+| list_   || get_    ||lines ||          || install_ |
+|component|| component|      ||scaffold_ ||design_   |
+|s        ||         ||get_  ||feature   ||system    |
+|         ||get_comp ||design||          ||          |
+|search_  ||_stories ||_token||suggest_  ||          |
+|component||         ||s     ||components||          |
+|s        ||         ||      ||          ||          |
+|         ||         ||get_  ||validate_ ||          |
+|         ||         ||guide ||usage     ||          |
+|         ||         ||line  ||          ||          |
++---------++---------++------++----------++----------+
+     |           |       |       |              |
+     +-----------+-------+-------+--------------+
+                         |
+                   stdio transport
+                         |
+                         v
+                  +-----------+
+                  | Claude /  |
+                  | any AI    |
+                  +-----------+
+```
+
+### Typical AI Workflow
+
+```
+1. suggest_components("invoice table")
+   -> Table (paired with: badge, card, no-data-message)
+   -> Badge, Pagination
+
+2. get_component("table")
+   -> Props, accessibility, anatomy
+   -> Inline stories with Badge inside TableCell
+   -> "Commonly Used With: Badge, Card, NoDataMessage"
+
+3. get_component("badge")
+   -> Variants: green, yellow, red, gray...
+   -> Common status examples
+
+4. (optional) get_design_tokens("colors")
+   -> HSL palette for theming
+
+5. AI generates code that already includes Badge in cells
+```
+
+---
+
+## Available Tools
+
+### Installation & Setup
+
+> **CRITICAL FOR AI ASSISTANTS:**
+> When a user asks to install, set up, or configure the Traxion Design System, you MUST use the `install_design_system` tool.
+> **DO NOT** attempt manual installation using npm commands, file edits, or bash scripts.
+
+| Tool | Parameters | Purpose |
+|------|-----------|---------|
+| **`install_design_system`** | `projectPath?`, `skipTokenCheck?`, `confirmBackup?` | Interactive installer: configures `.npmrc`, installs packages, sets up CSS and Tailwind |
+
+### Discovery Tools
+
+| Tool | Parameters | Purpose |
+|------|-----------|---------|
+| **`list_components`** | `category?: string` | Entry point. Lists all components, optionally filtered by category (actions, forms, layout, feedback, overlay, navigation, data-display) |
+| **`search_components`** | `query: string` | Full-text search across component name, description, tags, and category |
+
+### Detail Tools
+
+| Tool | Parameters | Purpose |
+|------|-----------|---------|
+| **`get_component`** | `slug: string`, `include_source?: bool` | Complete docs: import, props, accessibility, **stories with real source code**, best practices, commonly used with, dependencies |
+| **`get_component_stories`** | `slug: string`, `story_name?: string` | All stories for a component with full source code. Useful for filtering a specific story |
+| **`get_design_tokens`** | `category?: string` | Design tokens: colors, radius, font. HSL format, Tailwind-compatible |
+| **`get_guideline`** | `name: string` | Design guidelines in markdown: `accessibility`, `patterns`, `tables`, `z-index` |
+
+### Smart Tools
+
+| Tool | Parameters | Purpose |
+|------|-----------|---------|
+| **`suggest_components`** | `use_case: string`, `max_results?: number` | Given a use case ("login form", "data table"), suggests components ranked by relevance + companion boost |
+| **`scaffold_feature`** | `description: string`, `components?: string[]` | Generates starter code with imports, components, and TODOs |
+| **`validate_usage`** | `code: string` | Validates correct imports from `@traxion-global/design-system/react`, no source copying, no component redefinition |
+
+---
+
+## How to Register a New Component
+
+Follow these 5 steps to add a new component so it is fully visible to the MCP server and generates high-quality code.
+
+### Step 1: Create the component in the design system
+
+File: `packages/design-system/src/components/MyComponent.tsx`
+
+```tsx
+import * as React from "react";
+import { cn } from "../lib/utils";
+
+export interface MyComponentProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "default" | "accent";
+}
+
+const MyComponent = React.forwardRef<HTMLDivElement, MyComponentProps>(
+  ({ className, variant = "default", ...props }, ref) => (
+    <div ref={ref} className={cn("...", className)} {...props} />
+  )
+);
+MyComponent.displayName = "MyComponent";
+
+export { MyComponent };
+```
+
+Export it in `packages/design-system/src/index.ts`:
+```tsx
+export { MyComponent } from "./components/MyComponent";
+```
+
+### Step 2: Create the metadata JSON
+
+File: `packages/mcp/src/metadata/components/MyComponent.json`
+
+```json
+{
+  "name": "MyComponent",
+  "slug": "my-component",
+  "description": "Clear description of what it does and when to use it.",
+  "category": "layout",
+  "tags": ["my-component", "layout", "container"],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"default\" | \"accent\"",
+      "default": "\"default\"",
+      "description": "Visual variant of the component."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes."
+    }
+  ],
+  "dependencies": [],
+  "peerDependencies": ["react", "react-dom"],
+  "accessibility": {
+    "role": "Describe the semantic role",
+    "keyboard": "Describe keyboard interaction",
+    "aria": "Describe required ARIA attributes"
+  },
+  "examples": [
+    {
+      "title": "Basic usage",
+      "code": "<MyComponent>Content</MyComponent>"
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use MyComponent for X.",
+      "code": "<MyComponent variant=\"accent\">...</MyComponent>"
+    },
+    {
+      "type": "dont",
+      "description": "Do not use MyComponent for Y."
+    }
+  ],
+  "commonlyUsedWith": ["card", "button"]
+}
+```
+
+**Key fields for AI code quality:**
+- `examples` — fallback when no stories exist (only used if stories are absent)
+- `recommendations` — shown as "Best Practices" (do/don't patterns)
+- `commonlyUsedWith` — the AI will see links to companion components and suggest them together
+
+### Step 3: Create Storybook stories
+
+File: `apps/docs/stories/MyComponent.stories.tsx`
+
+**Option A — Inline render (simpler, captured automatically by the parser):**
+```tsx
+import { MyComponent, Button } from "@traxion-global/design-system/react";
+
+export default {
+  title: "MyComponent",
+  component: MyComponent,
+  tags: ["autodocs"],
+  parameters: {
+    controls: { disable: true },
+    actions: { disable: true },
+  },
+};
+
+export const Basic = {
+  name: "Basic usage",
+  parameters: {
+    docs: {
+      description: {
+        story: "Basic example of **MyComponent**.",
+      },
+    },
+  },
+  render: args => (
+    <MyComponent>
+      <Button>Action</Button>
+    </MyComponent>
+  ),
+};
+```
+
+The parser will extract the JSX from the render function + the design-system imports automatically.
+
+**Option B — External source file (for more complex examples):**
+
+1. Create `apps/docs/stories/sources/MyComponent.basic.tsx`:
+```tsx
+import { MyComponent, Button } from "@traxion-global/design-system/react";
+
+export default function MyComponentBasic() {
+  return (
+    <MyComponent>
+      <Button>Action</Button>
+    </MyComponent>
+  );
+}
+```
+
+2. In the story file, import with `?raw`:
+```tsx
+import MyComponentBasic from "./sources/MyComponent.basic";
+import MyComponentBasicCode from "./sources/MyComponent.basic?raw";
+
+export const Basic = {
+  name: "Basic usage",
+  render: MyComponentBasic,
+  parameters: {
+    docs: {
+      source: { code: MyComponentBasicCode },
+      description: { story: "Basic example." },
+    },
+  },
+};
+```
+
+### Step 4: (Optional) Create anatomy
+
+File: `apps/docs/stories/sources/MyComponent.anatomy.tsx`
+```tsx
+export const MyComponentAnatomy = `
+<MyComponent>
+  <MyComponentHeader />
+  <MyComponentBody />
+  <MyComponentFooter />
+</MyComponent>
+`;
+```
+
+Import in the story file:
+```tsx
+import { MyComponentAnatomy } from "./sources/MyComponent.anatomy";
+// Use in the default export's description
+```
+
+### Step 5: Build and verify
+
+```bash
+cd packages/mcp && npm run build
+```
+
+The registry auto-discovers everything:
+- JSON in `metadata/components/` -> loaded as `ComponentMeta`
+- Source in `design-system/src/components/` -> loaded as `source`
+- `.stories.tsx` in `apps/docs/stories/` -> parsed by `StorybookParser`
+
+**Verification:**
+- `get_component("my-component")` -> should show stories inline with real code
+- `suggest_components("my use case")` -> should appear if tags/keywords match
+- `get_component_stories("my-component")` -> should list all stories with source
+
+### Checklist
+
+- [ ] Component TSX in `design-system/src/components/`
+- [ ] Export in `design-system/src/index.ts`
+- [ ] JSON metadata in `mcp/src/metadata/components/`
+- [ ] `commonlyUsedWith` with companion components
+- [ ] Stories in `apps/docs/stories/` (inline or with source files)
+- [ ] `npm run build` in `packages/mcp`
+
+---
+
+## Monorepo Structure
+
+```
+8-traxion-global-design-system/           (Monorepo root)
++-- packages/
+|   +-- design-system/                    <- Source of Truth
+|   |   +-- src/
+|   |   |   +-- components/               (32 .tsx files)
+|   |   |   +-- tokens/tokens.json        (Design tokens)
+|   |   |   +-- styles/theme.css
+|   |   |   +-- lib/utils.ts
+|   |   +-- package.json                  (@traxion-global/design-system)
+|   |
+|   +-- mcp/                              <- Smart Documentation Layer
+|       +-- src/
+|       |   +-- index.ts                  (MCP server entry point)
+|       |   +-- registry.ts               (Reads from ../design-system/)
+|       |   +-- parsers/
+|       |   |   +-- storybook-parser.ts   (Parses .stories.tsx files)
+|       |   +-- tools/                    (MCP tools)
+|       |   +-- metadata/                 (Component docs + guidelines)
+|       +-- package.json                  (@traxion-global/mcp)
+|
++-- apps/
+    +-- showcase/                         (Next.js demo app)
+    +-- docs/                             (Storybook)
+        +-- stories/
+        |   +-- *.stories.tsx             (31 story files)
+        |   +-- sources/                  (59 source files + anatomy)
+```
+
+### Data Flow
+
+```
++----------------------+       +----------------------+
+| packages/            |       | apps/docs/           |
+|   design-system/     |       |   stories/           |
+|     src/components/  |       |     *.stories.tsx    |  <- Usage examples
++----------+-----------+       +----------+-----------+
+           |                              |
+           | reads from                   | parses
+           v                              v
++--------------------------------------------------+
+| packages/mcp/                                    |
+|   registry.ts + storybook-parser.ts              |  <- Loads component data
+|   tools/                                         |  <- Generates import guides
++----------+---------------------------------------+
+           |
+           | used by
+           v
++----------------------+
+| Claude Code          |
+| (AI Assistant)       |  <- Helps developers
++----------+-----------+
+           |
+           | generates
+           v
++----------------------+
+| Developer's project  |
+|   LoginForm.tsx      |  <- Imports from package
++----------------------+
+```
+
+---
 
 ## Installation
 
@@ -111,6 +501,8 @@ npm run dev --workspace=@traxion-global/mcp
 # Build MCP server
 npm run build --workspace=@traxion-global/mcp
 ```
+
+---
 
 ## Key Principle: MCP Generates Code That USES Components
 
@@ -154,232 +546,36 @@ export function Button({ children, className, ...props }: ButtonProps) {
 // This defeats the purpose of having a design system!
 ```
 
-## Available Tools
-
-The MCP server provides these tools:
-
-### Installation & Setup
-
-> **⚠️ CRITICAL FOR AI ASSISTANTS:**
-> When a user asks to install, set up, or configure the Traxion Design System, you MUST use the `install_design_system` tool.
-> **DO NOT** attempt manual installation using npm commands, file edits, or bash scripts.
-> This tool handles everything: token validation, .npmrc configuration, package installation, CSS setup, and Tailwind configuration.
-
-1. **install_design_system** - Interactive installer that automatically sets up the Traxion Design System in your React project. Installs packages, creates config files, and updates your CSS and Tailwind setup.
-
-### Core Tools
-2. **list_components** - Browse all 32 components, optionally filtered by category
-3. **get_component** - Get detailed component info including import guide, props, and examples
-4. **search_components** - Find components by keyword, name, or description
-5. **get_component_stories** - View Storybook examples for real-world usage
-6. **get_design_tokens** - Access design tokens (colors, typography, spacing)
-7. **get_guideline** - View design guidelines (accessibility, patterns, theming)
-
-### Smart Tools
-8. **scaffold_feature** - Generate starter code for common features
-9. **validate_usage** - Check if code follows design system patterns
-10. **suggest_components** - Get component recommendations for specific use cases
-
-## Benefits
-
-### For Developers
-- **AI-first workflow** - Discover, scaffold, and validate with AI assistance
-- **Faster development** - Generate features in minutes, not hours
-- **Contextual guidance** - Get answers and examples without leaving your editor
-- **Enforced best practices** - MCP validates correct usage patterns
-- **Accelerated onboarding** - All developers productive from day one
-
-### For Design System Team
-- **Enforced consistency** - Components are locked in the package
-- **Easier maintenance** - Single source of truth in monorepo
-- **Better adoption** - AI assistance reduces friction
-- **Version control** - Package and MCP versioned together
-- **No duplication** - MCP reads from design system directly
-
-### For the Company
-- **Maximum UI consistency** - Locked components ensure uniformity across all apps
-- **Development velocity** - 30% faster feature development with AI assistance
-- **Zero technical debt** - No forked or modified components
-- **Instant productivity** - Developers productive from day one
-- **Scales effortlessly** - Works for teams of any size and experience level
-
-## How the Monorepo Structure Works
-
-```
-8-traxion-global-design-system/           (Monorepo root)
-├── packages/
-│   ├── design-system/                    ← Source of Truth
-│   │   ├── src/
-│   │   │   ├── components/               (32 .tsx files)
-│   │   │   ├── tokens/tokens.json        (Design tokens)
-│   │   │   ├── styles/theme.css
-│   │   │   └── lib/utils.ts
-│   │   └── package.json                  (@traxion-global/design-system)
-│   │
-│   └── mcp/                              ← Smart Documentation Layer
-│       ├── src/
-│       │   ├── index.ts                  (MCP server)
-│       │   ├── registry.ts               (Reads from ../design-system/)
-│       │   ├── parsers/
-│       │   │   └── storybook-parser.ts   (Parses .stories.tsx files)
-│       │   ├── tools/                    (MCP tools)
-│       │   └── metadata/                 (Component docs)
-│       └── package.json                  (@traxion-global/mcp)
-│
-└── apps/
-    ├── showcase/                         (Next.js demo app)
-    └── docs/                             (Storybook)
-```
-
-### Data Flow
-
-```
-┌──────────────────────┐       ┌──────────────────────┐
-│ packages/            │       │ apps/docs/           │
-│   design-system/     │       │   stories/           │
-│     src/components/  │       │     *.stories.tsx    │  ← Usage examples
-└──────────┬───────────┘       └──────────┬───────────┘
-           │                              │
-           │ reads from                   │ parses
-           ↓                              ↓
-┌────────────────────────────────────────────────────┐
-│ packages/mcp/                                      │
-│   registry.ts + storybook-parser.ts                │  ← Loads component data
-│   tools/                                           │  ← Generates import guides
-└──────────┬─────────────────────────────────────────┘
-           │
-           │ used by
-           ↓
-┌──────────────────────┐
-│ Claude Code          │
-│ (AI Assistant)       │  ← Helps developers
-└──────────┬───────────┘
-           │
-           │ generates
-           ↓
-┌──────────────────────┐
-│ Developer's project  │
-│   LoginForm.tsx      │  ← Imports from package
-└──────────────────────┘
-```
-
-## Developer Workflow
-
-### 1. Install the Package
-
-```bash
-npm install @traxion-global/design-system
-```
-
-### 2. Configure MCP (Optional but Recommended)
-
-Create `.mcp.json` in your project:
-
-```json
-{
-  "mcpServers": {
-    "traxion": {
-      "command": "npm",
-      "args": ["run", "dev", "--workspace=@traxion-global/mcp"],
-      "cwd": "/path/to/8-traxion-global-design-system"
-    }
-  }
-}
-```
-
-### 3. Use with AI Assistant
-
-**Without MCP (Traditional):**
-```
-Developer: Opens docs website → Searches for component → Copies example → Adapts to use case
-Time: 15-30 minutes per feature
-```
-
-**With MCP (AI-Enhanced):**
-```
-Developer: "Create a user profile card with avatar and stats"
-Claude Code (via MCP): Generates complete component in 30 seconds
-Developer: Reviews and tweaks if needed
-Time: 2-5 minutes per feature
-```
-
-### 4. Build Features Fast
-
-```tsx
-// All generated code imports from the design system package
-import { Card, Avatar, Badge } from '@traxion-global/design-system/react';
-
-// Feature is ready in minutes, not hours
-```
+---
 
 ## Component Categories
 
-- **navigation** - Accordion, Command, DropdownMenu, Pagination
-- **overlay** - AlertDialog, Dialog, HoverCard, Popover, Sheet, Tooltip
-- **data-display** - Avatar, Badge, InfoCard, SortableBoard, Table
-- **actions** - Button
-- **forms** - Calendar, Checkbox, FileDropZone, Input, Label, RadioGroup, Select, Switch, Textarea
-- **layout** - Card, Separator
-- **feedback** - FullPageOverlayLoader, InlineLoader, NoDataMessage, Progress, ToasterService
+- **navigation** — Accordion, Command, DropdownMenu, Pagination
+- **overlay** — AlertDialog, Dialog, HoverCard, Popover, Sheet, Tooltip
+- **data-display** — Avatar, Badge, InfoCard, SortableBoard, Table
+- **actions** — Button
+- **forms** — Calendar, Checkbox, FileDropZone, Input, Label, RadioGroup, Select, Switch, Textarea
+- **layout** — Card, Separator
+- **feedback** — FullPageOverlayLoader, InlineLoader, NoDataMessage, Progress, ToasterService
+
+---
 
 ## Design Philosophy
 
 ### What MCP Should Do:
 - Help developers **use** components from the package
 - Generate code with proper imports
-- Provide documentation and examples
+- Provide documentation and real Storybook examples
 - Scaffold complete features
 - Validate usage patterns
+- Suggest companion components via `commonlyUsedWith`
 
 ### What MCP Should NOT Do:
 - Copy component source code
 - Allow modification of components
 - Replace package distribution
 
-## Future Enhancements
-
-### Planned (Phase 2)
-- [ ] Enhanced scaffolding with form validation
-- [ ] Component composition suggestions
-- [ ] Accessibility audit tool
-- [ ] Theme customization helper
-- [ ] Visual component picker
-
-### Under Consideration (Phase 3)
-- [ ] Real-time component preview
-- [ ] Usage analytics (which components are most used)
-- [ ] Migration assistant (upgrade to new versions)
-- [ ] Component variant generator
-
-## Success Metrics
-
-### Adoption (Target: 80% in 3 months)
-- Number of projects using the design system
-- Number of components imported per project
-- NPM package download statistics
-
-### Developer Experience (Target: <10 min per feature)
-- Time to build a form (with AI help)
-- Time to discover relevant components
-- Developer satisfaction survey scores
-
-### Consistency (Target: 95% adherence)
-- UI consistency across applications
-- Adherence to design system patterns
-- Component modification attempts (should be 0%)
-
-### Support (Target: <5 requests/week)
-- Support requests about component usage
-- Bug reports (design system vs. usage issues)
-- Documentation clarity feedback
-
-## How It Works
-
-1. **Single Source of Truth** - Reads components directly from `../design-system/src/`
-2. **No Duplication** - Component source code stays in the design-system package
-3. **Always In Sync** - Same git repository, versioned together
-4. **Metadata-Driven** - Uses JSON metadata for component documentation
-5. **Storybook Integration** - Parses `.stories.tsx` files directly to extract usage examples
+---
 
 ## Contributing
 
@@ -392,4 +588,4 @@ This package is part of the Traxion Design System monorepo. To contribute:
 
 ## License
 
-Proprietary - Traxion Global
+Proprietary — Traxion Global
