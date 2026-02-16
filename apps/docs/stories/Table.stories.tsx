@@ -5,6 +5,8 @@ import {
 } from "@traxion-global/design-system/react";
 import TableMobileDesktopCode from "./sources/Table.mobileDesktop?raw";
 import TableMobileDesktop from "./sources/Table.mobileDesktop";
+import TableFilterPanelCode from "./sources/Table.filterPanel?raw";
+import TableFilterPanel from "./sources/Table.filterPanel";
 import {TableAnatomy} from "./sources/Table.anatomy";
 import {CheckCircle, XCircle} from "lucide-react";
 
@@ -99,6 +101,21 @@ export const NoResults = {
             </TableBody>
         </Table>
     )
+}
+
+export const FilterPanel = {
+    name: "Tabla con filtros",
+    parameters: {
+        docs: {
+            description: {
+                story: 'Usa Input solo para búsqueda de texto libre. Usa Select para valores enumerados como status o tipo. Usa Calendar + Popover para fechas. Nunca uses Input para filtros de fecha o de valores enumerados.'
+            },
+            source: {
+                code: TableFilterPanelCode
+            }
+        }
+    },
+    render: () => <TableFilterPanel />
 }
 
 export const CardsForMobile = {
