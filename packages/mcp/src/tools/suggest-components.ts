@@ -43,7 +43,7 @@ export function registerSuggestComponents(server: McpServer, registry: Component
 
         // Keyword-based matching for common use cases
         const useCasePatterns = [
-          { keywords: ['form', 'input', 'submit', 'field'], components: ['input', 'label', 'button', 'textarea', 'select', 'checkbox', 'radio-group', 'switch'] },
+          { keywords: ['form', 'input', 'submit', 'field', 'filters'], components: ['input', 'label', 'button', 'textarea', 'select', 'checkbox', 'radio-group', 'switch', 'calendar'] },
           { keywords: ['auth', 'login', 'signup', 'register', 'password'], components: ['input', 'label', 'button', 'card'] },
           { keywords: ['table', 'data', 'grid', 'list'], components: ['table', 'badge', 'pagination', 'sortable-board'] },
           { keywords: ['dialog', 'modal', 'popup', 'overlay'], components: ['dialog', 'alert-dialog', 'sheet', 'popover'] },
