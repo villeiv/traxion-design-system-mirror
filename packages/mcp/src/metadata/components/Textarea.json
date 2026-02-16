@@ -3,21 +3,80 @@
   "slug": "textarea",
   "description": "A styled multi-line text input that extends the native HTML <textarea> element. Features a consistent design with rounded border, shadow, placeholder styling, focus ring, and responsive font sizing (base on mobile, sm on md+).",
   "category": "forms",
-  "tags": ["textarea", "input", "form", "text", "multiline"],
+  "tags": [
+    "textarea",
+    "input",
+    "form",
+    "text",
+    "multiline"
+  ],
   "props": [
-    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with default styles (min-h-[60px], w-full, rounded-md, border, bg-transparent, shadow-sm, focus-visible ring)." },
-    { "name": "placeholder", "type": "string", "default": "undefined", "description": "Placeholder text displayed when the textarea is empty. Styled with muted-foreground color." },
-    { "name": "disabled", "type": "boolean", "default": "false", "description": "When true, the textarea cannot be edited. Applies cursor-not-allowed and opacity-50." },
-    { "name": "value", "type": "string", "default": "undefined", "description": "The controlled value of the textarea." },
-    { "name": "defaultValue", "type": "string", "default": "undefined", "description": "The uncontrolled default value of the textarea." },
-    { "name": "onChange", "type": "React.ChangeEventHandler<HTMLTextAreaElement>", "default": "undefined", "description": "Callback invoked when the textarea value changes." },
-    { "name": "rows", "type": "number", "default": "undefined", "description": "The number of visible text lines. Native HTML textarea attribute." },
-    { "name": "name", "type": "string", "default": "undefined", "description": "The name of the textarea for form submission." },
-    { "name": "required", "type": "boolean", "default": "false", "description": "When true, the textarea must have a value before the owning form can be submitted." },
-    { "name": "readOnly", "type": "boolean", "default": "false", "description": "When true, the textarea value cannot be changed but can be focused and selected." }
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged with default styles (min-h-[60px], w-full, rounded-md, border, bg-transparent, shadow-sm, focus-visible ring)."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "undefined",
+      "description": "Placeholder text displayed when the textarea is empty. Styled with muted-foreground color."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, the textarea cannot be edited. Applies cursor-not-allowed and opacity-50."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "undefined",
+      "description": "The controlled value of the textarea."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "undefined",
+      "description": "The uncontrolled default value of the textarea."
+    },
+    {
+      "name": "onChange",
+      "type": "React.ChangeEventHandler<HTMLTextAreaElement>",
+      "default": "undefined",
+      "description": "Callback invoked when the textarea value changes."
+    },
+    {
+      "name": "rows",
+      "type": "number",
+      "default": "undefined",
+      "description": "The number of visible text lines. Native HTML textarea attribute."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "undefined",
+      "description": "The name of the textarea for form submission."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, the textarea must have a value before the owning form can be submitted."
+    },
+    {
+      "name": "readOnly",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, the textarea value cannot be changed but can be focused and selected."
+    }
   ],
   "dependencies": [],
-  "peerDependencies": ["react", "react-dom"],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "textbox (native HTML textarea semantics)",
     "keyboard": "Standard textarea interaction. Tab moves focus to/from the textarea. Text can be entered and edited normally.",
@@ -48,5 +107,8 @@
       "description": "El componente Textarea debe ir acompañado de una etiqueta (Label) para describir su propósito.",
       "code": "<div className=\"grid w-full gap-1.5\">\n  <Label htmlFor=\"message\">Descripción</Label>\n  <Textarea id=\"message\" placeholder=\"Escribe los detalles...\" rows={4} />\n</div>"
     }
+  ],
+  "commonlyUsedWith": [
+    "label"
   ]
 }

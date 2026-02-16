@@ -3,7 +3,12 @@
   "slug": "label",
   "description": "An accessible label component built on @radix-ui/react-label. Uses class-variance-authority for variant-based styling. Automatically disables visual appearance when its associated peer input is disabled.",
   "category": "forms",
-  "tags": ["label", "form", "radix", "accessibility"],
+  "tags": [
+    "label",
+    "form",
+    "radix",
+    "accessibility"
+  ],
   "props": [
     {
       "name": "className",
@@ -24,8 +29,15 @@
       "description": "All Radix Label primitive props and class-variance-authority variant props are forwarded."
     }
   ],
-  "dependencies": ["@radix-ui/react-label", "class-variance-authority", "@/lib/utils"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-label",
+    "class-variance-authority",
+    "@/lib/utils"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Renders a native <label> element via Radix, providing implicit label semantics.",
     "keyboard": "Clicking the label focuses or activates the associated form control.",
@@ -41,5 +53,11 @@
       "title": "Label with disabled input",
       "code": "<div>\n  <Label htmlFor=\"disabled-field\">Disabled Field</Label>\n  <Input id=\"disabled-field\" disabled />\n</div>"
     }
+  ],
+  "commonlyUsedWith": [
+    "input",
+    "checkbox",
+    "radio-group",
+    "switch"
   ]
 }

@@ -43,6 +43,7 @@ export interface ComponentMeta {
   accessibility: ComponentAccessibility;
   examples: ComponentExample[];
   recommendations?: ComponentRecommendation[];
+  commonlyUsedWith?: string[];
 }
 
 export interface ComponentEntry {
@@ -192,10 +193,15 @@ export class ComponentRegistry {
         const sources = new Map<string, string>();
 
         // Load each story's source file from the sources directory
+        // For inline stories, use the pre-extracted inlineSource directly
         for (const story of parsed.stories) {
-          const sourceContent = StorybookParser.loadSourceFile(this.STORYBOOK_PATH, story.sourceFile);
-          if (sourceContent) {
-            sources.set(story.sourceFile, sourceContent);
+          if (story.inlineSource) {
+            sources.set(story.sourceFile, story.inlineSource);
+          } else {
+            const sourceContent = StorybookParser.loadSourceFile(this.STORYBOOK_PATH, story.sourceFile);
+            if (sourceContent) {
+              sources.set(story.sourceFile, sourceContent);
+            }
           }
         }
 

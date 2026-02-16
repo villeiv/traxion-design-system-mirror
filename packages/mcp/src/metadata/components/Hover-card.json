@@ -3,7 +3,13 @@
   "slug": "hover-card",
   "description": "A compound component built on @radix-ui/react-hover-card that displays rich content in a floating card when the user hovers over a trigger element. Includes animated enter/exit transitions.",
   "category": "overlay",
-  "tags": ["hover", "card", "tooltip", "popover", "radix"],
+  "tags": [
+    "hover",
+    "card",
+    "tooltip",
+    "popover",
+    "radix"
+  ],
   "props": [
     {
       "name": "HoverCard (Root)",
@@ -36,8 +42,14 @@
       "description": "Distance in pixels between the content and the trigger."
     }
   ],
-  "dependencies": ["@radix-ui/react-hover-card", "@/lib/utils"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-hover-card",
+    "@/lib/utils"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Managed by Radix HoverCard primitive.",
     "keyboard": "Content is shown on hover; Radix manages focus and dismissal.",
@@ -53,5 +65,6 @@
       "title": "Custom alignment and offset",
       "code": "<HoverCard>\n  <HoverCardTrigger>Trigger</HoverCardTrigger>\n  <HoverCardContent align=\"start\" sideOffset={8}>\n    <p>Start-aligned content with extra offset.</p>\n  </HoverCardContent>\n</HoverCard>"
     }
-  ]
+  ],
+  "commonlyUsedWith": []
 }

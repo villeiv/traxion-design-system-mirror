@@ -3,81 +3,163 @@
   "slug": "dialog",
   "description": "A modal dialog overlay that renders content centered on the viewport. Built on @radix-ui/react-dialog with animated overlay (bg-black/80 fade) and content (zoom/slide transitions). Includes a built-in close button (X icon) in the top-right corner of DialogContent. Composed of sub-components for structured layout.",
   "category": "overlay",
-  "tags": ["dialog", "modal", "popup", "overlay", "window"],
+  "tags": [
+    "dialog",
+    "modal",
+    "popup",
+    "overlay",
+    "window"
+  ],
   "props": [
-    { "name": "open", "type": "boolean", "default": "undefined", "description": "Controlled open state of the dialog." },
-    { "name": "defaultOpen", "type": "boolean", "default": "false", "description": "The default open state when uncontrolled." },
-    { "name": "onOpenChange", "type": "(open: boolean) => void", "default": "undefined", "description": "Event handler called when the open state changes." },
-    { "name": "modal", "type": "boolean", "default": "true", "description": "Whether the dialog blocks interaction with the rest of the page." }
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "undefined",
+      "description": "Controlled open state of the dialog."
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "default": "false",
+      "description": "The default open state when uncontrolled."
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "default": "undefined",
+      "description": "Event handler called when the open state changes."
+    },
+    {
+      "name": "modal",
+      "type": "boolean",
+      "default": "true",
+      "description": "Whether the dialog blocks interaction with the rest of the page."
+    }
   ],
   "subComponents": [
     {
       "name": "DialogTrigger",
       "description": "The element that opens the dialog when clicked.",
       "props": [
-        { "name": "asChild", "type": "boolean", "default": "false", "description": "Merge props onto the child element instead of rendering a default button." }
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false",
+          "description": "Merge props onto the child element instead of rendering a default button."
+        }
       ]
     },
     {
       "name": "DialogPortal",
       "description": "Portals the overlay and content into document.body.",
       "props": [
-        { "name": "container", "type": "HTMLElement", "default": "document.body", "description": "The container element to portal into." }
+        {
+          "name": "container",
+          "type": "HTMLElement",
+          "default": "document.body",
+          "description": "The container element to portal into."
+        }
       ]
     },
     {
       "name": "DialogOverlay",
       "description": "A semi-transparent overlay behind the dialog content. Uses bg-black/80 with fade-in/fade-out animations.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DialogClose",
       "description": "A button that closes the dialog. Can be used anywhere within DialogContent.",
       "props": [
-        { "name": "asChild", "type": "boolean", "default": "false", "description": "Merge props onto the child element." }
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false",
+          "description": "Merge props onto the child element."
+        }
       ]
     },
     {
       "name": "DialogContent",
       "description": "The centered modal content container. Renders inside a portal with an overlay. Max width is lg (32rem). Includes an automatic close button (X icon) in the top-right corner with 'Close' as sr-only text. Features zoom and slide animations on open/close.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
-        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The dialog content." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "The dialog content."
+        }
       ]
     },
     {
       "name": "DialogHeader",
       "description": "Layout wrapper for the title and description. Stacks vertically with space-y-1.5. Centered text on mobile, left-aligned on sm+ breakpoints.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DialogFooter",
       "description": "Layout wrapper for dialog actions. Uses column-reverse on mobile, row with right-alignment on sm+ breakpoints.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DialogTitle",
       "description": "The title of the dialog. Rendered as text-lg font-semibold with tight leading and tracking.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DialogDescription",
       "description": "A description providing context below the title. Styled as text-sm text-muted-foreground.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     }
   ],
-  "dependencies": ["@radix-ui/react-dialog", "lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Uses role='dialog' on the content element. The overlay prevents interaction with elements behind the dialog.",
     "keyboard": "Escape closes the dialog (returning focus to the trigger). Tab and Shift+Tab cycle focus within the dialog. Focus is trapped inside the dialog while open.",
@@ -93,5 +175,9 @@
       "title": "Controlled dialog",
       "code": "<Dialog open={isOpen} onOpenChange={setIsOpen}>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Confirmation</DialogTitle>\n      <DialogDescription>Are you sure you want to proceed?</DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <Button variant=\"outline\" onClick={() => setIsOpen(false)}>Cancel</Button>\n      <Button onClick={handleConfirm}>Confirm</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>"
     }
+  ],
+  "commonlyUsedWith": [
+    "button",
+    "input"
   ]
 }

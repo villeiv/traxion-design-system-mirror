@@ -71,6 +71,23 @@ export function registerSuggestComponents(server: McpServer, registry: Component
         }
       }
 
+      // Second pass: boost components in commonlyUsedWith arrays of already-scored components
+      const boosts = new Map<string, number>();
+      for (const [slug, score] of suggestions.entries()) {
+        const comp = allComponents.find(c => c.slug === slug);
+        if (comp?.commonlyUsedWith) {
+          for (const companion of comp.commonlyUsedWith) {
+            const boost = Math.round(score * 0.3);
+            if (boost > 0) {
+              boosts.set(companion, (boosts.get(companion) ?? 0) + boost);
+            }
+          }
+        }
+      }
+      for (const [slug, boost] of boosts.entries()) {
+        suggestions.set(slug, (suggestions.get(slug) ?? 0) + boost);
+      }
+
       // Sort by score and take top results
       const sortedSuggestions = Array.from(suggestions.entries())
         .sort((a, b) => b[1] - a[1])
@@ -99,7 +116,11 @@ export function registerSuggestComponents(server: McpServer, registry: Component
         response += `## ${i + 1}. ${entry.meta.name}\n\n`;
         response += `**Slug:** \`${entry.meta.slug}\`  \n`;
         response += `**Category:** ${entry.meta.category}  \n`;
-        response += `**Description:** ${entry.meta.description}\n\n`;
+        response += `**Description:** ${entry.meta.description}\n`;
+        if (entry.meta.commonlyUsedWith && entry.meta.commonlyUsedWith.length > 0) {
+          response += `**Often paired with:** ${entry.meta.commonlyUsedWith.join(', ')}\n`;
+        }
+        response += '\n';
       }
 
       response += `---\n\n`;

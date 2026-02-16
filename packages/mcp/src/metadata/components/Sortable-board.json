@@ -3,11 +3,33 @@
   "slug": "sortable-board",
   "description": "A drag-and-drop Kanban-style board component built on @dnd-kit. Renders columns with draggable items that can be reordered within a column or moved between columns. Supports custom item rendering via a renderItem prop. Columns auto-fit to fill available width using CSS grid.",
   "category": "data-display",
-  "tags": ["sortable", "kanban", "board", "drag-and-drop", "dnd-kit", "columns"],
+  "tags": [
+    "sortable",
+    "kanban",
+    "board",
+    "drag-and-drop",
+    "dnd-kit",
+    "columns"
+  ],
   "props": [
-    { "name": "defaultColumns", "type": "DefaultColumnType[]", "default": "undefined", "description": "The initial column definitions. Each column has a title, items array of string IDs, and an optional id (auto-generated as 'col-{index}' if omitted)." },
-    { "name": "onChange", "type": "(columns: ColumnType[]) => void", "default": "undefined", "description": "Callback invoked when items are reordered or moved between columns. Receives the full updated columns array." },
-    { "name": "renderItem", "type": "(id: string) => ReactNode", "default": "undefined", "description": "Custom render function for each draggable item. Receives the item's string ID. When omitted, items display their ID as plain text." }
+    {
+      "name": "defaultColumns",
+      "type": "DefaultColumnType[]",
+      "default": "undefined",
+      "description": "The initial column definitions. Each column has a title, items array of string IDs, and an optional id (auto-generated as 'col-{index}' if omitted)."
+    },
+    {
+      "name": "onChange",
+      "type": "(columns: ColumnType[]) => void",
+      "default": "undefined",
+      "description": "Callback invoked when items are reordered or moved between columns. Receives the full updated columns array."
+    },
+    {
+      "name": "renderItem",
+      "type": "(id: string) => ReactNode",
+      "default": "undefined",
+      "description": "Custom render function for each draggable item. Receives the item's string ID. When omitted, items display their ID as plain text."
+    }
   ],
   "types": [
     {
@@ -21,8 +43,16 @@
       "description": "Column definition as returned by onChange. id is always present."
     }
   ],
-  "dependencies": ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities", "lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@dnd-kit/core",
+    "@dnd-kit/sortable",
+    "@dnd-kit/utilities",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Application-level drag-and-drop region",
     "keyboard": "Provided by @dnd-kit: Space/Enter to pick up and drop items. Arrow keys to move items. Escape to cancel drag.",
@@ -38,5 +68,6 @@
       "title": "SortableBoard with Custom Item Rendering",
       "code": "<SortableBoard\n  defaultColumns={[\n    { id: \"backlog\", title: \"Backlog\", items: [\"PROJ-1\", \"PROJ-2\"] },\n    { id: \"active\", title: \"Active\", items: [\"PROJ-3\"] }\n  ]}\n  renderItem={(id) => (\n    <div className=\"flex flex-col gap-1\">\n      <span className=\"font-medium\">{id}</span>\n      <span className=\"text-xs text-muted-foreground\">Task description</span>\n    </div>\n  )}\n  onChange={(columns) => console.log(columns)}\n/>"
     }
-  ]
+  ],
+  "commonlyUsedWith": []
 }

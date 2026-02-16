@@ -62,11 +62,35 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
       }
       response += '\n';
 
-      // Usage Examples
-      response += `## Usage Examples\n\n`;
-      for (const example of entry.meta.examples) {
-        response += `### ${example.title}\n\n`;
-        response += `\`\`\`tsx\n${example.code}\n\`\`\`\n\n`;
+      // Usage Examples — prefer stories with real source code over metadata examples
+      const storyData = registry.getStories(slug);
+      if (storyData && storyData.meta.stories.length > 0) {
+        response += `## Usage Examples\n\n`;
+        response += `> Import all components from \`@traxion-global/design-system/react\`\n\n`;
+
+        if (storyData.meta.anatomy) {
+          response += `### Component Anatomy\n\n`;
+          response += `\`\`\`tsx\n${storyData.meta.anatomy}\n\`\`\`\n\n`;
+        }
+
+        for (const story of storyData.meta.stories) {
+          response += `### ${story.name}\n\n`;
+          if (story.description) {
+            response += `${story.description}\n\n`;
+          }
+
+          const source = storyData.sources.get(story.sourceFile);
+          if (source) {
+            response += `\`\`\`tsx\n${source}\n\`\`\`\n\n`;
+          }
+        }
+      } else {
+        // Fallback to metadata examples when no stories exist
+        response += `## Usage Examples\n\n`;
+        for (const example of entry.meta.examples) {
+          response += `### ${example.title}\n\n`;
+          response += `\`\`\`tsx\n${example.code}\n\`\`\`\n\n`;
+        }
       }
 
       // Usage Recommendations
@@ -82,6 +106,17 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
         }
       }
 
+      // Commonly Used With
+      if (entry.meta.commonlyUsedWith && entry.meta.commonlyUsedWith.length > 0) {
+        response += `## Commonly Used With\n\n`;
+        for (const companion of entry.meta.commonlyUsedWith) {
+          const companionEntry = registry.getComponent(companion);
+          const companionName = companionEntry?.meta.name ?? companion;
+          response += `- **${companionName}** — use \`get_component("${companion}")\` for details\n`;
+        }
+        response += '\n';
+      }
+
       // Dependencies
       if (entry.meta.dependencies.length > 0 || entry.meta.peerDependencies.length > 0) {
         response += `## Dependencies\n\n`;
@@ -91,21 +126,6 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
         if (entry.meta.peerDependencies.length > 0) {
           response += `**Peer Dependencies:** ${entry.meta.peerDependencies.join(', ')}\n\n`;
         }
-      }
-
-      // Storybook examples summary
-      const storyData = registry.getStories(slug);
-      if (storyData) {
-        response += `## Storybook Examples\n\n`;
-        if (storyData.meta.anatomy) {
-          response += `### Component Anatomy\n\n`;
-          response += `\`\`\`tsx\n${storyData.meta.anatomy}\n\`\`\`\n\n`;
-        }
-        response += `${storyData.meta.stories.length} usage example${storyData.meta.stories.length === 1 ? '' : 's'} available. Use \`get_component_stories("${slug}")\` for full source code.\n\n`;
-        for (const story of storyData.meta.stories) {
-          response += `- **${story.name}**: ${story.description}\n`;
-        }
-        response += '\n';
       }
 
       // Source code (only if explicitly requested)

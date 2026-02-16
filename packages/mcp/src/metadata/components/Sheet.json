@@ -3,26 +3,65 @@
   "slug": "sheet",
   "description": "A panel that slides in from a screen edge, built on Radix UI Dialog primitive. Uses class-variance-authority (CVA) for side variants (top, bottom, left, right). Includes an overlay backdrop, close button, and layout sub-components for header, footer, title, and description.",
   "category": "overlay",
-  "tags": ["sheet", "drawer", "panel", "slide-over", "dialog", "overlay", "radix", "cva"],
+  "tags": [
+    "sheet",
+    "drawer",
+    "panel",
+    "slide-over",
+    "dialog",
+    "overlay",
+    "radix",
+    "cva"
+  ],
   "props": [
-    { "name": "open", "type": "boolean", "default": "undefined", "description": "Controlled open state of the sheet." },
-    { "name": "defaultOpen", "type": "boolean", "default": "false", "description": "The uncontrolled default open state." },
-    { "name": "onOpenChange", "type": "(open: boolean) => void", "default": "undefined", "description": "Callback invoked when the open state changes." },
-    { "name": "modal", "type": "boolean", "default": "true", "description": "When true, interaction with outside elements is disabled and only content within the sheet is accessible." }
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "undefined",
+      "description": "Controlled open state of the sheet."
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "default": "false",
+      "description": "The uncontrolled default open state."
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "default": "undefined",
+      "description": "Callback invoked when the open state changes."
+    },
+    {
+      "name": "modal",
+      "type": "boolean",
+      "default": "true",
+      "description": "When true, interaction with outside elements is disabled and only content within the sheet is accessible."
+    }
   ],
   "subComponents": [
     {
       "name": "SheetTrigger",
       "description": "The element that opens the sheet when clicked. Renders as a Radix Dialog Trigger.",
       "props": [
-        { "name": "asChild", "type": "boolean", "default": "false", "description": "When true, merges props onto the child element." }
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, merges props onto the child element."
+        }
       ]
     },
     {
       "name": "SheetClose",
       "description": "An element that closes the sheet when clicked. Renders as a Radix Dialog Close.",
       "props": [
-        { "name": "asChild", "type": "boolean", "default": "false", "description": "When true, merges props onto the child element." }
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, merges props onto the child element."
+        }
       ]
     },
     {
@@ -34,49 +73,96 @@
       "name": "SheetOverlay",
       "description": "A fixed full-screen overlay with black/80 background and fade-in/fade-out animations.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "SheetContent",
       "description": "The main sliding panel. Accepts a 'side' prop for positioning. Automatically renders the overlay and a close (X) button. Animates with slide-in/slide-out transitions. Default width is 3/4 screen (sm:max-w-sm) for left/right sides.",
       "props": [
-        { "name": "side", "type": "\"top\" | \"bottom\" | \"left\" | \"right\"", "default": "\"right\"", "description": "The edge of the screen from which the sheet slides in." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with CVA variant styles." },
-        { "name": "children", "type": "ReactNode", "default": "undefined", "description": "The content to display inside the sheet panel." }
+        {
+          "name": "side",
+          "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+          "default": "\"right\"",
+          "description": "The edge of the screen from which the sheet slides in."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes merged with CVA variant styles."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "undefined",
+          "description": "The content to display inside the sheet panel."
+        }
       ]
     },
     {
       "name": "SheetHeader",
       "description": "A layout wrapper for the sheet header area. Renders a flex column with center-aligned text on mobile and left-aligned on sm+.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "SheetFooter",
       "description": "A layout wrapper for the sheet footer area. Renders as column-reverse on mobile and row on sm+ with end-justified content.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "SheetTitle",
       "description": "The title element for the sheet. Rendered as a Radix Dialog Title with text-lg font-semibold styling.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "SheetDescription",
       "description": "A description element for the sheet. Rendered as a Radix Dialog Description with text-sm muted-foreground styling.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     }
   ],
-  "dependencies": ["@radix-ui/react-dialog", "class-variance-authority", "lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "dialog",
     "keyboard": "Escape closes the sheet. Tab traps focus within the sheet content when open. The close button is focusable.",
@@ -96,5 +182,8 @@
       "title": "Bottom Sheet",
       "code": "<Sheet>\n  <SheetTrigger asChild>\n    <Button>Open Bottom</Button>\n  </SheetTrigger>\n  <SheetContent side=\"bottom\">\n    <SheetHeader>\n      <SheetTitle>Actions</SheetTitle>\n      <SheetDescription>Choose an action below.</SheetDescription>\n    </SheetHeader>\n  </SheetContent>\n</Sheet>"
     }
+  ],
+  "commonlyUsedWith": [
+    "button"
   ]
 }

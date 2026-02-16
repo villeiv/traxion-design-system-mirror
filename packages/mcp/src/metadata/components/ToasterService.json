@@ -3,33 +3,86 @@
   "slug": "toaster-service",
   "description": "A toast notification system built on the Sonner library. Consists of two exports: a Toaster component that mounts the toast container infrastructure, and a toast API object with methods for triggering success, error, info, and warning notifications. Each toast type has a corresponding Lucide icon (CheckCircle, OctagonX, Info, TriangleAlert).",
   "category": "feedback",
-  "tags": ["toast", "notification", "alert", "feedback", "sonner", "toaster"],
+  "tags": [
+    "toast",
+    "notification",
+    "alert",
+    "feedback",
+    "sonner",
+    "toaster"
+  ],
   "props": [
-    { "name": "position", "type": "\"top-left\" | \"top-center\" | \"top-right\" | \"bottom-left\" | \"bottom-center\" | \"bottom-right\"", "default": "\"top-right\"", "description": "The screen position where toast notifications appear." },
-    { "name": "closeButton", "type": "boolean", "default": "true", "description": "When true, each toast displays a close button." }
+    {
+      "name": "position",
+      "type": "\"top-left\" | \"top-center\" | \"top-right\" | \"bottom-left\" | \"bottom-center\" | \"bottom-right\"",
+      "default": "\"top-right\"",
+      "description": "The screen position where toast notifications appear."
+    },
+    {
+      "name": "closeButton",
+      "type": "boolean",
+      "default": "true",
+      "description": "When true, each toast displays a close button."
+    }
   ],
   "subComponents": [
     {
       "name": "Toaster",
       "description": "The container component that must be mounted once in your app (typically in a root layout). Renders the Sonner Toaster with custom Lucide icons for each toast type.",
       "props": [
-        { "name": "position", "type": "ToastPosition", "default": "\"top-right\"", "description": "Screen corner or edge where toasts appear." },
-        { "name": "closeButton", "type": "boolean", "default": "true", "description": "Whether toasts show a close button." }
+        {
+          "name": "position",
+          "type": "ToastPosition",
+          "default": "\"top-right\"",
+          "description": "Screen corner or edge where toasts appear."
+        },
+        {
+          "name": "closeButton",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether toasts show a close button."
+        }
       ]
     },
     {
       "name": "toast",
       "description": "An API object (not a component) with four methods for dispatching notifications: toast.success(), toast.error(), toast.info(), and toast.warning(). Each accepts a message string and an optional description string.",
       "props": [
-        { "name": "toast.success", "type": "(message: string, description?: string) => void", "default": "N/A", "description": "Displays a success toast with a CheckCircle icon." },
-        { "name": "toast.error", "type": "(message: string, description?: string) => void", "default": "N/A", "description": "Displays an error toast with an OctagonX icon." },
-        { "name": "toast.info", "type": "(message: string, description?: string) => void", "default": "N/A", "description": "Displays an info toast with an Info icon." },
-        { "name": "toast.warning", "type": "(message: string, description?: string) => void", "default": "N/A", "description": "Displays a warning toast with a TriangleAlert icon." }
+        {
+          "name": "toast.success",
+          "type": "(message: string, description?: string) => void",
+          "default": "N/A",
+          "description": "Displays a success toast with a CheckCircle icon."
+        },
+        {
+          "name": "toast.error",
+          "type": "(message: string, description?: string) => void",
+          "default": "N/A",
+          "description": "Displays an error toast with an OctagonX icon."
+        },
+        {
+          "name": "toast.info",
+          "type": "(message: string, description?: string) => void",
+          "default": "N/A",
+          "description": "Displays an info toast with an Info icon."
+        },
+        {
+          "name": "toast.warning",
+          "type": "(message: string, description?: string) => void",
+          "default": "N/A",
+          "description": "Displays a warning toast with a TriangleAlert icon."
+        }
       ]
     }
   ],
-  "dependencies": ["sonner", "lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "sonner",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "status / alert (managed by Sonner)",
     "keyboard": "Toasts can be dismissed via close button (Tab to focus, Enter/Space to activate). Escape may dismiss the most recent toast depending on Sonner configuration.",
@@ -49,5 +102,6 @@
       "title": "Bottom-center Positioned Toaster",
       "code": "<Toaster position=\"bottom-center\" closeButton={false} />"
     }
-  ]
+  ],
+  "commonlyUsedWith": []
 }

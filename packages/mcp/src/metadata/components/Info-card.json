@@ -3,7 +3,14 @@
   "slug": "info-card",
   "description": "A compact data-display card that shows a title, a bold value, and an optional icon inside a colored circular badge. The icon color can be themed to primary, green, yellow, red, or gray. Built on top of the Card and CardContent components.",
   "category": "data-display",
-  "tags": ["card", "info", "statistic", "metric", "kpi", "data-display"],
+  "tags": [
+    "card",
+    "info",
+    "statistic",
+    "metric",
+    "kpi",
+    "data-display"
+  ],
   "props": [
     {
       "name": "title",
@@ -30,8 +37,13 @@
       "description": "Determines the background and text color of the icon badge. Falls back to primary when not specified."
     }
   ],
-  "dependencies": ["./Card"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "./Card"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Inherits from Card component (typically rendered as a div).",
     "keyboard": "No interactive elements; purely presentational.",
@@ -51,5 +63,8 @@
       "title": "Error-themed card",
       "code": "<InfoCard\n  title=\"Errors\"\n  value=\"12\"\n  icon={<AlertCircle className=\"h-6 w-6\" />}\n  iconColor=\"red\"\n/>"
     }
+  ],
+  "commonlyUsedWith": [
+    "card"
   ]
 }

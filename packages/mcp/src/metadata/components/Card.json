@@ -3,55 +3,124 @@
   "slug": "card",
   "description": "A container component for grouping related content with a rounded border, background, and shadow. Composed of six sub-components for structured layout: Card (root), CardHeader, CardTitle, CardDescription, CardContent, and CardFooter. All sub-components are forwardRef div elements with className merging.",
   "category": "layout",
-  "tags": ["card", "container", "panel", "surface", "layout"],
+  "tags": [
+    "card",
+    "container",
+    "panel",
+    "surface",
+    "layout"
+  ],
   "props": [
-    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes applied to the card root. Default styles: rounded-xl border bg-card text-card-foreground shadow." },
-    { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "Card content, typically composed of CardHeader, CardContent, and CardFooter sub-components." }
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes applied to the card root. Default styles: rounded-xl border bg-card text-card-foreground shadow."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "undefined",
+      "description": "Card content, typically composed of CardHeader, CardContent, and CardFooter sub-components."
+    }
   ],
   "subComponents": [
     {
       "name": "CardHeader",
       "description": "The top section of the card. Renders as a flex column with space-y-1.5 gap and p-6 padding.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
-        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "Typically contains CardTitle and CardDescription." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "Typically contains CardTitle and CardDescription."
+        }
       ]
     },
     {
       "name": "CardTitle",
       "description": "The title element inside CardHeader. Styled as font-semibold with tight leading and tracking.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
-        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The title text." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "The title text."
+        }
       ]
     },
     {
       "name": "CardDescription",
       "description": "A secondary description below the title. Styled as text-sm text-muted-foreground.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
-        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The description text." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "The description text."
+        }
       ]
     },
     {
       "name": "CardContent",
       "description": "The main content area of the card. Padded with p-6 pt-0 (no top padding to flow from header).",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
-        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The main content." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "The main content."
+        }
       ]
     },
     {
       "name": "CardFooter",
       "description": "The bottom section of the card. Renders as a flex row with items-center, padded with p-6 pt-0.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
-        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "Footer content, typically actions or metadata." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "Footer content, typically actions or metadata."
+        }
       ]
     }
   ],
   "dependencies": [],
-  "peerDependencies": ["react", "react-dom"],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Renders as plain div elements. No implicit ARIA role. Add role='region' with aria-label if the card represents a distinct landmark.",
     "keyboard": "Not interactive by default. Interactive children (buttons, links) handle their own keyboard behavior.",
@@ -67,5 +136,11 @@
       "title": "Card with footer actions",
       "code": "<Card>\n  <CardHeader>\n    <CardTitle>Notifications</CardTitle>\n    <CardDescription>You have 3 unread messages.</CardDescription>\n  </CardHeader>\n  <CardContent>\n    <p>Review your recent notifications.</p>\n  </CardContent>\n  <CardFooter>\n    <Button variant=\"outline\">Dismiss</Button>\n    <Button>View All</Button>\n  </CardFooter>\n</Card>"
     }
+  ],
+  "commonlyUsedWith": [
+    "button",
+    "input",
+    "table",
+    "badge"
   ]
 }

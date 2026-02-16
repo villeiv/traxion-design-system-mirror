@@ -3,7 +3,13 @@
   "slug": "popover",
   "description": "A compound popover component built on @radix-ui/react-popover. Provides Popover (root), PopoverTrigger, PopoverAnchor, and PopoverContent sub-components. Content is rendered through a portal with animated enter/exit transitions.",
   "category": "overlay",
-  "tags": ["popover", "popup", "overlay", "radix", "portal"],
+  "tags": [
+    "popover",
+    "popup",
+    "overlay",
+    "radix",
+    "portal"
+  ],
   "props": [
     {
       "name": "Popover (Root)",
@@ -48,8 +54,14 @@
       "description": "All additional Radix Popover.Content props are forwarded (side, sideOffset, alignOffset, avoidCollisions, etc.)."
     }
   ],
-  "dependencies": ["@radix-ui/react-popover", "@/lib/utils"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-popover",
+    "@/lib/utils"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Managed by Radix Popover primitive. The trigger receives aria-expanded and aria-controls attributes.",
     "keyboard": "Enter/Space toggles the popover. Escape closes it. Focus is trapped inside the content when open.",
@@ -65,5 +77,10 @@
       "title": "Popover with custom anchor",
       "code": "<Popover>\n  <PopoverAnchor asChild>\n    <div className=\"inline-block\">Anchor element</div>\n  </PopoverAnchor>\n  <PopoverTrigger asChild>\n    <Button>Toggle</Button>\n  </PopoverTrigger>\n  <PopoverContent align=\"start\" sideOffset={8}>\n    <p>Positioned relative to the anchor.</p>\n  </PopoverContent>\n</Popover>"
     }
+  ],
+  "commonlyUsedWith": [
+    "button",
+    "calendar",
+    "command"
   ]
 }

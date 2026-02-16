@@ -3,33 +3,115 @@
   "slug": "radio-group",
   "description": "A set of checkable buttons where only one can be checked at a time. Built on Radix UI RadioGroup primitive with a circular indicator icon from Lucide.",
   "category": "forms",
-  "tags": ["radio", "radio-group", "form", "selection", "radix"],
+  "tags": [
+    "radio",
+    "radio-group",
+    "form",
+    "selection",
+    "radix"
+  ],
   "props": [
-    { "name": "value", "type": "string", "default": "undefined", "description": "The controlled value of the selected radio item." },
-    { "name": "defaultValue", "type": "string", "default": "undefined", "description": "The uncontrolled default value of the selected radio item." },
-    { "name": "onValueChange", "type": "(value: string) => void", "default": "undefined", "description": "Callback invoked when the selected value changes." },
-    { "name": "disabled", "type": "boolean", "default": "false", "description": "When true, prevents the user from interacting with any radio items." },
-    { "name": "name", "type": "string", "default": "undefined", "description": "The name of the radio group, submitted with its owning form as part of a name/value pair." },
-    { "name": "required", "type": "boolean", "default": "false", "description": "When true, indicates that the user must select a value before the owning form can be submitted." },
-    { "name": "orientation", "type": "\"horizontal\" | \"vertical\"", "default": "undefined", "description": "The orientation of the radio group." },
-    { "name": "dir", "type": "\"ltr\" | \"rtl\"", "default": "undefined", "description": "The reading direction of the radio group." },
-    { "name": "loop", "type": "boolean", "default": "true", "description": "When true, keyboard navigation will loop from last item to first, and vice versa." },
-    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes. Merged with default 'grid gap-2' layout classes." }
+    {
+      "name": "value",
+      "type": "string",
+      "default": "undefined",
+      "description": "The controlled value of the selected radio item."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "undefined",
+      "description": "The uncontrolled default value of the selected radio item."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "undefined",
+      "description": "Callback invoked when the selected value changes."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, prevents the user from interacting with any radio items."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "undefined",
+      "description": "The name of the radio group, submitted with its owning form as part of a name/value pair."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, indicates that the user must select a value before the owning form can be submitted."
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "undefined",
+      "description": "The orientation of the radio group."
+    },
+    {
+      "name": "dir",
+      "type": "\"ltr\" | \"rtl\"",
+      "default": "undefined",
+      "description": "The reading direction of the radio group."
+    },
+    {
+      "name": "loop",
+      "type": "boolean",
+      "default": "true",
+      "description": "When true, keyboard navigation will loop from last item to first, and vice versa."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes. Merged with default 'grid gap-2' layout classes."
+    }
   ],
   "subComponents": [
     {
       "name": "RadioGroupItem",
       "description": "An individual radio button item rendered as a round bordered indicator with a filled circle when selected.",
       "props": [
-        { "name": "value", "type": "string", "default": "undefined", "description": "The unique value of this radio item." },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "When true, prevents the user from interacting with this radio item." },
-        { "name": "required", "type": "boolean", "default": "false", "description": "When true, indicates that the user must select this item before the owning form can be submitted." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes. Merged with default styling (aspect-square, h-4, w-4, rounded-full, border, focus-visible ring)." }
+        {
+          "name": "value",
+          "type": "string",
+          "default": "undefined",
+          "description": "The unique value of this radio item."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, prevents the user from interacting with this radio item."
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, indicates that the user must select this item before the owning form can be submitted."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes. Merged with default styling (aspect-square, h-4, w-4, rounded-full, border, focus-visible ring)."
+        }
       ]
     }
   ],
-  "dependencies": ["@radix-ui/react-radio-group", "lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-radio-group",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "radiogroup (RadioGroup) and radio (RadioGroupItem)",
     "keyboard": "Arrow keys navigate between items. Space selects the focused item. Tab moves focus into/out of the group.",
@@ -45,5 +127,8 @@
       "title": "Controlled RadioGroup",
       "code": "<RadioGroup value={selected} onValueChange={setSelected}>\n  <div className=\"flex items-center space-x-2\">\n    <RadioGroupItem value=\"apple\" id=\"apple\" />\n    <Label htmlFor=\"apple\">Apple</Label>\n  </div>\n  <div className=\"flex items-center space-x-2\">\n    <RadioGroupItem value=\"banana\" id=\"banana\" />\n    <Label htmlFor=\"banana\">Banana</Label>\n  </div>\n</RadioGroup>"
     }
+  ],
+  "commonlyUsedWith": [
+    "label"
   ]
 }

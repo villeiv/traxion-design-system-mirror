@@ -3,14 +3,41 @@
   "slug": "badge",
   "description": "A small inline label rendered as a rounded-full pill with color-coded variants. Uses class-variance-authority (CVA) for variant management. Includes both shadcn legacy variants (default, secondary, destructive, outline) and Traxion-specific color variants (primary, green, yellow, red, gray, cyan, violet, blue, teal, orange, pink, fuchsia).",
   "category": "data-display",
-  "tags": ["badge", "label", "tag", "status", "chip", "pill"],
-  "props": [
-    { "name": "variant", "type": "\"default\" | \"secondary\" | \"destructive\" | \"outline\" | \"primary\" | \"green\" | \"yellow\" | \"red\" | \"gray\" | \"cyan\" | \"violet\" | \"blue\" | \"teal\" | \"orange\" | \"pink\" | \"fuchsia\"", "default": "\"default\"", "description": "The visual style variant of the badge. Legacy shadcn variants use solid backgrounds with hover states. Traxion variants use a colored border and text with a 10% opacity background." },
-    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged via cn()." },
-    { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The badge content (typically text)." }
+  "tags": [
+    "badge",
+    "label",
+    "tag",
+    "status",
+    "chip",
+    "pill"
   ],
-  "dependencies": ["class-variance-authority"],
-  "peerDependencies": ["react", "react-dom"],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"default\" | \"secondary\" | \"destructive\" | \"outline\" | \"primary\" | \"green\" | \"yellow\" | \"red\" | \"gray\" | \"cyan\" | \"violet\" | \"blue\" | \"teal\" | \"orange\" | \"pink\" | \"fuchsia\"",
+      "default": "\"default\"",
+      "description": "The visual style variant of the badge. Legacy shadcn variants use solid backgrounds with hover states. Traxion variants use a colored border and text with a 10% opacity background."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged via cn()."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "undefined",
+      "description": "The badge content (typically text)."
+    }
+  ],
+  "dependencies": [
+    "class-variance-authority"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Renders as a div element. No implicit ARIA role. If the badge conveys status information, consider adding role='status' or an aria-label.",
     "keyboard": "Not interactive by default. Supports focus ring styles via focus:ring-2 for cases where it is made focusable.",
@@ -45,5 +72,9 @@
       "description": "No colocar íconos dentro de un badge. El badge debe ser pequeño y simple. Incluir íconos puede hacerlo parecer un botón o un componente de acción.",
       "code": "<Badge><Plus />En tránsito</Badge>"
     }
+  ],
+  "commonlyUsedWith": [
+    "table",
+    "card"
   ]
 }

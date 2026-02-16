@@ -3,7 +3,13 @@
   "slug": "progress",
   "description": "A progress bar component built on @radix-ui/react-progress. Displays a horizontal bar that fills proportionally to the given value (0-100). The indicator animates via CSS translateX transitions.",
   "category": "feedback",
-  "tags": ["progress", "progress-bar", "loading", "radix", "indicator"],
+  "tags": [
+    "progress",
+    "progress-bar",
+    "loading",
+    "radix",
+    "indicator"
+  ],
   "props": [
     {
       "name": "value",
@@ -24,8 +30,14 @@
       "description": "All Radix Progress.Root props are forwarded (max, getValueLabel, etc.)."
     }
   ],
-  "dependencies": ["@radix-ui/react-progress", "@/lib/utils"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-progress",
+    "@/lib/utils"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Radix renders a progressbar role automatically on the root element.",
     "keyboard": "No keyboard interaction; purely visual indicator.",
@@ -45,5 +57,6 @@
       "title": "Dynamic progress with state",
       "code": "const [progress, setProgress] = useState(0);\n\n<Progress value={progress} className=\"w-[60%]\" />"
     }
-  ]
+  ],
+  "commonlyUsedWith": []
 }

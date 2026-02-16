@@ -3,63 +3,112 @@
   "slug": "table",
   "description": "A compound table component built on native HTML table elements. Wrapped in a responsive overflow container. Provides styled sub-components for header, body, footer, rows, head cells, data cells, and captions with hover states and selection support.",
   "category": "data-display",
-  "tags": ["table", "data", "grid", "tabular", "html-table"],
+  "tags": [
+    "table",
+    "data",
+    "grid",
+    "tabular",
+    "html-table"
+  ],
   "props": [
-    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with default 'w-full caption-bottom text-sm' styling." }
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged with default 'w-full caption-bottom text-sm' styling."
+    }
   ],
   "subComponents": [
     {
       "name": "TableHeader",
       "description": "Wraps table header rows in a <thead> element. Applies border-bottom to child rows.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with '[&_tr]:border-b'." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes merged with '[&_tr]:border-b'."
+        }
       ]
     },
     {
       "name": "TableBody",
       "description": "Wraps table body rows in a <tbody> element. Removes border from the last row.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with '[&_tr:last-child]:border-0'." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes merged with '[&_tr:last-child]:border-0'."
+        }
       ]
     },
     {
       "name": "TableFooter",
       "description": "Wraps table footer rows in a <tfoot> element. Styled with top border, muted/50 background, and medium font weight.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with 'border-t bg-muted/50 font-medium'." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes merged with 'border-t bg-muted/50 font-medium'."
+        }
       ]
     },
     {
       "name": "TableRow",
       "description": "A table row (<tr>) with bottom border, hover highlight (muted/50), and selected state background via data-[state=selected].",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged with 'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted'." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes merged with 'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted'."
+        }
       ]
     },
     {
       "name": "TableHead",
       "description": "A table header cell (<th>) with h-10 height, left-aligned text, medium font weight, and muted-foreground color. Adjusts padding when containing a checkbox.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "TableCell",
       "description": "A table data cell (<td>) with p-2 padding and middle vertical alignment. Adjusts padding when containing a checkbox.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "TableCaption",
       "description": "A table caption (<caption>) positioned at the bottom with mt-4 margin, text-sm, and muted-foreground color.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     }
   ],
   "dependencies": [],
-  "peerDependencies": ["react", "react-dom"],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "table (native HTML semantics)",
     "keyboard": "Standard table navigation. Tab moves through interactive elements within cells.",
@@ -75,5 +124,10 @@
       "title": "Table with Footer",
       "code": "<Table>\n  <TableHeader>\n    <TableRow>\n      <TableHead>Item</TableHead>\n      <TableHead className=\"text-right\">Price</TableHead>\n    </TableRow>\n  </TableHeader>\n  <TableBody>\n    <TableRow>\n      <TableCell>Widget A</TableCell>\n      <TableCell className=\"text-right\">$10.00</TableCell>\n    </TableRow>\n  </TableBody>\n  <TableFooter>\n    <TableRow>\n      <TableCell>Total</TableCell>\n      <TableCell className=\"text-right\">$10.00</TableCell>\n    </TableRow>\n  </TableFooter>\n</Table>"
     }
+  ],
+  "commonlyUsedWith": [
+    "badge",
+    "card",
+    "no-data-message"
   ]
 }

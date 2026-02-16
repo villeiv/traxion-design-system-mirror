@@ -3,32 +3,78 @@
   "slug": "avatar",
   "description": "A circular image element with a fallback for representing a user. Built on @radix-ui/react-avatar. The root is a 40x40px rounded-full container. AvatarImage fills it with aspect-square sizing, and AvatarFallback displays initials or an icon when the image fails to load.",
   "category": "data-display",
-  "tags": ["avatar", "user", "profile", "image", "fallback"],
+  "tags": [
+    "avatar",
+    "user",
+    "profile",
+    "image",
+    "fallback"
+  ],
   "props": [
-    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes applied to the avatar root container." }
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes applied to the avatar root container."
+    }
   ],
   "subComponents": [
     {
       "name": "AvatarImage",
       "description": "The img element displayed inside the avatar. Fills the container with aspect-square sizing. Falls back to AvatarFallback if the image fails to load.",
       "props": [
-        { "name": "src", "type": "string", "default": "undefined", "description": "The image source URL." },
-        { "name": "alt", "type": "string", "default": "undefined", "description": "Accessible alt text for the image." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "src",
+          "type": "string",
+          "default": "undefined",
+          "description": "The image source URL."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "undefined",
+          "description": "Accessible alt text for the image."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "AvatarFallback",
       "description": "The fallback content shown while the image is loading or if it fails. Displayed as centered content on a bg-primary rounded-full background with text-primary-foreground color.",
       "props": [
-        { "name": "delayMs", "type": "number", "default": "undefined", "description": "Delay in milliseconds before showing the fallback to avoid flashing for fast-loading images." },
-        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "Fallback content, typically initials or an icon." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "delayMs",
+          "type": "number",
+          "default": "undefined",
+          "description": "Delay in milliseconds before showing the fallback to avoid flashing for fast-loading images."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "Fallback content, typically initials or an icon."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     }
   ],
-  "dependencies": ["@radix-ui/react-avatar"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-avatar"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "The Avatar renders as a span container. The AvatarImage renders as an img element with alt text support.",
     "keyboard": "Not interactive by default. If wrapped in a button or link, standard keyboard interactions apply.",
@@ -44,5 +90,6 @@
       "title": "Avatar with delayed fallback",
       "code": "<Avatar>\n  <AvatarImage src=\"https://example.com/avatar.jpg\" alt=\"Jane Doe\" />\n  <AvatarFallback delayMs={600}>JD</AvatarFallback>\n</Avatar>"
     }
-  ]
+  ],
+  "commonlyUsedWith": []
 }

@@ -3,7 +3,12 @@
   "slug": "pagination",
   "description": "A compound pagination component for navigating multi-page content. Composed of Pagination (nav wrapper), PaginationContent (list), PaginationItem (list item), PaginationLink (page link), PaginationPrevious, PaginationNext, and PaginationEllipsis sub-components. Uses Button variants for link styling.",
   "category": "navigation",
-  "tags": ["pagination", "navigation", "paging", "pages"],
+  "tags": [
+    "pagination",
+    "navigation",
+    "paging",
+    "pages"
+  ],
   "props": [
     {
       "name": "Pagination (nav)",
@@ -54,8 +59,15 @@
       "description": "A non-interactive ellipsis indicator (MoreHorizontal icon) with aria-hidden and a sr-only \"More pages\" label."
     }
   ],
-  "dependencies": ["lucide-react", "./Button", "@/lib/utils"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "lucide-react",
+    "./Button",
+    "@/lib/utils"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "The root Pagination renders a <nav> element with role=\"navigation\".",
     "keyboard": "Standard anchor keyboard navigation: Tab to focus links, Enter to activate.",
@@ -71,5 +83,8 @@
       "title": "Previous/Next with text labels",
       "code": "<Pagination>\n  <PaginationContent>\n    <PaginationItem>\n      <PaginationPrevious href=\"#\">Previous</PaginationPrevious>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationNext href=\"#\">Next</PaginationNext>\n    </PaginationItem>\n  </PaginationContent>\n</Pagination>"
     }
+  ],
+  "commonlyUsedWith": [
+    "button"
   ]
 }

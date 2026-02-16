@@ -3,10 +3,21 @@
   "slug": "full-page-overlay-loader",
   "description": "A full-page, fixed-position overlay with a centered spinning loader icon. Used to block interaction and indicate a global loading state.",
   "category": "feedback",
-  "tags": ["loader", "spinner", "overlay", "loading", "full-page"],
+  "tags": [
+    "loader",
+    "spinner",
+    "overlay",
+    "loading",
+    "full-page"
+  ],
   "props": [],
-  "dependencies": ["lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "none",
     "keyboard": "No keyboard interaction. The overlay covers the entire viewport.",
@@ -22,5 +33,6 @@
       "title": "Conditional rendering",
       "code": "{isLoading && <FullPageOverlayLoader />}"
     }
-  ]
+  ],
+  "commonlyUsedWith": []
 }

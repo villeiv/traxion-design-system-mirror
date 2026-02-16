@@ -3,7 +3,12 @@
   "slug": "input",
   "description": "A styled text input component that extends the native HTML input element. Supports all standard input attributes via React.ComponentProps<\"input\"> and merges custom classes via the cn utility. Includes focus ring, placeholder, disabled, and file-input styles.",
   "category": "forms",
-  "tags": ["input", "text", "form", "field"],
+  "tags": [
+    "input",
+    "text",
+    "form",
+    "field"
+  ],
   "props": [
     {
       "name": "type",
@@ -24,8 +29,13 @@
       "description": "All standard HTML input attributes are forwarded (placeholder, disabled, value, onChange, name, etc.)."
     }
   ],
-  "dependencies": ["@/lib/utils"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@/lib/utils"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Native input element with implicit textbox role.",
     "keyboard": "Standard input keyboard behavior: Tab to focus, type to enter text.",
@@ -61,5 +71,9 @@
       "description": "Evitar agregar un ícono dentro del Input si no aporta valor significativo o en formularios donde hay demasiados campos.",
       "code": "<div className=\"relative\">\n  <Search className=\"absolute left-3 top-1/2 -translate-y-1/2 size-4 pointer-events-none\" />\n  <Input placeholder=\"Buscar\" className=\"pl-10\" />\n</div>"
     }
+  ],
+  "commonlyUsedWith": [
+    "label",
+    "button"
   ]
 }

@@ -3,7 +3,13 @@
   "slug": "no-data-message",
   "description": "A centered empty-state message component that displays an Info icon inside a circular muted badge, a title, and a descriptive message. Used to communicate that no data is available for a given view or query.",
   "category": "feedback",
-  "tags": ["empty-state", "no-data", "placeholder", "message", "info"],
+  "tags": [
+    "empty-state",
+    "no-data",
+    "placeholder",
+    "message",
+    "info"
+  ],
   "props": [
     {
       "name": "title",
@@ -18,8 +24,13 @@
       "description": "A secondary descriptive message displayed below the title in muted text (e.g. \"Try adjusting your filters\")."
     }
   ],
-  "dependencies": ["lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Presentational container (div). No implicit ARIA role.",
     "keyboard": "No interactive elements.",
@@ -35,5 +46,8 @@
       "title": "Empty table fallback",
       "code": "{rows.length === 0 && <NoDataMessage title=\"No records\" message=\"There are no records to display.\" />}"
     }
+  ],
+  "commonlyUsedWith": [
+    "table"
   ]
 }

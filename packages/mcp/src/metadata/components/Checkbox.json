@@ -3,19 +3,71 @@
   "slug": "checkbox",
   "description": "A form control that allows the user to toggle between checked, unchecked, and optionally indeterminate states. Built on @radix-ui/react-checkbox with a Check icon from lucide-react. Styled as a 16x16px rounded-sm box with primary color when checked.",
   "category": "forms",
-  "tags": ["checkbox", "form", "input", "toggle", "check"],
-  "props": [
-    { "name": "checked", "type": "boolean | \"indeterminate\"", "default": "undefined", "description": "The controlled checked state. Can be true, false, or 'indeterminate'." },
-    { "name": "defaultChecked", "type": "boolean", "default": "undefined", "description": "The default checked state when uncontrolled." },
-    { "name": "onCheckedChange", "type": "(checked: boolean | \"indeterminate\") => void", "default": "undefined", "description": "Event handler called when the checked state changes." },
-    { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the checkbox, showing cursor-not-allowed and reducing opacity to 50%." },
-    { "name": "required", "type": "boolean", "default": "false", "description": "Marks the checkbox as required for form validation." },
-    { "name": "name", "type": "string", "default": "undefined", "description": "The name of the checkbox for form submission." },
-    { "name": "value", "type": "string", "default": "\"on\"", "description": "The value submitted with the form when checked." },
-    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged via cn()." }
+  "tags": [
+    "checkbox",
+    "form",
+    "input",
+    "toggle",
+    "check"
   ],
-  "dependencies": ["@radix-ui/react-checkbox", "lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "props": [
+    {
+      "name": "checked",
+      "type": "boolean | \"indeterminate\"",
+      "default": "undefined",
+      "description": "The controlled checked state. Can be true, false, or 'indeterminate'."
+    },
+    {
+      "name": "defaultChecked",
+      "type": "boolean",
+      "default": "undefined",
+      "description": "The default checked state when uncontrolled."
+    },
+    {
+      "name": "onCheckedChange",
+      "type": "(checked: boolean | \"indeterminate\") => void",
+      "default": "undefined",
+      "description": "Event handler called when the checked state changes."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the checkbox, showing cursor-not-allowed and reducing opacity to 50%."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "Marks the checkbox as required for form validation."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "undefined",
+      "description": "The name of the checkbox for form submission."
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "default": "\"on\"",
+      "description": "The value submitted with the form when checked."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged via cn()."
+    }
+  ],
+  "dependencies": [
+    "@radix-ui/react-checkbox",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Renders as a button with role='checkbox'. The native checkbox input is hidden but present for form submission.",
     "keyboard": "Space toggles the checkbox. Tab moves focus to/from the checkbox. Focus-visible ring appears on keyboard navigation.",
@@ -35,5 +87,8 @@
       "title": "Disabled checkbox",
       "code": "<Checkbox disabled checked />"
     }
+  ],
+  "commonlyUsedWith": [
+    "label"
   ]
 }

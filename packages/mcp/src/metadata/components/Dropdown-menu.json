@@ -3,90 +3,237 @@
   "slug": "dropdown-menu",
   "description": "A contextual menu that displays a list of actions or options triggered by a button press. Built on @radix-ui/react-dropdown-menu with animated open/close transitions (fade, zoom, slide). Supports standard items, checkbox items, radio items, sub-menus, labels, separators, and keyboard shortcut hints. Content is portaled and auto-constrained to available viewport height.",
   "category": "navigation",
-  "tags": ["dropdown", "menu", "context-menu", "actions", "popover", "select"],
+  "tags": [
+    "dropdown",
+    "menu",
+    "context-menu",
+    "actions",
+    "popover",
+    "select"
+  ],
   "props": [
-    { "name": "open", "type": "boolean", "default": "undefined", "description": "Controlled open state of the dropdown menu." },
-    { "name": "defaultOpen", "type": "boolean", "default": "false", "description": "The default open state when uncontrolled." },
-    { "name": "onOpenChange", "type": "(open: boolean) => void", "default": "undefined", "description": "Event handler called when the open state changes." },
-    { "name": "modal", "type": "boolean", "default": "true", "description": "Whether the dropdown blocks interaction with the rest of the page when open." },
-    { "name": "dir", "type": "\"ltr\" | \"rtl\"", "default": "undefined", "description": "Reading direction for the menu." }
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "undefined",
+      "description": "Controlled open state of the dropdown menu."
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "default": "false",
+      "description": "The default open state when uncontrolled."
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "default": "undefined",
+      "description": "Event handler called when the open state changes."
+    },
+    {
+      "name": "modal",
+      "type": "boolean",
+      "default": "true",
+      "description": "Whether the dropdown blocks interaction with the rest of the page when open."
+    },
+    {
+      "name": "dir",
+      "type": "\"ltr\" | \"rtl\"",
+      "default": "undefined",
+      "description": "Reading direction for the menu."
+    }
   ],
   "subComponents": [
     {
       "name": "DropdownMenuTrigger",
       "description": "The button that toggles the dropdown menu open/closed.",
       "props": [
-        { "name": "asChild", "type": "boolean", "default": "false", "description": "Merge props onto the child element instead of rendering a default button." }
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false",
+          "description": "Merge props onto the child element instead of rendering a default button."
+        }
       ]
     },
     {
       "name": "DropdownMenuContent",
       "description": "The popover container for menu items. Portaled to document.body. Styled with border, bg-popover, rounded-md, shadow-md. Max height is constrained to --radix-dropdown-menu-content-available-height. Includes directional slide-in animations.",
       "props": [
-        { "name": "sideOffset", "type": "number", "default": "4", "description": "Distance in pixels from the trigger." },
-        { "name": "side", "type": "\"top\" | \"right\" | \"bottom\" | \"left\"", "default": "\"bottom\"", "description": "The preferred side to position the menu relative to the trigger." },
-        { "name": "align", "type": "\"start\" | \"center\" | \"end\"", "default": "\"center\"", "description": "Alignment relative to the trigger." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "sideOffset",
+          "type": "number",
+          "default": "4",
+          "description": "Distance in pixels from the trigger."
+        },
+        {
+          "name": "side",
+          "type": "\"top\" | \"right\" | \"bottom\" | \"left\"",
+          "default": "\"bottom\"",
+          "description": "The preferred side to position the menu relative to the trigger."
+        },
+        {
+          "name": "align",
+          "type": "\"start\" | \"center\" | \"end\"",
+          "default": "\"center\"",
+          "description": "Alignment relative to the trigger."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DropdownMenuItem",
       "description": "A standard menu action item. Highlights with bg-accent on focus. Supports an inset prop for left-padding alignment with checkbox/radio items.",
       "props": [
-        { "name": "inset", "type": "boolean", "default": "false", "description": "When true, adds pl-8 left padding to align with checkbox/radio items." },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the item." },
-        { "name": "onSelect", "type": "(event: Event) => void", "default": "undefined", "description": "Callback when the item is selected." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "inset",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, adds pl-8 left padding to align with checkbox/radio items."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the item."
+        },
+        {
+          "name": "onSelect",
+          "type": "(event: Event) => void",
+          "default": "undefined",
+          "description": "Callback when the item is selected."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DropdownMenuCheckboxItem",
       "description": "A menu item that can be toggled on/off. Displays a Check icon indicator when checked. Has pl-8 padding to accommodate the indicator.",
       "props": [
-        { "name": "checked", "type": "boolean", "default": "false", "description": "The checked state of the item." },
-        { "name": "onCheckedChange", "type": "(checked: boolean) => void", "default": "undefined", "description": "Callback when the checked state changes." },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the item." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false",
+          "description": "The checked state of the item."
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "(checked: boolean) => void",
+          "default": "undefined",
+          "description": "Callback when the checked state changes."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the item."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DropdownMenuRadioGroup",
       "description": "Groups radio items together so only one can be selected at a time.",
       "props": [
-        { "name": "value", "type": "string", "default": "undefined", "description": "The value of the currently selected radio item." },
-        { "name": "onValueChange", "type": "(value: string) => void", "default": "undefined", "description": "Callback when the selected radio item changes." }
+        {
+          "name": "value",
+          "type": "string",
+          "default": "undefined",
+          "description": "The value of the currently selected radio item."
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "default": "undefined",
+          "description": "Callback when the selected radio item changes."
+        }
       ]
     },
     {
       "name": "DropdownMenuRadioItem",
       "description": "A radio-selectable menu item. Displays a filled Circle icon indicator when selected. Has pl-8 padding to accommodate the indicator.",
       "props": [
-        { "name": "value", "type": "string", "default": "undefined", "description": "The unique value for this radio item." },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the item." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "value",
+          "type": "string",
+          "default": "undefined",
+          "description": "The unique value for this radio item."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the item."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DropdownMenuLabel",
       "description": "A non-interactive label for a group of items. Styled as text-sm font-semibold. Supports inset prop.",
       "props": [
-        { "name": "inset", "type": "boolean", "default": "false", "description": "When true, adds pl-8 left padding." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "inset",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, adds pl-8 left padding."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DropdownMenuSeparator",
       "description": "A visual separator line between menu sections. Renders as a 1px horizontal line with bg-muted.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DropdownMenuShortcut",
       "description": "Displays a keyboard shortcut hint aligned to the right of a menu item. Styled as text-xs tracking-widest at 60% opacity.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." },
-        { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The shortcut text." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "The shortcut text."
+        }
       ]
     },
     {
@@ -98,36 +245,77 @@
       "name": "DropdownMenuPortal",
       "description": "Portals sub-menu content into document.body.",
       "props": [
-        { "name": "container", "type": "HTMLElement", "default": "document.body", "description": "The container to portal into." }
+        {
+          "name": "container",
+          "type": "HTMLElement",
+          "default": "document.body",
+          "description": "The container to portal into."
+        }
       ]
     },
     {
       "name": "DropdownMenuSub",
       "description": "Wraps a sub-menu (nested menu). Contains DropdownMenuSubTrigger and DropdownMenuSubContent.",
       "props": [
-        { "name": "open", "type": "boolean", "default": "undefined", "description": "Controlled open state of the sub-menu." },
-        { "name": "defaultOpen", "type": "boolean", "default": "false", "description": "Default open state." },
-        { "name": "onOpenChange", "type": "(open: boolean) => void", "default": "undefined", "description": "Callback when the sub-menu open state changes." }
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "undefined",
+          "description": "Controlled open state of the sub-menu."
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean",
+          "default": "false",
+          "description": "Default open state."
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "default": "undefined",
+          "description": "Callback when the sub-menu open state changes."
+        }
       ]
     },
     {
       "name": "DropdownMenuSubTrigger",
       "description": "The item that opens a sub-menu on hover/focus. Displays a ChevronRight icon on the right side. Supports inset prop.",
       "props": [
-        { "name": "inset", "type": "boolean", "default": "false", "description": "When true, adds pl-8 left padding." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "inset",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, adds pl-8 left padding."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     },
     {
       "name": "DropdownMenuSubContent",
       "description": "The popover content for a sub-menu. Styled similarly to DropdownMenuContent with shadow-lg and directional animations. Uses origin-[--radix-dropdown-menu-content-transform-origin] for natural-looking transitions.",
       "props": [
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes." }
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
       ]
     }
   ],
-  "dependencies": ["@radix-ui/react-dropdown-menu", "lucide-react"],
-  "peerDependencies": ["react", "react-dom"],
+  "dependencies": [
+    "@radix-ui/react-dropdown-menu",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Uses role='menu' on the content, role='menuitem' on items, role='menuitemcheckbox' on checkbox items, and role='menuitemradio' on radio items. The trigger has aria-haspopup='menu'.",
     "keyboard": "Arrow Down/Up navigates between items. Arrow Right opens a sub-menu. Arrow Left closes a sub-menu. Enter/Space selects an item. Escape closes the menu (returning focus to trigger). Type-ahead is supported for quick item selection.",
@@ -147,5 +335,8 @@
       "title": "Dropdown with sub-menu and shortcuts",
       "code": "<DropdownMenu>\n  <DropdownMenuTrigger asChild>\n    <Button variant=\"outline\">Actions</Button>\n  </DropdownMenuTrigger>\n  <DropdownMenuContent>\n    <DropdownMenuItem>\n      New Tab <DropdownMenuShortcut>Ctrl+T</DropdownMenuShortcut>\n    </DropdownMenuItem>\n    <DropdownMenuSub>\n      <DropdownMenuSubTrigger>More Tools</DropdownMenuSubTrigger>\n      <DropdownMenuPortal>\n        <DropdownMenuSubContent>\n          <DropdownMenuItem>Save Page As...</DropdownMenuItem>\n          <DropdownMenuItem>Developer Tools</DropdownMenuItem>\n        </DropdownMenuSubContent>\n      </DropdownMenuPortal>\n    </DropdownMenuSub>\n  </DropdownMenuContent>\n</DropdownMenu>"
     }
+  ],
+  "commonlyUsedWith": [
+    "button"
   ]
 }

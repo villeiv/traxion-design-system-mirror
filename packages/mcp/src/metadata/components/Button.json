@@ -3,17 +3,59 @@
   "slug": "button",
   "description": "A versatile button component with multiple visual variants and sizes. Uses class-variance-authority (CVA) for variant management and supports polymorphic rendering via the asChild prop (powered by @radix-ui/react-slot). Includes focus-visible ring styles and disabled state handling.",
   "category": "actions",
-  "tags": ["button", "action", "cta", "interactive", "click"],
-  "props": [
-    { "name": "variant", "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"", "default": "\"default\"", "description": "The visual style variant. 'default' uses primary bg, 'destructive' uses destructive bg, 'outline' has a border with transparent bg, 'secondary' uses secondary bg, 'ghost' has no bg until hover, 'link' renders as underlined text using primary-dark color." },
-    { "name": "size", "type": "\"default\" | \"sm\" | \"lg\" | \"icon\"", "default": "\"default\"", "description": "The size of the button. 'default' is h-8 px-4, 'sm' is h-7 px-3 text-xs, 'lg' is h-9 px-8, 'icon' is h-7 w-7 (square)." },
-    { "name": "asChild", "type": "boolean", "default": "false", "description": "When true, the button renders as a Radix Slot, merging its props onto the first child element. Useful for rendering as a link or other element while keeping button styles." },
-    { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes merged via cn()." },
-    { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the button, reducing opacity to 50% and preventing pointer events." },
-    { "name": "children", "type": "React.ReactNode", "default": "undefined", "description": "The button content." }
+  "tags": [
+    "button",
+    "action",
+    "cta",
+    "interactive",
+    "click"
   ],
-  "dependencies": ["@radix-ui/react-slot", "class-variance-authority"],
-  "peerDependencies": ["react", "react-dom"],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+      "default": "\"default\"",
+      "description": "The visual style variant. 'default' uses primary bg, 'destructive' uses destructive bg, 'outline' has a border with transparent bg, 'secondary' uses secondary bg, 'ghost' has no bg until hover, 'link' renders as underlined text using primary-dark color."
+    },
+    {
+      "name": "size",
+      "type": "\"default\" | \"sm\" | \"lg\" | \"icon\"",
+      "default": "\"default\"",
+      "description": "The size of the button. 'default' is h-8 px-4, 'sm' is h-7 px-3 text-xs, 'lg' is h-9 px-8, 'icon' is h-7 w-7 (square)."
+    },
+    {
+      "name": "asChild",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, the button renders as a Radix Slot, merging its props onto the first child element. Useful for rendering as a link or other element while keeping button styles."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged via cn()."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the button, reducing opacity to 50% and preventing pointer events."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "undefined",
+      "description": "The button content."
+    }
+  ],
+  "dependencies": [
+    "@radix-ui/react-slot",
+    "class-variance-authority"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
   "accessibility": {
     "role": "Renders as a native <button> element by default, providing implicit button role. When asChild is true, the rendered element determines the role.",
     "keyboard": "Space and Enter activate the button. Tab moves focus to/from the button. Focus-visible ring appears on keyboard navigation only.",
@@ -41,5 +83,11 @@
       "title": "Button as a link (asChild)",
       "code": "<Button asChild variant=\"link\">\n  <a href=\"/docs\">Read the docs</a>\n</Button>"
     }
+  ],
+  "commonlyUsedWith": [
+    "card",
+    "input",
+    "dialog",
+    "dropdown-menu"
   ]
 }
