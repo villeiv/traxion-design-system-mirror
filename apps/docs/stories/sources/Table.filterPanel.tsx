@@ -41,7 +41,7 @@ export default function TableFilterPanel() {
     });
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 w-44">
             {/* Filter Controls:
                 - Input for free-text search (open-ended values)
                 - Select for status (enumerated values)

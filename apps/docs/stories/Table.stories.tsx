@@ -127,7 +127,7 @@ export const CardsForMobile = {
             }
         }
     },
-    render: _=>{
+    render: ()=>{
         return <Card className={"w-[50rem]"}>
             <CardHeader>
                 <CardTitle>Apilamiento vertical en móvil </CardTitle>
