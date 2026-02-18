@@ -14,6 +14,8 @@ import {
   type SortingState,
   type VisibilityState,
   type ColumnOrderState,
+  type Table,
+  type Column,
 } from "@tanstack/react-table"
 import {
   DndContext,
@@ -31,10 +33,23 @@ import {
   horizontalListSortingStrategy,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import {
+  ChevronDown,
+  ChevronUp,
+  ChevronsUpDown,
+  GripVertical,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Settings2,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
-  Table,
+  Table as UITable,
   TableBody,
   TableCell,
   TableHead,
@@ -42,174 +57,471 @@ import {
   TableRow,
 } from "./Table"
 import { NoDataMessage } from "./No-data-message"
+import { Button } from "./Button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./Select"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./Dropdown-menu"
 
-/**
- * Props for DataTable component
- */
-export interface DataTableProps<TData, TValue = unknown> {
-  /**
-   * Column definitions for the table
-   */
-  columns: ColumnDef<TData, TValue>[]
+/* ─────────────────────────────────────────────
+ * 1. Internal Context (not exported)
+ * ───────────────────────────────────────────── */
 
-  /**
-   * Data to display in the table
-   */
-  data: TData[]
-
-  /**
-   * Total number of pages (required for server-side pagination)
-   */
-  pageCount: number
-
-  /**
-   * Controlled pagination state (required)
-   */
-  pagination: PaginationState
-
-  /**
-   * Pagination state change handler (required)
-   */
-  onPaginationChange: OnChangeFn<PaginationState>
-
-  /**
-   * Controlled sorting state
-   */
-  sorting?: SortingState
-
-  /**
-   * Sorting state change handler
-   */
-  onSortingChange?: OnChangeFn<SortingState>
-
-  /**
-   * Controlled column filters state
-   */
-  columnFilters?: ColumnFiltersState
-
-  /**
-   * Column filters state change handler
-   */
-  onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>
-
-  /**
-   * Controlled row selection state
-   */
-  rowSelection?: RowSelectionState
-
-  /**
-   * Row selection state change handler
-   */
-  onRowSelectionChange?: OnChangeFn<RowSelectionState>
-
-  /**
-   * Function to get unique row ID
-   */
-  getRowId?: (row: TData, index: number) => string
-
-  /**
-   * Enable row selection
-   * Can be a boolean or a function that determines if a row is selectable
-   * @default false
-   */
-  enableRowSelection?: boolean | ((row: Row<TData>) => boolean)
-
-  /**
-   * Controlled column visibility state
-   */
-  columnVisibility?: VisibilityState
-
-  /**
-   * Column visibility state change handler
-   */
-  onColumnVisibilityChange?: OnChangeFn<VisibilityState>
-
-  /**
-   * Controlled column order state
-   */
-  columnOrder?: ColumnOrderState
-
-  /**
-   * Column order state change handler
-   */
-  onColumnOrderChange?: OnChangeFn<ColumnOrderState>
-
-  /**
-   * Enable column reordering via drag-and-drop
-   * @default false
-   */
-  enableColumnReordering?: boolean
-
-  /**
-   * Additional CSS class name
-   */
-  className?: string
-
-  /**
-   * Custom empty state component
-   */
+interface DataTableContextValue<TData = unknown> {
+  table: Table<TData>
+  isLoading: boolean
+  loadingRowCount: number
   emptyState?: React.ReactNode
-
-  /**
-   * Show loading state with skeleton rows
-   * @default false
-   */
-  isLoading?: boolean
-
-  /**
-   * Number of skeleton rows to show when loading
-   * @default 5
-   */
-  loadingRowCount?: number
+  columnCount: number
 }
 
-/**
- * A flexible, production-ready DataTable component built on TanStack Table v8
- *
- * **Server-side only**: This component expects pre-filtered, pre-sorted, and pre-paginated
- * data from the server. All pagination, sorting, and filtering logic must be handled server-side.
- *
- * Supports row selection, column visibility, and column reordering via drag-and-drop.
- *
- * @example
- * Server-side with URL state (recommended):
- * ```tsx
- * const tableState = useDataTable({ serverSide: true })
- *
- * // Fetch data based on tableState (pagination, sorting, filters)
- * const { data, pageCount } = await fetchData({
- *   page: tableState.pagination.pageIndex,
- *   pageSize: tableState.pagination.pageSize,
- *   sort: tableState.sorting,
- *   filters: tableState.columnFilters,
- * })
- *
- * <DataTable
- *   columns={columns}
- *   data={data}
- *   pageCount={pageCount}
- *   pagination={tableState.pagination}
- *   onPaginationChange={tableState.setPagination}
- *   sorting={tableState.sorting}
- *   onSortingChange={tableState.setSorting}
- *   columnFilters={tableState.columnFilters}
- *   onColumnFiltersChange={tableState.setColumnFilters}
- * />
- * ```
- *
- * @example
- * With row selection:
- * ```tsx
- * <DataTable
- *   columns={columns}
- *   data={data}
- *   pageCount={totalPages}
- *   pagination={pagination}
- *   onPaginationChange={setPagination}
- *   enableRowSelection
- * />
- * ```
- */
+const DataTableContext = React.createContext<DataTableContextValue | null>(null)
+
+function useDataTableInstance<TData = unknown>(): DataTableContextValue<TData> {
+  const ctx = React.useContext(DataTableContext)
+  if (!ctx) {
+    throw new Error(
+      "DataTable compound components must be used inside <DataTable>"
+    )
+  }
+  return ctx as DataTableContextValue<TData>
+}
+
+function useOptionalDataTableInstance<
+  TData = unknown,
+>(): DataTableContextValue<TData> | null {
+  return React.useContext(DataTableContext) as DataTableContextValue<TData> | null
+}
+
+/* ─────────────────────────────────────────────
+ * 2. DataTableToolbar
+ * ───────────────────────────────────────────── */
+
+export interface DataTableToolbarProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode
+}
+
+export function DataTableToolbar({
+  children,
+  className,
+  ...props
+}: DataTableToolbarProps) {
+  return (
+    <div
+      className={cn("flex items-center justify-between gap-2", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
+
+DataTableToolbar.displayName = "DataTableToolbar"
+
+/* ─────────────────────────────────────────────
+ * 3. DataTableColumnHeader
+ * ───────────────────────────────────────────── */
+
+export interface DataTableColumnHeaderProps<TData, TValue>
+  extends React.HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>
+  title: string
+}
+
+export function DataTableColumnHeader<TData, TValue>({
+  column,
+  title,
+  className,
+  ...props
+}: DataTableColumnHeaderProps<TData, TValue>) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: column.id,
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
+
+  const isReorderingEnabled = listeners !== undefined
+
+  if (!column.getCanSort() && !isReorderingEnabled) {
+    return (
+      <div className={cn(className)} {...props}>
+        {title}
+      </div>
+    )
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        "flex items-center space-x-2",
+        isDragging && "opacity-50",
+        className
+      )}
+      {...props}
+    >
+      {isReorderingEnabled && (
+        <button
+          type="button"
+          className={cn(
+            "cursor-grab active:cursor-grabbing",
+            "text-muted-foreground hover:text-foreground",
+            "transition-colors",
+            "focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          )}
+          {...attributes}
+          {...listeners}
+          aria-label="Drag to reorder column"
+        >
+          <GripVertical className="h-4 w-4" />
+        </button>
+      )}
+
+      {column.getCanSort() ? (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="-ml-3 h-8 data-[state=open]:bg-accent"
+          onClick={(e) => {
+            e.stopPropagation()
+            column.toggleSorting(column.getIsSorted() === "asc")
+          }}
+        >
+          <span>{title}</span>
+          {column.getIsSorted() === "desc" ? (
+            <ChevronDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === "asc" ? (
+            <ChevronUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ChevronsUpDown className="ml-2 h-4 w-4" />
+          )}
+        </Button>
+      ) : (
+        <span>{title}</span>
+      )}
+    </div>
+  )
+}
+
+DataTableColumnHeader.displayName = "DataTableColumnHeader"
+
+/* ─────────────────────────────────────────────
+ * 4. DataTableViewOptions
+ * ───────────────────────────────────────────── */
+
+export interface DataTableViewOptionsProps<TData> {
+  table?: Table<TData>
+}
+
+export function DataTableViewOptions<TData>({
+  table: tableProp,
+}: DataTableViewOptionsProps<TData>) {
+  const ctx = useOptionalDataTableInstance<TData>()
+  const table = tableProp ?? ctx?.table
+
+  if (!table) {
+    throw new Error(
+      "DataTableViewOptions requires a `table` prop or must be used inside <DataTable>"
+    )
+  }
+
+  const columns = table
+    .getAllColumns()
+    .filter(
+      (column) =>
+        typeof column.accessorFn !== "undefined" && column.getCanHide()
+    )
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="sm" className="ml-auto h-8">
+          <Settings2 className="mr-2 h-4 w-4" />
+          View
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-[200px]">
+        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {columns.map((column) => {
+          return (
+            <DropdownMenuCheckboxItem
+              key={column.id}
+              className="capitalize"
+              checked={column.getIsVisible()}
+              onCheckedChange={(value) => column.toggleVisibility(!!value)}
+            >
+              {column.id}
+            </DropdownMenuCheckboxItem>
+          )
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+DataTableViewOptions.displayName = "DataTableViewOptions"
+
+/* ─────────────────────────────────────────────
+ * 5. DataTablePagination
+ * ───────────────────────────────────────────── */
+
+export interface DataTablePaginationProps<TData> {
+  table?: Table<TData>
+  pageSizeOptions?: number[]
+  showRowSelection?: boolean
+}
+
+export function DataTablePagination<TData>({
+  table: tableProp,
+  pageSizeOptions = [3, 5, 10, 20, 30, 50],
+  showRowSelection = true,
+}: DataTablePaginationProps<TData>) {
+  const ctx = useOptionalDataTableInstance<TData>()
+  const table = tableProp ?? ctx?.table
+
+  if (!table) {
+    throw new Error(
+      "DataTablePagination requires a `table` prop or must be used inside <DataTable>"
+    )
+  }
+
+  const selectedRowCount = table.getSelectedRowModel().rows.length
+  const totalRowCount = table.getRowModel().rows.length
+
+  return (
+    <div className="flex items-center justify-between px-2">
+      <div className="flex-1 text-sm text-muted-foreground">
+        {showRowSelection && selectedRowCount > 0 ? (
+          <span>
+            {selectedRowCount} of {totalRowCount} row(s) selected
+          </span>
+        ) : (
+          <span>{totalRowCount} row(s)</span>
+        )}
+      </div>
+      <div className="flex items-center space-x-6 lg:space-x-8">
+        <div className="flex items-center space-x-2">
+          <p className="text-sm font-medium">Rows per page</p>
+          <Select
+            value={`${table.getState().pagination.pageSize}`}
+            onValueChange={(value) => {
+              table.setPageSize(Number(value))
+            }}
+          >
+            <SelectTrigger className="h-8 w-[70px]">
+              <SelectValue
+                placeholder={table.getState().pagination.pageSize}
+              />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {pageSizeOptions.map((pageSize) => (
+                <SelectItem key={pageSize} value={`${pageSize}`}>
+                  {pageSize}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            className="hidden h-8 w-8 p-0 lg:flex"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="sr-only">Go to first page</span>
+            <ChevronsLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <span className="sr-only">Go to previous page</span>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 w-8 p-0"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="sr-only">Go to next page</span>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            className="hidden h-8 w-8 p-0 lg:flex"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="sr-only">Go to last page</span>
+            <ChevronsRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+DataTablePagination.displayName = "DataTablePagination"
+
+/* ─────────────────────────────────────────────
+ * 6. DataTableContent (NEW)
+ * ───────────────────────────────────────────── */
+
+export function DataTableContent() {
+  const { table, isLoading, loadingRowCount, emptyState, columnCount } =
+    useDataTableInstance()
+
+  if (isLoading) {
+    return (
+      <div className="rounded-md border">
+        <UITable>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {Array.from({ length: loadingRowCount }).map((_, index) => (
+              <TableRow key={index}>
+                {table.getAllLeafColumns().map((column) => (
+                  <TableCell key={column.id}>
+                    <div className="h-4 w-full animate-pulse rounded bg-muted" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </UITable>
+      </div>
+    )
+  }
+
+  const rows = table.getRowModel().rows
+  const showEmptyState = rows.length === 0
+
+  return (
+    <div className="rounded-md border">
+      <UITable>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id} style={{ width: header.getSize() }}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {showEmptyState ? (
+            <TableRow>
+              <TableCell colSpan={columnCount} className="h-24 text-center">
+                {emptyState ?? (
+                  <NoDataMessage title="No data" message="No records found." />
+                )}
+              </TableCell>
+            </TableRow>
+          ) : (
+            rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </UITable>
+    </div>
+  )
+}
+
+DataTableContent.displayName = "DataTableContent"
+
+/* ─────────────────────────────────────────────
+ * 7. DataTable (main component)
+ * ───────────────────────────────────────────── */
+
+export interface DataTableProps<TData, TValue = unknown> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  pageCount: number
+  pagination: PaginationState
+  onPaginationChange: OnChangeFn<PaginationState>
+  sorting?: SortingState
+  onSortingChange?: OnChangeFn<SortingState>
+  columnFilters?: ColumnFiltersState
+  onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>
+  rowSelection?: RowSelectionState
+  onRowSelectionChange?: OnChangeFn<RowSelectionState>
+  getRowId?: (row: TData, index: number) => string
+  enableRowSelection?: boolean | ((row: Row<TData>) => boolean)
+  columnVisibility?: VisibilityState
+  onColumnVisibilityChange?: OnChangeFn<VisibilityState>
+  columnOrder?: ColumnOrderState
+  onColumnOrderChange?: OnChangeFn<ColumnOrderState>
+  enableColumnReordering?: boolean
+  className?: string
+  emptyState?: React.ReactNode
+  isLoading?: boolean
+  loadingRowCount?: number
+  children?: React.ReactNode
+}
+
 export function DataTable<TData, TValue = unknown>({
   columns,
   data,
@@ -233,6 +545,7 @@ export function DataTable<TData, TValue = unknown>({
   emptyState,
   isLoading = false,
   loadingRowCount = 5,
+  children,
 }: DataTableProps<TData, TValue>) {
   // Internal hydration tracking - prevents SSR hydration mismatches with @dnd-kit
   const [isHydrated, setIsHydrated] = React.useState(false)
@@ -243,13 +556,19 @@ export function DataTable<TData, TValue = unknown>({
 
   // Internal state for optional controlled props
   const [internalSorting, setInternalSorting] = React.useState<SortingState>([])
-  const [internalColumnFilters, setInternalColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [internalRowSelection, setInternalRowSelection] = React.useState<RowSelectionState>({})
-  const [internalColumnVisibility, setInternalColumnVisibility] = React.useState<VisibilityState>({})
-  const [internalColumnOrder, setInternalColumnOrder] = React.useState<ColumnOrderState>([])
+  const [internalColumnFilters, setInternalColumnFilters] =
+    React.useState<ColumnFiltersState>([])
+  const [internalRowSelection, setInternalRowSelection] =
+    React.useState<RowSelectionState>({})
+  const [internalColumnVisibility, setInternalColumnVisibility] =
+    React.useState<VisibilityState>({})
+  const [internalColumnOrder, setInternalColumnOrder] =
+    React.useState<ColumnOrderState>([])
 
   // Drag-and-drop state
-  const [activeColumnId, setActiveColumnId] = React.useState<string | null>(null)
+  const [activeColumnId, setActiveColumnId] = React.useState<string | null>(
+    null
+  )
 
   // Use controlled state if provided, otherwise use internal state
   const sorting = controlledSorting ?? internalSorting
@@ -275,7 +594,8 @@ export function DataTable<TData, TValue = unknown>({
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnFiltersChange: onColumnFiltersChange ?? setInternalColumnFilters,
     onRowSelectionChange: onRowSelectionChange ?? setInternalRowSelection,
-    onColumnVisibilityChange: onColumnVisibilityChange ?? setInternalColumnVisibility,
+    onColumnVisibilityChange:
+      onColumnVisibilityChange ?? setInternalColumnVisibility,
     onColumnOrderChange: onColumnOrderChange ?? setInternalColumnOrder,
     getCoreRowModel: getCoreRowModel(),
     // Server-side mode: always manual
@@ -326,134 +646,62 @@ export function DataTable<TData, TValue = unknown>({
     [table, onColumnOrderChange]
   )
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className={cn("space-y-4", className)}>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {Array.from({ length: loadingRowCount }).map((_, index) => (
-                <TableRow key={index}>
-                  {table.getAllLeafColumns().map((column) => (
-                    <TableCell key={column.id}>
-                      <div className="h-4 w-full animate-pulse rounded bg-muted" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
-    )
-  }
-
-  // Empty state
-  const rows = table.getRowModel().rows
-  const showEmptyState = !isLoading && rows.length === 0
-
-  const tableContent = (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} style={{ width: header.getSize() }}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {showEmptyState ? (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                {emptyState ?? (
-                  <NoDataMessage
-                    title="No data"
-                    message="No records found."
-                  />
-                )}
-              </TableCell>
-            </TableRow>
-          ) : (
-            rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </div>
+  // Context value
+  const contextValue: DataTableContextValue<TData> = React.useMemo(
+    () => ({
+      table,
+      isLoading,
+      loadingRowCount,
+      emptyState,
+      columnCount: columns.length,
+    }),
+    [table, isLoading, loadingRowCount, emptyState, columns.length]
   )
 
   // Only enable DndContext after hydration AND if prop is true
-  // This prevents hydration mismatches from @dnd-kit's dynamic IDs
   const shouldEnableDnd = enableColumnReordering && isHydrated
 
-  // Wrap with DndContext if column reordering is enabled and client is hydrated
+  // Determine content: children or default DataTableContent
+  const content = children ?? <DataTableContent />
+
   if (shouldEnableDnd) {
     const columnIds = table.getAllLeafColumns().map((col) => col.id)
 
     return (
-      <div className={cn("space-y-4", className)}>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={(event) => setActiveColumnId(event.active.id as string)}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={columnIds}
-            strategy={horizontalListSortingStrategy}
+      <DataTableContext.Provider value={contextValue as DataTableContextValue}>
+        <div className={cn("space-y-4", className)}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={(event) =>
+              setActiveColumnId(event.active.id as string)
+            }
+            onDragEnd={handleDragEnd}
           >
-            {tableContent}
-          </SortableContext>
-          <DragOverlay>
-            {activeColumnId ? (
-              <div className="rounded bg-muted p-2 shadow-lg">
-                {activeColumnId}
-              </div>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
-      </div>
+            <SortableContext
+              items={columnIds}
+              strategy={horizontalListSortingStrategy}
+            >
+              {content}
+            </SortableContext>
+            <DragOverlay>
+              {activeColumnId ? (
+                <div className="rounded bg-muted p-2 shadow-lg">
+                  {activeColumnId}
+                </div>
+              ) : null}
+            </DragOverlay>
+          </DndContext>
+        </div>
+      </DataTableContext.Provider>
     )
   }
 
-  return <div className={cn("space-y-4", className)}>{tableContent}</div>
+  return (
+    <DataTableContext.Provider value={contextValue as DataTableContextValue}>
+      <div className={cn("space-y-4", className)}>{content}</div>
+    </DataTableContext.Provider>
+  )
 }
 
 DataTable.displayName = "DataTable"

@@ -8,6 +8,7 @@ import type {
   SortingState,
   VisibilityState,
   ColumnOrderState,
+  OnChangeFn,
 } from "@tanstack/react-table"
 
 /**
@@ -19,13 +20,6 @@ export interface UseDataTableOptions {
    * @default 10
    */
   pageSize?: number
-
-  /**
-   * Enable server-side data fetching (required for DataTable component)
-   * When true, pagination/sorting/filtering changes will update the URL
-   * @default false
-   */
-  serverSide?: boolean
 
   /**
    * Namespace prefix for URL params (for multiple tables on same page)
@@ -42,7 +36,7 @@ export interface UseDataTableOptions {
 
   /**
    * Next.js router instance (for client-side navigation)
-   * If not provided, hook will attempt to use Next.js useRouter
+   * When provided, table state will be synced to URL automatically.
    */
   router?: {
     push: (url: string) => void
@@ -90,6 +84,16 @@ export interface UseDataTableReturn {
   setColumnOrder: (
     updater: ColumnOrderState | ((old: ColumnOrderState) => ColumnOrderState)
   ) => void
+
+  // onXxxChange aliases (so {...tableState} works with DataTable props)
+  onPaginationChange: OnChangeFn<PaginationState>
+  onSortingChange: OnChangeFn<SortingState>
+  onColumnFiltersChange: OnChangeFn<ColumnFiltersState>
+  onColumnVisibilityChange: OnChangeFn<VisibilityState>
+  onColumnOrderChange: OnChangeFn<ColumnOrderState>
+
+  // True while a URL transition is pending (useful for loading indicators)
+  isPending: boolean
 
   // Helper to get search params for API calls
   getSearchParams: () => URLSearchParams
@@ -194,27 +198,29 @@ function serializeSearchParams(
 }
 
 /**
- * Hook for managing DataTable state with URL synchronization
+ * Hook for managing DataTable state with optional URL synchronization.
  *
- * **Important**: The DataTable component is server-side only. Always use `serverSide: true`
- * to enable URL synchronization and proper state management for server-side data fetching.
- *
- * Works with Next.js App Router for server-side pagination/sorting/filtering.
+ * URL sync is auto-detected: when `router` is provided, state changes
+ * will be reflected in the URL. No need for a `serverSide` flag.
  *
  * @example
  * ```tsx
  * const tableState = useDataTable({
- *   serverSide: true,  // Required for DataTable
- *   pageSize: 10
+ *   pageSize: 10,
+ *   router,
+ *   searchParams,
  * })
  *
- * // Use tableState to fetch data from your API
- * const { data, pageCount } = await fetchData({
- *   page: tableState.pagination.pageIndex,
- *   pageSize: tableState.pagination.pageSize,
- *   sort: tableState.sorting,
- *   filters: tableState.columnFilters,
- * })
+ * const { data, pageCount } = useFetchData(tableState)
+ *
+ * <DataTable columns={columns} data={data} pageCount={pageCount} {...tableState}>
+ *   <DataTableToolbar>
+ *     <Input placeholder="Search..." />
+ *     <DataTableViewOptions />
+ *   </DataTableToolbar>
+ *   <DataTableContent />
+ *   <DataTablePagination />
+ * </DataTable>
  * ```
  */
 export function useDataTable(
@@ -222,16 +228,16 @@ export function useDataTable(
 ): UseDataTableReturn {
   const {
     pageSize: initialPageSize = 10,
-    serverSide = false,
     namespace,
     debounceMs = 300,
     router: customRouter,
     searchParams: customSearchParams,
   } = options
 
-  // Use provided router and searchParams
+  // URL sync is auto-detected from router presence
   const router = customRouter
   const searchParams = customSearchParams ?? null
+  const syncToUrl = !!router
 
   // Parse initial state from URL
   const initialState = parseSearchParams(searchParams ?? null, namespace)
@@ -267,12 +273,10 @@ export function useDataTable(
 
   /**
    * Sync all state to URL (after initial render)
-   * Note: Debouncing should be handled at the component level for filters
-   * using useDebouncedCallback to avoid laggy inputs
    */
   React.useEffect(() => {
     // Skip URL update during initial render
-    if (isInitialRender.current || !serverSide || !router) return
+    if (isInitialRender.current || !syncToUrl || !router) return
 
     const params = serializeSearchParams(
       pagination,
@@ -285,10 +289,10 @@ export function useDataTable(
     startTransition(() => {
       router.push(`?${params.toString()}`)
     })
-  }, [pagination, sorting, columnFilters, serverSide, router, namespace])
+  }, [pagination, sorting, columnFilters, syncToUrl, router, namespace])
 
   /**
-   * Pagination setter (no URL sync here - handled by useEffect)
+   * Pagination setter
    */
   const setPagination = useCallback(
     (
@@ -300,7 +304,7 @@ export function useDataTable(
   )
 
   /**
-   * Sorting setter (no URL sync here - handled by useEffect)
+   * Sorting setter
    */
   const setSorting = useCallback(
     (updater: SortingState | ((old: SortingState) => SortingState)) => {
@@ -310,7 +314,7 @@ export function useDataTable(
   )
 
   /**
-   * Column filters setter (immediate update, URL sync is debounced in useEffect)
+   * Column filters setter
    */
   const setColumnFilters = useCallback(
     (
@@ -341,6 +345,13 @@ export function useDataTable(
     setColumnVisibility,
     columnOrder,
     setColumnOrder,
+    isPending,
     getSearchParams,
+    // onXxxChange aliases — same references, so {...tableState} just works
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onColumnOrderChange: setColumnOrder,
   }
 }

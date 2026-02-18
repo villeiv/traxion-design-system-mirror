@@ -10,10 +10,6 @@ export * from "./components/Card";
 export * from "./components/Checkbox";
 export * from "./components/Command";
 export * from "./components/DataTable";
-export * from "./components/DataTableColumnHeader";
-export * from "./components/DataTablePagination";
-export * from "./components/DataTableToolbar";
-export * from "./components/DataTableViewOptions";
 export * from "./components/Dialog";
 export * from "./components/Dropdown-menu";
 export * from "./components/File-drop-zone";
@@ -40,5 +36,7 @@ export * from "./components/Tooltip";
 
 // DataTable utilities
 export * from "./lib/use-data-table";
-export * from "./lib/data-table-utils";
 export * from "./lib/use-debounced-callback";
+
+// Re-export TanStack Table types so consumers never need @tanstack/react-table
+export type { ColumnDef, Row, Column } from "@tanstack/react-table";

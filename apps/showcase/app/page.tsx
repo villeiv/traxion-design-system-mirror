@@ -22,7 +22,8 @@ import {
     Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
     Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Switch, Textarea, toast,
     InfoCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
-    DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions
+    DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions, DataTableContent,
+    type ColumnDef,
 } from "@traxion-global/design-system/react";
 
 import {
@@ -35,11 +36,6 @@ import {
     Star, SquareArrowOutUpRight, PanelRightOpen, MoreHorizontal, ArrowUpDown
 } from "lucide-react";
 
-import type { ColumnDef } from "@tanstack/react-table";
-import {
-    useReactTable,
-    getCoreRowModel
-} from "@tanstack/react-table";
 import { useDataTable, useDebouncedCallback } from "@traxion-global/design-system/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -1534,10 +1530,9 @@ function DataTableURLDemo() {
     const router = useRouter()
     const searchParams = useSearchParams()
 
-    // Use the URL state management hook
+    // Use the URL state management hook (URL sync auto-detected from router)
     const tableState = useDataTable({
         pageSize: 5, // Smaller page size to demonstrate pagination better
-        serverSide: true, // Enable server-side mode for URL sync
         namespace: "shipments", // Namespace to avoid conflicts with other tables
         router,
         searchParams,
@@ -1710,32 +1705,6 @@ function DataTableURLDemo() {
         },
     ]
 
-    // Create table instance with SERVER-SIDE mode
-    // Data is already filtered/sorted/paginated, table just displays it
-    const table = useReactTable({
-        data: processedData.data, // Pre-processed data from "server"
-        columns,
-        pageCount: processedData.pageCount, // Total pages from "server"
-        state: {
-            pagination: tableState.pagination,
-            sorting: tableState.sorting,
-            columnFilters: tableState.columnFilters,
-            columnVisibility: tableState.columnVisibility,
-            rowSelection,
-        },
-        enableRowSelection: true,
-        onPaginationChange: tableState.setPagination,
-        onSortingChange: tableState.setSorting,
-        onColumnFiltersChange: tableState.setColumnFilters,
-        onColumnVisibilityChange: tableState.setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        getCoreRowModel: getCoreRowModel(),
-        // Server-side mode: data is pre-processed, table just displays it
-        manualPagination: true,
-        manualSorting: true,
-        manualFiltering: true,
-    })
-
     return (
         <div className="space-y-4">
             {/* Demo controls */}
@@ -1766,8 +1735,18 @@ function DataTableURLDemo() {
                 </Button>
             </div>
 
-            {/* DataTable with URL state */}
-            <div className="space-y-4">
+            {/* DataTable with children pattern — no useReactTable needed */}
+            <DataTable
+                columns={columns}
+                data={processedData.data}
+                pageCount={processedData.pageCount}
+                enableRowSelection
+                enableColumnReordering
+                isLoading={isLoading}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+                {...tableState}
+            >
                 <DataTableToolbar>
                     <div className="flex flex-1 flex-wrap items-center gap-2">
                         <Input
@@ -1817,33 +1796,11 @@ function DataTableURLDemo() {
                             </Button>
                         )}
                     </div>
-                    <DataTableViewOptions table={table} />
+                    <DataTableViewOptions />
                 </DataTableToolbar>
-
-                <DataTable
-                    columns={columns}
-                    data={processedData.data} // Pre-filtered/sorted/paginated data from server
-                    pageCount={processedData.pageCount} // Total page count from server
-                    enableRowSelection
-                    enableColumnReordering
-                    isLoading={isLoading}
-                    // Pass URL state to DataTable
-                    pagination={tableState.pagination}
-                    onPaginationChange={tableState.setPagination}
-                    sorting={tableState.sorting}
-                    onSortingChange={tableState.setSorting}
-                    columnFilters={tableState.columnFilters}
-                    onColumnFiltersChange={tableState.setColumnFilters}
-                    columnVisibility={tableState.columnVisibility}
-                    onColumnVisibilityChange={tableState.setColumnVisibility}
-                    columnOrder={tableState.columnOrder}
-                    onColumnOrderChange={tableState.setColumnOrder}
-                    rowSelection={rowSelection}
-                    onRowSelectionChange={setRowSelection}
-                />
-
-                <DataTablePagination table={table} />
-            </div>
+                <DataTableContent />
+                <DataTablePagination />
+            </DataTable>
         </div>
     )
 }
@@ -1877,7 +1834,6 @@ function DataTableAPIDemo() {
 
     const tableState = useDataTable({
         pageSize: 10,
-        serverSide: true,
         namespace: "invoices",
         router,
         searchParams,
@@ -2065,58 +2021,20 @@ function DataTableAPIDemo() {
         },
     ]
 
-    const table = useReactTable({
-        data,
-        columns,
-        pageCount,
-        state: {
-            pagination: tableState.pagination,
-            sorting: tableState.sorting,
-            columnFilters: tableState.columnFilters,
-            columnVisibility: tableState.columnVisibility,
-            rowSelection,
-        },
-        enableRowSelection: true,
-        onPaginationChange: tableState.setPagination,
-        onSortingChange: tableState.setSorting,
-        onColumnFiltersChange: tableState.setColumnFilters,
-        onColumnVisibilityChange: tableState.setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        getCoreRowModel: getCoreRowModel(),
-        // Server-side mode: data comes from API pre-processed
-        manualPagination: true,
-        manualSorting: true,
-        manualFiltering: true,
-    })
-
     return (
-        <div className="space-y-4">
-            <DataTable
-                columns={columns}
-                data={data}
-                pageCount={pageCount}
-                enableRowSelection
-                enableColumnReordering
-                isLoading={isLoading}
-                pagination={tableState.pagination}
-                onPaginationChange={tableState.setPagination}
-                sorting={tableState.sorting}
-                onSortingChange={tableState.setSorting}
-                columnFilters={tableState.columnFilters}
-                onColumnFiltersChange={tableState.setColumnFilters}
-                columnVisibility={tableState.columnVisibility}
-                onColumnVisibilityChange={tableState.setColumnVisibility}
-                columnOrder={tableState.columnOrder}
-                onColumnOrderChange={tableState.setColumnOrder}
-                rowSelection={rowSelection}
-                onRowSelectionChange={setRowSelection}
-            />
-            <DataTablePagination table={table} />
-        </div>
+        <DataTable
+            columns={columns}
+            data={data}
+            pageCount={pageCount}
+            enableRowSelection
+            enableColumnReordering
+            isLoading={isLoading}
+            rowSelection={rowSelection}
+            onRowSelectionChange={setRowSelection}
+            {...tableState}
+        >
+            <DataTableContent />
+            <DataTablePagination />
+        </DataTable>
     )
-}
-
-
-function MyDataTableExample(){
-
 }
