@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {ReactNode, useState} from "react";
+import {ReactNode, useState, Suspense} from "react";
 import {cn} from "@traxion-global/design-system";
 import {
     Accordion, AccordionContent, AccordionItem, AccordionTrigger,
@@ -20,8 +20,9 @@ import {
     Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger,
     Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow,
     Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
-    Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Switch, toast, Textarea,
-    InfoCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard
+    Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Switch, Textarea, toast,
+    InfoCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
+    DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions
 } from "@traxion-global/design-system/react";
 
 import {
@@ -31,8 +32,16 @@ import {
     Truck, Package, Warehouse, Map, Navigation, Compass, Route, Clipboard, ClipboardCheck, ShoppingCart, ShoppingBag, CreditCard, Percent, Bookmark, Gift, Smartphone,
     Tablet, Laptop, Monitor, Printer, Camera, Headphones, Speaker, AlertCircle, AlertTriangle, CheckCircle, XCircle, Info, HelpCircle, ThumbsUp, ThumbsDown,
     Lock, Unlock, Shield, Key, Fingerprint, Heart, Activity, Stethoscope, Pill, AmbulanceIcon as FirstAid, Coffee, Zap, Award, Flag,
-    Star, SquareArrowOutUpRight, PanelRightOpen
+    Star, SquareArrowOutUpRight, PanelRightOpen, MoreHorizontal, ArrowUpDown
 } from "lucide-react";
+
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+    useReactTable,
+    getCoreRowModel
+} from "@tanstack/react-table";
+import { useDataTable, useDebouncedCallback } from "@traxion-global/design-system/react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 /*import {cn} from "@/lib/utils";
 
@@ -168,6 +177,27 @@ export default function DesignSystemShowcase() {
 
                 </div>
             </div>
+            {/* DataTable */}
+            <Section
+                title="DataTable"
+                description="Tabla de datos avanzada con paginación, ordenamiento, filtros, selección de filas, visibilidad de columnas y reordenamiento mediante drag & drop."
+            >
+                <Suspense fallback={<div className="flex items-center justify-center p-8"><InlineLoader /></div>}>
+                    <DataTableURLDemo />
+                </Suspense>
+
+                <Separator className="my-8" />
+
+                <div>
+                    <h3 className="text-lg font-semibold mb-2">Real API Example</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                        Fetches invoice data from a real API with server-side pagination and filtering.
+                    </p>
+                    <Suspense fallback={<div className="flex items-center justify-center p-8"><InlineLoader /></div>}>
+                        <DataTableAPIDemo />
+                    </Suspense>
+                </div>
+            </Section>
             {/* Tokens */}
             <Section title="Tokens" description="Colores de marca, escala de espacio, tipografía y sombras.">
                 {/* Colores */}
@@ -1264,7 +1294,7 @@ export default function Page() {
                 <p className="text-sm text-muted-foreground">Tip: usa Separator para cortar secciones largas.</p>
             </Section>
 
-            {/* Sortable coard */}
+            {/* Sortable board */}
             <Section title="Tablero de columnas ordenables" description="Componente de tablero con columnas y elementos ordenables mediante drag & drop.">
                 <div className={"overflow-hidden overflow-x-auto sm:overflow-x-hidden"}>
                     <div className={"" +
@@ -1385,21 +1415,708 @@ const itemsInfo: Record<string, TimelineEntry> = {
 }
 
 function AlertBoardItem(id: string) {
+    const item = itemsInfo[id]
+    if (!item) return null
+
     return <Card className={"border-none shadow-none text-xs sm:text-sm"}>
         <CardHeader className={"p-2"}>
             <CardTitle className={"flex flex-row gap-2 mb-2"}>
                 <Tag className={"h-4 w-4"}/>
-                <span>{itemsInfo[id].title}</span>
+                <span>{item.title}</span>
             </CardTitle>
             <CardDescription className={"flex flex-col justify-between gap-2 text-xs sm:text-sm"}>
-                <div className={"flex items-center gap-2"}><MapPin className={"w-4 h-4"}/>{itemsInfo[id].location}</div>
-                <div className={"flex items-center gap-2"}><CalendarIcon className={"w-4 h-4"}/>{itemsInfo[id].date}</div>
+                <div className={"flex items-center gap-2"}><MapPin className={"w-4 h-4"}/>{item.location}</div>
+                <div className={"flex items-center gap-2"}><CalendarIcon className={"w-4 h-4"}/>{item.date}</div>
             </CardDescription>
         </CardHeader>
         <CardContent className={"p-2 flex gap-2 items-start"}>
-            {
-                itemsInfo[id].badges
-            }
+            {item.badges}
         </CardContent>
     </Card>
+}
+
+// DataTable Demo Types
+type Shipment = {
+    id: string
+    tracking: string
+    origin: string
+    destination: string
+    status: "pending" | "in-transit" | "delivered" | "delayed"
+    date: string
+    amount: number
+}
+
+// Sample data
+const sampleShipments: Shipment[] = [
+    {
+        id: "1",
+        tracking: "TRX-001-2025",
+        origin: "Los Angeles, CA",
+        destination: "New York, NY",
+        status: "delivered",
+        date: "2025-01-15",
+        amount: 2450.00
+    },
+    {
+        id: "2",
+        tracking: "TRX-002-2025",
+        origin: "Chicago, IL",
+        destination: "Houston, TX",
+        status: "in-transit",
+        date: "2025-02-10",
+        amount: 1875.50
+    },
+    {
+        id: "3",
+        tracking: "TRX-003-2025",
+        origin: "Miami, FL",
+        destination: "Seattle, WA",
+        status: "delayed",
+        date: "2025-02-08",
+        amount: 3120.75
+    },
+    {
+        id: "4",
+        tracking: "TRX-004-2025",
+        origin: "Dallas, TX",
+        destination: "Phoenix, AZ",
+        status: "pending",
+        date: "2025-02-16",
+        amount: 1650.00
+    },
+    {
+        id: "5",
+        tracking: "TRX-005-2025",
+        origin: "San Francisco, CA",
+        destination: "Denver, CO",
+        status: "in-transit",
+        date: "2025-02-14",
+        amount: 2890.25
+    },
+    {
+        id: "6",
+        tracking: "TRX-006-2025",
+        origin: "Boston, MA",
+        destination: "Atlanta, GA",
+        status: "delivered",
+        date: "2025-01-28",
+        amount: 2100.00
+    },
+    {
+        id: "7",
+        tracking: "TRX-007-2025",
+        origin: "Portland, OR",
+        destination: "Las Vegas, NV",
+        status: "in-transit",
+        date: "2025-02-15",
+        amount: 1540.80
+    },
+    {
+        id: "8",
+        tracking: "TRX-008-2025",
+        origin: "Philadelphia, PA",
+        destination: "San Diego, CA",
+        status: "pending",
+        date: "2025-02-16",
+        amount: 3450.00
+    },
+]
+
+// DataTable with URL State Demo
+function DataTableURLDemo() {
+    const [isLoading, setIsLoading] = React.useState(false)
+    const [rowSelection, setRowSelection] = React.useState({})
+
+    // Local state for instant input feedback
+    const [trackingSearch, setTrackingSearch] = React.useState("")
+
+    // Get Next.js hooks
+    const router = useRouter()
+    const searchParams = useSearchParams()
+
+    // Use the URL state management hook
+    const tableState = useDataTable({
+        pageSize: 5, // Smaller page size to demonstrate pagination better
+        serverSide: true, // Enable server-side mode for URL sync
+        namespace: "shipments", // Namespace to avoid conflicts with other tables
+        router,
+        searchParams,
+    })
+
+    // Sync local tracking search with table filter value on mount/URL change
+    React.useEffect(() => {
+        const currentFilter = tableState.columnFilters.find(f => f.id === "tracking")
+        setTrackingSearch((currentFilter?.value as string) ?? "")
+    }, [searchParams])
+
+    // Debounced callback to update actual filter state
+    const debouncedSetTrackingFilter = useDebouncedCallback((value: string) => {
+        tableState.setColumnFilters((prev) => {
+            const withoutTracking = prev.filter(f => f.id !== "tracking")
+            if (value) {
+                return [...withoutTracking, { id: "tracking", value }]
+            }
+            return withoutTracking
+        })
+    }, 300)
+
+    // SERVER-SIDE SIMULATION: Filter, sort, and paginate data
+    // In production, this would be done by your API based on URL params
+    const processedData = React.useMemo(() => {
+        let filtered = [...sampleShipments]
+
+        // Apply filters
+        tableState.columnFilters.forEach((filter) => {
+            const value = String(filter.value).toLowerCase()
+            filtered = filtered.filter((row) => {
+                const cellValue = String(row[filter.id as keyof Shipment]).toLowerCase()
+                return cellValue.includes(value)
+            })
+        })
+
+        // Apply sorting
+        if (tableState.sorting.length > 0) {
+            const sort = tableState.sorting[0]!
+            filtered.sort((a, b) => {
+                const aVal = a[sort.id as keyof Shipment]
+                const bVal = b[sort.id as keyof Shipment]
+                if (aVal < bVal) return sort.desc ? 1 : -1
+                if (aVal > bVal) return sort.desc ? -1 : 1
+                return 0
+            })
+        }
+
+        // Calculate pagination
+        const totalCount = filtered.length
+        const pageCount = Math.ceil(totalCount / tableState.pagination.pageSize)
+        const start = tableState.pagination.pageIndex * tableState.pagination.pageSize
+        const end = start + tableState.pagination.pageSize
+        const pageData = filtered.slice(start, end)
+
+        return { data: pageData, totalCount, pageCount }
+    }, [tableState.columnFilters, tableState.sorting, tableState.pagination])
+
+    // Column definitions (reusing same columns from above, but simplified)
+    const columns: ColumnDef<Shipment>[] = [
+        {
+            id: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                    }
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Select all"
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label="Select row"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
+            accessorKey: "tracking",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Tracking #" />
+            ),
+            cell: ({ row }) => (
+                <div className="font-mono text-sm">{row.getValue("tracking")}</div>
+            ),
+        },
+        {
+            accessorKey: "origin",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Origin" />
+            ),
+        },
+        {
+            accessorKey: "destination",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Destination" />
+            ),
+        },
+        {
+            accessorKey: "status",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Status" />
+            ),
+            cell: ({ row }) => {
+                const status = row.getValue("status") as string
+                const variants: Record<string, "green" | "yellow" | "red" | "gray"> = {
+                    delivered: "green",
+                    "in-transit": "yellow",
+                    delayed: "red",
+                    pending: "gray",
+                }
+                const labels: Record<string, string> = {
+                    delivered: "Delivered",
+                    "in-transit": "In Transit",
+                    delayed: "Delayed",
+                    pending: "Pending",
+                }
+                return <Badge variant={variants[status]}>{labels[status]}</Badge>
+            },
+        },
+        {
+            accessorKey: "amount",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Amount" />
+            ),
+            cell: ({ row }) => {
+                const amount = parseFloat(row.getValue("amount"))
+                const formatted = new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                }).format(amount)
+                return <div className="font-medium">{formatted}</div>
+            },
+        },
+        {
+            id: "actions",
+            header: () => <span className="sr-only">Actions</span>,
+            cell: ({ row }) => {
+                const shipment = row.original
+                return (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    navigator.clipboard.writeText(shipment.tracking)
+                                    toast.success("Tracking number copied!")
+                                }}
+                            >
+                                <Copy className="mr-2 h-4 w-4" />
+                                Copy tracking #
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )
+            },
+            enableSorting: false,
+            enableHiding: false,
+        },
+    ]
+
+    // Create table instance with SERVER-SIDE mode
+    // Data is already filtered/sorted/paginated, table just displays it
+    const table = useReactTable({
+        data: processedData.data, // Pre-processed data from "server"
+        columns,
+        pageCount: processedData.pageCount, // Total pages from "server"
+        state: {
+            pagination: tableState.pagination,
+            sorting: tableState.sorting,
+            columnFilters: tableState.columnFilters,
+            columnVisibility: tableState.columnVisibility,
+            rowSelection,
+        },
+        enableRowSelection: true,
+        onPaginationChange: tableState.setPagination,
+        onSortingChange: tableState.setSorting,
+        onColumnFiltersChange: tableState.setColumnFilters,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
+        getCoreRowModel: getCoreRowModel(),
+        // Server-side mode: data is pre-processed, table just displays it
+        manualPagination: true,
+        manualSorting: true,
+        manualFiltering: true,
+    })
+
+    return (
+        <div className="space-y-4">
+            {/* Demo controls */}
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border p-4 bg-muted/20">
+                <Label className="text-sm font-medium">Demo controls:</Label>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                        setIsLoading(true)
+                        setTimeout(() => setIsLoading(false), 2000)
+                    }}
+                >
+                    {isLoading && <InlineLoader />}
+                    {!isLoading && "Simulate loading"}
+                </Button>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                        // Reset to defaults
+                        tableState.setPagination({ pageIndex: 0, pageSize: 5 })
+                        tableState.setSorting([])
+                        tableState.setColumnFilters([])
+                    }}
+                >
+                    Reset URL state
+                </Button>
+            </div>
+
+            {/* DataTable with URL state */}
+            <div className="space-y-4">
+                <DataTableToolbar>
+                    <div className="flex flex-1 flex-wrap items-center gap-2">
+                        <Input
+                            placeholder="Search tracking..."
+                            value={trackingSearch}
+                            onChange={(event) => {
+                                const value = event.target.value
+                                setTrackingSearch(value) // Instant local update
+                                debouncedSetTrackingFilter(value) // Debounced filter update
+                            }}
+                            className="h-8 w-[200px]"
+                        />
+                        <Select
+                            value={tableState.columnFilters.find(f => f.id === "status")?.value as string ?? "all"}
+                            onValueChange={(value) => {
+                                tableState.setColumnFilters((prev) => {
+                                    const withoutStatus = prev.filter(f => f.id !== "status")
+                                    if (value === "all") {
+                                        return withoutStatus
+                                    }
+                                    return [...withoutStatus, { id: "status", value }]
+                                })
+                            }}
+                        >
+                            <SelectTrigger className="h-8 w-[150px]">
+                                <SelectValue placeholder="Filter status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All statuses</SelectItem>
+                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="in-transit">In Transit</SelectItem>
+                                <SelectItem value="delivered">Delivered</SelectItem>
+                                <SelectItem value="delayed">Delayed</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        {tableState.columnFilters.length > 0 && (
+                            <Button
+                                variant="ghost"
+                                onClick={() => {
+                                    setTrackingSearch("")
+                                    tableState.setColumnFilters([])
+                                }}
+                                className="h-8 px-2 lg:px-3"
+                            >
+                                Clear filters
+                                <X className="ml-2 h-4 w-4" />
+                            </Button>
+                        )}
+                    </div>
+                    <DataTableViewOptions table={table} />
+                </DataTableToolbar>
+
+                <DataTable
+                    columns={columns}
+                    data={processedData.data} // Pre-filtered/sorted/paginated data from server
+                    pageCount={processedData.pageCount} // Total page count from server
+                    enableRowSelection
+                    enableColumnReordering
+                    isLoading={isLoading}
+                    // Pass URL state to DataTable
+                    pagination={tableState.pagination}
+                    onPaginationChange={tableState.setPagination}
+                    sorting={tableState.sorting}
+                    onSortingChange={tableState.setSorting}
+                    columnFilters={tableState.columnFilters}
+                    onColumnFiltersChange={tableState.setColumnFilters}
+                    columnVisibility={tableState.columnVisibility}
+                    onColumnVisibilityChange={tableState.setColumnVisibility}
+                    columnOrder={tableState.columnOrder}
+                    onColumnOrderChange={tableState.setColumnOrder}
+                    rowSelection={rowSelection}
+                    onRowSelectionChange={setRowSelection}
+                />
+
+                <DataTablePagination table={table} />
+            </div>
+        </div>
+    )
+}
+
+// Invoice type from API
+type Invoice = {
+    id: string
+    folio: string
+    client_name: string
+    issueDate: string
+    dueDate: string
+    totals: {
+        subtotal: number
+        iva: number
+        total: number
+    }
+    currency: string
+    status: string
+}
+
+// Real API DataTable Demo
+function DataTableAPIDemo() {
+    const [data, setData] = React.useState<Invoice[]>([])
+    const [isLoading, setIsLoading] = React.useState(true)
+    const [pageCount, setPageCount] = React.useState(0)
+    const [rowSelection, setRowSelection] = React.useState({})
+    const abortControllerRef = React.useRef<AbortController | null>(null)
+
+    const router = useRouter()
+    const searchParams = useSearchParams()
+
+    const tableState = useDataTable({
+        pageSize: 10,
+        serverSide: true,
+        namespace: "invoices",
+        router,
+        searchParams,
+    })
+
+    // Fetch data from API based on table state
+    // Use stringified versions for stable dependencies
+    const paginationKey = JSON.stringify(tableState.pagination)
+    const sortingKey = JSON.stringify(tableState.sorting)
+    const filtersKey = JSON.stringify(tableState.columnFilters)
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            // Cancel previous request if still pending
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort()
+            }
+
+            // Create new abort controller for this request
+            abortControllerRef.current = new AbortController()
+
+            setIsLoading(true)
+            try {
+                // Build query params from table state
+                const params = new URLSearchParams()
+                params.set("page", String(tableState.pagination.pageIndex + 1))
+                params.set("limit", String(tableState.pagination.pageSize))
+
+                // Add sorting
+                if (tableState.sorting.length > 0) {
+                    const sort = tableState.sorting[0]!
+                    params.set("sortBy", sort.id)
+                    params.set("order", sort.desc ? "desc" : "asc")
+                }
+
+                // Add filters
+                tableState.columnFilters.forEach((filter) => {
+                    params.set(filter.id, String(filter.value))
+                })
+
+                const response = await fetch(
+                    `https://684c5a4aed2578be881e9033.mockapi.io/api/v0/invoices?${params}`,
+                    { signal: abortControllerRef.current.signal }
+                )
+
+                // Check if response is OK
+                if (!response.ok) {
+                    const text = await response.text()
+
+                    // Handle rate limiting
+                    if (text.includes("rate limit") || response.status === 429) {
+                        toast.error("Rate Limit Reached - The API is being called too frequently. Please wait a moment.")
+                        throw new Error(`Rate limit exceeded: ${text}`)
+                    }
+
+                    throw new Error(`API error: ${response.status} - ${text}`)
+                }
+
+                // Check if response is JSON
+                const contentType = response.headers.get("content-type")
+                if (!contentType || !contentType.includes("application/json")) {
+                    const text = await response.text()
+                    throw new Error(`Expected JSON but got: ${text}`)
+                }
+
+                const result = await response.json()
+
+                setData(result)
+                // MockAPI doesn't return total count, so estimate from data length
+                const estimatedTotal = result.length < tableState.pagination.pageSize
+                    ? tableState.pagination.pageIndex * tableState.pagination.pageSize + result.length
+                    : (tableState.pagination.pageIndex + 2) * tableState.pagination.pageSize
+                setPageCount(Math.ceil(estimatedTotal / tableState.pagination.pageSize))
+            } catch (error) {
+                // Ignore abort errors (they're expected when canceling requests)
+                if (error instanceof Error && error.name === "AbortError") {
+                    return
+                }
+
+                console.error("Failed to fetch invoices:", error)
+                setData([])
+                setPageCount(0)
+
+                // Show error toast if not already shown
+                if (!(error instanceof Error && error.message.includes("Rate limit"))) {
+                    toast.error("Failed to load invoices. Please try again later.")
+                }
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        fetchData()
+
+        // Cleanup function - abort request if component unmounts or dependencies change
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort()
+            }
+        }
+    }, [paginationKey, sortingKey, filtersKey])
+
+    const columns: ColumnDef<Invoice>[] = [
+        {
+            id: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                    }
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Select all"
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label="Select row"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
+            accessorKey: "folio",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Folio" />
+            ),
+            cell: ({ row }) => <div className="font-mono text-sm">{row.getValue("folio")}</div>,
+        },
+        {
+            accessorKey: "client_name",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Cliente" />
+            ),
+        },
+        {
+            accessorKey: "issueDate",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Fecha" />
+            ),
+            cell: ({ row }) => new Date(row.getValue("issueDate")).toLocaleDateString(),
+        },
+        {
+            accessorKey: "totals.total",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Total" />
+            ),
+            cell: ({ row }) => {
+                const amount = row.original.totals?.total || 0
+                const currency = row.original.currency
+                return (
+                    <div className="font-medium">
+                        {new Intl.NumberFormat("es-MX", {
+                            style: "currency",
+                            currency: currency || "MXN",
+                        }).format(amount)}
+                    </div>
+                )
+            },
+        },
+        {
+            accessorKey: "status",
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Estado" />
+            ),
+            cell: ({ row }) => {
+                const status = row.getValue("status") as string
+                const variants: Record<string, "green" | "yellow" | "red" | "gray"> = {
+                    paid: "green",
+                    pending: "yellow",
+                    overdue: "red",
+                    cancelled: "gray",
+                }
+                const labels: Record<string, string> = {
+                    paid: "Pagado",
+                    pending: "Pendiente",
+                    overdue: "Vencido",
+                    cancelled: "Cancelado",
+                }
+                return <Badge variant={variants[status] || "gray"}>{labels[status] || status}</Badge>
+            },
+        },
+    ]
+
+    const table = useReactTable({
+        data,
+        columns,
+        pageCount,
+        state: {
+            pagination: tableState.pagination,
+            sorting: tableState.sorting,
+            columnFilters: tableState.columnFilters,
+            columnVisibility: tableState.columnVisibility,
+            rowSelection,
+        },
+        enableRowSelection: true,
+        onPaginationChange: tableState.setPagination,
+        onSortingChange: tableState.setSorting,
+        onColumnFiltersChange: tableState.setColumnFilters,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
+        getCoreRowModel: getCoreRowModel(),
+        // Server-side mode: data comes from API pre-processed
+        manualPagination: true,
+        manualSorting: true,
+        manualFiltering: true,
+    })
+
+    return (
+        <div className="space-y-4">
+            <DataTable
+                columns={columns}
+                data={data}
+                pageCount={pageCount}
+                enableRowSelection
+                enableColumnReordering
+                isLoading={isLoading}
+                pagination={tableState.pagination}
+                onPaginationChange={tableState.setPagination}
+                sorting={tableState.sorting}
+                onSortingChange={tableState.setSorting}
+                columnFilters={tableState.columnFilters}
+                onColumnFiltersChange={tableState.setColumnFilters}
+                columnVisibility={tableState.columnVisibility}
+                onColumnVisibilityChange={tableState.setColumnVisibility}
+                columnOrder={tableState.columnOrder}
+                onColumnOrderChange={tableState.setColumnOrder}
+                rowSelection={rowSelection}
+                onRowSelectionChange={setRowSelection}
+            />
+            <DataTablePagination table={table} />
+        </div>
+    )
+}
+
+
+function MyDataTableExample(){
+
 }
