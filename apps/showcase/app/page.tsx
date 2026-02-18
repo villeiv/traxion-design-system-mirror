@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import {ReactNode, useState, Suspense} from "react";
-import {cn} from "@traxion-global/design-system";
+import { ReactNode, useState, Suspense } from "react";
+import { cn } from "@traxion-global/design-system";
 import {
     Accordion, AccordionContent, AccordionItem, AccordionTrigger,
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
@@ -57,7 +57,7 @@ import {
 //
 // Objetivo: muestra del design system con ejemplos mínimos y tips de uso.
 
-function Section({title, description, children}: { title: string; description?: string; children: React.ReactNode }) {
+function Section({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
     return (
         <Card className="rounded-2xl">
             <CardHeader className={"p-4 sm:p-6 pb-0 sm:pb-0"}>
@@ -75,7 +75,7 @@ type ColorSwatchProps = {
     className?: string;
 }
 
-function ColorSwatch({name, color, className }: ColorSwatchProps) {
+function ColorSwatch({ name, color, className }: ColorSwatchProps) {
     return (
         <div className={cn(`flex flex-col h-16 sm:h-20 rounded-md flex items-center justify-center `, className)}>
             <span className="sm:text-lg">{name}</span>
@@ -105,14 +105,14 @@ export default function DesignSystemShowcase() {
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2 text-sm font-medium">
-                        <User className="h-4 w-4"/>
+                        <User className="h-4 w-4" />
                         <span>Design System</span>
                     </div>
-                    <Separator orientation="vertical" className="h-8"/>
+                    <Separator orientation="vertical" className="h-8" />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Avatar className={"cursor-pointer"}>
-                                <AvatarImage src="https://avatars.github" alt="demo"/>
+                                <AvatarImage src="https://avatars.github" alt="demo" />
                                 <AvatarFallback>DS</AvatarFallback>
                             </Avatar>
                         </DropdownMenuTrigger>
@@ -125,7 +125,7 @@ export default function DesignSystemShowcase() {
                                 </div>
                             </DropdownMenuLabel>
 
-                            <DropdownMenuSeparator/>
+                            <DropdownMenuSeparator />
 
                             <DropdownMenuGroup>
                                 <DropdownMenuItem>Perfil</DropdownMenuItem>
@@ -133,19 +133,19 @@ export default function DesignSystemShowcase() {
                                 <DropdownMenuItem>Configuración</DropdownMenuItem>
                             </DropdownMenuGroup>
 
-                            <DropdownMenuSeparator/>
+                            <DropdownMenuSeparator />
 
                             <DropdownMenuSub>
                                 <DropdownMenuSubTrigger>Tema</DropdownMenuSubTrigger>
                                 <DropdownMenuSubContent>
                                     <DropdownMenuItem>Claro</DropdownMenuItem>
                                     <DropdownMenuItem>Oscuro</DropdownMenuItem>
-                                    <DropdownMenuSeparator/>
+                                    <DropdownMenuSeparator />
                                     <DropdownMenuItem>Sistema</DropdownMenuItem>
                                 </DropdownMenuSubContent>
                             </DropdownMenuSub>
 
-                            <DropdownMenuSeparator/>
+                            <DropdownMenuSeparator />
 
                             <DropdownMenuCheckboxItem checked>
                                 Notificaciones
@@ -154,14 +154,14 @@ export default function DesignSystemShowcase() {
                                 Emails
                             </DropdownMenuCheckboxItem>
 
-                            <DropdownMenuSeparator/>
+                            <DropdownMenuSeparator />
 
                             <DropdownMenuRadioGroup value="es">
                                 <DropdownMenuRadioItem value="en">English</DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem value="es">Español</DropdownMenuRadioItem>
                             </DropdownMenuRadioGroup>
 
-                            <DropdownMenuSeparator/>
+                            <DropdownMenuSeparator />
 
                             <DropdownMenuItem>
                                 Cerrar sesión
@@ -173,45 +173,24 @@ export default function DesignSystemShowcase() {
 
                 </div>
             </div>
-            {/* DataTable */}
-            <Section
-                title="DataTable"
-                description="Tabla de datos avanzada con paginación, ordenamiento, filtros, selección de filas, visibilidad de columnas y reordenamiento mediante drag & drop."
-            >
-                <Suspense fallback={<div className="flex items-center justify-center p-8"><InlineLoader /></div>}>
-                    <DataTableURLDemo />
-                </Suspense>
-
-                <Separator className="my-8" />
-
-                <div>
-                    <h3 className="text-lg font-semibold mb-2">Real API Example</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                        Fetches invoice data from a real API with server-side pagination and filtering.
-                    </p>
-                    <Suspense fallback={<div className="flex items-center justify-center p-8"><InlineLoader /></div>}>
-                        <DataTableAPIDemo />
-                    </Suspense>
-                </div>
-            </Section>
             {/* Tokens */}
             <Section title="Tokens" description="Colores de marca, escala de espacio, tipografía y sombras.">
                 {/* Colores */}
                 <div className="space-y-4">
                     <h3 className="font-medium">Colores de marca</h3>
                     <div className="grid grid-cols-2 gap-4">
-                        <ColorSwatch name="Primary" color="#D0DF00" className="bg-primary text-primary-foreground"/>
-                        <ColorSwatch name="Secondary" color="#63666A" className="bg-secondary text-secondary-foreground"/>
+                        <ColorSwatch name="Primary" color="#D0DF00" className="bg-primary text-primary-foreground" />
+                        <ColorSwatch name="Secondary" color="#63666A" className="bg-secondary text-secondary-foreground" />
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <ColorSwatch name="Primary light" color="#E3E935" className="bg-primary-light text-primary-foreground"/>
-                        <ColorSwatch name="Primary dark" color="#B5BD00" className="bg-primary-dark text-secondary-foreground"/>
-                        <ColorSwatch name="Secondary light" color="#D0D0CE" className="bg-secondary-light text-primary-foreground"/>
-                        <ColorSwatch name="Secondary medium" color="#97999B" className="bg-secondary-medium text-white"/>
+                        <ColorSwatch name="Primary light" color="#E3E935" className="bg-primary-light text-primary-foreground" />
+                        <ColorSwatch name="Primary dark" color="#B5BD00" className="bg-primary-dark text-secondary-foreground" />
+                        <ColorSwatch name="Secondary light" color="#D0D0CE" className="bg-secondary-light text-primary-foreground" />
+                        <ColorSwatch name="Secondary medium" color="#97999B" className="bg-secondary-medium text-white" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-                        <ColorSwatch name="White" color="#FFFFFF" className="bg-white text-black border"/>
-                        <ColorSwatch name="Black" color="#000000" className="bg-black text-white"/>
+                        <ColorSwatch name="White" color="#FFFFFF" className="bg-white text-black border" />
+                        <ColorSwatch name="Black" color="#000000" className="bg-black text-white" />
                     </div>
                 </div>
 
@@ -220,31 +199,31 @@ export default function DesignSystemShowcase() {
                     <h3 className="font-medium">Escala de espacio</h3>
                     <div className="flex flex-col gap-3">
                         <div className="flex items-center gap-2">
-                            <div className="bg-primary h-4 w-1"/>
+                            <div className="bg-primary h-4 w-1" />
                             <span className="text-xs">w-1</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="bg-primary h-4 w-2"/>
+                            <div className="bg-primary h-4 w-2" />
                             <span className="text-xs">w-2</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="bg-primary h-4 w-3"/>
+                            <div className="bg-primary h-4 w-3" />
                             <span className="text-xs">w-3</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="bg-primary h-4 w-4"/>
+                            <div className="bg-primary h-4 w-4" />
                             <span className="text-xs">w-4</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="bg-primary h-4 w-6"/>
+                            <div className="bg-primary h-4 w-6" />
                             <span className="text-xs">w-6</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="bg-primary h-4 w-8"/>
+                            <div className="bg-primary h-4 w-8" />
                             <span className="text-xs">w-8</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="bg-primary h-4 w-12"/>
+                            <div className="bg-primary h-4 w-12" />
                             <span className="text-xs">w-12</span>
                         </div>
                     </div>
@@ -279,35 +258,35 @@ export default function DesignSystemShowcase() {
                     <h3 className="font-medium">Border radius</h3>
                     <div className="flex gap-4 flex-wrap items-end">
                         <div className="flex flex-col items-center gap-2">
-                            <div className="w-16 h-16 bg-primary rounded-none border"/>
+                            <div className="w-16 h-16 bg-primary rounded-none border" />
                             <span className="text-xs">none</span>
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="w-16 h-16 bg-primary rounded-sm border"/>
+                            <div className="w-16 h-16 bg-primary rounded-sm border" />
                             <span className="text-xs">sm</span>
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="w-16 h-16 bg-primary rounded-md border"/>
+                            <div className="w-16 h-16 bg-primary rounded-md border" />
                             <span className="text-xs">md</span>
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="w-16 h-16 bg-primary rounded-lg border"/>
+                            <div className="w-16 h-16 bg-primary rounded-lg border" />
                             <span className="text-xs">lg</span>
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="w-16 h-16 bg-primary rounded-xl border"/>
+                            <div className="w-16 h-16 bg-primary rounded-xl border" />
                             <span className="text-xs">xl</span>
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="w-16 h-16 bg-primary rounded-2xl border"/>
+                            <div className="w-16 h-16 bg-primary rounded-2xl border" />
                             <span className="text-xs">2xl</span>
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="w-16 h-16 bg-primary rounded-3xl border"/>
+                            <div className="w-16 h-16 bg-primary rounded-3xl border" />
                             <span className="text-xs">3xl</span>
                         </div>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="w-16 h-16 bg-primary rounded-full border"/>
+                            <div className="w-16 h-16 bg-primary rounded-full border" />
                             <span className="text-xs">full</span>
                         </div>
                     </div>
@@ -316,7 +295,7 @@ export default function DesignSystemShowcase() {
 
             {/* Badges */}
             <Section title="Badges" description="Primarias para casos comunes, estados predefinidos para flujos de negocio y auxiliares para etiquetas adicionales.">
-                {/* Primarias */}
+                {/* Primary */}
                 <div className="space-y-2">
                     <h3 className="text-sm font-medium">Primarias</h3>
                     <div className="flex flex-wrap gap-2">
@@ -328,7 +307,7 @@ export default function DesignSystemShowcase() {
                     </div>
                 </div>
 
-                {/* estados */}
+                {/* States */}
                 <div className="space-y-2 mt-4">
                     <h3 className="text-sm font-medium">Estados de facturas, viajes, etc.</h3>
                     <div className="flex flex-wrap gap-2">
@@ -339,7 +318,7 @@ export default function DesignSystemShowcase() {
                     </div>
                 </div>
 
-                {/* auxiliares */}
+                {/* Auxiliary */}
                 <div className="space-y-2 mt-4">
                     <h3 className="text-sm font-medium">Auxiliares</h3>
                     <div className="flex flex-wrap gap-2">
@@ -369,12 +348,11 @@ export default function DesignSystemShowcase() {
                     <Button size="sm">sm</Button>
                     <Button size="lg">lg</Button>
                     <Button size="icon" aria-label="Icon button">
-                        <XIcon className="h-4 w-4"/>
+                        <XIcon className="h-4 w-4" />
                     </Button>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                    Tip: Usa los tokens de diseño que ya están definidos en Tailwind en lugar de
-                    crear clases ad-hoc para cada botón.
+                    Tip: Usa los tokens de diseño que ya están definidos en Tailwind en lugar de crear clases ad-hoc para cada botón.
                 </p>
             </Section>
 
@@ -383,12 +361,12 @@ export default function DesignSystemShowcase() {
                 <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" placeholder="john@acme.com"/>
+                        <Input id="email" placeholder="john@acme.com" />
                         <p className="text-xs text-muted-foreground">Tip: usa `aria-*` + `htmlFor` para accesibilidad.</p>
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="bio">Bio</Label>
-                        <Textarea id="bio" placeholder="Escribe algo..."/>
+                        <Textarea id="bio" placeholder="Escribe algo..." />
                     </div>
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -411,13 +389,13 @@ export default function DesignSystemShowcase() {
                 description="Cajas compactas para resaltar datos clave como periodos, fechas o totales."
             >
                 <div className="grid gap-4 sm:grid-cols-3">
-                    <InfoCard title="Period" value="June" icon={<Calendar1Icon className="h-6 w-6"/>}/>
-                    <InfoCard title="Payment date" value="14/6/2025" icon={<Calendar1Icon className="h-6 w-6"/>}/>
-                    <InfoCard title="Total" value="$357,971.86" icon={<DollarSign className="h-6 w-6"/>}/>
+                    <InfoCard title="Periodo" value="Junio" icon={<Calendar1Icon className="h-6 w-6" />} />
+                    <InfoCard title="Fecha de pago" value="14/6/2025" icon={<Calendar1Icon className="h-6 w-6" />} />
+                    <InfoCard title="Total" value="$357,971.86" icon={<DollarSign className="h-6 w-6" />} />
                 </div>
             </Section>
 
-            {/* Íconos */}
+            {/* Icons */}
             <Section
                 title="Íconos"
                 description="Los iconos provienen de la librería Lucide y pueden importarse individualmente. Busca por nombre o palabra clave en el sitio oficial: https://lucide.dev/icons/ para encontrar el icono que necesites."
@@ -426,43 +404,43 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Acciones básicas</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <Plus className="h-6 w-6"/>
+                            <Plus className="h-6 w-6" />
                             <span className="text-xs mt-1">Crear</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <PenLine className="h-6 w-6"/>
+                            <PenLine className="h-6 w-6" />
                             <span className="text-xs mt-1">Editar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Trash2 className="h-6 w-6"/>
+                            <Trash2 className="h-6 w-6" />
                             <span className="text-xs mt-1">Eliminar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Copy className="h-6 w-6"/>
+                            <Copy className="h-6 w-6" />
                             <span className="text-xs mt-1">Copiar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Download className="h-6 w-6"/>
+                            <Download className="h-6 w-6" />
                             <span className="text-xs mt-1">Descargar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <UploadIcon className="h-6 w-6"/>
+                            <UploadIcon className="h-6 w-6" />
                             <span className="text-xs mt-1">Subir</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Eye className="h-6 w-6"/>
+                            <Eye className="h-6 w-6" />
                             <span className="text-xs mt-1">Ver</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <EyeOff className="h-6 w-6"/>
+                            <EyeOff className="h-6 w-6" />
                             <span className="text-xs mt-1">Ocultar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <SearchIcon className="h-6 w-6"/>
+                            <SearchIcon className="h-6 w-6" />
                             <span className="text-xs mt-1">Buscar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Filter className="h-6 w-6"/>
+                            <Filter className="h-6 w-6" />
                             <span className="text-xs mt-1">Filtrar</span>
                         </div>
                     </div>
@@ -472,43 +450,43 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Navegación y UI</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <ChevronDown className="h-6 w-6"/>
+                            <ChevronDown className="h-6 w-6" />
                             <span className="text-xs mt-1">Abajo</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <ChevronUp className="h-6 w-6"/>
+                            <ChevronUp className="h-6 w-6" />
                             <span className="text-xs mt-1">Arriba</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <ChevronLeft className="h-6 w-6"/>
+                            <ChevronLeft className="h-6 w-6" />
                             <span className="text-xs mt-1">Izquierda</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <ChevronRight className="h-6 w-6"/>
+                            <ChevronRight className="h-6 w-6" />
                             <span className="text-xs mt-1">Derecha</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Menu className="h-6 w-6"/>
+                            <Menu className="h-6 w-6" />
                             <span className="text-xs mt-1">Menú</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <X className="h-6 w-6"/>
+                            <X className="h-6 w-6" />
                             <span className="text-xs mt-1">Cerrar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Settings className="h-6 w-6"/>
+                            <Settings className="h-6 w-6" />
                             <span className="text-xs mt-1">Ajustes</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Bell className="h-6 w-6"/>
+                            <Bell className="h-6 w-6" />
                             <span className="text-xs mt-1">Notificación</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Home className="h-6 w-6"/>
+                            <Home className="h-6 w-6" />
                             <span className="text-xs mt-1">Inicio</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <User className="h-6 w-6"/>
+                            <User className="h-6 w-6" />
                             <span className="text-xs mt-1">Usuario</span>
                         </div>
                     </div>
@@ -518,43 +496,43 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Logística y transporte</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <Truck className="h-6 w-6"/>
+                            <Truck className="h-6 w-6" />
                             <span className="text-xs mt-1">Camión</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Package className="h-6 w-6"/>
+                            <Package className="h-6 w-6" />
                             <span className="text-xs mt-1">Paquete</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Warehouse className="h-6 w-6"/>
+                            <Warehouse className="h-6 w-6" />
                             <span className="text-xs mt-1">Almacén</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Map className="h-6 w-6"/>
+                            <Map className="h-6 w-6" />
                             <span className="text-xs mt-1">Mapa</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <MapPin className="h-6 w-6"/>
+                            <MapPin className="h-6 w-6" />
                             <span className="text-xs mt-1">Ubicación</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Navigation className="h-6 w-6"/>
+                            <Navigation className="h-6 w-6" />
                             <span className="text-xs mt-1">Navegación</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Compass className="h-6 w-6"/>
+                            <Compass className="h-6 w-6" />
                             <span className="text-xs mt-1">Brújula</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Route className="h-6 w-6"/>
+                            <Route className="h-6 w-6" />
                             <span className="text-xs mt-1">Ruta</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Clipboard className="h-6 w-6"/>
+                            <Clipboard className="h-6 w-6" />
                             <span className="text-xs mt-1">Portapapeles</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <ClipboardCheck className="h-6 w-6"/>
+                            <ClipboardCheck className="h-6 w-6" />
                             <span className="text-xs mt-1">Verificado</span>
                         </div>
                     </div>
@@ -564,35 +542,35 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Comercio y finanzas</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <ShoppingCart className="h-6 w-6"/>
+                            <ShoppingCart className="h-6 w-6" />
                             <span className="text-xs mt-1">Carrito</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <ShoppingBag className="h-6 w-6"/>
+                            <ShoppingBag className="h-6 w-6" />
                             <span className="text-xs mt-1">Bolsa</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <CreditCard className="h-6 w-6"/>
+                            <CreditCard className="h-6 w-6" />
                             <span className="text-xs mt-1">Tarjeta</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <DollarSign className="h-6 w-6"/>
+                            <DollarSign className="h-6 w-6" />
                             <span className="text-xs mt-1">Precio</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Percent className="h-6 w-6"/>
+                            <Percent className="h-6 w-6" />
                             <span className="text-xs mt-1">Descuento</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Tag className="h-6 w-6"/>
+                            <Tag className="h-6 w-6" />
                             <span className="text-xs mt-1">Etiqueta</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Bookmark className="h-6 w-6"/>
+                            <Bookmark className="h-6 w-6" />
                             <span className="text-xs mt-1">Guardar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Gift className="h-6 w-6"/>
+                            <Gift className="h-6 w-6" />
                             <span className="text-xs mt-1">Regalo</span>
                         </div>
                     </div>
@@ -602,35 +580,35 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Archivos y datos</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <File className="h-6 w-6"/>
+                            <File className="h-6 w-6" />
                             <span className="text-xs mt-1">Archivo</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <FileText className="h-6 w-6"/>
+                            <FileText className="h-6 w-6" />
                             <span className="text-xs mt-1">Documento</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <FilePlus className="h-6 w-6"/>
+                            <FilePlus className="h-6 w-6" />
                             <span className="text-xs mt-1">Nuevo archivo</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Folder className="h-6 w-6"/>
+                            <Folder className="h-6 w-6" />
                             <span className="text-xs mt-1">Carpeta</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <FolderPlus className="h-6 w-6"/>
+                            <FolderPlus className="h-6 w-6" />
                             <span className="text-xs mt-1">Nueva carpeta</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Save className="h-6 w-6"/>
+                            <Save className="h-6 w-6" />
                             <span className="text-xs mt-1">Guardar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Database className="h-6 w-6"/>
+                            <Database className="h-6 w-6" />
                             <span className="text-xs mt-1">Base de datos</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <BarChart className="h-6 w-6"/>
+                            <BarChart className="h-6 w-6" />
                             <span className="text-xs mt-1">Gráfico</span>
                         </div>
                     </div>
@@ -640,35 +618,35 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Comunicación</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <MailIcon className="h-6 w-6"/>
+                            <MailIcon className="h-6 w-6" />
                             <span className="text-xs mt-1">Correo</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <MessageSquare className="h-6 w-6"/>
+                            <MessageSquare className="h-6 w-6" />
                             <span className="text-xs mt-1">Mensaje</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Phone className="h-6 w-6"/>
+                            <Phone className="h-6 w-6" />
                             <span className="text-xs mt-1">Teléfono</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Send className="h-6 w-6"/>
+                            <Send className="h-6 w-6" />
                             <span className="text-xs mt-1">Enviar</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Share className="h-6 w-6"/>
+                            <Share className="h-6 w-6" />
                             <span className="text-xs mt-1">Compartir</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Globe className="h-6 w-6"/>
+                            <Globe className="h-6 w-6" />
                             <span className="text-xs mt-1">Web</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Wifi className="h-6 w-6"/>
+                            <Wifi className="h-6 w-6" />
                             <span className="text-xs mt-1">WiFi</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Bluetooth className="h-6 w-6"/>
+                            <Bluetooth className="h-6 w-6" />
                             <span className="text-xs mt-1">Bluetooth</span>
                         </div>
                     </div>
@@ -678,35 +656,35 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Alertas y feedback</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <AlertCircle className="h-6 w-6"/>
+                            <AlertCircle className="h-6 w-6" />
                             <span className="text-xs mt-1">Alerta</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <AlertTriangle className="h-6 w-6"/>
+                            <AlertTriangle className="h-6 w-6" />
                             <span className="text-xs mt-1">Advertencia</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <CheckCircle className="h-6 w-6"/>
+                            <CheckCircle className="h-6 w-6" />
                             <span className="text-xs mt-1">Éxito</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <XCircle className="h-6 w-6"/>
+                            <XCircle className="h-6 w-6" />
                             <span className="text-xs mt-1">Error</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Info className="h-6 w-6"/>
+                            <Info className="h-6 w-6" />
                             <span className="text-xs mt-1">Información</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <HelpCircle className="h-6 w-6"/>
+                            <HelpCircle className="h-6 w-6" />
                             <span className="text-xs mt-1">Ayuda</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <ThumbsUp className="h-6 w-6"/>
+                            <ThumbsUp className="h-6 w-6" />
                             <span className="text-xs mt-1">Me gusta</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <ThumbsDown className="h-6 w-6"/>
+                            <ThumbsDown className="h-6 w-6" />
                             <span className="text-xs mt-1">No me gusta</span>
                         </div>
                     </div>
@@ -716,35 +694,35 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Dispositivos</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <Smartphone className="h-6 w-6"/>
+                            <Smartphone className="h-6 w-6" />
                             <span className="text-xs mt-1">Smartphone</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Tablet className="h-6 w-6"/>
+                            <Tablet className="h-6 w-6" />
                             <span className="text-xs mt-1">Tablet</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Laptop className="h-6 w-6"/>
+                            <Laptop className="h-6 w-6" />
                             <span className="text-xs mt-1">Laptop</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Monitor className="h-6 w-6"/>
+                            <Monitor className="h-6 w-6" />
                             <span className="text-xs mt-1">Monitor</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Printer className="h-6 w-6"/>
+                            <Printer className="h-6 w-6" />
                             <span className="text-xs mt-1">Impresora</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Camera className="h-6 w-6"/>
+                            <Camera className="h-6 w-6" />
                             <span className="text-xs mt-1">Cámara</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Headphones className="h-6 w-6"/>
+                            <Headphones className="h-6 w-6" />
                             <span className="text-xs mt-1">Auriculares</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Speaker className="h-6 w-6"/>
+                            <Speaker className="h-6 w-6" />
                             <span className="text-xs mt-1">Altavoz</span>
                         </div>
                     </div>
@@ -754,23 +732,23 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Seguridad</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <Lock className="h-6 w-6"/>
+                            <Lock className="h-6 w-6" />
                             <span className="text-xs mt-1">Bloquear</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Unlock className="h-6 w-6"/>
+                            <Unlock className="h-6 w-6" />
                             <span className="text-xs mt-1">Desbloquear</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Shield className="h-6 w-6"/>
+                            <Shield className="h-6 w-6" />
                             <span className="text-xs mt-1">Protección</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Key className="h-6 w-6"/>
+                            <Key className="h-6 w-6" />
                             <span className="text-xs mt-1">Clave</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Fingerprint className="h-6 w-6"/>
+                            <Fingerprint className="h-6 w-6" />
                             <span className="text-xs mt-1">Huella</span>
                         </div>
                     </div>
@@ -780,23 +758,23 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Salud</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <Heart className="h-6 w-6"/>
+                            <Heart className="h-6 w-6" />
                             <span className="text-xs mt-1">Corazón</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Activity className="h-6 w-6"/>
+                            <Activity className="h-6 w-6" />
                             <span className="text-xs mt-1">Actividad</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Stethoscope className="h-6 w-6"/>
+                            <Stethoscope className="h-6 w-6" />
                             <span className="text-xs mt-1">Médico</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Pill className="h-6 w-6"/>
+                            <Pill className="h-6 w-6" />
                             <span className="text-xs mt-1">Medicamento</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <FirstAid className="h-6 w-6"/>
+                            <FirstAid className="h-6 w-6" />
                             <span className="text-xs mt-1">Primeros auxilios</span>
                         </div>
                     </div>
@@ -806,23 +784,23 @@ export default function DesignSystemShowcase() {
                     <h3 className="text-base font-medium mb-3">Otros</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         <div className="flex flex-col items-center">
-                            <Coffee className="h-6 w-6"/>
+                            <Coffee className="h-6 w-6" />
                             <span className="text-xs mt-1">Café</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Zap className="h-6 w-6"/>
+                            <Zap className="h-6 w-6" />
                             <span className="text-xs mt-1">Energía</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Award className="h-6 w-6"/>
+                            <Award className="h-6 w-6" />
                             <span className="text-xs mt-1">Premio</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Flag className="h-6 w-6"/>
+                            <Flag className="h-6 w-6" />
                             <span className="text-xs mt-1">Bandera</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <Star className="h-6 w-6"/>
+                            <Star className="h-6 w-6" />
                             <span className="text-xs mt-1">Favorito</span>
                         </div>
                     </div>
@@ -873,7 +851,7 @@ export default function DesignSystemShowcase() {
                                                 <SelectItem value="editor">Editor</SelectItem>
                                                 <SelectItem value="admin">Admin</SelectItem>
                                                 <SelectGroupSeparator/>
-                                                <SelectGroupLabel>Especial</SelectGroupLabel>
+                                                <SelectGroupLabel>Special</SelectGroupLabel>
                                                 <SelectItem value="owner">Owner</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
@@ -902,23 +880,23 @@ export default function DesignSystemShowcase() {
 
                         <div className="md:col-span-2 flex gap-2">
                             <Button type="submit">Enviar</Button>
-                            <Button type="button" variant="outline" onClick={() => form.reset()}>Reset</Button>
+                            <Button type="button" variant="outline" onClick={() => form.reset()}>Resetear</Button>
                         </div>
                     </form>
                 </Form>
             </Section>*/}
 
             {/* Choices */}
-            <Section title="Checkbox / Radio / Switches" description="Usa RadioGroup para selección única, Checkbox para múltiple.">
+            <Section title="Checkbox / Radio / Switches" description="Usa RadioGroup para selección única, Checkbox para múltiples.">
                 <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
                         <Label>Preferencias</Label>
                         <div className="flex items-center gap-2">
-                            <Checkbox id="c1"/>
+                            <Checkbox id="c1" />
                             <Label htmlFor="c1">Recibir alertas</Label>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Checkbox id="c2" defaultChecked/>
+                            <Checkbox id="c2" defaultChecked />
                             <Label htmlFor="c2">Modo compacto</Label>
                         </div>
                     </div>
@@ -926,12 +904,12 @@ export default function DesignSystemShowcase() {
                         <Label>Entrega</Label>
                         <RadioGroup defaultValue="std">
                             <div className="flex items-center gap-2">
-                                <RadioGroupItem value="std" id="r1"/>
+                                <RadioGroupItem value="std" id="r1" />
                                 <Label htmlFor="r1">Estándar</Label>
                             </div>
                             <div className="flex items-center gap-2">
-                                <RadioGroupItem value="exp" id="r2"/>
-                                <Label htmlFor="r2">Express</Label>
+                                <RadioGroupItem value="exp" id="r2" />
+                                <Label htmlFor="r2">Exprés</Label>
                             </div>
                         </RadioGroup>
                     </div>
@@ -966,7 +944,7 @@ export default function DesignSystemShowcase() {
                 <div className="flex flex-wrap gap-3">
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button variant={"outline"}><SquareArrowOutUpRight/>Abrir diálogo</Button>
+                            <Button variant={"outline"}><SquareArrowOutUpRight />Abrir diálogo</Button>
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
@@ -985,11 +963,11 @@ export default function DesignSystemShowcase() {
 
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="outline"><Trash2/>Eliminar</Button>
+                            <Button variant="outline"><Trash2 />Eliminar</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>¿Seguro?</AlertDialogTitle>
+                                <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
                                 <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -1001,7 +979,7 @@ export default function DesignSystemShowcase() {
 
                     <Sheet>
                         <SheetTrigger asChild>
-                            <Button variant="outline"><PanelRightOpen/>Abrir Sheet</Button>
+                            <Button variant="outline"><PanelRightOpen />Abrir panel</Button>
                         </SheetTrigger>
                         <SheetContent>
                             <SheetHeader>
@@ -1010,7 +988,7 @@ export default function DesignSystemShowcase() {
                             </SheetHeader>
                             <div className="py-4 space-y-2">
                                 <Label htmlFor="name">Nombre</Label>
-                                <Input id="name" placeholder="Acme"/>
+                                <Input id="name" placeholder="Acme" />
                             </div>
                             <SheetFooter>
                                 <Button>Guardar</Button>
@@ -1021,25 +999,25 @@ export default function DesignSystemShowcase() {
             </Section>
 
             {/* Toast */}
-            <Section title="Toast" description="Mensajes efímeros para notificar acciones al usuario.">
+            <Section title="Toast" description="Mensajes efímeros para notificar acciones del usuario.">
                 <div className="flex flex-wrap gap-2">
-                    <Button variant="outline" onClick={() => toast.success("Guardado con éxito")}>
-                        <CheckCircle className="h-4 w-4"/>
+                    <Button variant="outline" onClick={() => toast.success("Guardado exitosamente")}>
+                        <CheckCircle className="h-4 w-4" />
                         Éxito
                     </Button>
 
                     <Button variant="outline" onClick={() => toast.error("Ocurrió un error inesperado")}>
-                        <AlertTriangle className="h-4 w-4"/>
+                        <AlertTriangle className="h-4 w-4" />
                         Error
                     </Button>
 
                     <Button variant="outline" onClick={() => toast.info("Nueva actualización disponible")}>
-                        <Info className="h-4 w-4"/>
+                        <Info className="h-4 w-4" />
                         Info
                     </Button>
 
-                    <Button variant="outline" onClick={() => toast.warning("Cuidado con los cambios realizados")}>
-                        <AlertCircle className="h-4 w-4"/>
+                    <Button variant="outline" onClick={() => toast.warning("Ten cuidado con los cambios realizados")}>
+                        <AlertCircle className="h-4 w-4" />
                         Advertencia
                     </Button>
                 </div>
@@ -1050,9 +1028,9 @@ export default function DesignSystemShowcase() {
             </Section>
 
 
-            {/* Menús y popovers */}
-            <Section title="Menus, Popovers & Tooltips"
-                     description="Usa DropdownMenu para acciones; Popover para contenido liviano; Tooltip para microcopia (requiere TooltipProvider, ya montado en el layout global).">
+            {/* Menus and popovers */}
+            <Section title="Menús, Popovers y Tooltips"
+                description="Usa DropdownMenu para acciones; Popover para contenido ligero; Tooltip para microcopy (requiere TooltipProvider, ya montado en el layout global).">
                 <div className="flex flex-wrap gap-4 items-center">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -1062,7 +1040,7 @@ export default function DesignSystemShowcase() {
                             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                             <DropdownMenuItem>Duplicar</DropdownMenuItem>
                             <DropdownMenuItem>Compartir</DropdownMenuItem>
-                            <DropdownMenuSeparator/>
+                            <DropdownMenuSeparator />
                             <DropdownMenuRadioGroup value="asc">
                                 <DropdownMenuRadioItem value="asc">Asc</DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem value="desc">Desc</DropdownMenuRadioItem>
@@ -1077,7 +1055,7 @@ export default function DesignSystemShowcase() {
                         <PopoverTrigger asChild>
                             <Button>Popover</Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-64">Contenido suelto, formularios chicos, etc.</PopoverContent>
+                        <PopoverContent className="w-64">Contenido suelto, formularios pequeños, etc.</PopoverContent>
                     </Popover>
 
                     <Tooltip>
@@ -1092,41 +1070,41 @@ export default function DesignSystemShowcase() {
                             <Button variant="link">Hover para ver más info</Button>
                         </HoverCardTrigger>
                         <HoverCardContent className="w-64">
-                            Útil para previews de entidades.
+                            Útil para vistas previas de entidades.
                         </HoverCardContent>
                     </HoverCard>
                 </div>
             </Section>
 
             {/* Calendar */}
-            <Section title="Calendar" description="Componente controlado/ no controlado para selección de fecha.">
-                <Calendar mode="single" className="rounded-md border"/>
+            <Section title="Calendario" description="Componente controlado/no controlado para selección de fechas.">
+                <Calendar mode="single" className="rounded-md border" />
             </Section>
 
             {/* Command */}
-            <Section title="Command Palette" description="Busca y ejecuta acciones. Mapea tus comandos a items.">
+            <Section title="Paleta de comandos" description="Busca y ejecuta acciones. Mapea tus comandos a items.">
                 <div className="max-w-md rounded-lg border">
                     <Command>
-                        <CommandInput placeholder="Buscar comando..."/>
+                        <CommandInput placeholder="Buscar comando..." />
                         <CommandList>
                             <CommandEmpty>Sin resultados.</CommandEmpty>
                             <CommandGroup heading="General">
                                 <CommandItem onSelect={() => alert("Nuevo archivo")}>Nuevo archivo <CommandShortcut>⌘N</CommandShortcut></CommandItem>
                                 <CommandItem onSelect={() => alert("Guardar")}>Guardar <CommandShortcut>⌘S</CommandShortcut></CommandItem>
                             </CommandGroup>
-                            <CommandSeparator/>
+                            <CommandSeparator />
                             <CommandGroup heading="Ir a">
-                                <CommandItem>Dashboard</CommandItem>
+                                <CommandItem>Panel</CommandItem>
                                 <CommandItem>Facturas</CommandItem>
                             </CommandGroup>
                         </CommandList>
                     </Command>
                 </div>
-                <p className="text-sm text-muted-foreground">Tip: expone un atajo global (p. ej., <kbd>⌘K</kbd>) para abrir la paleta.</p>
+                <p className="text-sm text-muted-foreground">Tip: expone un atajo global (ej., <kbd>⌘K</kbd>) para abrir la paleta.</p>
             </Section>
 
             {/* Cards, Table, Pagination, Progress */}
-            <Section title="Card / Table / Pagination / Progress" description="Layout de datos y navegación.">
+            <Section title="Card / Table / Pagination / Progress" description="Maquetado de datos y navegación.">
                 <div className="grid gap-4 md:grid-cols-2">
                     <Card className="rounded-xl">
                         <CardHeader>
@@ -1135,10 +1113,10 @@ export default function DesignSystemShowcase() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                             <div className="flex items-center justify-between">
-                                <span>Subida</span>
+                                <span>Incremento</span>
                                 <Badge variant={"outline"}>+12%</Badge>
                             </div>
-                            <Progress value={progress} aria-label="Progreso"/>
+                            <Progress value={progress} aria-label="Progreso" />
                             <div className="flex gap-2">
                                 <Button onClick={() => setProgress((p) => Math.max(0, p - 10))}>-10</Button>
                                 <Button onClick={() => setProgress((p) => Math.min(100, p + 10))}>+10</Button>
@@ -1151,7 +1129,7 @@ export default function DesignSystemShowcase() {
 
                     <div className="rounded-lg border">
                         <Table>
-                            <TableCaption>Top clientes del mes</TableCaption>
+                            <TableCaption>Mejores clientes del mes</TableCaption>
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>Cliente</TableHead>
@@ -1182,7 +1160,7 @@ export default function DesignSystemShowcase() {
                                     <TableCell>Initech</TableCell>
                                     <TableCell>
                                         <Badge variant="red">
-                                            Vencido
+                                            Atrasado
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">$7,540</TableCell>
@@ -1191,7 +1169,7 @@ export default function DesignSystemShowcase() {
                             <TableFooter>
                                 <TableRow>
                                     <TableCell>Total</TableCell>
-                                    <TableCell/>
+                                    <TableCell />
                                     <TableCell className="text-right">$29,710</TableCell>
                                 </TableRow>
                             </TableFooter>
@@ -1200,7 +1178,7 @@ export default function DesignSystemShowcase() {
                             <Pagination>
                                 <PaginationContent>
                                     <PaginationItem>
-                                        <PaginationPrevious href="#"/>
+                                        <PaginationPrevious href="#" />
                                     </PaginationItem>
                                     <PaginationItem>
                                         <PaginationLink href="#">1</PaginationLink>
@@ -1214,10 +1192,10 @@ export default function DesignSystemShowcase() {
                                         <PaginationLink href="#">3</PaginationLink>
                                     </PaginationItem>
                                     <PaginationItem>
-                                        <PaginationEllipsis/>
+                                        <PaginationEllipsis />
                                     </PaginationItem>
                                     <PaginationItem>
-                                        <PaginationNext href="#"/>
+                                        <PaginationNext href="#" />
                                     </PaginationItem>
                                 </PaginationContent>
                             </Pagination>
@@ -1225,31 +1203,39 @@ export default function DesignSystemShowcase() {
                     </div>
                 </div>
 
-                {/* Estado vacío */}
+                {/* Empty state */}
                 <div className="mt-6 border rounded-lg">
                     <NoDataMessage
                         title="No hay registros disponibles"
-                        message="Cuando no existan resultados para mostrar, utiliza este componente para indicar el estado vacío de forma clara y consistente."
+                        message="Cuando no hay resultados para mostrar, usa este componente para indicar el estado vacío de forma clara y consistente."
                     />
                 </div>
             </Section>
-
-            {/* Cargadores */}
+            {/* DataTable */}
             <Section
-                title="Cargadores"
-                description="Indicadores de carga para estados locales (en línea) y globales (pantalla completa)."
+                title="DataTable"
+                description="Tabla de datos avanzada con paginación, ordenamiento, filtros, selección de filas, visibilidad de columnas y reordenamiento mediante drag & drop."
             >
-                {/* Loader en línea (local) */}
+                <Suspense fallback={<div className="flex items-center justify-center p-8"><InlineLoader /></div>}>
+                    <DataTableURLDemo />
+                </Suspense>
+            </Section>
+            {/* Loaders */}
+            <Section
+                title="Loaders"
+                description="Indicadores de carga para estados locales (inline) y globales (pantalla completa)."
+            >
+                {/* Inline loader (local) */}
                 <div className="border rounded-lg">
-                    <InlineLoader/>
+                    <InlineLoader />
                 </div>
 
-                {/* Demo de overlay (global) */}
+                {/* Overlay demo (global) */}
                 <div className="flex items-center gap-2">
                     <Button
                         onClick={() => {
                             setLoading(true);
-                            // Demo: oculta el overlay tras 2s
+                            // Demo: hide overlay after 2s
                             setTimeout(() => setLoading(false), 2000);
                         }}
                     >
@@ -1260,7 +1246,7 @@ export default function DesignSystemShowcase() {
                     </p>
                 </div>
 
-                {loading && <FullPageOverlayLoader/>}
+                {loading && <FullPageOverlayLoader />}
             </Section>
 
             {/* Accordion & Separator */}
@@ -1277,7 +1263,7 @@ export default function DesignSystemShowcase() {
                     <AccordionItem value="use-in-page">
                         <AccordionTrigger>¿Cómo uso un componente en una página?</AccordionTrigger>
                         <AccordionContent className="space-y-3">
-                            <p>Importalo y usalo en tu JSX:</p>
+                            <p>Impórtalo y úsalo en tu JSX:</p>
                             <pre className="rounded-md bg-muted p-3 text-sm overflow-x-auto">{`import { Button } from "@/components/ui/button";
 
 export default function Page() {
@@ -1286,22 +1272,22 @@ export default function Page() {
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>
-                <Separator/>
-                <p className="text-sm text-muted-foreground">Tip: usa Separator para cortar secciones largas.</p>
+                <Separator />
+                <p className="text-sm text-muted-foreground">Tip: usa Separator para dividir secciones largas.</p>
             </Section>
 
             {/* Sortable board */}
-            <Section title="Tablero de columnas ordenables" description="Componente de tablero con columnas y elementos ordenables mediante drag & drop.">
+            <Section title="Tablero de columnas ordenables" description="Componente de tablero con columnas e items ordenables mediante drag & drop.">
                 <div className={"overflow-hidden overflow-x-auto sm:overflow-x-hidden"}>
                     <div className={"" +
-                    "w-[850px] sm:w-[1070px] h-[500px]"
+                        "w-[850px] sm:w-[1070px] h-[500px]"
                     }>
                         <SortableBoard
-                            onChange={(items: ColumnType[]) => {console.log(items)}}
+                            onChange={(items: ColumnType[]) => { console.log(items) }}
                             defaultColumns={[
-                                {title: "Alertas pendientes", items: ["1"]},
-                                {title: "Manejo", items: ["2"]},
-                                {title: "Seguimiento", items: ["3"]},
+                                { title: "Alertas pendientes", items: ["1"] },
+                                { title: "En gestión", items: ["2"] },
+                                { title: "Seguimiento", items: ["3"] },
                             ]}
                             renderItem={AlertBoardItem}
                         />
@@ -1321,9 +1307,9 @@ type ColumnType = {
 type TimelineEntry = {
     title: string;
     location: string;
-    /** Formato esperado: DD/MM/YYYY HH:mm */
+    /** Expected format: DD/MM/YYYY HH:mm */
     date: string;
-    /** JSX para mostrar badges con tooltips */
+    /** JSX to display badges with tooltips */
     badges: ReactNode;
 };
 
@@ -1336,7 +1322,7 @@ const itemsInfo: Record<string, TimelineEntry> = {
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="orange">
-                        <PackageOpen className="w-4 h-4"/>
+                        <PackageOpen className="w-4 h-4" />
                     </Badge>
                 </TooltipTrigger>
                 <TooltipContent>Paquete abierto</TooltipContent>
@@ -1345,7 +1331,7 @@ const itemsInfo: Record<string, TimelineEntry> = {
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="red">
-                        <Ban className="w-4 h-4"/>
+                        <Ban className="w-4 h-4" />
                     </Badge>
                 </TooltipTrigger>
                 <TooltipContent>Parada no autorizada</TooltipContent>
@@ -1354,7 +1340,7 @@ const itemsInfo: Record<string, TimelineEntry> = {
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="cyan">
-                        <ThermometerSnowflake className="w-4 h-4"/>
+                        <ThermometerSnowflake className="w-4 h-4" />
                     </Badge>
                 </TooltipTrigger>
                 <TooltipContent>Cadena de frío interrumpida</TooltipContent>
@@ -1369,7 +1355,7 @@ const itemsInfo: Record<string, TimelineEntry> = {
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="violet">
-                        <ClockAlert className="w-4 h-4"/>
+                        <ClockAlert className="w-4 h-4" />
                     </Badge>
                 </TooltipTrigger>
                 <TooltipContent>Retraso en ruta</TooltipContent>
@@ -1378,21 +1364,21 @@ const itemsInfo: Record<string, TimelineEntry> = {
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="pink">
-                        <RouteOff className="w-4 h-4"/>
+                        <RouteOff className="w-4 h-4" />
                     </Badge>
                 </TooltipTrigger>
-                <TooltipContent>Desvío de ruta</TooltipContent>
+                <TooltipContent>Desviación de ruta</TooltipContent>
             </Tooltip></>
     },
     "3": {
-        title: "Reverse Logistics (Inbound)",
+        title: "Logística inversa (entrada)",
         location: "Nevada, US.",
         date: "12/10/2025 09:35",
         badges: <>
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="teal">
-                        <DoorOpen className="w-4 h-4"/>
+                        <DoorOpen className="w-4 h-4" />
                     </Badge>
                 </TooltipTrigger>
                 <TooltipContent>Puerta abierta en tránsito</TooltipContent>
@@ -1401,7 +1387,7 @@ const itemsInfo: Record<string, TimelineEntry> = {
             <Tooltip>
                 <TooltipTrigger>
                     <Badge variant="yellow">
-                        <BatteryLow className="w-4 h-4"/>
+                        <BatteryLow className="w-4 h-4" />
                     </Badge>
                 </TooltipTrigger>
                 <TooltipContent>Batería baja del dispositivo</TooltipContent>
@@ -1417,12 +1403,12 @@ function AlertBoardItem(id: string) {
     return <Card className={"border-none shadow-none text-xs sm:text-sm"}>
         <CardHeader className={"p-2"}>
             <CardTitle className={"flex flex-row gap-2 mb-2"}>
-                <Tag className={"h-4 w-4"}/>
+                <Tag className={"h-4 w-4"} />
                 <span>{item.title}</span>
             </CardTitle>
             <CardDescription className={"flex flex-col justify-between gap-2 text-xs sm:text-sm"}>
-                <div className={"flex items-center gap-2"}><MapPin className={"w-4 h-4"}/>{item.location}</div>
-                <div className={"flex items-center gap-2"}><CalendarIcon className={"w-4 h-4"}/>{item.date}</div>
+                <div className={"flex items-center gap-2"}><MapPin className={"w-4 h-4"} />{item.location}</div>
+                <div className={"flex items-center gap-2"}><CalendarIcon className={"w-4 h-4"} />{item.date}</div>
             </CardDescription>
         </CardHeader>
         <CardContent className={"p-2 flex gap-2 items-start"}>
@@ -1602,14 +1588,14 @@ function DataTableURLDemo() {
                         (table.getIsSomePageRowsSelected() && "indeterminate")
                     }
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
+                    aria-label="Seleccionar todo"
                 />
             ),
             cell: ({ row }) => (
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
+                    aria-label="Seleccionar fila"
                 />
             ),
             enableSorting: false,
@@ -1627,19 +1613,19 @@ function DataTableURLDemo() {
         {
             accessorKey: "origin",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Origin" />
+                <DataTableColumnHeader column={column} title="Origen" />
             ),
         },
         {
             accessorKey: "destination",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Destination" />
+                <DataTableColumnHeader column={column} title="Destino" />
             ),
         },
         {
             accessorKey: "status",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Status" />
+                <DataTableColumnHeader column={column} title="Estado" />
             ),
             cell: ({ row }) => {
                 const status = row.getValue("status") as string
@@ -1650,10 +1636,10 @@ function DataTableURLDemo() {
                     pending: "gray",
                 }
                 const labels: Record<string, string> = {
-                    delivered: "Delivered",
-                    "in-transit": "In Transit",
-                    delayed: "Delayed",
-                    pending: "Pending",
+                    delivered: "Entregado",
+                    "in-transit": "En tránsito",
+                    delayed: "Retrasado",
+                    pending: "Pendiente",
                 }
                 return <Badge variant={variants[status]}>{labels[status]}</Badge>
             },
@@ -1661,7 +1647,7 @@ function DataTableURLDemo() {
         {
             accessorKey: "amount",
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Amount" />
+                <DataTableColumnHeader column={column} title="Monto" />
             ),
             cell: ({ row }) => {
                 const amount = parseFloat(row.getValue("amount"))
@@ -1674,27 +1660,27 @@ function DataTableURLDemo() {
         },
         {
             id: "actions",
-            header: () => <span className="sr-only">Actions</span>,
+            header: () => <span className="sr-only">Acciones</span>,
             cell: ({ row }) => {
                 const shipment = row.original
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
+                                <span className="sr-only">Abrir menú</span>
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                             <DropdownMenuItem
                                 onClick={() => {
                                     navigator.clipboard.writeText(shipment.tracking)
-                                    toast.success("Tracking number copied!")
+                                    toast.success("¡Número de tracking copiado!")
                                 }}
                             >
                                 <Copy className="mr-2 h-4 w-4" />
-                                Copy tracking #
+                                Copiar tracking #
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -1709,7 +1695,7 @@ function DataTableURLDemo() {
         <div className="space-y-4">
             {/* Demo controls */}
             <div className="flex flex-wrap items-center gap-2 rounded-lg border p-4 bg-muted/20">
-                <Label className="text-sm font-medium">Demo controls:</Label>
+                <Label className="text-sm font-medium">Controles del demo:</Label>
                 <Button
                     size="sm"
                     variant="outline"
@@ -1719,7 +1705,7 @@ function DataTableURLDemo() {
                     }}
                 >
                     {isLoading && <InlineLoader />}
-                    {!isLoading && "Simulate loading"}
+                    {!isLoading && "Simular carga"}
                 </Button>
                 <Button
                     size="sm"
@@ -1731,7 +1717,7 @@ function DataTableURLDemo() {
                         tableState.setColumnFilters([])
                     }}
                 >
-                    Reset URL state
+                    Reiniciar URL
                 </Button>
             </div>
 
@@ -1750,7 +1736,7 @@ function DataTableURLDemo() {
                 <DataTableToolbar>
                     <div className="flex flex-1 flex-wrap items-center gap-2">
                         <Input
-                            placeholder="Search tracking..."
+                            placeholder="Buscar tracking..."
                             value={trackingSearch}
                             onChange={(event) => {
                                 const value = event.target.value
@@ -1772,14 +1758,14 @@ function DataTableURLDemo() {
                             }}
                         >
                             <SelectTrigger className="h-8 w-[150px]">
-                                <SelectValue placeholder="Filter status" />
+                                <SelectValue placeholder="Filtrar estado" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">All statuses</SelectItem>
-                                <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="in-transit">In Transit</SelectItem>
-                                <SelectItem value="delivered">Delivered</SelectItem>
-                                <SelectItem value="delayed">Delayed</SelectItem>
+                                <SelectItem value="all">Todos los estados</SelectItem>
+                                <SelectItem value="pending">Pendiente</SelectItem>
+                                <SelectItem value="in-transit">En tránsito</SelectItem>
+                                <SelectItem value="delivered">Entregado</SelectItem>
+                                <SelectItem value="delayed">Retrasado</SelectItem>
                             </SelectContent>
                         </Select>
                         {tableState.columnFilters.length > 0 && (
@@ -1791,7 +1777,7 @@ function DataTableURLDemo() {
                                 }}
                                 className="h-8 px-2 lg:px-3"
                             >
-                                Clear filters
+                                Limpiar filtros
                                 <X className="ml-2 h-4 w-4" />
                             </Button>
                         )}
@@ -1802,239 +1788,5 @@ function DataTableURLDemo() {
                 <DataTablePagination />
             </DataTable>
         </div>
-    )
-}
-
-// Invoice type from API
-type Invoice = {
-    id: string
-    folio: string
-    client_name: string
-    issueDate: string
-    dueDate: string
-    totals: {
-        subtotal: number
-        iva: number
-        total: number
-    }
-    currency: string
-    status: string
-}
-
-// Real API DataTable Demo
-function DataTableAPIDemo() {
-    const [data, setData] = React.useState<Invoice[]>([])
-    const [isLoading, setIsLoading] = React.useState(true)
-    const [pageCount, setPageCount] = React.useState(0)
-    const [rowSelection, setRowSelection] = React.useState({})
-    const abortControllerRef = React.useRef<AbortController | null>(null)
-
-    const router = useRouter()
-    const searchParams = useSearchParams()
-
-    const tableState = useDataTable({
-        pageSize: 10,
-        namespace: "invoices",
-        router,
-        searchParams,
-    })
-
-    // Fetch data from API based on table state
-    // Use stringified versions for stable dependencies
-    const paginationKey = JSON.stringify(tableState.pagination)
-    const sortingKey = JSON.stringify(tableState.sorting)
-    const filtersKey = JSON.stringify(tableState.columnFilters)
-
-    React.useEffect(() => {
-        const fetchData = async () => {
-            // Cancel previous request if still pending
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort()
-            }
-
-            // Create new abort controller for this request
-            abortControllerRef.current = new AbortController()
-
-            setIsLoading(true)
-            try {
-                // Build query params from table state
-                const params = new URLSearchParams()
-                params.set("page", String(tableState.pagination.pageIndex + 1))
-                params.set("limit", String(tableState.pagination.pageSize))
-
-                // Add sorting
-                if (tableState.sorting.length > 0) {
-                    const sort = tableState.sorting[0]!
-                    params.set("sortBy", sort.id)
-                    params.set("order", sort.desc ? "desc" : "asc")
-                }
-
-                // Add filters
-                tableState.columnFilters.forEach((filter) => {
-                    params.set(filter.id, String(filter.value))
-                })
-
-                const response = await fetch(
-                    `https://684c5a4aed2578be881e9033.mockapi.io/api/v0/invoices?${params}`,
-                    { signal: abortControllerRef.current.signal }
-                )
-
-                // Check if response is OK
-                if (!response.ok) {
-                    const text = await response.text()
-
-                    // Handle rate limiting
-                    if (text.includes("rate limit") || response.status === 429) {
-                        toast.error("Rate Limit Reached - The API is being called too frequently. Please wait a moment.")
-                        throw new Error(`Rate limit exceeded: ${text}`)
-                    }
-
-                    throw new Error(`API error: ${response.status} - ${text}`)
-                }
-
-                // Check if response is JSON
-                const contentType = response.headers.get("content-type")
-                if (!contentType || !contentType.includes("application/json")) {
-                    const text = await response.text()
-                    throw new Error(`Expected JSON but got: ${text}`)
-                }
-
-                const result = await response.json()
-
-                setData(result)
-                // MockAPI doesn't return total count, so estimate from data length
-                const estimatedTotal = result.length < tableState.pagination.pageSize
-                    ? tableState.pagination.pageIndex * tableState.pagination.pageSize + result.length
-                    : (tableState.pagination.pageIndex + 2) * tableState.pagination.pageSize
-                setPageCount(Math.ceil(estimatedTotal / tableState.pagination.pageSize))
-            } catch (error) {
-                // Ignore abort errors (they're expected when canceling requests)
-                if (error instanceof Error && error.name === "AbortError") {
-                    return
-                }
-
-                console.error("Failed to fetch invoices:", error)
-                setData([])
-                setPageCount(0)
-
-                // Show error toast if not already shown
-                if (!(error instanceof Error && error.message.includes("Rate limit"))) {
-                    toast.error("Failed to load invoices. Please try again later.")
-                }
-            } finally {
-                setIsLoading(false)
-            }
-        }
-
-        fetchData()
-
-        // Cleanup function - abort request if component unmounts or dependencies change
-        return () => {
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort()
-            }
-        }
-    }, [paginationKey, sortingKey, filtersKey])
-
-    const columns: ColumnDef<Invoice>[] = [
-        {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            accessorKey: "folio",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Folio" />
-            ),
-            cell: ({ row }) => <div className="font-mono text-sm">{row.getValue("folio")}</div>,
-        },
-        {
-            accessorKey: "client_name",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Cliente" />
-            ),
-        },
-        {
-            accessorKey: "issueDate",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Fecha" />
-            ),
-            cell: ({ row }) => new Date(row.getValue("issueDate")).toLocaleDateString(),
-        },
-        {
-            accessorKey: "totals.total",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Total" />
-            ),
-            cell: ({ row }) => {
-                const amount = row.original.totals?.total || 0
-                const currency = row.original.currency
-                return (
-                    <div className="font-medium">
-                        {new Intl.NumberFormat("es-MX", {
-                            style: "currency",
-                            currency: currency || "MXN",
-                        }).format(amount)}
-                    </div>
-                )
-            },
-        },
-        {
-            accessorKey: "status",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Estado" />
-            ),
-            cell: ({ row }) => {
-                const status = row.getValue("status") as string
-                const variants: Record<string, "green" | "yellow" | "red" | "gray"> = {
-                    paid: "green",
-                    pending: "yellow",
-                    overdue: "red",
-                    cancelled: "gray",
-                }
-                const labels: Record<string, string> = {
-                    paid: "Pagado",
-                    pending: "Pendiente",
-                    overdue: "Vencido",
-                    cancelled: "Cancelado",
-                }
-                return <Badge variant={variants[status] || "gray"}>{labels[status] || status}</Badge>
-            },
-        },
-    ]
-
-    return (
-        <DataTable
-            columns={columns}
-            data={data}
-            pageCount={pageCount}
-            enableRowSelection
-            enableColumnReordering
-            isLoading={isLoading}
-            rowSelection={rowSelection}
-            onRowSelectionChange={setRowSelection}
-            {...tableState}
-        >
-            <DataTableContent />
-            <DataTablePagination />
-        </DataTable>
     )
 }
