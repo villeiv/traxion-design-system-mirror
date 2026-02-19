@@ -122,6 +122,7 @@ const columns: ColumnDef<UserData>[] = [
                 </Badge>
             );
         },
+        size:80,
         enableHiding: true,
     },
     {

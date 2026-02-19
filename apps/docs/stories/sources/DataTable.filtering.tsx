@@ -72,7 +72,7 @@ export default function DataTableFiltering() {
     }, 300)
 
     return (
-        <DataTable data={data} columns={columns} pageCount={pageCount} {...tableState}>
+        <DataTable className="w-[700px]" data={data} columns={columns} pageCount={pageCount} {...tableState}>
             {/* Recuerda usar <DataTableToolbar> para agregar herramientas de filtrado y controles */}
             <DataTableToolbar>
                 <Input

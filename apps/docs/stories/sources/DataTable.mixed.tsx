@@ -54,7 +54,7 @@ export default function DataTableMixedCellContent() {
     }, [tableState.pagination.pageIndex, tableState.pagination.pageSize]);
 
     return (
-        <DataTable data={data} columns={columns} pageCount={pageCount} {...tableState}>
+        <DataTable className="w-[700px]" data={data} columns={columns} pageCount={pageCount} {...tableState}>
             <DataTableContent />
             <DataTablePagination />
         </DataTable>

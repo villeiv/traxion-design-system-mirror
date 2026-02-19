@@ -65,6 +65,7 @@ export default function DataTableRowSelection() {
 
     return (
         <DataTable
+            className="w-[700px]"
             data={data}
             columns={columns}
             pageCount={pageCount}
