@@ -1,0 +1,504 @@
+{
+  "name": "DataTable",
+  "slug": "datatable",
+  "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
+  "category": "data-display",
+  "tags": [
+    "datatable",
+    "table",
+    "data",
+    "grid",
+    "pagination",
+    "sorting",
+    "filtering",
+    "server-side",
+    "tanstack",
+    "compound-component",
+    "drag-and-drop",
+    "column-reorder",
+    "row-selection"
+  ],
+  "anatomy": "<DataTable>\n  <DataTableToolbar>\n    <Input />\n    <DataTableViewOptions />\n  </DataTableToolbar>\n  <DataTableContent />\n  <DataTablePagination />\n</DataTable>",
+  "importPattern": "import {\n  DataTable,\n  DataTableContent,\n  DataTablePagination,\n  DataTableToolbar,\n  DataTableViewOptions,\n  DataTableColumnHeader,\n  useDataTable,\n  ColumnDef,\n} from \"@traxion-global/design-system/react\";",
+  "hook": {
+    "name": "useDataTable",
+    "description": "Centralized state management hook for DataTable. Manages pagination, sorting, filters, column visibility, and column order. Returns state and setter pairs that can be spread directly onto <DataTable> via {...tableState}. Optionally syncs state to URL when a router is provided.",
+    "importPath": "@traxion-global/design-system/react",
+    "options": [
+      {
+        "name": "pageSize",
+        "type": "number",
+        "default": "10",
+        "description": "Initial number of rows per page."
+      },
+      {
+        "name": "namespace",
+        "type": "string",
+        "default": "undefined",
+        "description": "Prefix for URL params when multiple tables share the same page. Example: 'shipments' produces ?shipments_page=1&shipments_filters=..."
+      },
+      {
+        "name": "debounceMs",
+        "type": "number",
+        "default": "300",
+        "description": "Debounce delay in milliseconds for filter changes when syncing to URL."
+      },
+      {
+        "name": "router",
+        "type": "{ push: (url: string) => void }",
+        "default": "undefined",
+        "description": "Next.js router instance. When provided, table state is synced to URL automatically."
+      },
+      {
+        "name": "searchParams",
+        "type": "URLSearchParams | null",
+        "default": "undefined",
+        "description": "Next.js searchParams for reading initial state from URL."
+      }
+    ],
+    "returns": [
+      {
+        "name": "pagination",
+        "type": "PaginationState",
+        "description": "Current pagination state: { pageIndex: number, pageSize: number }."
+      },
+      {
+        "name": "setPagination",
+        "type": "(updater) => void",
+        "description": "Setter for pagination state. Accepts a value or updater function."
+      },
+      {
+        "name": "sorting",
+        "type": "SortingState",
+        "description": "Current sorting state array: [{ id: string, desc: boolean }]."
+      },
+      {
+        "name": "setSorting",
+        "type": "(updater) => void",
+        "description": "Setter for sorting state."
+      },
+      {
+        "name": "columnFilters",
+        "type": "ColumnFiltersState",
+        "description": "Current column filters array: [{ id: string, value: unknown }]."
+      },
+      {
+        "name": "setColumnFilters",
+        "type": "(updater) => void",
+        "description": "Setter for column filters state."
+      },
+      {
+        "name": "columnVisibility",
+        "type": "VisibilityState",
+        "description": "Object mapping column IDs to boolean visibility."
+      },
+      {
+        "name": "setColumnVisibility",
+        "type": "(updater) => void",
+        "description": "Setter for column visibility state."
+      },
+      {
+        "name": "columnOrder",
+        "type": "ColumnOrderState",
+        "description": "Array of column IDs defining the display order."
+      },
+      {
+        "name": "setColumnOrder",
+        "type": "(updater) => void",
+        "description": "Setter for column order state."
+      },
+      {
+        "name": "isPending",
+        "type": "boolean",
+        "description": "True while a URL transition is pending (useful for loading indicators during navigation)."
+      },
+      {
+        "name": "getSearchParams",
+        "type": "() => URLSearchParams",
+        "description": "Helper that serializes current table state into URLSearchParams for API calls."
+      },
+      {
+        "name": "onPaginationChange / onSortingChange / onColumnFiltersChange / onColumnVisibilityChange / onColumnOrderChange",
+        "type": "OnChangeFn<...>",
+        "description": "Aliases for the setters above. These match DataTable prop names so {...tableState} spreads them directly onto DataTable without manual wiring."
+      }
+    ],
+    "usage": "const tableState = useDataTable({ pageSize: 10 });\n\n// Use tableState.pagination in your data-fetching effect:\nuseEffect(() => {\n  const { pageIndex, pageSize } = tableState.pagination;\n  fetchData({ skip: pageIndex * pageSize, limit: pageSize });\n}, [tableState.pagination.pageIndex, tableState.pagination.pageSize]);\n\n// Spread onto DataTable:\n<DataTable columns={columns} data={data} pageCount={pageCount} {...tableState}>\n  <DataTableContent />\n  <DataTablePagination />\n</DataTable>"
+  },
+  "columnDefinition": {
+    "type": "ColumnDef<TData>[]",
+    "importedFrom": "@traxion-global/design-system/react",
+    "description": "Array of TanStack Table column definitions. Re-exported from the design system so consumers never need @tanstack/react-table directly.",
+    "commonPatterns": [
+      {
+        "pattern": "Simple text column",
+        "code": "{ header: \"Name\", accessorKey: \"firstName\" }"
+      },
+      {
+        "pattern": "Fixed-width column",
+        "code": "{ header: \"ID\", accessorKey: \"id\", size: 50 }"
+      },
+      {
+        "pattern": "Sortable column (use DataTableColumnHeader)",
+        "code": "{\n  header: ({ column }) => (\n    <DataTableColumnHeader column={column} title=\"Email\" />\n  ),\n  accessorKey: \"email\",\n}"
+      },
+      {
+        "pattern": "Custom cell renderer with mixed content",
+        "code": "{\n  header: \"User\",\n  accessorKey: \"firstName\",\n  cell: ({ row }) => (\n    <div className=\"flex items-center gap-2\">\n      <User className=\"h-4 w-4 text-muted-foreground\" />\n      <span>{row.original.firstName} {row.original.lastName}</span>\n    </div>\n  ),\n}"
+      },
+      {
+        "pattern": "Action buttons column (always right-aligned, non-sortable, non-hideable)",
+        "code": "{\n  id: \"actions\",\n  header: () => <div className=\"text-right\">Actions</div>,\n  size: 100,\n  enableSorting: false,\n  enableHiding: false,\n  cell: ({ row }) => (\n    <div className=\"flex gap-2 justify-end\">\n      <Button size=\"icon\" variant=\"outline\" onClick={() => handleEdit(row.original.id)}>\n        <Pencil className=\"h-4 w-4\" />\n      </Button>\n      <Button size=\"icon\" variant=\"destructive\" onClick={() => handleDelete(row.original.id)}>\n        <Trash className=\"h-4 w-4\" />\n      </Button>\n    </div>\n  ),\n}"
+      },
+      {
+        "pattern": "Row selection checkbox column",
+        "code": "{\n  id: \"select\",\n  header: ({ table }) => (\n    <Checkbox\n      checked={\n        table.getIsAllPageRowsSelected() ||\n        (table.getIsSomePageRowsSelected() && \"indeterminate\")\n      }\n      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}\n      aria-label=\"Select all\"\n    />\n  ),\n  cell: ({ row }) => (\n    <Checkbox\n      checked={row.getIsSelected()}\n      onCheckedChange={(value) => row.toggleSelected(!!value)}\n      aria-label=\"Select row\"\n    />\n  ),\n  enableSorting: false,\n  enableHiding: false,\n  size: 50,\n}"
+      },
+      {
+        "pattern": "Column with visibility toggling (set id for display name)",
+        "code": "{ id: \"Email\", header: \"Email\", accessorKey: \"email\", enableHiding: true }"
+      },
+      {
+        "pattern": "Non-hideable column",
+        "code": "{ header: \"ID\", accessorKey: \"id\", enableHiding: false }"
+      },
+      {
+        "pattern": "Nested object accessor",
+        "code": "{\n  id: \"Company\",\n  accessorKey: \"company.name\",\n  header: ({ column }) => (\n    <DataTableColumnHeader column={column} title=\"Company\" />\n  ),\n}"
+      },
+      {
+        "pattern": "Multi-line cell (mixed content for related data)",
+        "code": "{\n  id: \"Location\",\n  accessorKey: \"address.city\",\n  cell: ({ row }) => (\n    <div className=\"flex flex-col\">\n      <span className=\"font-medium\">{row.original.address.city}</span>\n      <span className=\"text-xs text-muted-foreground\">\n        {row.original.address.state}, {row.original.address.country}\n      </span>\n    </div>\n  ),\n}"
+      }
+    ]
+  },
+  "props": [
+    {
+      "name": "columns",
+      "type": "ColumnDef<TData, TValue>[]",
+      "default": "required",
+      "description": "Array of TanStack Table column definitions. Import ColumnDef from the design system. Each column defines header, accessorKey or accessorFn, optional cell renderer, and column-level features (enableSorting, enableHiding, size)."
+    },
+    {
+      "name": "data",
+      "type": "TData[]",
+      "default": "required",
+      "description": "Array of row data objects. Typically fetched from an API. The data must match the shape expected by the column definitions."
+    },
+    {
+      "name": "pageCount",
+      "type": "number",
+      "default": "required",
+      "description": "Total number of pages. Calculated as Math.ceil(totalItems / pageSize). Required because DataTable uses server-side (manual) pagination."
+    },
+    {
+      "name": "pagination",
+      "type": "PaginationState",
+      "default": "required",
+      "description": "Controlled pagination state: { pageIndex: number, pageSize: number }. Provided by useDataTable via spread."
+    },
+    {
+      "name": "onPaginationChange",
+      "type": "OnChangeFn<PaginationState>",
+      "default": "required",
+      "description": "Pagination change handler. Provided by useDataTable via spread."
+    },
+    {
+      "name": "sorting",
+      "type": "SortingState",
+      "default": "[]",
+      "description": "Controlled sorting state. Array of { id: string, desc: boolean }. If not provided, managed internally."
+    },
+    {
+      "name": "onSortingChange",
+      "type": "OnChangeFn<SortingState>",
+      "default": "undefined",
+      "description": "Sorting change handler. Provided by useDataTable via spread."
+    },
+    {
+      "name": "columnFilters",
+      "type": "ColumnFiltersState",
+      "default": "[]",
+      "description": "Controlled column filters state. Array of { id: string, value: unknown }. If not provided, managed internally."
+    },
+    {
+      "name": "onColumnFiltersChange",
+      "type": "OnChangeFn<ColumnFiltersState>",
+      "default": "undefined",
+      "description": "Column filters change handler. Provided by useDataTable via spread."
+    },
+    {
+      "name": "rowSelection",
+      "type": "RowSelectionState",
+      "default": "{}",
+      "description": "Controlled row selection state. Object mapping row indices to boolean. Must be used together with enableRowSelection and onRowSelectionChange."
+    },
+    {
+      "name": "onRowSelectionChange",
+      "type": "OnChangeFn<RowSelectionState>",
+      "default": "undefined",
+      "description": "Row selection change handler. Manage externally with useState when you need access to selected rows."
+    },
+    {
+      "name": "enableRowSelection",
+      "type": "boolean | ((row: Row<TData>) => boolean)",
+      "default": "false",
+      "description": "Enables row selection. Set to true to allow all rows, or pass a function for conditional selection per row."
+    },
+    {
+      "name": "getRowId",
+      "type": "(row: TData, index: number) => string",
+      "default": "undefined",
+      "description": "Custom row ID getter. Useful for stable selection across page changes. If not provided, TanStack Table uses the row index."
+    },
+    {
+      "name": "columnVisibility",
+      "type": "VisibilityState",
+      "default": "{}",
+      "description": "Controlled column visibility state. Object mapping column IDs to boolean. If not provided, managed internally."
+    },
+    {
+      "name": "onColumnVisibilityChange",
+      "type": "OnChangeFn<VisibilityState>",
+      "default": "undefined",
+      "description": "Column visibility change handler. Provided by useDataTable via spread."
+    },
+    {
+      "name": "columnOrder",
+      "type": "ColumnOrderState",
+      "default": "[]",
+      "description": "Controlled column order state. Array of column IDs. If not provided, managed internally."
+    },
+    {
+      "name": "onColumnOrderChange",
+      "type": "OnChangeFn<ColumnOrderState>",
+      "default": "undefined",
+      "description": "Column order change handler. Provided by useDataTable via spread."
+    },
+    {
+      "name": "enableColumnReordering",
+      "type": "boolean",
+      "default": "false",
+      "description": "Enables drag-and-drop column reordering via @dnd-kit. When true, DataTableColumnHeader renders a drag handle (GripVertical icon). Requires columns to use DataTableColumnHeader."
+    },
+    {
+      "name": "isLoading",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, DataTableContent renders skeleton rows instead of data. Headers are still visible. Hide DataTablePagination during loading: {!isLoading && <DataTablePagination />}."
+    },
+    {
+      "name": "loadingRowCount",
+      "type": "number",
+      "default": "5",
+      "description": "Number of skeleton rows to render when isLoading is true."
+    },
+    {
+      "name": "emptyState",
+      "type": "React.ReactNode",
+      "default": "<NoDataMessage title=\"No data\" message=\"No records found.\" />",
+      "description": "Custom empty state rendered when data array is empty and isLoading is false. Defaults to NoDataMessage component."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged with default 'space-y-4' wrapper styling."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "<DataTableContent />",
+      "description": "Compound children. Use DataTableToolbar, DataTableContent, DataTablePagination, and DataTableViewOptions as children. If no children are provided, renders DataTableContent by default."
+    }
+  ],
+  "subComponents": [
+    {
+      "name": "DataTableContent",
+      "description": "Renders the table body with headers, rows, loading skeletons, and empty state. Must be placed inside <DataTable>. Automatically reads table state from internal context — no props needed.",
+      "props": []
+    },
+    {
+      "name": "DataTableToolbar",
+      "description": "A flex container (items-center, justify-between, gap-2) for placing filter inputs, action buttons, and view options above the table. Place inside <DataTable> before <DataTableContent>.",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "required",
+          "description": "Filter inputs, buttons, DataTableViewOptions, or any controls."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes merged with 'flex items-center justify-between gap-2'."
+        }
+      ]
+    },
+    {
+      "name": "DataTableColumnHeader",
+      "description": "Sortable column header component. Renders a ghost Button with sort direction indicators (ChevronUp/ChevronDown/ChevronsUpDown). When enableColumnReordering is active, also renders a GripVertical drag handle. Use this in the column definition's header property to enable sorting and/or drag-reordering on that column.",
+      "props": [
+        {
+          "name": "column",
+          "type": "Column<TData, TValue>",
+          "default": "required",
+          "description": "The TanStack Table column instance. Passed from the column definition's header render function: header: ({ column }) => <DataTableColumnHeader column={column} title=\"Name\" />."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "required",
+          "description": "Display text for the column header."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
+      ]
+    },
+    {
+      "name": "DataTableViewOptions",
+      "description": "Dropdown menu button (Settings2 icon) to toggle column visibility. Shows all columns that have enableHiding: true (or undefined) and an accessorFn. Place inside <DataTableToolbar> or as a direct child of <DataTable>. When inside <DataTable>, reads the table instance from context automatically.",
+      "props": [
+        {
+          "name": "table",
+          "type": "Table<TData>",
+          "default": "undefined",
+          "description": "Optional explicit table instance. When used inside <DataTable>, this is read from context and does not need to be passed."
+        }
+      ]
+    },
+    {
+      "name": "DataTablePagination",
+      "description": "Pagination controls with rows-per-page selector (Select), page indicator, and navigation buttons (first/prev/next/last). Shows selected row count when rows are selected. Place as the last child inside <DataTable>. Hide during loading state: {!isLoading && <DataTablePagination />}.",
+      "props": [
+        {
+          "name": "table",
+          "type": "Table<TData>",
+          "default": "undefined",
+          "description": "Optional explicit table instance. When used inside <DataTable>, this is read from context and does not need to be passed."
+        },
+        {
+          "name": "pageSizeOptions",
+          "type": "number[]",
+          "default": "[3, 5, 10, 20, 30, 50]",
+          "description": "Array of page size options shown in the rows-per-page selector."
+        },
+        {
+          "name": "showRowSelection",
+          "type": "boolean",
+          "default": "true",
+          "description": "When true and rows are selected, shows 'X of Y row(s) selected' text. When no rows are selected, shows 'Y row(s)' instead."
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "@tanstack/react-table",
+    "@dnd-kit/core",
+    "@dnd-kit/sortable",
+    "@dnd-kit/utilities",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
+  "internalDependencies": [
+    "table",
+    "button",
+    "select",
+    "dropdown-menu",
+    "no-data-message",
+    "checkbox"
+  ],
+  "accessibility": {
+    "role": "table (native HTML semantics via the underlying Table component)",
+    "keyboard": "Tab navigates through interactive elements (sort buttons, checkboxes, action buttons, pagination controls). Sort buttons toggle direction on Enter/Space. Drag handles support keyboard reordering via arrow keys. Pagination buttons are keyboard accessible with sr-only labels.",
+    "aria": "Row selection state conveyed via data-[state=selected] on TableRow. Checkbox columns use aria-label for screen readers. Drag handles use aria-label='Drag to reorder column'. Pagination buttons have sr-only text ('Go to first page', 'Go to previous page', etc.). Sort direction indicated visually via icons (ChevronUp for asc, ChevronDown for desc, ChevronsUpDown for unsorted).",
+    "notes": "The table renders inside a 'rounded-md border' container. Loading state preserves table headers and renders animated skeleton bars for body cells. Empty state renders a full-width NoDataMessage inside the table body — headers remain visible so users understand the page context. When enableColumnReordering is true, DndContext is only initialized after client-side hydration to prevent SSR mismatches."
+  },
+  "examples": [
+    {
+      "title": "Basic DataTable with server-side pagination",
+      "description": "Minimal setup: define columns with ColumnDef, use useDataTable for state, fetch data in useEffect reacting to pagination changes, spread tableState onto DataTable.",
+      "code": "import { DataTable, DataTableContent, DataTablePagination, ColumnDef, useDataTable } from \"@traxion-global/design-system/react\";\nimport { useEffect, useState } from \"react\";\n\ninterface User {\n  id: number;\n  firstName: string;\n  email: string;\n}\n\nconst columns: ColumnDef<User>[] = [\n  { header: \"ID\", accessorKey: \"id\", size: 50 },\n  { header: \"Name\", accessorKey: \"firstName\" },\n  { header: \"Email\", accessorKey: \"email\" },\n];\n\nexport default function UsersTable() {\n  const [data, setData] = useState<User[]>([]);\n  const [pageCount, setPageCount] = useState(0);\n  const tableState = useDataTable({ pageSize: 10 });\n\n  useEffect(() => {\n    const { pageIndex, pageSize } = tableState.pagination;\n    fetch(`/api/users?limit=${pageSize}&skip=${pageIndex * pageSize}`)\n      .then((res) => res.json())\n      .then((result) => {\n        setData(result.users);\n        setPageCount(Math.ceil(result.total / pageSize));\n      });\n  }, [tableState.pagination.pageIndex, tableState.pagination.pageSize]);\n\n  return (\n    <DataTable\n      data={data}\n      columns={columns}\n      pageCount={pageCount}\n      {...tableState}\n    >\n      <DataTableContent />\n      <DataTablePagination />\n    </DataTable>\n  );\n}"
+    },
+    {
+      "title": "Sortable columns",
+      "description": "Use DataTableColumnHeader in the column definition's header property to enable click-to-sort. Include tableState.sorting in the useEffect dependencies and pass sort params to your API.",
+      "code": "import { DataTable, DataTableContent, DataTablePagination, DataTableColumnHeader, ColumnDef, useDataTable } from \"@traxion-global/design-system/react\";\n\nconst columns: ColumnDef<User>[] = [\n  { header: \"ID\", accessorKey: \"id\", size: 50 },\n  { header: \"Name\", accessorKey: \"firstName\" },\n  {\n    header: ({ column }) => (\n      <DataTableColumnHeader column={column} title=\"Email\" />\n    ),\n    accessorKey: \"email\",\n  },\n];\n\n// In your component:\nconst tableState = useDataTable({ pageSize: 10 });\n\nuseEffect(() => {\n  const { pageIndex, pageSize } = tableState.pagination;\n  const sortBy = tableState.sorting.map(s => s.id).join(\",\");\n  const order = tableState.sorting.map(s => s.desc ? \"desc\" : \"asc\").join(\",\");\n  fetch(`/api/users?limit=${pageSize}&skip=${pageIndex * pageSize}&sortBy=${sortBy}&order=${order}`);\n}, [tableState.pagination.pageIndex, tableState.pagination.pageSize, tableState.sorting]);\n\n<DataTable columns={columns} data={data} pageCount={pageCount} {...tableState}>\n  <DataTableContent />\n  <DataTablePagination />\n</DataTable>"
+    },
+    {
+      "title": "Filtering with debounced input",
+      "description": "Use DataTableToolbar with an Input and useDebouncedCallback to update columnFilters. Reset pagination to page 0 when filters change. Include tableState.columnFilters in the useEffect dependencies.",
+      "code": "import {\n  DataTable, DataTableContent, DataTablePagination, DataTableToolbar,\n  ColumnDef, useDataTable, Input, useDebouncedCallback, Button\n} from \"@traxion-global/design-system/react\";\nimport { X } from \"lucide-react\";\n\nexport default function FilterableTable() {\n  const [data, setData] = useState<User[]>([]);\n  const [pageCount, setPageCount] = useState(0);\n  const [searchValue, setSearchValue] = useState(\"\");\n  const tableState = useDataTable({ pageSize: 10 });\n\n  useEffect(() => {\n    const { pageIndex, pageSize } = tableState.pagination;\n    const filters = tableState.columnFilters\n      .map(f => `key=${f.id}&value=${f.value}`).join(\"&\");\n    const url = filters\n      ? `/api/users/filter?limit=${pageSize}&skip=${pageIndex * pageSize}&${filters}`\n      : `/api/users?limit=${pageSize}&skip=${pageIndex * pageSize}`;\n    fetch(url).then(res => res.json()).then(result => {\n      setData(result.users);\n      setPageCount(Math.ceil(result.total / pageSize));\n    });\n  }, [tableState.pagination.pageIndex, tableState.pagination.pageSize, tableState.columnFilters]);\n\n  // Reset page when filters change\n  useEffect(() => {\n    tableState.setPagination(prev => ({ ...prev, pageIndex: 0 }));\n  }, [tableState.columnFilters]);\n\n  const debouncedSetFilter = useDebouncedCallback((value: string) => {\n    tableState.setColumnFilters(prev => {\n      const without = prev.filter(f => f.id !== \"id\");\n      return value ? [...without, { id: \"id\", value }] : without;\n    });\n  }, 300);\n\n  return (\n    <DataTable columns={columns} data={data} pageCount={pageCount} {...tableState}>\n      <DataTableToolbar>\n        <Input\n          placeholder=\"Search by ID\"\n          value={searchValue}\n          onChange={(e) => {\n            setSearchValue(e.target.value);\n            debouncedSetFilter(e.target.value);\n          }}\n          className=\"h-8 w-[200px]\"\n        />\n        {tableState.columnFilters.length > 0 && (\n          <Button variant=\"outline\" onClick={() => {\n            tableState.setColumnFilters([]);\n            setSearchValue(\"\");\n          }}>\n            <X className=\"mr-2 h-4 w-4\" /> Clear filters\n          </Button>\n        )}\n      </DataTableToolbar>\n      <DataTableContent />\n      <DataTablePagination />\n    </DataTable>\n  );\n}"
+    },
+    {
+      "title": "Row selection with action toolbar",
+      "description": "Add a checkbox column, enable row selection, and conditionally render a toolbar with bulk actions when rows are selected.",
+      "code": "import { DataTable, DataTableContent, DataTablePagination, DataTableToolbar, ColumnDef, useDataTable, Checkbox, Button } from \"@traxion-global/design-system/react\";\n\nconst columns: ColumnDef<User>[] = [\n  {\n    id: \"select\",\n    header: ({ table }) => (\n      <Checkbox\n        checked={\n          table.getIsAllPageRowsSelected() ||\n          (table.getIsSomePageRowsSelected() && \"indeterminate\")\n        }\n        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}\n        aria-label=\"Select all\"\n      />\n    ),\n    cell: ({ row }) => (\n      <Checkbox\n        checked={row.getIsSelected()}\n        onCheckedChange={(value) => row.toggleSelected(!!value)}\n        aria-label=\"Select row\"\n      />\n    ),\n    size: 50,\n  },\n  { header: \"ID\", accessorKey: \"id\", size: 50 },\n  { header: \"Name\", accessorKey: \"firstName\" },\n  { header: \"Email\", accessorKey: \"email\" },\n];\n\nexport default function SelectableTable() {\n  const [rowSelection, setRowSelection] = useState({});\n  const tableState = useDataTable({ pageSize: 10 });\n\n  return (\n    <DataTable\n      columns={columns}\n      data={data}\n      pageCount={pageCount}\n      {...tableState}\n      enableRowSelection\n      rowSelection={rowSelection}\n      onRowSelectionChange={setRowSelection}\n    >\n      {Object.keys(rowSelection).length > 0 && (\n        <DataTableToolbar>\n          <Button variant=\"destructive\" onClick={() => handleBulkDelete(rowSelection)}>\n            Delete selected ({Object.keys(rowSelection).length})\n          </Button>\n        </DataTableToolbar>\n      )}\n      <DataTableContent />\n      <DataTablePagination />\n    </DataTable>\n  );\n}"
+    },
+    {
+      "title": "Column visibility toggle",
+      "description": "Set column id (used as display name in the toggle menu) and enableHiding per column. Add DataTableViewOptions as a child of DataTable.",
+      "code": "import { DataTable, DataTableContent, DataTablePagination, DataTableViewOptions, ColumnDef, useDataTable } from \"@traxion-global/design-system/react\";\n\nconst columns: ColumnDef<User>[] = [\n  { header: \"ID\", accessorKey: \"id\", enableHiding: false, size: 50 },\n  { id: \"Name\", header: \"Name\", accessorKey: \"firstName\" },\n  { id: \"Email\", header: \"Email\", accessorKey: \"email\" },\n];\n\n<DataTable columns={columns} data={data} pageCount={pageCount} {...tableState}>\n  <DataTableViewOptions />\n  <DataTableContent />\n  <DataTablePagination />\n</DataTable>"
+    },
+    {
+      "title": "Column reordering via drag-and-drop",
+      "description": "Set enableColumnReordering on DataTable. Use DataTableColumnHeader on columns to render drag handles. Set enableSorting: false if the column should only be draggable, not sortable.",
+      "code": "import { DataTable, DataTableContent, DataTablePagination, DataTableColumnHeader, ColumnDef, useDataTable } from \"@traxion-global/design-system/react\";\n\nconst columns: ColumnDef<User>[] = [\n  { header: \"ID\", accessorKey: \"id\", size: 50 },\n  {\n    id: \"Name\",\n    accessorKey: \"firstName\",\n    header: ({ column }) => <DataTableColumnHeader column={column} title=\"Name\" />,\n    enableSorting: false,\n  },\n  {\n    id: \"Email\",\n    accessorKey: \"email\",\n    header: ({ column }) => <DataTableColumnHeader column={column} title=\"Email\" />,\n    enableSorting: false,\n  },\n];\n\n<DataTable\n  columns={columns}\n  data={data}\n  pageCount={pageCount}\n  {...tableState}\n  enableColumnReordering\n>\n  <DataTableContent />\n  <DataTablePagination />\n</DataTable>"
+    },
+    {
+      "title": "Loading state",
+      "description": "Pass isLoading={true} to show skeleton rows. Hide pagination during loading.",
+      "code": "<DataTable\n  columns={columns}\n  data={data}\n  pageCount={pageCount}\n  {...tableState}\n  isLoading={isLoading}\n>\n  <DataTableContent />\n  {!isLoading && <DataTablePagination />}\n</DataTable>"
+    },
+    {
+      "title": "All features combined",
+      "description": "Comprehensive example combining row selection, sorting, filtering, column visibility, column reordering, loading state, action buttons, and mixed cell content.",
+      "code": "import {\n  DataTable, DataTableContent, DataTablePagination, DataTableToolbar,\n  DataTableViewOptions, DataTableColumnHeader, ColumnDef, useDataTable,\n  Checkbox, Input, Button, useDebouncedCallback, Badge\n} from \"@traxion-global/design-system/react\";\nimport { Pencil, Trash, X } from \"lucide-react\";\n\nexport default function FullFeaturedTable() {\n  const [data, setData] = useState<UserData[]>([]);\n  const [pageCount, setPageCount] = useState(0);\n  const [isLoading, setIsLoading] = useState(true);\n  const [rowSelection, setRowSelection] = useState({});\n  const [searchValue, setSearchValue] = useState(\"\");\n  const tableState = useDataTable({ pageSize: 10 });\n\n  const debouncedSetFilter = useDebouncedCallback((value: string) => {\n    tableState.setColumnFilters(prev => {\n      const without = prev.filter(f => f.id !== \"ID\");\n      return value ? [...without, { id: \"ID\", value }] : without;\n    });\n  }, 300);\n\n  useEffect(() => {\n    setIsLoading(true);\n    fetchUsers(tableState).then(result => {\n      setData(result.users);\n      setPageCount(Math.ceil(result.total / tableState.pagination.pageSize));\n      setIsLoading(false);\n    });\n  }, [\n    tableState.pagination.pageIndex,\n    tableState.pagination.pageSize,\n    tableState.sorting,\n    tableState.columnFilters,\n  ]);\n\n  useEffect(() => {\n    tableState.setPagination(prev => ({ ...prev, pageIndex: 0 }));\n  }, [tableState.columnFilters]);\n\n  return (\n    <DataTable\n      data={data}\n      columns={columns}\n      pageCount={pageCount}\n      isLoading={isLoading}\n      enableRowSelection\n      rowSelection={rowSelection}\n      onRowSelectionChange={setRowSelection}\n      enableColumnReordering\n      {...tableState}\n    >\n      <DataTableToolbar>\n        <Input\n          placeholder=\"Search by ID\"\n          value={searchValue}\n          onChange={(e) => {\n            setSearchValue(e.target.value);\n            debouncedSetFilter(e.target.value);\n          }}\n          className=\"h-8 w-[200px]\"\n        />\n        {tableState.columnFilters.length > 0 && (\n          <Button variant=\"outline\" onClick={() => {\n            tableState.setColumnFilters([]);\n            setSearchValue(\"\");\n          }} className=\"h-8 px-2 lg:px-3\">\n            <X className=\"mr-2 h-4 w-4\" /> Clear filters\n          </Button>\n        )}\n        {Object.keys(rowSelection).length > 0 && (\n          <Button variant=\"destructive\" className=\"h-8 px-2 lg:px-3\">\n            Delete selected ({Object.keys(rowSelection).length})\n          </Button>\n        )}\n        <DataTableViewOptions />\n      </DataTableToolbar>\n      <DataTableContent />\n      {!isLoading && <DataTablePagination />}\n    </DataTable>\n  );\n}"
+    }
+  ],
+  "recommendations": {
+    "do": [
+      "Always use useDataTable() hook for state management and spread it onto DataTable: {...tableState}",
+      "Always include <DataTablePagination /> — every backoffice table must have pagination",
+      "Hide pagination during loading: {!isLoading && <DataTablePagination />}",
+      "Reset pagination to page 0 when filters change: useEffect(() => { tableState.setPagination(prev => ({ ...prev, pageIndex: 0 })); }, [tableState.columnFilters])",
+      "Use useDebouncedCallback for filter inputs to avoid excessive API calls while the user types",
+      "Set enableSorting: false and enableHiding: false on action and checkbox columns",
+      "Use DataTableColumnHeader for any column that should be sortable — it provides consistent sort indicators",
+      "Set a column id (e.g., id: 'Name') when using DataTableViewOptions so the toggle menu shows human-readable names instead of accessorKey paths",
+      "Include tableState.sorting and tableState.columnFilters in your useEffect dependencies when they are used",
+      "Use the cell render function with row.original to access the full row data object for custom cell content",
+      "Use mixed-content cells (multiple lines in one cell) for related data that doesn't justify its own column",
+      "Use icons from lucide-react only — never emoji, unicode, or other icon libraries",
+      "Place DataTableViewOptions inside DataTableToolbar for consistent layout"
+    ],
+    "dont": [
+      "Don't use DataTable for simple static tables — use the Table component instead",
+      "Don't manage pagination/sorting/filter state manually with useState — use useDataTable() hook",
+      "Don't import from @tanstack/react-table directly — import ColumnDef, Row, Column from @traxion-global/design-system/react",
+      "Don't use client-side pagination — DataTable is designed for server-side (manual) pagination only",
+      "Don't forget to pass pageCount — it is required for server-side pagination to work",
+      "Don't show DataTablePagination while isLoading is true — it will show stale data",
+      "Don't use enableColumnReordering without DataTableColumnHeader on the columns — the drag handle is rendered by DataTableColumnHeader",
+      "Don't create separate columns for closely related data (city + state + country) — use a multi-line cell instead",
+      "Don't hardcode color values — use semantic Tailwind classes (text-muted-foreground, text-destructive, etc.)"
+    ]
+  },
+  "commonlyUsedWith": [
+    "badge",
+    "button",
+    "checkbox",
+    "dropdown-menu",
+    "input",
+    "no-data-message",
+    "select"
+  ]
+}
