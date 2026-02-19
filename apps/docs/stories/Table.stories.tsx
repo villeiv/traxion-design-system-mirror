@@ -20,7 +20,10 @@ export default {
         controls: { disable: true },
         docs: {
             description: {
-                component: 'El componente **Table** se utiliza para mostrar datos en un formato tabular, facilitando la organización y visualización de información estructurada.' + TableAnatomy
+                component: 'El componente **Table** se utiliza para mostrar datos en un formato tabular, facilitando la organización y visualización de información estructurada. ' +
+                    '\n\n**Recomendación de uso:** Este componente es ideal para tablas simples y estáticas. ' +
+                    'Si necesitas funcionalidades avanzadas como ordenamiento, filtrado, paginación del lado del servidor, selección de filas o reordenamiento de columnas, ' +
+                    'considera usar el componente **DataTable** en su lugar. ' + TableAnatomy
             }
         }
     }

@@ -5,11 +5,11 @@ export const DataTableAnatomy = `
   <DataTableToolbar>
     //Controles y filtros
     <Input />
+    <DataTableViewOptions />
   </DataTableToolbar>
-  <DataTableViewOptions />
   <DataTableContent />
   <DataTablePagination />
 </DataTable>
 \`\`\`
-Puedes añadir múltiples campos de filtro dentro de DataTableToolbar según sea necesario.
+Puedes añadir múltiples campos de filtro dentro de DataTableToolbar según sea necesario. El componente **DataTableViewOptions** debe colocarse dentro del toolbar para mantener una estructura consistente y mejorar la experiencia de usuario.
 `;

@@ -18,6 +18,8 @@ import DataTableLoading from "./sources/DataTable.loading";
 import DataTableLoadingCode from "./sources/DataTable.loading?raw";
 import DataTableFiltering from "./sources/DataTable.filtering";
 import DataTableFilteringCode from "./sources/DataTable.filtering?raw";
+import DataTableAllFunctionality from "./sources/DataTable.allFunctionality";
+import DataTableAllFunctionalityCode from "./sources/DataTable.allFunctionality?raw";
 
 export default {
     title: "DataTable",
@@ -32,6 +34,8 @@ export default {
                 component:
                     "Un componente de tabla potente y con funcionalidades avanzadas, construido sobre TanStack Table con soporte " +
                     "integrado para ordenamiento, filtrado, paginación, visibilidad de columnas y reordenamiento. " +
+                    "\n\n**Recomendación de uso:** Este componente está diseñado para tablas de datos complejas que requieren funcionalidades avanzadas. " +
+                    "Si necesitas una tabla más simple para mostrar datos estáticos o con poca interactividad, considera usar el componente **Table** en su lugar. " +
                     DataTableAnatomy,
             },
         },
@@ -159,4 +163,25 @@ export const Filtering = {
             },
         },
     },
+}
+
+export const AllFunctionality = {
+    name: "Todas las funcionalidades",
+    render: DataTableAllFunctionality,
+    parameters: {
+        docs: {
+            source: { code: DataTableAllFunctionalityCode },
+            description: {
+                story: "Ejemplo completo de **DataTable** combinando todas las funcionalidades disponibles: " +
+                    "selección de filas con checkboxes y acción masiva, ordenamiento por columnas, botones de acción con variantes " +
+                    "(editar/eliminar), filtrado con búsqueda debounced, visibilidad de columnas configurada dentro del " +
+                    "toolbar, reordenamiento de columnas mediante drag-and-drop, estado de carga con skeleton y " +
+                    "paginación del lado del servidor.\n\n" +
+                    "**Nota sobre contenido mixto:** La columna 'Ubicación' utiliza contenido mixto (múltiples líneas de texto) " +
+                    "porque combina información relacionada (ciudad, estado, país) que es útil tener visible pero no justifica " +
+                    "crear columnas separadas. Usa este patrón cuando la información sea un 'nice-to-have' que no amerita " +
+                    "su propia columna, manteniendo así una tabla más compacta y fácil de escanear."
+            }
+        }
+    }
 }
