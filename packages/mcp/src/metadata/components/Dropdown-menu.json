@@ -1,5 +1,6 @@
 {
   "name": "DropdownMenu",
+  "packageVersion": "0.3.3",
   "slug": "dropdown-menu",
   "description": "A contextual menu that displays a list of actions or options triggered by a button press. Built on @radix-ui/react-dropdown-menu with animated open/close transitions (fade, zoom, slide). Supports standard items, checkbox items, radio items, sub-menus, labels, separators, and keyboard shortcut hints. Content is portaled and auto-constrained to available viewport height.",
   "category": "navigation",

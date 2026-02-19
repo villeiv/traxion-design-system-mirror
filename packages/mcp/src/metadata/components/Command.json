@@ -1,5 +1,6 @@
 {
   "name": "Command",
+  "packageVersion": "0.3.3",
   "slug": "command",
   "description": "A command palette / search interface built on the cmdk library. Provides a filterable list of options with keyboard navigation. Includes a CommandDialog variant that wraps Command inside a Dialog for modal usage. Sub-components provide structured input, list, grouping, items, separators, and keyboard shortcut display.",
   "category": "navigation",

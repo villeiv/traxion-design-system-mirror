@@ -1,5 +1,6 @@
 {
   "name": "Avatar",
+  "packageVersion": "0.3.3",
   "slug": "avatar",
   "description": "A circular image element with a fallback for representing a user. Built on @radix-ui/react-avatar. The root is a 40x40px rounded-full container. AvatarImage fills it with aspect-square sizing, and AvatarFallback displays initials or an icon when the image fails to load.",
   "category": "data-display",

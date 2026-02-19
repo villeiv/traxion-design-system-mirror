@@ -1,5 +1,6 @@
 {
   "name": "NoDataMessage",
+  "packageVersion": "0.3.3",
   "slug": "no-data-message",
   "description": "A centered empty-state message component that displays an Info icon inside a circular muted badge, a title, and a descriptive message. Used to communicate that no data is available for a given view or query.",
   "category": "feedback",

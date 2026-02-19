@@ -1,5 +1,6 @@
 {
   "name": "Textarea",
+  "packageVersion": "0.3.3",
   "slug": "textarea",
   "description": "A styled multi-line text input that extends the native HTML <textarea> element. Features a consistent design with rounded border, shadow, placeholder styling, focus ring, and responsive font sizing (base on mobile, sm on md+).",
   "category": "forms",

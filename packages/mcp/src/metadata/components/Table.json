@@ -1,5 +1,6 @@
 {
   "name": "Table",
+  "packageVersion": "0.3.3",
   "slug": "table",
   "description": "A compound table component built on native HTML table elements. Wrapped in a responsive overflow container. Provides styled sub-components for header, body, footer, rows, head cells, data cells, and captions with hover states and selection support.",
   "category": "data-display",

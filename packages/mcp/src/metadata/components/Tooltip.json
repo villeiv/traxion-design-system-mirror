@@ -1,5 +1,6 @@
 {
   "name": "Tooltip",
+  "packageVersion": "0.3.3",
   "slug": "tooltip",
   "description": "A popup that displays informational text when hovering over or focusing a trigger element. Built on Radix UI Tooltip primitive. The content is portaled and features entrance/exit animations with directional slide-in based on placement side.",
   "category": "overlay",

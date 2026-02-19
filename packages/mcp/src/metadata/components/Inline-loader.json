@@ -1,5 +1,6 @@
 {
   "name": "InlineLoader",
+  "packageVersion": "0.3.3",
   "slug": "inline-loader",
   "description": "A compact, centered spinning loader intended for inline or section-level loading states. Renders a Loader2 icon inside a flex container with vertical padding.",
   "category": "feedback",

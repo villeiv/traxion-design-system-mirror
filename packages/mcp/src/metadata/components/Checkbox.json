@@ -1,5 +1,6 @@
 {
   "name": "Checkbox",
+  "packageVersion": "0.3.3",
   "slug": "checkbox",
   "description": "A form control that allows the user to toggle between checked, unchecked, and optionally indeterminate states. Built on @radix-ui/react-checkbox with a Check icon from lucide-react. Styled as a 16x16px rounded-sm box with primary color when checked.",
   "category": "forms",

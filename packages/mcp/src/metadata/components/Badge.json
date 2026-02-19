@@ -1,5 +1,6 @@
 {
   "name": "Badge",
+  "packageVersion": "0.3.3",
   "slug": "badge",
   "description": "A small inline label rendered as a rounded-full pill with color-coded variants. Uses class-variance-authority (CVA) for variant management. Includes both shadcn legacy variants (default, secondary, destructive, outline) and Traxion-specific color variants (primary, green, yellow, red, gray, cyan, violet, blue, teal, orange, pink, fuchsia).",
   "category": "data-display",

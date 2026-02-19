@@ -1,5 +1,6 @@
 {
   "name": "InfoCard",
+  "packageVersion": "0.3.3",
   "slug": "info-card",
   "description": "A compact data-display card that shows a title, a bold value, and an optional icon inside a colored circular badge. The icon color can be themed to primary, green, yellow, red, or gray. Built on top of the Card and CardContent components.",
   "category": "data-display",

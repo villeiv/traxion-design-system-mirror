@@ -1,5 +1,6 @@
 {
   "name": "Calendar",
+  "packageVersion": "0.3.3",
   "slug": "calendar",
   "description": "A date picker calendar component built on react-day-picker (DayPicker). Supports single date selection, date ranges, and multiple date selection. Features locale support for Spanish (es) and English (en) via date-fns, configurable caption layouts (label or dropdown), and custom day button rendering with range highlighting. Navigation buttons use the Traxion Button component.",
   "category": "forms",

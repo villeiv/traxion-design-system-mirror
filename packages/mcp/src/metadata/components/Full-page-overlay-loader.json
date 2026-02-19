@@ -1,5 +1,6 @@
 {
   "name": "FullPageOverlayLoader",
+  "packageVersion": "0.3.3",
   "slug": "full-page-overlay-loader",
   "description": "A full-page, fixed-position overlay with a centered spinning loader icon. Used to block interaction and indicate a global loading state.",
   "category": "feedback",

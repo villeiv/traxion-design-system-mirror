@@ -1,5 +1,6 @@
 {
   "name": "HoverCard",
+  "packageVersion": "0.3.3",
   "slug": "hover-card",
   "description": "A compound component built on @radix-ui/react-hover-card that displays rich content in a floating card when the user hovers over a trigger element. Includes animated enter/exit transitions.",
   "category": "overlay",

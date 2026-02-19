@@ -1,5 +1,6 @@
 {
   "name": "Button",
+  "packageVersion": "0.3.3",
   "slug": "button",
   "description": "A versatile button component with multiple visual variants and sizes. Uses class-variance-authority (CVA) for variant management and supports polymorphic rendering via the asChild prop (powered by @radix-ui/react-slot). Includes focus-visible ring styles and disabled state handling.",
   "category": "actions",
