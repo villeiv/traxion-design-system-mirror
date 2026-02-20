@@ -1,6 +1,6 @@
 # Monorepo – Design System 
 
-Este monorepo contiene el **Design System** y la documentación mediante **Storybook**.
+Este monorepo contiene el **Design System**, la documentación mediante **Storybook** y un **MCP Server** que actua como una capa de documentación inteligente enfocada en IA-first development del Traxion Design System.
 
 ## Estructura del proyecto
 
@@ -32,7 +32,7 @@ Este monorepo contiene el **Design System** y la documentación mediante **Story
 Los siguientes comandos se ejecutan desde el root del monorepo:
 
     npm install
-    npm run dev           # Levanta las apps en modo desarrollo
+    npm run dev           # Levanta las apps en modo desarrollo, en el caso del design system, hace un rebuild cuando los componets cambian, para que los cambios estén disponibles inmediatamente
     npm run storybook     # Abre Storybook desde apps/docs
     npm run build         # Construye los packages y apps
 
@@ -50,7 +50,7 @@ Cuyo contenido es:
 - `tailwind/` con la configuración del preset de Tailwind
 - `src/` con el código fuente del design system  
   - `index.ts` (entrypoint utilidades como `cn`)  
-  - `react.ts` (entrypoint client-only que exporta todos los componentes)
+  - `react.ts` (entrypoint que exporta todos los componentes y hooks para el uso con React)
 - `dist/` generado por la build (componentes, entrypoints, tokens y css procesados)
 - `README.md` del paquete
 - `CHANGELOG.md`
@@ -74,10 +74,11 @@ El servidor MCP está en:
 
     packages/mcp/
 
-Este servidor actúa como una **capa de documentación inteligente** para el Design System, permitiendo que asistentes AI (como Claude Code) ayuden a los desarrolladores a usar los componentes de manera efectiva.
+Este servidor actúa como una **capa de documentación inteligente** para el Design System, permitiendo que asistentes AI (como Claude Code) utilicen y ayuden a los desarrolladores a usar los componentes de manera efectiva.
 
 ### ¿Qué hace el MCP?
 
+- **Proporciona una guía de instalación** - Ayuda a instalar el design system 
 - **Descubrimiento de componentes** - Encuentra componentes relevantes por palabra clave
 - **Documentación contextual** - Proporciona props, ejemplos y guías de uso
 - **Scaffolding de código** - Genera código inicial con imports correctos del paquete
@@ -108,14 +109,17 @@ El Traxion Design System usa una **arquitectura híbrida** que combina distribuc
 ┌─────────────────────────────────────────────────────────────┐
 │                   Traxion Design System                     │
 ├─────────────────────────┬───────────────────────────────────┤
-│   Paquete NPM           │   Servidor MCP                    │
-│   (Fuente de verdad)    │   (Capa de documentación IA)      │
+│   Paquete GitHub        │   Servidor MCP                    │
+│   Package               │   (Capa de documentación IA)      │
+│   (Fuente de verdad)    │                                   │
 ├─────────────────────────┼───────────────────────────────────┤
 │ • Componentes React     │ • Descubrimiento de componentes   │
 │ • Publicado en GitHub   │ • Scaffolding asistido por IA     │
 │ • Componentes bloqueados│ • Validación de uso               │
 │ • Versionado semántico  │ • Sugerencias contextuales        │
 │ • Import tradicional    │ • Ejemplos personalizados         │
+│ • Import tradicional    │ • Acceso a stories                │
+│                         │ • Helper de instalación del DS    │
 └─────────────────────────┴───────────────────────────────────┘
 ```
 
@@ -132,7 +136,7 @@ El Traxion Design System usa una **arquitectura híbrida** que combina distribuc
    - Genera código que IMPORTA del paquete
    - Siempre sincronizado (misma versión, mismo repo)
 
-**Principio clave:** El MCP genera código que **usa** los componentes del paquete, nunca copia su código fuente.
+**Principio clave:** MUY IMPORTANTE: El MCP genera código que **usa** los componentes del paquete, nunca copia su código fuente.
 
 **Para más detalles sobre el MCP, arquitectura híbrida, beneficios y workflows completos, ver [packages/mcp/README.md](./packages/mcp/README.md)**
 

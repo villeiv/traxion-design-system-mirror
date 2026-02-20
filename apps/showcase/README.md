@@ -1,6 +1,7 @@
 # Showcase – Visualización de Componentes
 
-Este workspace contiene una aplicación mínima cuyo único propósito es **mostrar visualmente los componentes disponibles en el Design System**.  
+Este workspace contiene una aplicación mínima cuyo único propósito es **mostrar visualmente los componentes disponibles en el Design System**. 
+No debe tomarse el código como ejemplo a seguir de buenas prácticas, el único objetivo del showcase es brindar una página en que se puedan explorar rapidamente los componentes disponibles, no es una guía de implementación.
 Sirve como referencia rápida para revisar el aspecto actual de la UI y comprobar su estado en cada versión del paquete.
 
 ---
@@ -21,6 +22,8 @@ El showcase consume el Design System vía workspaces:
     "dependencies": {
       "@traxion-global/design-system": "*"
     }
+
+El script `npm run dev` del root hace watch sobre el Design System y ejecuta el build automáticamente al detectar cambios. Sin esto, el showcase podría mostrar componentes desactualizados ya que consume el output del build, no los archivos fuente directamente.
 
 Los componentes se importan desde:
 

@@ -4,25 +4,26 @@
 
 ## Overview
 
-This MCP server helps developers use the `@traxion-global/design-system` package effectively through AI-assisted development. It provides component discovery, documentation, real-world Storybook examples, and code generation capabilities.
+This MCP server helps developers and AI agents use the `@traxion-global/design-system` package effectively through AI-assisted development. It provides component discovery, documentation, real-world Storybook examples, and code generation capabilities.
 
 ## Hybrid Architecture
 
 The Traxion Design System uses a **Hybrid Approach** that combines traditional package distribution with AI-assisted development:
 
 ```
-+-------------------------------------------------------------+
-|                   Traxion Design System                       |
-+-----------------------------+-------------------------------+
-|   GitHub Package            |   MCP Server                   |
-|   (Source of Truth)         |   (Smart Documentation Layer)  |
-+-----------------------------+-------------------------------+
-| - 32 React components       | - Component discovery          |
-| - Published to GitHub        | - AI-assisted scaffolding      |
-| - Locked (no edits)         | - Usage validation             |
-| - Versioned releases        | - Smart suggestions            |
-| - Traditional import        | - Context-aware examples       |
-+-----------------------------+-------------------------------+
++------------------------------------------------------------------+
+|                   Traxion Design System                          |
++-----------------------------+------------------------------------+
+|   GitHub Package            |   MCP Server                       |
+|   (Source of Truth)         |   (Smart Documentation Layer)      |
++-----------------------------+------------------------------------+
+| - 33 React components       | - Component discovery              |
+| - Published to GitHub       | - AI-assisted scaffolding          |
+| - Locked (no edits)         | - Usage validation                 |
+| - Versioned releases        | - Smart suggestions                |
+| - Traditional import        | - Context-aware examples           |
+|                             | - Design system installation guide |
++-----------------------------+------------------------------------+
 ```
 
 ### The Two Layers
@@ -31,7 +32,7 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 
 **Location:** `packages/design-system/`
 
-The actual React components (32 components), design tokens, utilities, and styles. Published to GitHub Packages as `@traxion-global/design-system`.
+The actual React hooks and components (33 components), design tokens, utilities, and styles. Published to GitHub Packages as `@traxion-global/design-system`.
 
 ```bash
 npm install @traxion-global/design-system
@@ -72,66 +73,38 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 ## Architecture Diagram
 
 ```
-+-----------------------------------------------------------+
-|                   FILESYSTEM (Source of Truth)             |
-+------------------------+----------------------------------+
-| metadata/              | apps/docs/stories/               |
-|  components/*.json     |  *.stories.tsx  (31 files)       |
-|  guidelines/*.md       |  sources/*.tsx  (59 files)       |
-|                        |  sources/*.anatomy.tsx           |
-| design-system/         |                                  |
-|  components/*.tsx      |                                  |
-|  tokens/tokens.json    |                                  |
-+----------+-------------+--------------+-------------------+
-           |                            |
-           |   new ComponentRegistry()  |
-           |   ------- load() -------   |
-           v                            v
-+-----------------------------------------------------------+
-|          ComponentRegistry (In-Memory Cache)               |
-+-----------------------------------------------------------+
-|                                                           |
-|  components: Map<slug, {meta, source}>    (32 entries)    |
-|  tokens: Record<category, data>           (3 categories)  |
-|  guidelines: Map<name, markdown>          (4 entries)     |
-|  stories: Map<slug, {meta, sources}>      (31 entries)    |
-|                                                           |
-|  Public API:                                              |
-|  +-- getComponent(slug)  listComponents()                 |
-|  +-- searchComponents(query)  getComponentsByCategory()   |
-|  +-- getStories(slug)  hasStories()                       |
-|  +-- getTokens()  getTokenCategory()                      |
-|  +-- getGuideline(name)  listGuidelines()                 |
-+------------------------+----------------------------------+
-                         |
-                  registerTools()
-                         |
-     +-----------+-------+-------+--------------+
-     v           v       v       v              v
-+---------++---------++------++----------++----------+
-|Discovery|| Details ||Tokens||  Smart   || Install  |
-|         ||         ||Guide ||  Tools   ||          |
-| list_   || get_    ||lines ||          || install_ |
-|component|| component|      ||scaffold_ ||design_   |
-|s        ||         ||get_  ||feature   ||system    |
-|         ||get_comp ||design||          ||          |
-|search_  ||_stories ||_token||suggest_  ||          |
-|component||         ||s     ||components||          |
-|s        ||         ||      ||          ||          |
-|         ||         ||get_  ||validate_ ||          |
-|         ||         ||guide ||usage     ||          |
-|         ||         ||line  ||          ||          |
-+---------++---------++------++----------++----------+
-     |           |       |       |              |
-     +-----------+-------+-------+--------------+
-                         |
-                   stdio transport
-                         |
-                         v
-                  +-----------+
-                  | Claude /  |
-                  | any AI    |
-                  +-----------+
++-----------------------+     +---------------------------+
+| metadata/             |     | apps/docs/stories/        |
+|   components/*.json   |     |   *.stories.tsx   (32)    |
+|   guidelines/*.md     |     |   sources/*.tsx   (71)    |
+|                       |     +---------------------------+
+| design-system/        |
+|   components/*.tsx    |     ComponentRegistry.load()
+|   tokens/tokens.json  |            |
++-----------------------+            v
+                          +---------------------+
+                          | ComponentRegistry   |
+                          | (In-Memory Cache)   |
+                          |                     |
+                          | 33 components       |
+                          | 32 story sets       |
+                          | 3 token categories  |
+                          | 3 guidelines        |
+                          +----------+----------+
+                                     |
+                              registerTools()
+                                     |
+         +------------+---------+----+----+-----------+
+         |            |         |         |           |
+    list_components  get_    suggest_  scaffold_  install_
+    search_         component components feature  design_system
+                    get_stories        validate_
+                    get_tokens          usage
+                    get_guideline
+                                     |
+                               stdio transport
+                                     |
+                                Claude / AI
 ```
 
 ### Typical AI Workflow
@@ -142,8 +115,9 @@ A Model Context Protocol server that provides intelligent documentation and scaf
    -> Badge, Pagination
 
 2. get_component("table")
-   -> Props, accessibility, anatomy
+   -> Package version, props, accessibility, anatomy
    -> Inline stories with Badge inside TableCell
+   -> Documentation sections (for complex components)
    -> "Commonly Used With: Badge, Card, NoDataMessage"
 
 3. get_component("badge")
@@ -181,10 +155,10 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 
 | Tool | Parameters | Purpose |
 |------|-----------|---------|
-| **`get_component`** | `slug: string`, `include_source?: bool` | Complete docs: import, props, accessibility, **stories with real source code**, best practices, commonly used with, dependencies |
+| **`get_component`** | `slug: string`, `include_source?: bool` | Complete docs: import, props, accessibility, **stories with real source code**, best practices, commonly used with, dependencies, package version, and documentation sections (for complex components) |
 | **`get_component_stories`** | `slug: string`, `story_name?: string` | All stories for a component with full source code. Useful for filtering a specific story |
 | **`get_design_tokens`** | `category?: string` | Design tokens: colors, radius, font. HSL format, Tailwind-compatible |
-| **`get_guideline`** | `name: string` | Design guidelines in markdown: `accessibility`, `patterns`, `tables`, `z-index` |
+| **`get_guideline`** | `name: string` | Design guidelines in markdown: `accessibility`, `patterns`, `z-index` |
 
 ### Smart Tools
 
@@ -198,36 +172,18 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 
 ## How to Register a New Component
 
-Follow these 5 steps to add a new component so it is fully visible to the MCP server and generates high-quality code.
+Before registering a component in the MCP server, the following design system tasks must be completed first:
 
-### Step 1: Create the component in the design system
+### Prerequisites (Design System)
 
-File: `packages/design-system/src/components/MyComponent.tsx`
+1. **Create the component** in `packages/design-system/src/components/MyComponent.tsx` and export it in `packages/design-system/src/index.ts`
+2. **Create Storybook stories** in `apps/docs/stories/MyComponent.stories.tsx` with usage examples (inline renders or external source files in `apps/docs/stories/sources/`)
+3. **(Optional) Create an anatomy file** in `apps/docs/stories/sources/MyComponent.anatomy.tsx` showing the component's structure
+4. **Build and publish a new version** of the `@traxion-global/design-system` package so the component is available to consumers
 
-```tsx
-import * as React from "react";
-import { cn } from "../lib/utils";
+Once the component is published and has stories, follow these steps to make it visible to the MCP server.
 
-export interface MyComponentProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "accent";
-}
-
-const MyComponent = React.forwardRef<HTMLDivElement, MyComponentProps>(
-  ({ className, variant = "default", ...props }, ref) => (
-    <div ref={ref} className={cn("...", className)} {...props} />
-  )
-);
-MyComponent.displayName = "MyComponent";
-
-export { MyComponent };
-```
-
-Export it in `packages/design-system/src/index.ts`:
-```tsx
-export { MyComponent } from "./components/MyComponent";
-```
-
-### Step 2: Create the metadata JSON
+### Step 1: Create the metadata JSON
 
 File: `packages/mcp/src/metadata/components/MyComponent.json`
 
@@ -235,6 +191,7 @@ File: `packages/mcp/src/metadata/components/MyComponent.json`
 {
   "name": "MyComponent",
   "slug": "my-component",
+  "packageVersion": "0.1.0",
   "description": "Clear description of what it does and when to use it.",
   "category": "layout",
   "tags": ["my-component", "layout", "container"],
@@ -259,12 +216,6 @@ File: `packages/mcp/src/metadata/components/MyComponent.json`
     "keyboard": "Describe keyboard interaction",
     "aria": "Describe required ARIA attributes"
   },
-  "examples": [
-    {
-      "title": "Basic usage",
-      "code": "<MyComponent>Content</MyComponent>"
-    }
-  ],
   "recommendations": [
     {
       "type": "do",
@@ -276,104 +227,27 @@ File: `packages/mcp/src/metadata/components/MyComponent.json`
       "description": "Do not use MyComponent for Y."
     }
   ],
-  "commonlyUsedWith": ["card", "button"]
+  "commonlyUsedWith": ["card", "button"],
+  "sections": [
+    {
+      "title": "Section Title",
+      "blocks": [
+        { "type": "text", "content": "Markdown text block." },
+        { "type": "code", "language": "tsx", "content": "<MyComponent />" },
+        { "type": "table", "headers": ["Name", "Type"], "rows": [["foo", "string"]] }
+      ]
+    }
+  ]
 }
 ```
 
 **Key fields for AI code quality:**
-- `examples` — fallback when no stories exist (only used if stories are absent)
+- `packageVersion` — must match the published version of the design system package where this component is available
 - `recommendations` — shown as "Best Practices" (do/don't patterns)
 - `commonlyUsedWith` — the AI will see links to companion components and suggest them together
+- `sections` — generic documentation blocks for complex components that need additional documentation beyond props and examples (e.g., hook APIs, sub-component guides, column definition patterns). Most simple components don't need this field. See `DataTable.json` for a full example
 
-### Step 3: Create Storybook stories
-
-File: `apps/docs/stories/MyComponent.stories.tsx`
-
-**Option A — Inline render (simpler, captured automatically by the parser):**
-```tsx
-import { MyComponent, Button } from "@traxion-global/design-system/react";
-
-export default {
-  title: "MyComponent",
-  component: MyComponent,
-  tags: ["autodocs"],
-  parameters: {
-    controls: { disable: true },
-    actions: { disable: true },
-  },
-};
-
-export const Basic = {
-  name: "Basic usage",
-  parameters: {
-    docs: {
-      description: {
-        story: "Basic example of **MyComponent**.",
-      },
-    },
-  },
-  render: args => (
-    <MyComponent>
-      <Button>Action</Button>
-    </MyComponent>
-  ),
-};
-```
-
-The parser will extract the JSX from the render function + the design-system imports automatically.
-
-**Option B — External source file (for more complex examples):**
-
-1. Create `apps/docs/stories/sources/MyComponent.basic.tsx`:
-```tsx
-import { MyComponent, Button } from "@traxion-global/design-system/react";
-
-export default function MyComponentBasic() {
-  return (
-    <MyComponent>
-      <Button>Action</Button>
-    </MyComponent>
-  );
-}
-```
-
-2. In the story file, import with `?raw`:
-```tsx
-import MyComponentBasic from "./sources/MyComponent.basic";
-import MyComponentBasicCode from "./sources/MyComponent.basic?raw";
-
-export const Basic = {
-  name: "Basic usage",
-  render: MyComponentBasic,
-  parameters: {
-    docs: {
-      source: { code: MyComponentBasicCode },
-      description: { story: "Basic example." },
-    },
-  },
-};
-```
-
-### Step 4: (Optional) Create anatomy
-
-File: `apps/docs/stories/sources/MyComponent.anatomy.tsx`
-```tsx
-export const MyComponentAnatomy = `
-<MyComponent>
-  <MyComponentHeader />
-  <MyComponentBody />
-  <MyComponentFooter />
-</MyComponent>
-`;
-```
-
-Import in the story file:
-```tsx
-import { MyComponentAnatomy } from "./sources/MyComponent.anatomy";
-// Use in the default export's description
-```
-
-### Step 5: Build and verify
+### Step 2: Build and verify
 
 ```bash
 cd packages/mcp && npm run build
@@ -391,11 +265,17 @@ The registry auto-discovers everything:
 
 ### Checklist
 
+**Design system (prerequisites):**
 - [ ] Component TSX in `design-system/src/components/`
 - [ ] Export in `design-system/src/index.ts`
-- [ ] JSON metadata in `mcp/src/metadata/components/`
-- [ ] `commonlyUsedWith` with companion components
 - [ ] Stories in `apps/docs/stories/` (inline or with source files)
+- [ ] Design system package built and published with a new version
+
+**MCP registration:**
+- [ ] JSON metadata in `mcp/src/metadata/components/`
+- [ ] `packageVersion` set to the published design system version
+- [ ] `commonlyUsedWith` with companion components
+- [ ] (Optional) `sections` for complex components that need additional documentation (hooks, sub-components, etc.)
 - [ ] `npm run build` in `packages/mcp`
 
 ---
@@ -407,7 +287,7 @@ The registry auto-discovers everything:
 +-- packages/
 |   +-- design-system/                    <- Source of Truth
 |   |   +-- src/
-|   |   |   +-- components/               (32 .tsx files)
+|   |   |   +-- components/               (33 .tsx files)
 |   |   |   +-- tokens/tokens.json        (Design tokens)
 |   |   |   +-- styles/theme.css
 |   |   |   +-- lib/utils.ts
@@ -416,7 +296,7 @@ The registry auto-discovers everything:
 |   +-- mcp/                              <- Smart Documentation Layer
 |       +-- src/
 |       |   +-- index.ts                  (MCP server entry point)
-|       |   +-- registry.ts               (Reads from ../design-system/)
+|       |   +-- registry.ts               (Loads components, stories & metadata)
 |       |   +-- parsers/
 |       |   |   +-- storybook-parser.ts   (Parses .stories.tsx files)
 |       |   +-- tools/                    (MCP tools)
@@ -427,8 +307,8 @@ The registry auto-discovers everything:
     +-- showcase/                         (Next.js demo app)
     +-- docs/                             (Storybook)
         +-- stories/
-        |   +-- *.stories.tsx             (31 story files)
-        |   +-- sources/                  (59 source files + anatomy)
+        |   +-- *.stories.tsx             (32 story files)
+        |   +-- sources/                  (71 source files + anatomy)
 ```
 
 ### Data Flow
@@ -452,7 +332,7 @@ The registry auto-discovers everything:
            v
 +----------------------+
 | Claude Code          |
-| (AI Assistant)       |  <- Helps developers
+| (AI Assistant)       |  <- Helps developers and AI agents
 +----------+-----------+
            |
            | generates
@@ -469,12 +349,7 @@ The registry auto-discovers everything:
 
 ### For End Users (In Your Project)
 
-1. Install the design system package:
-```bash
-npm install @traxion-global/design-system
-```
-
-2. Configure the MCP server in your `.mcp.json`:
+1. Configure the MCP server in your project's `.mcp.json`:
 ```json
 {
   "mcpServers": {
@@ -487,7 +362,9 @@ npm install @traxion-global/design-system
 }
 ```
 
-3. Use with Claude Code to get AI-assisted component usage!
+2. Ask your AI assistant to install the design system. It will use the `install_design_system` tool to automatically configure `.npmrc`, install packages, set up CSS, and configure Tailwind in your project.
+
+3. Start building with AI-assisted component discovery, documentation, and code generation!
 
 ### For Development (In This Monorepo)
 
@@ -552,7 +429,7 @@ export function Button({ children, className, ...props }: ButtonProps) {
 
 - **navigation** — Accordion, Command, DropdownMenu, Pagination
 - **overlay** — AlertDialog, Dialog, HoverCard, Popover, Sheet, Tooltip
-- **data-display** — Avatar, Badge, InfoCard, SortableBoard, Table
+- **data-display** — Avatar, Badge, DataTable, InfoCard, SortableBoard, Table
 - **actions** — Button
 - **forms** — Calendar, Checkbox, FileDropZone, Input, Label, RadioGroup, Select, Switch, Textarea
 - **layout** — Card, Separator
@@ -561,6 +438,8 @@ export function Button({ children, className, ...props }: ButtonProps) {
 ---
 
 ## Design Philosophy
+
+This MCP server follows an **AI-first development philosophy**. Rather than relying solely on traditional documentation or manual browsing, the design system is built to be consumed primarily through AI agents. The MCP server is the primary interface for developers to discover, learn, and use components — making AI the first-class citizen in the development workflow.
 
 ### What MCP Should Do:
 - Help developers **use** components from the package

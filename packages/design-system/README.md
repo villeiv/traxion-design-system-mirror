@@ -8,7 +8,7 @@ Entry point pensado para utilidades que pueden importarse (por ejemplo, `cn`).
 
 ### Componentes React
 **Ruta:** `@traxion-global/design-system/react`  
-Conjunto de componentes UI implementados en React, diseñados según los lineamientos visuales de Traxion.
+Conjunto de hooks y componentes UI implementados en React, diseñados según los lineamientos visuales de Traxion.
 
 ### Tema global (CSS)
 **Ruta:** `@traxion-global/design-system/theme.css`  
@@ -50,34 +50,17 @@ Cambios funcionales o potencialmente incompatibles:
 
 #### Acceso al paquete privado (.npmrc)
 
-El Design System se distribuye mediante GitHub Packages. Configure su `.npmrc`:
+El Design System se distribuye mediante GitHub Packages y es un paquete privado, para instalarlo necesitas ser parte de la organización de Traxion en GitHub, generar un token de acceso en: https://github.com/settings/tokens y configurar un archivo `.npmrc` en el root de la aplicación de la siguiente manera:
 
     @traxion-global:registry=https://npm.pkg.github.com
     //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 
-#### Escenario A: Proyecto con React (Next.js o standalone)
+#### Instalación base del proyecto
 
-Requisitos:
-- React `^18` o `^19`
+- React `^18` o `^19` ya sea con NextJS, Vite, CRA o cualquier otro bundler
 - Tailwind CSS `^3.4`
 - `tailwindcss-animate`
-- Archivo de estilos global
 - `lucide-react`
-
-Notas:  
-El DS no depende directamente de PostCSS ni Autoprefixer.
-
-#### Escenario B: Proyecto sin React (solo tokens)
-
-- React no es obligatorio
-- Tailwind no es obligatorio
-- Basta con poder importar JSON y/o CSS
-
-Se consumen principalmente:
-- `tokens.json`
-- `theme.css`
-
----
 
 ### 2. Instalación del paquete
 
@@ -97,7 +80,7 @@ En `app/globals.css`:
     @tailwind components;
     @tailwind utilities;
 
-#### React standalone (Vite, CRA, otros bundlers)
+#### Vite, CRA, otros bundlers
 
 En `src/index.css`:
 
@@ -142,15 +125,16 @@ En `src/index.css`:
 
 ---
 
-### 6. Uso de tokens sin React (solo tokens)
+## Uso de tokens en proyectos sin React
 
-Consumo en JSON:
+El uso del design system por ahora está enfocado en React, sin embargo si tu proyecto usa otro framework o librería puedes utilizar los tokens y el theme.css de la siguiente manera:
+
+Tokens:
 
     import tokens from "@traxion-global/design-system/tokens.json";
-
     console.log(tokens.colors.primary);
 
-Import solo del tema:
+Tema:
 
     @import "@traxion-global/design-system/theme.css";
 

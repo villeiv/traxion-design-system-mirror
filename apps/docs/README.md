@@ -1,13 +1,13 @@
-# Storybook – Documentation Workspace
+# Storybook
 
-Este workspace contiene la instancia de Storybook utilizada para documentar y visualizar los componentes del Design System del monorepo. Su propósito es ofrecer un entorno aislado para desarrollar, revisar y documentar UI sin depender de aplicaciones de producción.
+Este workspace contiene la instancia de Storybook utilizada para documentar y visualizar los componentes del Design System. Su propósito es ofrecer un entorno aislado para desarrollar, revisar y documentar UI sin depender de aplicaciones de producción.
 
 ---
 
 ## Scripts
 
 ```bash
-npm run storybook      # Inicia Storybook en modo desarrollo
+npm run dev             # Inicia Storybook en modo desarrollo, se recomienda utilizar el script dev del root para habilitar el watcher de los componentes de la librería de componentes y así evitar tener que hacer un build manual cada vez que los componentes cambien.  
 npm run build-storybook # Genera la versión estática en /storybook-static
 npm run lint            # Ejecuta ESLint
 ```
@@ -19,7 +19,7 @@ npm run lint            # Ejecuta ESLint
 ```
 apps/docs/
  ├─ .storybook/        # Configuración de Storybook
- ├─ src/stories/       # Historias y documentación en MDX
+ ├─ stories/           # Historias y documentación
  ├─ tsconfig.json      # Configuración TypeScript integrada con el monorepo
  ├─ eslint.config.mjs  # Extiende la configuración ESLint del monorepo
  └─ package.json
@@ -36,6 +36,8 @@ Este workspace consume el paquete del Design System vía workspaces:
   "@traxion-global/design-system": "*"
 }
 ```
+
+El script `npm run dev` del root hace watch sobre el Design System y ejecuta el build automáticamente al detectar cambios. Sin esto, Storybook podría mostrar componentes desactualizados ya que consume el output del build, no los archivos fuente directamente.
 
 Los componentes pueden importarse desde las historias, por ejemplo:
 
@@ -65,5 +67,4 @@ La configuración (`eslint.config.mjs`) extiende la configuración interna del m
 
 ## Notas
 
-- Este workspace no es una aplicación de producción.
-- No utiliza Vite como aplicación; únicamente como builder interno de Storybook.
+- No se utiliza Vite como aplicación; únicamente como builder interno de Storybook.
