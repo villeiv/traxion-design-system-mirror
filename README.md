@@ -33,7 +33,6 @@ Los siguientes comandos se ejecutan desde el root del monorepo:
 
     npm install
     npm run dev           # Levanta las apps en modo desarrollo, en el caso del design system, hace un rebuild cuando los componets cambian, para que los cambios estén disponibles inmediatamente
-    npm run storybook     # Abre Storybook desde apps/docs
     npm run build         # Construye los packages y apps
 
 ## Design System
@@ -64,7 +63,7 @@ Storybook está en:
 
 Para ejecutarlo:
 
-    npm run storybook
+    npm run dev
 
 Esto abre la documentación del Design System, incluyendo ejemplos, playgrounds y especificaciones de componentes.
 
