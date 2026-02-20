@@ -82,15 +82,5 @@
     "aria": "Provide meaningful alt text on AvatarImage for screen readers. If the avatar is purely decorative, use alt=''.",
     "notes": "AvatarFallback content should provide equivalent meaning to the image (e.g., user initials)."
   },
-  "examples": [
-    {
-      "title": "Avatar with image and fallback",
-      "code": "<Avatar>\n  <AvatarImage src=\"https://example.com/avatar.jpg\" alt=\"User Name\" />\n  <AvatarFallback>UN</AvatarFallback>\n</Avatar>"
-    },
-    {
-      "title": "Avatar with delayed fallback",
-      "code": "<Avatar>\n  <AvatarImage src=\"https://example.com/avatar.jpg\" alt=\"Jane Doe\" />\n  <AvatarFallback delayMs={600}>JD</AvatarFallback>\n</Avatar>"
-    }
-  ],
   "commonlyUsedWith": []
 }

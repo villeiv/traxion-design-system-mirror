@@ -75,20 +75,6 @@
     "aria": "aria-checked reflects the current state ('true', 'false', or 'mixed' for indeterminate). Pair with a label element using htmlFor or wrap the checkbox in a label for screen reader support.",
     "notes": "The component uses the 'peer' class, enabling peer-based styling on sibling elements (e.g., peer-disabled:cursor-not-allowed on an adjacent label)."
   },
-  "examples": [
-    {
-      "title": "Basic checkbox with label",
-      "code": "<div className=\"flex items-center space-x-2\">\n  <Checkbox id=\"terms\" />\n  <label htmlFor=\"terms\" className=\"text-sm\">Accept terms and conditions</label>\n</div>"
-    },
-    {
-      "title": "Controlled checkbox",
-      "code": "<Checkbox checked={isChecked} onCheckedChange={setIsChecked} />"
-    },
-    {
-      "title": "Disabled checkbox",
-      "code": "<Checkbox disabled checked />"
-    }
-  ],
   "commonlyUsedWith": [
     "label"
   ]

@@ -323,20 +323,6 @@
     "aria": "aria-expanded on the trigger reflects open state. aria-checked on checkbox/radio items reflects selection. aria-disabled on disabled items. aria-controls on trigger references the content id.",
     "notes": "Follows the WAI-ARIA Menu Pattern. Focus is managed automatically by Radix. The menu closes on item selection by default (call event.preventDefault() in onSelect to keep it open)."
   },
-  "examples": [
-    {
-      "title": "Basic dropdown menu",
-      "code": "<DropdownMenu>\n  <DropdownMenuTrigger asChild>\n    <Button variant=\"outline\">Open Menu</Button>\n  </DropdownMenuTrigger>\n  <DropdownMenuContent>\n    <DropdownMenuLabel>My Account</DropdownMenuLabel>\n    <DropdownMenuSeparator />\n    <DropdownMenuItem>Profile</DropdownMenuItem>\n    <DropdownMenuItem>Billing</DropdownMenuItem>\n    <DropdownMenuItem>Settings</DropdownMenuItem>\n    <DropdownMenuSeparator />\n    <DropdownMenuItem>Log out</DropdownMenuItem>\n  </DropdownMenuContent>\n</DropdownMenu>"
-    },
-    {
-      "title": "Dropdown with checkbox items",
-      "code": "<DropdownMenu>\n  <DropdownMenuTrigger asChild>\n    <Button variant=\"outline\">View Options</Button>\n  </DropdownMenuTrigger>\n  <DropdownMenuContent>\n    <DropdownMenuLabel>Appearance</DropdownMenuLabel>\n    <DropdownMenuSeparator />\n    <DropdownMenuCheckboxItem checked={showStatusBar} onCheckedChange={setShowStatusBar}>\n      Status Bar\n    </DropdownMenuCheckboxItem>\n    <DropdownMenuCheckboxItem checked={showPanel} onCheckedChange={setShowPanel}>\n      Panel\n    </DropdownMenuCheckboxItem>\n  </DropdownMenuContent>\n</DropdownMenu>"
-    },
-    {
-      "title": "Dropdown with sub-menu and shortcuts",
-      "code": "<DropdownMenu>\n  <DropdownMenuTrigger asChild>\n    <Button variant=\"outline\">Actions</Button>\n  </DropdownMenuTrigger>\n  <DropdownMenuContent>\n    <DropdownMenuItem>\n      New Tab <DropdownMenuShortcut>Ctrl+T</DropdownMenuShortcut>\n    </DropdownMenuItem>\n    <DropdownMenuSub>\n      <DropdownMenuSubTrigger>More Tools</DropdownMenuSubTrigger>\n      <DropdownMenuPortal>\n        <DropdownMenuSubContent>\n          <DropdownMenuItem>Save Page As...</DropdownMenuItem>\n          <DropdownMenuItem>Developer Tools</DropdownMenuItem>\n        </DropdownMenuSubContent>\n      </DropdownMenuPortal>\n    </DropdownMenuSub>\n  </DropdownMenuContent>\n</DropdownMenu>"
-    }
-  ],
   "commonlyUsedWith": [
     "button"
   ]

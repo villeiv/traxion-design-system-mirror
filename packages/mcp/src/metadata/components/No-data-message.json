@@ -38,16 +38,6 @@
     "aria": "No explicit ARIA attributes. The content is conveyed through visible heading and paragraph text.",
     "notes": "The Info icon is purely decorative. The component centers its content vertically and horizontally with p-8 padding and rounded-md border radius."
   },
-  "examples": [
-    {
-      "title": "Basic empty state",
-      "code": "<NoDataMessage title=\"No results found\" message=\"Try adjusting your search or filters.\" />"
-    },
-    {
-      "title": "Empty table fallback",
-      "code": "{rows.length === 0 && <NoDataMessage title=\"No records\" message=\"There are no records to display.\" />}"
-    }
-  ],
   "commonlyUsedWith": [
     "table"
   ]

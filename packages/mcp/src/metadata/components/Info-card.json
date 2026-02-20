@@ -51,20 +51,6 @@
     "aria": "No explicit ARIA attributes. The title and value are conveyed through visible text content.",
     "notes": "On small screens the circular icon badge is hidden and a plain colored icon is shown instead for a compact layout."
   },
-  "examples": [
-    {
-      "title": "Basic info card",
-      "code": "<InfoCard title=\"Total Users\" value=\"1,234\" />"
-    },
-    {
-      "title": "With icon and color",
-      "code": "<InfoCard\n  title=\"Revenue\"\n  value=\"$56,789\"\n  icon={<DollarSign className=\"h-6 w-6\" />}\n  iconColor=\"green\"\n/>"
-    },
-    {
-      "title": "Error-themed card",
-      "code": "<InfoCard\n  title=\"Errors\"\n  value=\"12\"\n  icon={<AlertCircle className=\"h-6 w-6\" />}\n  iconColor=\"red\"\n/>"
-    }
-  ],
   "commonlyUsedWith": [
     "card"
   ]

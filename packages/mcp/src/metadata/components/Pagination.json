@@ -75,16 +75,6 @@
     "aria": "aria-label=\"pagination\" on the nav. PaginationLink uses aria-current=\"page\" when isActive is true. PaginationPrevious has aria-label=\"Go to previous page\". PaginationNext has aria-label=\"Go to next page\". PaginationEllipsis uses aria-hidden with a sr-only \"More pages\" text.",
     "notes": "Links are rendered as <a> elements styled with buttonVariants. The active page link uses the \"outline\" variant while inactive pages use \"ghost\"."
   },
-  "examples": [
-    {
-      "title": "Basic pagination",
-      "code": "<Pagination>\n  <PaginationContent>\n    <PaginationItem>\n      <PaginationPrevious href=\"#\" />\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationLink href=\"#\" isActive>1</PaginationLink>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationLink href=\"#\">2</PaginationLink>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationLink href=\"#\">3</PaginationLink>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationEllipsis />\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationNext href=\"#\" />\n    </PaginationItem>\n  </PaginationContent>\n</Pagination>"
-    },
-    {
-      "title": "Previous/Next with text labels",
-      "code": "<Pagination>\n  <PaginationContent>\n    <PaginationItem>\n      <PaginationPrevious href=\"#\">Previous</PaginationPrevious>\n    </PaginationItem>\n    <PaginationItem>\n      <PaginationNext href=\"#\">Next</PaginationNext>\n    </PaginationItem>\n  </PaginationContent>\n</Pagination>"
-    }
-  ],
   "commonlyUsedWith": [
     "button"
   ]

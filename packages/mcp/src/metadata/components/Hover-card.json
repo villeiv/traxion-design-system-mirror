@@ -57,15 +57,5 @@
     "aria": "Radix primitives handle aria attributes automatically for hover card semantics.",
     "notes": "The content panel includes animated transitions (fade and zoom) and supports directional slide-in based on the side placement."
   },
-  "examples": [
-    {
-      "title": "Basic hover card",
-      "code": "<HoverCard>\n  <HoverCardTrigger asChild>\n    <a href=\"#\">Hover me</a>\n  </HoverCardTrigger>\n  <HoverCardContent>\n    <p>Additional information displayed on hover.</p>\n  </HoverCardContent>\n</HoverCard>"
-    },
-    {
-      "title": "Custom alignment and offset",
-      "code": "<HoverCard>\n  <HoverCardTrigger>Trigger</HoverCardTrigger>\n  <HoverCardContent align=\"start\" sideOffset={8}>\n    <p>Start-aligned content with extra offset.</p>\n  </HoverCardContent>\n</HoverCard>"
-    }
-  ],
   "commonlyUsedWith": []
 }

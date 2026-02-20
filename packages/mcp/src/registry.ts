@@ -18,10 +18,23 @@ export interface ComponentExample {
   code: string;
 }
 
-export interface ComponentRecommendation {
-  type: 'do' | 'dont';
-  description: string;
-  code?: string;
+export interface ComponentRecommendations {
+  do: string[];
+  dont: string[];
+}
+
+export interface SectionBlock {
+  type: 'text' | 'code' | 'table' | 'list';
+  content?: string;
+  language?: string;
+  headers?: string[];
+  rows?: string[][];
+  items?: string[];
+}
+
+export interface MetadataSection {
+  title: string;
+  blocks: SectionBlock[];
 }
 
 export interface ComponentAccessibility {
@@ -34,6 +47,7 @@ export interface ComponentAccessibility {
 export interface ComponentMeta {
   name: string;
   slug: string;
+  packageVersion?: string;
   description: string;
   category: string;
   tags: string[];
@@ -41,9 +55,10 @@ export interface ComponentMeta {
   dependencies: string[];
   peerDependencies: string[];
   accessibility: ComponentAccessibility;
-  examples: ComponentExample[];
-  recommendations?: ComponentRecommendation[];
+  examples?: ComponentExample[];
+  recommendations?: ComponentRecommendations;
   commonlyUsedWith?: string[];
+  sections?: MetadataSection[];
 }
 
 export interface ComponentEntry {

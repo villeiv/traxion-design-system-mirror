@@ -210,16 +210,6 @@
     "aria": "aria-selected is set on the currently highlighted item. aria-disabled is set on disabled items. The input is associated with the listbox via aria-controls.",
     "notes": "When used as CommandDialog, focus is trapped inside the dialog. The cmdk library handles all search filtering and keyboard navigation automatically."
   },
-  "examples": [
-    {
-      "title": "Basic command palette",
-      "code": "<Command>\n  <CommandInput placeholder=\"Type a command or search...\" />\n  <CommandList>\n    <CommandEmpty>No results found.</CommandEmpty>\n    <CommandGroup heading=\"Suggestions\">\n      <CommandItem>Calendar</CommandItem>\n      <CommandItem>Search Emoji</CommandItem>\n      <CommandItem>Calculator</CommandItem>\n    </CommandGroup>\n    <CommandSeparator />\n    <CommandGroup heading=\"Settings\">\n      <CommandItem>Profile</CommandItem>\n      <CommandItem>Billing</CommandItem>\n      <CommandItem>Settings</CommandItem>\n    </CommandGroup>\n  </CommandList>\n</Command>"
-    },
-    {
-      "title": "Command in a dialog",
-      "code": "<CommandDialog open={open} onOpenChange={setOpen}>\n  <CommandInput placeholder=\"Search...\" />\n  <CommandList>\n    <CommandEmpty>No results.</CommandEmpty>\n    <CommandGroup heading=\"Actions\">\n      <CommandItem onSelect={() => handleSelect('new')}>New File</CommandItem>\n      <CommandItem onSelect={() => handleSelect('open')}>Open File</CommandItem>\n    </CommandGroup>\n  </CommandList>\n</CommandDialog>"
-    }
-  ],
   "commonlyUsedWith": [
     "dialog",
     "input"

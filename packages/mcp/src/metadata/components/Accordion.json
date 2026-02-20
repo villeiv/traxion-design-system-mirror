@@ -131,15 +131,5 @@
     "aria": "aria-expanded on triggers reflects open state. aria-controls on triggers references the content id. aria-labelledby on content references the trigger id.",
     "notes": "Radix handles all ARIA attributes automatically. The component follows the WAI-ARIA Accordion Pattern."
   },
-  "examples": [
-    {
-      "title": "Single collapsible accordion",
-      "code": "<Accordion type=\"single\" collapsible>\n  <AccordionItem value=\"item-1\">\n    <AccordionTrigger>Is it accessible?</AccordionTrigger>\n    <AccordionContent>Yes. It adheres to the WAI-ARIA design pattern.</AccordionContent>\n  </AccordionItem>\n  <AccordionItem value=\"item-2\">\n    <AccordionTrigger>Is it styled?</AccordionTrigger>\n    <AccordionContent>Yes. It comes with default styles matching the Traxion design system.</AccordionContent>\n  </AccordionItem>\n</Accordion>"
-    },
-    {
-      "title": "Multiple items open simultaneously",
-      "code": "<Accordion type=\"multiple\" defaultValue={[\"item-1\", \"item-2\"]}>\n  <AccordionItem value=\"item-1\">\n    <AccordionTrigger>Section One</AccordionTrigger>\n    <AccordionContent>Content for section one.</AccordionContent>\n  </AccordionItem>\n  <AccordionItem value=\"item-2\">\n    <AccordionTrigger>Section Two</AccordionTrigger>\n    <AccordionContent>Content for section two.</AccordionContent>\n  </AccordionItem>\n</Accordion>"
-    }
-  ],
   "commonlyUsedWith": []
 }

@@ -63,28 +63,6 @@
     "aria": "Supports all native button ARIA attributes. Use aria-label for icon-only buttons. The disabled attribute is natively handled.",
     "notes": "SVG children are automatically sized to 16x16 (size-4) and set to pointer-events-none via the [&_svg] selector."
   },
-  "examples": [
-    {
-      "title": "Default button",
-      "code": "<Button>Click me</Button>"
-    },
-    {
-      "title": "Destructive button",
-      "code": "<Button variant=\"destructive\">Delete</Button>"
-    },
-    {
-      "title": "Outline button with small size",
-      "code": "<Button variant=\"outline\" size=\"sm\">Cancel</Button>"
-    },
-    {
-      "title": "Ghost icon button",
-      "code": "<Button variant=\"ghost\" size=\"icon\" aria-label=\"Settings\">\n  <SettingsIcon />\n</Button>"
-    },
-    {
-      "title": "Button as a link (asChild)",
-      "code": "<Button asChild variant=\"link\">\n  <a href=\"/docs\">Read the docs</a>\n</Button>"
-    }
-  ],
   "commonlyUsedWith": [
     "card",
     "input",

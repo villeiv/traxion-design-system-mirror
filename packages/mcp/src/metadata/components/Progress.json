@@ -45,19 +45,5 @@
     "aria": "Radix Progress automatically sets aria-valuenow, aria-valuemin (0), and aria-valuemax (100). Custom value labels can be provided via getValueLabel prop.",
     "notes": "The root has a height of h-2, full width, rounded-full corners, and a bg-primary/20 background track. The indicator uses bg-primary with transition-all for smooth animation."
   },
-  "examples": [
-    {
-      "title": "Basic progress bar",
-      "code": "<Progress value={50} />"
-    },
-    {
-      "title": "Full progress",
-      "code": "<Progress value={100} />"
-    },
-    {
-      "title": "Dynamic progress with state",
-      "code": "const [progress, setProgress] = useState(0);\n\n<Progress value={progress} className=\"w-[60%]\" />"
-    }
-  ],
   "commonlyUsedWith": []
 }

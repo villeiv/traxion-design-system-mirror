@@ -166,12 +166,6 @@
     "aria": "aria-labelledby is automatically set to the AlertDialogTitle id. aria-describedby is automatically set to the AlertDialogDescription id.",
     "notes": "Unlike Dialog, AlertDialog does not close on overlay click. The user must explicitly choose an action or cancel. This follows the WAI-ARIA AlertDialog Pattern."
   },
-  "examples": [
-    {
-      "title": "Delete confirmation dialog",
-      "code": "<AlertDialog>\n  <AlertDialogTrigger asChild>\n    <Button variant=\"destructive\">Delete Account</Button>\n  </AlertDialogTrigger>\n  <AlertDialogContent>\n    <AlertDialogHeader>\n      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>\n      <AlertDialogDescription>\n        This action cannot be undone. This will permanently delete your account and remove your data from our servers.\n      </AlertDialogDescription>\n    </AlertDialogHeader>\n    <AlertDialogFooter>\n      <AlertDialogCancel>Cancel</AlertDialogCancel>\n      <AlertDialogAction>Continue</AlertDialogAction>\n    </AlertDialogFooter>\n  </AlertDialogContent>\n</AlertDialog>"
-    }
-  ],
   "commonlyUsedWith": [
     "button"
   ]

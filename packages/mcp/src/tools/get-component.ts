@@ -26,7 +26,11 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
       let response = `# ${entry.meta.name}\n\n`;
       response += `${entry.meta.description}\n\n`;
       response += `**Category:** ${entry.meta.category}\n`;
-      response += `**Tags:** ${entry.meta.tags.join(', ')}\n\n`;
+      response += `**Tags:** ${entry.meta.tags.join(', ')}\n`;
+      if (entry.meta.packageVersion) {
+        response += `**Package Version:** ${entry.meta.packageVersion}\n`;
+      }
+      response += '\n';
 
       // Installation & Import (NEW - emphasize npm package usage)
       response += `## Installation\n\n`;
@@ -62,6 +66,41 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
       }
       response += '\n';
 
+      // Sections (generic structured documentation blocks)
+      if (entry.meta.sections && entry.meta.sections.length > 0) {
+        for (const section of entry.meta.sections) {
+          response += `## ${section.title}\n\n`;
+          for (const block of section.blocks) {
+            switch (block.type) {
+              case 'text':
+                response += `${block.content}\n\n`;
+                break;
+              case 'code':
+                response += `\`\`\`${block.language || ''}\n${block.content}\n\`\`\`\n\n`;
+                break;
+              case 'table':
+                if (block.headers && block.rows) {
+                  response += `| ${block.headers.join(' | ')} |\n`;
+                  response += `|${block.headers.map(() => '---').join('|')}|\n`;
+                  for (const row of block.rows) {
+                    response += `| ${row.join(' | ')} |\n`;
+                  }
+                  response += '\n';
+                }
+                break;
+              case 'list':
+                if (block.items) {
+                  for (const item of block.items) {
+                    response += `- ${item}\n`;
+                  }
+                  response += '\n';
+                }
+                break;
+            }
+          }
+        }
+      }
+
       // Usage Examples — prefer stories with real source code over metadata examples
       const storyData = registry.getStories(slug);
       if (storyData && storyData.meta.stories.length > 0) {
@@ -84,24 +123,26 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
             response += `\`\`\`tsx\n${source}\n\`\`\`\n\n`;
           }
         }
-      } else {
-        // Fallback to metadata examples when no stories exist
-        response += `## Usage Examples\n\n`;
-        for (const example of entry.meta.examples) {
-          response += `### ${example.title}\n\n`;
-          response += `\`\`\`tsx\n${example.code}\n\`\`\`\n\n`;
-        }
       }
 
       // Usage Recommendations
-      if (entry.meta.recommendations && entry.meta.recommendations.length > 0) {
-        response += `## Best Practices\n\n`;
-        for (const rec of entry.meta.recommendations) {
-          const label = rec.type === 'do' ? '✅ DO' : "❌ DON'T";
-          response += `### ${label}\n\n`;
-          response += `${rec.description}\n\n`;
-          if (rec.code) {
-            response += `\`\`\`tsx\n${rec.code}\n\`\`\`\n\n`;
+      if (entry.meta.recommendations) {
+        const recs = entry.meta.recommendations;
+        if ((recs.do && recs.do.length > 0) || (recs.dont && recs.dont.length > 0)) {
+          response += `## Best Practices\n\n`;
+          if (recs.do && recs.do.length > 0) {
+            response += `### DO\n\n`;
+            for (const item of recs.do) {
+              response += `- ${item}\n`;
+            }
+            response += '\n';
+          }
+          if (recs.dont && recs.dont.length > 0) {
+            response += `### DON'T\n\n`;
+            for (const item of recs.dont) {
+              response += `- ${item}\n`;
+            }
+            response += '\n';
           }
         }
       }

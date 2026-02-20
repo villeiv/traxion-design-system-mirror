@@ -84,24 +84,6 @@
     "aria": "Native HTML textarea provides built-in accessibility. Use an associated <Label> with htmlFor for screen reader accessibility.",
     "notes": "The textarea has a minimum height of 60px. It uses text-base on mobile for iOS zoom prevention and text-sm on md+ breakpoints."
   },
-  "examples": [
-    {
-      "title": "Basic Textarea",
-      "code": "<Textarea placeholder=\"Type your message here.\" />"
-    },
-    {
-      "title": "Textarea with Label",
-      "code": "<div className=\"grid w-full gap-1.5\">\n  <Label htmlFor=\"message\">Your message</Label>\n  <Textarea placeholder=\"Type your message here.\" id=\"message\" />\n</div>"
-    },
-    {
-      "title": "Disabled Textarea",
-      "code": "<Textarea placeholder=\"This textarea is disabled.\" disabled />"
-    },
-    {
-      "title": "Controlled Textarea",
-      "code": "<Textarea\n  value={text}\n  onChange={(e) => setText(e.target.value)}\n  placeholder=\"Enter description...\"\n/>"
-    }
-  ],
   "recommendations": [
     {
       "type": "do",

@@ -116,16 +116,6 @@
     "aria": "Native HTML table semantics provide built-in accessibility. Row selection state is conveyed via data-[state=selected] attribute. Checkbox columns adjust layout automatically.",
     "notes": "The table is wrapped in a 'relative w-full overflow-auto' container for horizontal scrolling on small screens. Use TableCaption to provide a summary of the table content for screen readers."
   },
-  "examples": [
-    {
-      "title": "Basic Table",
-      "code": "<Table>\n  <TableCaption>A list of recent invoices.</TableCaption>\n  <TableHeader>\n    <TableRow>\n      <TableHead className=\"w-[100px]\">Invoice</TableHead>\n      <TableHead>Status</TableHead>\n      <TableHead>Method</TableHead>\n      <TableHead className=\"text-right\">Amount</TableHead>\n    </TableRow>\n  </TableHeader>\n  <TableBody>\n    <TableRow>\n      <TableCell className=\"font-medium\">INV001</TableCell>\n      <TableCell>Paid</TableCell>\n      <TableCell>Credit Card</TableCell>\n      <TableCell className=\"text-right\">$250.00</TableCell>\n    </TableRow>\n    <TableRow>\n      <TableCell className=\"font-medium\">INV002</TableCell>\n      <TableCell>Pending</TableCell>\n      <TableCell>PayPal</TableCell>\n      <TableCell className=\"text-right\">$150.00</TableCell>\n    </TableRow>\n  </TableBody>\n</Table>"
-    },
-    {
-      "title": "Table with Footer",
-      "code": "<Table>\n  <TableHeader>\n    <TableRow>\n      <TableHead>Item</TableHead>\n      <TableHead className=\"text-right\">Price</TableHead>\n    </TableRow>\n  </TableHeader>\n  <TableBody>\n    <TableRow>\n      <TableCell>Widget A</TableCell>\n      <TableCell className=\"text-right\">$10.00</TableCell>\n    </TableRow>\n  </TableBody>\n  <TableFooter>\n    <TableRow>\n      <TableCell>Total</TableCell>\n      <TableCell className=\"text-right\">$10.00</TableCell>\n    </TableRow>\n  </TableFooter>\n</Table>"
-    }
-  ],
   "commonlyUsedWith": [
     "badge",
     "card",

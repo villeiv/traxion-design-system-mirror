@@ -24,15 +24,5 @@
     "aria": "No explicit ARIA attributes. Consider wrapping with role=\"status\" and aria-label for screen reader announcements.",
     "notes": "Displays a spinning Loader2 icon (h-9 w-9) centered horizontally with py-6 vertical spacing. Uses text-primary for the spinner color."
   },
-  "examples": [
-    {
-      "title": "Basic usage",
-      "code": "<InlineLoader />"
-    },
-    {
-      "title": "Conditional inline loading",
-      "code": "{isLoading ? <InlineLoader /> : <DataTable data={rows} />}"
-    }
-  ],
   "commonlyUsedWith": []
 }

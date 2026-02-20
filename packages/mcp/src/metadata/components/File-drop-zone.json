@@ -44,19 +44,5 @@
     "aria": "aria-label is set to describe the upload action.",
     "notes": "The component uses a hidden file input triggered by click or keyboard. The outer div has role=\"button\" and tabIndex={0} for focusability."
   },
-  "examples": [
-    {
-      "title": "Basic usage",
-      "code": "<FileDropZone onFiles={(files) => console.log(files)} />"
-    },
-    {
-      "title": "Accept only images",
-      "code": "<FileDropZone onFiles={(files) => console.log(files)} accept=\"image/*\" />"
-    },
-    {
-      "title": "Single file only",
-      "code": "<FileDropZone onFiles={(files) => console.log(files)} multiple={false} accept=\".pdf\" />"
-    }
-  ],
   "commonlyUsedWith": []
 }

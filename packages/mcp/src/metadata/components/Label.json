@@ -45,16 +45,6 @@
     "aria": "Radix Label handles the htmlFor/id association automatically when used with Radix form primitives.",
     "notes": "When a peer input is disabled (peer-disabled), the label reduces opacity to 70% and shows a not-allowed cursor. Base style is text-sm font-medium leading-none."
   },
-  "examples": [
-    {
-      "title": "Basic label with input",
-      "code": "<div>\n  <Label htmlFor=\"name\">Full Name</Label>\n  <Input id=\"name\" type=\"text\" />\n</div>"
-    },
-    {
-      "title": "Label with disabled input",
-      "code": "<div>\n  <Label htmlFor=\"disabled-field\">Disabled Field</Label>\n  <Input id=\"disabled-field\" disabled />\n</div>"
-    }
-  ],
   "commonlyUsedWith": [
     "input",
     "checkbox",

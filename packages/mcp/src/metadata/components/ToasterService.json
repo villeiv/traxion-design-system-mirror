@@ -90,19 +90,5 @@
     "aria": "Sonner manages aria-live regions for toast announcements. Success/info toasts use polite announcements; error/warning toasts use assertive announcements.",
     "notes": "Mount the Toaster component once in your application root. Each toast type has a distinct icon for visual differentiation. The loading state uses a spinning Loader2 icon."
   },
-  "examples": [
-    {
-      "title": "Mount the Toaster in a Layout",
-      "code": "import { Toaster } from \"./ToasterService\";\n\nexport default function RootLayout({ children }) {\n  return (\n    <html>\n      <body>\n        {children}\n        <Toaster position=\"top-right\" />\n      </body>\n    </html>\n  );\n}"
-    },
-    {
-      "title": "Trigger Toast Notifications",
-      "code": "import { toast } from \"./ToasterService\";\n\nfunction handleSave() {\n  toast.success(\"Saved!\", \"Your changes have been saved.\");\n}\n\nfunction handleError() {\n  toast.error(\"Error\", \"Something went wrong. Please try again.\");\n}\n\nfunction handleInfo() {\n  toast.info(\"Heads up\", \"A new version is available.\");\n}\n\nfunction handleWarning() {\n  toast.warning(\"Warning\", \"This action cannot be undone.\");\n}"
-    },
-    {
-      "title": "Bottom-center Positioned Toaster",
-      "code": "<Toaster position=\"bottom-center\" closeButton={false} />"
-    }
-  ],
   "commonlyUsedWith": []
 }

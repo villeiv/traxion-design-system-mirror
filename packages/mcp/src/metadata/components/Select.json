@@ -227,15 +227,5 @@
     "aria": "Managed by Radix UI: aria-expanded on trigger, aria-selected on items, role=listbox on content.",
     "notes": "Placeholder text is styled with muted foreground color via data-[placeholder] attribute. Disabled items receive pointer-events-none and reduced opacity."
   },
-  "examples": [
-    {
-      "title": "Basic Select",
-      "code": "<Select>\n  <SelectTrigger className=\"w-[180px]\">\n    <SelectValue placeholder=\"Select a fruit\" />\n  </SelectTrigger>\n  <SelectContent>\n    <SelectItem value=\"apple\">Apple</SelectItem>\n    <SelectItem value=\"banana\">Banana</SelectItem>\n    <SelectItem value=\"orange\">Orange</SelectItem>\n  </SelectContent>\n</Select>"
-    },
-    {
-      "title": "Grouped Select with Labels",
-      "code": "<Select>\n  <SelectTrigger className=\"w-[240px]\">\n    <SelectValue placeholder=\"Select a food\" />\n  </SelectTrigger>\n  <SelectContent>\n    <SelectGroup>\n      <SelectLabel>Fruits</SelectLabel>\n      <SelectItem value=\"apple\">Apple</SelectItem>\n      <SelectItem value=\"banana\">Banana</SelectItem>\n    </SelectGroup>\n    <SelectSeparator />\n    <SelectGroup>\n      <SelectLabel>Vegetables</SelectLabel>\n      <SelectItem value=\"carrot\">Carrot</SelectItem>\n      <SelectItem value=\"celery\">Celery</SelectItem>\n    </SelectGroup>\n  </SelectContent>\n</Select>"
-    }
-  ],
   "commonlyUsedWith": []
 }

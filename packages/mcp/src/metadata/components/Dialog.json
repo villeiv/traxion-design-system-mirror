@@ -167,16 +167,6 @@
     "aria": "aria-labelledby is automatically set to the DialogTitle id. aria-describedby is automatically set to the DialogDescription id. The built-in close button has a sr-only 'Close' label.",
     "notes": "Unlike AlertDialog, Dialog closes when clicking on the overlay. The close button (X icon) is always rendered inside DialogContent. Follows the WAI-ARIA Dialog Pattern."
   },
-  "examples": [
-    {
-      "title": "Basic dialog with form",
-      "code": "<Dialog>\n  <DialogTrigger asChild>\n    <Button>Edit Profile</Button>\n  </DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Edit Profile</DialogTitle>\n      <DialogDescription>Make changes to your profile here. Click save when you're done.</DialogDescription>\n    </DialogHeader>\n    <div className=\"grid gap-4 py-4\">\n      <input placeholder=\"Name\" />\n      <input placeholder=\"Email\" />\n    </div>\n    <DialogFooter>\n      <Button type=\"submit\">Save changes</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>"
-    },
-    {
-      "title": "Controlled dialog",
-      "code": "<Dialog open={isOpen} onOpenChange={setIsOpen}>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Confirmation</DialogTitle>\n      <DialogDescription>Are you sure you want to proceed?</DialogDescription>\n    </DialogHeader>\n    <DialogFooter>\n      <Button variant=\"outline\" onClick={() => setIsOpen(false)}>Cancel</Button>\n      <Button onClick={handleConfirm}>Confirm</Button>\n    </DialogFooter>\n  </DialogContent>\n</Dialog>"
-    }
-  ],
   "commonlyUsedWith": [
     "button",
     "input"

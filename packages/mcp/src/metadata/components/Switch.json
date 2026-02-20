@@ -74,20 +74,6 @@
     "aria": "Automatically managed by Radix UI: role=switch, aria-checked reflecting the current state.",
     "notes": "Pair the Switch with a Label element for proper accessibility. The thumb has pointer-events-none and uses translate-x to animate between states."
   },
-  "examples": [
-    {
-      "title": "Basic Switch",
-      "code": "<div className=\"flex items-center space-x-2\">\n  <Switch id=\"airplane-mode\" />\n  <Label htmlFor=\"airplane-mode\">Airplane Mode</Label>\n</div>"
-    },
-    {
-      "title": "Controlled Switch",
-      "code": "<div className=\"flex items-center space-x-2\">\n  <Switch\n    checked={enabled}\n    onCheckedChange={setEnabled}\n    id=\"notifications\"\n  />\n  <Label htmlFor=\"notifications\">Enable notifications</Label>\n</div>"
-    },
-    {
-      "title": "Disabled Switch",
-      "code": "<div className=\"flex items-center space-x-2\">\n  <Switch disabled id=\"disabled-switch\" />\n  <Label htmlFor=\"disabled-switch\">Disabled</Label>\n</div>"
-    }
-  ],
   "commonlyUsedWith": [
     "label"
   ]

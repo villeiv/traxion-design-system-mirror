@@ -154,20 +154,6 @@
     "aria": "Managed by Radix UI: role=tooltip on content, aria-describedby on trigger linking to the tooltip content.",
     "notes": "TooltipProvider must wrap all Tooltip instances. Use asChild on TooltipTrigger when wrapping custom elements like buttons or icons. The content is portaled to avoid clipping."
   },
-  "examples": [
-    {
-      "title": "Basic Tooltip",
-      "code": "<TooltipProvider>\n  <Tooltip>\n    <TooltipTrigger asChild>\n      <Button variant=\"outline\">Hover me</Button>\n    </TooltipTrigger>\n    <TooltipContent>\n      <p>This is a tooltip</p>\n    </TooltipContent>\n  </Tooltip>\n</TooltipProvider>"
-    },
-    {
-      "title": "Tooltip with Side and Offset",
-      "code": "<TooltipProvider>\n  <Tooltip>\n    <TooltipTrigger asChild>\n      <Button variant=\"ghost\" size=\"icon\">\n        <Info className=\"h-4 w-4\" />\n      </Button>\n    </TooltipTrigger>\n    <TooltipContent side=\"right\" sideOffset={8}>\n      <p>More information here</p>\n    </TooltipContent>\n  </Tooltip>\n</TooltipProvider>"
-    },
-    {
-      "title": "Controlled Tooltip",
-      "code": "<TooltipProvider>\n  <Tooltip open={isOpen} onOpenChange={setIsOpen}>\n    <TooltipTrigger asChild>\n      <span>Controlled trigger</span>\n    </TooltipTrigger>\n    <TooltipContent>\n      <p>Controlled tooltip content</p>\n    </TooltipContent>\n  </Tooltip>\n</TooltipProvider>"
-    }
-  ],
   "commonlyUsedWith": [
     "button"
   ]

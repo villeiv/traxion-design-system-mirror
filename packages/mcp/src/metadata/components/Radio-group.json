@@ -119,16 +119,6 @@
     "aria": "Automatically managed by Radix UI: aria-checked on each item, role=radiogroup on the container.",
     "notes": "Pair each RadioGroupItem with a <Label> element using htmlFor for screen reader accessibility. Disabled items receive opacity-50 and cursor-not-allowed styling."
   },
-  "examples": [
-    {
-      "title": "Basic RadioGroup",
-      "code": "<RadioGroup defaultValue=\"option-1\">\n  <div className=\"flex items-center space-x-2\">\n    <RadioGroupItem value=\"option-1\" id=\"option-1\" />\n    <Label htmlFor=\"option-1\">Option 1</Label>\n  </div>\n  <div className=\"flex items-center space-x-2\">\n    <RadioGroupItem value=\"option-2\" id=\"option-2\" />\n    <Label htmlFor=\"option-2\">Option 2</Label>\n  </div>\n</RadioGroup>"
-    },
-    {
-      "title": "Controlled RadioGroup",
-      "code": "<RadioGroup value={selected} onValueChange={setSelected}>\n  <div className=\"flex items-center space-x-2\">\n    <RadioGroupItem value=\"apple\" id=\"apple\" />\n    <Label htmlFor=\"apple\">Apple</Label>\n  </div>\n  <div className=\"flex items-center space-x-2\">\n    <RadioGroupItem value=\"banana\" id=\"banana\" />\n    <Label htmlFor=\"banana\">Banana</Label>\n  </div>\n</RadioGroup>"
-    }
-  ],
   "commonlyUsedWith": [
     "label"
   ]

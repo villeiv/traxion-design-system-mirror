@@ -128,16 +128,6 @@
     "aria": "No built-in ARIA attributes. Use appropriate heading levels inside CardTitle for document outline (e.g., wrap in h2/h3).",
     "notes": "CardTitle renders as a div, not a heading element. If semantic heading hierarchy is needed, nest a heading element inside CardTitle."
   },
-  "examples": [
-    {
-      "title": "Basic card with header and content",
-      "code": "<Card>\n  <CardHeader>\n    <CardTitle>Card Title</CardTitle>\n    <CardDescription>Card description goes here.</CardDescription>\n  </CardHeader>\n  <CardContent>\n    <p>Main content of the card.</p>\n  </CardContent>\n</Card>"
-    },
-    {
-      "title": "Card with footer actions",
-      "code": "<Card>\n  <CardHeader>\n    <CardTitle>Notifications</CardTitle>\n    <CardDescription>You have 3 unread messages.</CardDescription>\n  </CardHeader>\n  <CardContent>\n    <p>Review your recent notifications.</p>\n  </CardContent>\n  <CardFooter>\n    <Button variant=\"outline\">Dismiss</Button>\n    <Button>View All</Button>\n  </CardFooter>\n</Card>"
-    }
-  ],
   "commonlyUsedWith": [
     "button",
     "input",

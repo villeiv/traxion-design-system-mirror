@@ -45,28 +45,6 @@
     "aria": "No built-in ARIA attributes. Add aria-label if the badge color alone conveys meaning that is not reflected in the text content.",
     "notes": "Color should not be the only means of conveying information. Ensure badge text provides sufficient context."
   },
-  "examples": [
-    {
-      "title": "Default badge",
-      "code": "<Badge>Default</Badge>"
-    },
-    {
-      "title": "Destructive badge",
-      "code": "<Badge variant=\"destructive\">Error</Badge>"
-    },
-    {
-      "title": "Traxion green status badge",
-      "code": "<Badge variant=\"green\">Active</Badge>"
-    },
-    {
-      "title": "Outline badge",
-      "code": "<Badge variant=\"outline\">Draft</Badge>"
-    },
-    {
-      "title": "Multiple color variants",
-      "code": "<div className=\"flex gap-2\">\n  <Badge variant=\"primary\">Primary</Badge>\n  <Badge variant=\"cyan\">Info</Badge>\n  <Badge variant=\"yellow\">Warning</Badge>\n  <Badge variant=\"red\">Critical</Badge>\n  <Badge variant=\"gray\">Inactive</Badge>\n</div>"
-    }
-  ],
   "recommendations": [
     {
       "type": "dont",

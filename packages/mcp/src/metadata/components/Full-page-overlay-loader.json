@@ -25,15 +25,5 @@
     "aria": "No explicit ARIA attributes. Consider adding role=\"status\" and aria-label for screen readers in production use.",
     "notes": "This component renders a fixed overlay at z-50 with a semi-transparent white background (bg-white/80) and a spinning Loader2 icon."
   },
-  "examples": [
-    {
-      "title": "Basic usage",
-      "code": "<FullPageOverlayLoader />"
-    },
-    {
-      "title": "Conditional rendering",
-      "code": "{isLoading && <FullPageOverlayLoader />}"
-    }
-  ],
   "commonlyUsedWith": []
 }
