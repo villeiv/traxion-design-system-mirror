@@ -118,6 +118,55 @@ Traxion tokens use full `hsl()` CSS color values. This ensures compatibility wit
 
 > **Tailwind v3 vs v4:** Tailwind v3 expected bare HSL values (e.g., `64 100% 44%`) and wrapped them in `hsl()` via the config. Tailwind v4 passes CSS variable values through as-is via `@theme inline`, so they must be valid CSS colors. The `hsl()`-wrapped format works correctly in both versions. Opacity modifiers like `/50` work in v4 via `color-mix()`.
 
+## Icons — lucide-react Only
+
+All icons across the entire application **must** come from `lucide-react`. This is a strict convention — no exceptions.
+
+**Never use:**
+- Unicode escape sequences (`\u2639`, `\u27A4`)
+- Emoji characters (check marks, crosses, arrows, etc.)
+- Icon fonts (FontAwesome, Material Icons)
+- Inline SVG strings
+- Any other icon library
+
+```tsx
+// Good: lucide-react icon
+import { Truck, MapPin, AlertCircle, Check } from "lucide-react";
+
+<div className="flex items-center gap-2">
+  <Truck className="h-4 w-4 text-muted-foreground" />
+  {carrier.name}
+</div>
+
+// Bad: emoji or unicode
+<span>🚛 {carrier.name}</span>
+<span>{"\u{1F69B}"} {carrier.name}</span>
+```
+
+### Icon Sizing Convention
+
+| Context             | Size class     | Use case                                  |
+|---------------------|----------------|-------------------------------------------|
+| Inline with text    | `h-4 w-4`     | Table cells, labels, badges               |
+| Buttons (icon-only) | `h-4 w-4`     | Icon buttons (`size="icon"`)              |
+| Section headers     | `h-5 w-5`     | Sidebar items, card headers               |
+| KPI / hero areas    | `h-6 w-6`     | Dashboard cards, empty states             |
+| Large illustrations | `h-8 w-8`+    | Onboarding, error pages                   |
+
+### Icon Color
+
+Use semantic Tailwind classes — never hardcoded hex or rgb:
+
+```tsx
+// Good
+<AlertCircle className="h-4 w-4 text-destructive" />
+<Check className="h-4 w-4 text-primary" />
+<Info className="h-4 w-4 text-muted-foreground" />
+
+// Bad
+<AlertCircle className="h-4 w-4 text-red-600" />
+```
+
 ## Import Patterns
 
 ### Component Imports

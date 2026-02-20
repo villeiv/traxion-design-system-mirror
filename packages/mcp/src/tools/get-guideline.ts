@@ -5,9 +5,9 @@ import { ComponentRegistry } from '../registry.js';
 export function registerGetGuideline(server: McpServer, registry: ComponentRegistry): void {
   server.tool(
     'get_guideline',
-    'Get design guidelines (accessibility, patterns, theming)',
+    'Get design guidelines (accessibility, patterns, z-index)',
     {
-      name: z.string().describe('Guideline name (e.g., "accessibility", "patterns", "theming")'),
+      name: z.string().describe('Guideline name (e.g., "accessibility", "patterns", "z-index")'),
     },
     async ({ name }) => {
       const guideline = registry.getGuideline(name);
