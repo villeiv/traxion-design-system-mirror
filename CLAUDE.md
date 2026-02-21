@@ -81,6 +81,11 @@ Components follow a consistent structure:
 
 Located in `packages/mcp/`. Provides tools: `list_components`, `search_components`, `get_component`, `get_component_stories`, `get_design_tokens`, `get_guideline`, `suggest_components`, `scaffold_feature`, `validate_usage`, `install_design_system`. Component metadata JSON files live in `packages/mcp/src/metadata/components/`. **Key principle**: MCP generates code that *imports from* the package, never copies source code.
 
+## Adding New Components
+
+Follow the methodology in `docs/creating-components.md`.
+Use `/new-component ComponentName` to walk through the process interactively.
+
 ## Key Conventions
 
 - Versioning: SemVer. While on `0.x.y`, MINOR bumps may contain breaking changes
