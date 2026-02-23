@@ -45,7 +45,7 @@ export function registerSuggestComponents(server: McpServer, registry: Component
         const useCasePatterns = [
           { keywords: ['form', 'input', 'submit', 'field', 'filters'], components: ['input', 'label', 'button', 'textarea', 'select', 'checkbox', 'radio-group', 'switch', 'calendar'] },
           { keywords: ['auth', 'login', 'signup', 'register', 'password'], components: ['input', 'label', 'button', 'card'] },
-          { keywords: ['table', 'data', 'grid', 'list'], components: ['table', 'badge', 'pagination', 'sortable-board'] },
+          { keywords: ['table', 'data', 'grid', 'list'], components: ['datatable', 'table', 'badge', 'pagination', 'sortable-board', 'calendar', 'popover'] },
           { keywords: ['dialog', 'modal', 'popup', 'overlay'], components: ['dialog', 'alert-dialog', 'sheet', 'popover'] },
           { keywords: ['nav', 'menu', 'navigation', 'sidebar'], components: ['accordion', 'dropdown-menu', 'command'] },
           { keywords: ['card', 'container', 'box', 'panel'], components: ['card', 'separator'] },

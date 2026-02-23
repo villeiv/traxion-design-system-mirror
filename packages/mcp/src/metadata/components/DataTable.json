@@ -148,6 +148,20 @@
           "content": "// Simple text column\n{ header: \"Name\", accessorKey: \"firstName\" }\n\n// Fixed-width column\n{ header: \"ID\", accessorKey: \"id\", size: 50 }\n\n// Sortable column (use DataTableColumnHeader)\n{\n  header: ({ column }) => (\n    <DataTableColumnHeader column={column} title=\"Email\" />\n  ),\n  accessorKey: \"email\",\n}\n\n// Custom cell renderer\n{\n  header: \"User\",\n  accessorKey: \"firstName\",\n  cell: ({ row }) => (\n    <div className=\"flex items-center gap-2\">\n      <User className=\"h-4 w-4 text-muted-foreground\" />\n      <span>{row.original.firstName} {row.original.lastName}</span>\n    </div>\n  ),\n}\n\n// Action buttons column (non-sortable, non-hideable)\n{\n  id: \"actions\",\n  header: () => <div className=\"text-right\">Actions</div>,\n  size: 100,\n  enableSorting: false,\n  enableHiding: false,\n  cell: ({ row }) => (\n    <div className=\"flex gap-2 justify-end\">\n      <Button size=\"icon\" variant=\"outline\" onClick={() => handleEdit(row.original.id)}>\n        <Pencil className=\"h-4 w-4\" />\n      </Button>\n    </div>\n  ),\n}\n\n// Row selection checkbox column\n{\n  id: \"select\",\n  header: ({ table }) => (\n    <Checkbox\n      checked={\n        table.getIsAllPageRowsSelected() ||\n        (table.getIsSomePageRowsSelected() && \"indeterminate\")\n      }\n      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}\n      aria-label=\"Select all\"\n    />\n  ),\n  cell: ({ row }) => (\n    <Checkbox\n      checked={row.getIsSelected()}\n      onCheckedChange={(value) => row.toggleSelected(!!value)}\n      aria-label=\"Select row\"\n    />\n  ),\n  enableSorting: false,\n  enableHiding: false,\n  size: 50,\n}\n\n// Column with visibility toggle (set id for display name in menu)\n{ id: \"Email\", header: \"Email\", accessorKey: \"email\", enableHiding: true }\n\n// Nested object accessor\n{\n  id: \"Company\",\n  accessorKey: \"company.name\",\n  header: ({ column }) => (\n    <DataTableColumnHeader column={column} title=\"Company\" />\n  ),\n}\n\n// Multi-line cell for related data\n{\n  id: \"Location\",\n  accessorKey: \"address.city\",\n  cell: ({ row }) => (\n    <div className=\"flex flex-col\">\n      <span className=\"font-medium\">{row.original.address.city}</span>\n      <span className=\"text-xs text-muted-foreground\">\n        {row.original.address.state}, {row.original.address.country}\n      </span>\n    </div>\n  ),\n}"
         }
       ]
+    },
+    {
+      "title": "Date Filter Pattern",
+      "blocks": [
+        {
+          "type": "text",
+          "content": "Use `Calendar` (from `@traxion-global/design-system/react`) inside a `Popover` for date filters in `DataTableToolbar`. **Never use `<input type=\"date\">`** — it bypasses the design system's styling, locale support, and accessibility features."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "import {\n  Calendar, Popover, PopoverContent, PopoverTrigger, Button,\n} from \"@traxion-global/design-system/react\";\nimport { CalendarIcon } from \"lucide-react\";\nimport { useState } from \"react\";\nimport type { DateRange } from \"react-day-picker\";\n\n// State inside the component\nconst [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);\nconst [calendarOpen, setCalendarOpen] = useState(false);\n\nconst formatDate = (date: Date) =>\n  date.toLocaleDateString(\"es-ES\", { day: \"2-digit\", month: \"2-digit\", year: \"numeric\" });\n\n// Inside DataTableToolbar — never use <input type=\"date\">\n<Popover open={calendarOpen} onOpenChange={setCalendarOpen}>\n  <PopoverTrigger asChild>\n    <Button variant=\"outline\" className=\"h-8 px-2 lg:px-3\">\n      <CalendarIcon className=\"mr-2 h-4 w-4\" />\n      {dateRange?.from\n        ? dateRange.to\n          ? `${formatDate(dateRange.from)} \u2013 ${formatDate(dateRange.to)}`\n          : formatDate(dateRange.from)\n        : \"Fecha\"}\n    </Button>\n  </PopoverTrigger>\n  <PopoverContent className=\"w-auto p-0\" align=\"start\">\n    <Calendar\n      mode=\"range\"\n      selected={dateRange}\n      onSelect={(range) => {\n        setDateRange(range);\n        tableState.setColumnFilters((prev) => {\n          const without = prev.filter((f) => f.id !== \"myDateColumn\");\n          return range?.from ? [...without, { id: \"myDateColumn\", value: range }] : without;\n        });\n        if (range?.from && range?.to) setCalendarOpen(false);\n      }}\n      localeCode=\"es\"\n    />\n  </PopoverContent>\n</Popover>"
+        }
+      ]
     }
   ],
   "props": [
@@ -310,7 +324,8 @@
       "Use the cell render function with row.original to access the full row data object for custom cell content",
       "Use mixed-content cells (multiple lines in one cell) for related data that doesn't justify its own column",
       "Use icons from lucide-react only — never emoji, unicode, or other icon libraries",
-      "Place DataTableViewOptions inside DataTableToolbar for consistent layout"
+      "Place DataTableViewOptions inside DataTableToolbar for consistent layout",
+      "Use Calendar inside a Popover for date filters in DataTableToolbar — never use <input type=\"date\"> (native browser picker)."
     ],
     "dont": [
       "Don't use DataTable for simple static tables — use the Table component instead",
@@ -338,10 +353,12 @@
   "commonlyUsedWith": [
     "badge",
     "button",
+    "calendar",
     "checkbox",
     "dropdown-menu",
     "input",
     "no-data-message",
+    "popover",
     "select"
   ]
 }
