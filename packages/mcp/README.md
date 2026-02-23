@@ -168,6 +168,12 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 | **`scaffold_feature`** | `description: string`, `components?: string[]` | Generates starter code with imports, components, and TODOs |
 | **`validate_usage`** | `code: string` | Validates correct imports from `@traxion-global/design-system/react`, no source copying, no component redefinition |
 
+### Utility Tools
+
+| Tool | Parameters | Purpose |
+|------|-----------|---------|
+| **`version`** | _(none)_ | Returns the MCP server version, the design system package version, and registry stats (component count, story sets). Use this to confirm you are running the expected build. |
+
 ---
 
 ## How to Register a New Component
@@ -247,7 +253,19 @@ File: `packages/mcp/src/metadata/components/MyComponent.json`
 - `commonlyUsedWith` — the AI will see links to companion components and suggest them together
 - `sections` — generic documentation blocks for complex components that need additional documentation beyond props and examples (e.g., hook APIs, sub-component guides, column definition patterns). Most simple components don't need this field. See `DataTable.json` for a full example
 
-### Step 2: Build and verify
+### Step 2: Bump the MCP version (if applicable)
+
+When making significant changes to the MCP (new tools, changed behavior, updated metadata), bump the version in **three places** in sync:
+
+| File | Field |
+|------|-------|
+| `packages/mcp/package.json` | `"version"` |
+| `packages/mcp/src/index.ts` | `version:` inside `new McpServer({...})` |
+| `packages/mcp/src/tools/version.ts` | `MCP_VERSION` constant |
+
+This ensures the `version()` tool always reflects the running build and consumers can verify they are on the expected version.
+
+### Step 3: Build and verify
 
 ```bash
 cd packages/mcp && npm run build
@@ -259,6 +277,7 @@ The registry auto-discovers everything:
 - `.stories.tsx` in `apps/docs/stories/` -> parsed by `StorybookParser`
 
 **Verification:**
+- `version()` -> confirm component count increased by 1
 - `get_component("my-component")` -> should show stories inline with real code
 - `suggest_components("my use case")` -> should appear if tags/keywords match
 - `get_component_stories("my-component")` -> should list all stories with source
@@ -276,6 +295,7 @@ The registry auto-discovers everything:
 - [ ] `packageVersion` set to the published design system version
 - [ ] `commonlyUsedWith` with companion components
 - [ ] (Optional) `sections` for complex components that need additional documentation (hooks, sub-components, etc.)
+- [ ] Version bumped in `package.json`, `src/index.ts`, and `src/tools/version.ts`
 - [ ] `npm run build` in `packages/mcp`
 
 ---

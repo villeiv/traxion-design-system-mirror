@@ -79,7 +79,7 @@ Components follow a consistent structure:
 
 ### MCP Server
 
-Located in `packages/mcp/`. Provides tools: `list_components`, `search_components`, `get_component`, `get_component_stories`, `get_design_tokens`, `get_guideline`, `suggest_components`, `scaffold_feature`, `validate_usage`, `install_design_system`. Component metadata JSON files live in `packages/mcp/src/metadata/components/`. **Key principle**: MCP generates code that *imports from* the package, never copies source code.
+Located in `packages/mcp/`. Provides 11 tools: `list_components`, `search_components`, `get_component`, `get_component_stories`, `get_design_tokens`, `get_guideline`, `suggest_components`, `scaffold_feature`, `validate_usage`, `install_design_system`, `version`. Component metadata JSON files live in `packages/mcp/src/metadata/components/`. **Key principle**: MCP generates code that *imports from* the package, never copies source code.
 
 ## Adding New Components
 
@@ -89,6 +89,7 @@ Use `/new-component ComponentName` to walk through the process interactively.
 ## Key Conventions
 
 - Versioning: SemVer. While on `0.x.y`, MINOR bumps may contain breaking changes
+- MCP versioning: when making significant MCP changes, bump the version in **three places** in sync: `packages/mcp/package.json` → `"version"`, `packages/mcp/src/index.ts` → `version:` in McpServer config, and `packages/mcp/src/tools/version.ts` → `MCP_VERSION` constant. This ensures `version()` always reflects the running build.
 - ESLint 9 flat config with `--max-warnings 0` on design-system and showcase
 - TypeScript strict mode. Path alias `@/*` → `src/*` in design-system
 - Peer dependencies: React 18/19, lucide-react for icons
