@@ -5,7 +5,7 @@ import { ComponentRegistry } from '../registry.js';
 export function registerGetComponent(server: McpServer, registry: ComponentRegistry): void {
   server.tool(
     'get_component',
-    'Get full details for a Traxion design system component including import guide, props, examples, and accessibility guidelines.',
+    'Get full details for a Traxion design system component including import guide, props, examples, and accessibility guidelines. Returns one representative story inline; use get_component_stories(slug, storyName) to retrieve additional story source code.',
     {
       slug: z.string().describe('Component slug (e.g., "button", "input", "card", "dialog")'),
       include_source: z.boolean().optional().describe('Whether to include the full TSX source code (default: false)'),
@@ -112,16 +112,31 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
           response += `\`\`\`tsx\n${storyData.meta.anatomy}\n\`\`\`\n\n`;
         }
 
-        for (const story of storyData.meta.stories) {
-          response += `### ${story.name}\n\n`;
-          if (story.description) {
-            response += `${story.description}\n\n`;
+        // Render first story inline
+        const firstStory = storyData.meta.stories[0];
+        if (firstStory) {
+          response += `### ${firstStory.name}\n\n`;
+          if (firstStory.description) {
+            response += `${firstStory.description}\n\n`;
           }
+          const firstSource = storyData.sources.get(firstStory.sourceFile);
+          if (firstSource) {
+            response += `\`\`\`tsx\n${firstSource}\n\`\`\`\n\n`;
+          }
+        }
 
-          const source = storyData.sources.get(story.sourceFile);
-          if (source) {
-            response += `\`\`\`tsx\n${source}\n\`\`\`\n\n`;
+        // Summarize remaining stories
+        const remainingStories = storyData.meta.stories.slice(1);
+        if (remainingStories.length > 0) {
+          response += `### More Examples\n\n`;
+          for (const story of remainingStories) {
+            response += `- **${story.name}**`;
+            if (story.description) {
+              response += ` — ${story.description}`;
+            }
+            response += '\n';
           }
+          response += `\n> Use \`get_component_stories("${slug}", "StoryName")\` to get the full source for any example above.\n\n`;
         }
       }
 
