@@ -628,6 +628,26 @@ The slug is the kebab-case version of the component name, used as the lookup key
 - `AlertDialog` → `alert-dialog`
 - `NoDataMessage` → `no-data-message`
 
+### 6.7 MCP Version Bump
+
+**Every time the MCP registry changes** (new component metadata, updated metadata, new tools, changed tool behaviour) you must bump the MCP version in **three places in sync**:
+
+| File | Field |
+|------|-------|
+| `packages/mcp/package.json` | `"version"` |
+| `packages/mcp/src/index.ts` | `version:` inside `new McpServer({…})` |
+| `packages/mcp/src/tools/version.ts` | `MCP_VERSION` constant |
+
+**When to bump:**
+- New component metadata JSON added → **MINOR** bump
+- Existing metadata corrected or extended → **PATCH** bump
+- New MCP tool added or tool signature changed → **MINOR** bump
+- MCP-only bug fix → **PATCH** bump
+
+**Relationship to the design-system version:**
+- An MCP bump is almost always needed when the design-system adds components (new metadata = new registry state).
+- Never skip the MCP bump when you add or modify metadata; the `version()` tool is the only signal consumers have that the registry is up to date.
+
 ---
 
 ## Phase 7: Build, Verify & Publish
@@ -665,7 +685,15 @@ Check localhost:6006:
 
 ### 7.4 Publish
 
-Follow the existing CI/CD or manual process to publish a new version of `@traxion-global/design-system` to GitHub Packages.
+1. Publish the design-system package to GitHub Packages:
+   ```bash
+   npm publish --workspace=@traxion-global/design-system
+   ```
+2. If MCP metadata or tools changed (Phase 6.7), rebuild MCP before committing:
+   ```bash
+   npm run build --workspace=@traxion-global/mcp
+   ```
+   MCP is not published to a registry for now — it runs directly from source. The rebuild ensures the committed `dist/` is in sync with the version bump.
 
 ---
 

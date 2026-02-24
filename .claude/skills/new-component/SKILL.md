@@ -53,7 +53,7 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 - Place logically near related components
 - Verify with `npm run dev --workspace=showcase`
 
-### Phase 5: Version Bump
+### Phase 5: Package Version Bump
 - Determine version: PATCH for additions, MINOR for breaking changes
 - Bump `packages/design-system/package.json`
 - Update `packages/design-system/CHANGELOG.md` with new entry (Spanish)
@@ -64,12 +64,17 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 - Add recommended fields: commonlyUsedWith, recommendations (do/dont)
 - For complex components: add sections with documentation blocks
 - Use the Badge.json and DataTable.json examples in the codebase as references
+- **Bump the MCP version in three places in sync** (adding metadata = MINOR bump):
+  - `packages/mcp/package.json` → `"version"`
+  - `packages/mcp/src/index.ts` → `version:` inside `new McpServer({…})`
+  - `packages/mcp/src/tools/version.ts` → `MCP_VERSION` constant
 
 ### Phase 7: Build, Verify & Publish
 - Run full build: `npm run build`
 - Verify MCP: test `get_component("slug")` with MCP dev server
 - Verify Storybook renders correctly
-- Publish (following existing process)
+- Publish design-system: `npm publish --workspace=@traxion-global/design-system`
+- Rebuild MCP after the version bump: `npm run build --workspace=@traxion-global/mcp`
 
 ### Phase 8: Documentation Updates
 - Update `packages/mcp/README.md` component and story counts
@@ -92,7 +97,8 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 ## Important Reminders
 
 - **One phase at a time** — never start the next phase until the user explicitly confirms the current one is good
-- Adding new components or features = **MINOR** version bump (`0.X+1.0`). Bug fixes = **PATCH** (`0.x.Y+1`)
+- Design-system versioning: new components/features = **MINOR** (`0.X+1.0`); bug fixes = **PATCH** (`0.x.Y+1`)
+- MCP versioning: bump whenever metadata or tools change. Adding components almost always requires an MCP bump.
 - Reference real examples from the codebase (listed at the bottom of the methodology doc) when building each artifact
 - Stories and MCP metadata are teaching material for AI agents — quality matters
 - All descriptions in stories should be in Spanish
