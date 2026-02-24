@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { DatePicker, Label } from "@traxion-global/design-system/react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { DatePicker, Label, toast } from "@traxion-global/design-system/react";
 
 export default function DatePickerWithDropdown() {
     const [date, setDate] = useState<Date | undefined>();
@@ -9,7 +11,10 @@ export default function DatePickerWithDropdown() {
             <Label>Fecha de nacimiento</Label>
             <DatePicker
                 value={date}
-                onChange={setDate}
+                onChange={(d) => {
+                    setDate(d);
+                    if (d) toast.success(`Fecha: ${format(d, "PPP", { locale: es })}`);
+                }}
                 captionLayout="dropdown"
                 placeholder="Selecciona tu fecha de nacimiento"
             />

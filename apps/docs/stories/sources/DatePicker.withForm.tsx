@@ -14,6 +14,7 @@ import {
     CardFooter,
     Button,
     Input,
+    toast,
 } from "@traxion-global/design-system/react";
 
 export default function DatePickerWithForm() {
@@ -79,7 +80,11 @@ export default function DatePickerWithForm() {
             </CardContent>
             <CardFooter className="justify-end gap-2">
                 <Button variant="outline">Cancelar</Button>
-                <Button>Guardar</Button>
+                <Button
+                    onClick={() => toast.success("Entrega programada correctamente")}
+                >
+                    Guardar
+                </Button>
             </CardFooter>
         </Card>
     );

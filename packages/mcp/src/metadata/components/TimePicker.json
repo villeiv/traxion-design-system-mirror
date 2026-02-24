@@ -1,0 +1,76 @@
+{
+  "name": "TimePicker",
+  "packageVersion": "0.5.0",
+  "slug": "time-picker",
+  "description": "A styled native <input type=\"time\"> that integrates with the Traxion Design System. Uses the browser's built-in time picker controls (keyboard increment/decrement, scroll wheel, AM/PM per system locale). Step is fixed at 60 seconds (1-minute precision, no seconds). Extends all standard HTML input attributes except type. For combined date and time selection in a single popover, use DateTimePicker instead.",
+  "category": "forms",
+  "tags": [
+    "time",
+    "time-picker",
+    "input",
+    "form",
+    "clock",
+    "hour",
+    "minute"
+  ],
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "default": "undefined",
+      "description": "Controlled time value in HH:mm format (24-hour). Passed directly to the native input."
+    },
+    {
+      "name": "onChange",
+      "type": "React.ChangeEventHandler<HTMLInputElement>",
+      "default": "undefined",
+      "description": "Standard input onChange handler. Access the selected time via e.target.value (HH:mm string)."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the input. Shows reduced opacity and a not-allowed cursor."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged with the base input styles via cn()."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "default": "undefined",
+      "description": "HTML id attribute. Use to associate the input with a Label via htmlFor."
+    }
+  ],
+  "dependencies": [],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
+  "accessibility": {
+    "role": "Renders as a native <input type=\"time\"> element. The browser provides the accessible name via aria-label or an associated <label> element.",
+    "keyboard": "Tab to focus. Arrow Up/Down increment or decrement hours/minutes. The browser handles all native time input keyboard interactions including AM/PM toggling.",
+    "aria": "Associate with a Label using htmlFor/id for a proper accessible name. The native input is recognized by screen readers as a time input.",
+    "notes": "The native browser time picker UI varies between operating systems and browsers. The webkit calendar picker indicator is hidden via CSS to keep a consistent appearance."
+  },
+  "commonlyUsedWith": [
+    "label",
+    "form",
+    "card",
+    "date-picker"
+  ],
+  "recommendations": {
+    "do": [
+      "Always pair with a Label using htmlFor/id: <Label htmlFor=\"hora\">Hora</Label><TimePicker id=\"hora\" />",
+      "Use DateTimePicker when the user needs to select both a date and a time in the same interaction.",
+      "Control width from the parent container — the input is w-full by default."
+    ],
+    "dont": [
+      "Do not use TimePicker when date selection is also needed — use DateTimePicker instead.",
+      "Do not try to display seconds — the step is fixed at 60s (1 minute precision)."
+    ]
+  }
+}

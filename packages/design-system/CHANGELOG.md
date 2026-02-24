@@ -1,5 +1,15 @@
 # Changelog
 
+### [0.5.0] - 2026-02-24
+### Added
+- Módulo **DatePicker** con tres componentes de selección de fechas:
+  - `DatePicker` — selector de fecha única con soporte controlado/no controlado (`value`/`defaultValue`).
+  - `DateRangePicker` — selector de rango con estado pendiente; la selección se confirma con **Aplicar**.
+  - `DateTimePicker` — combina calendario y selector de hora en un único popover, confirmado con **Aplicar**.
+- Componente **TimePicker** — `<input type="time">` estilizado con controles nativos del navegador, paso de 1 minuto, sin segundos.
+- Tipo auxiliar `DateRange` re-exportado desde `react-day-picker` para evitar dependencia directa del consumidor.
+- Soporte de localización (`localeCode: "es" | "en"`), formato personalizable (`dateFormat`), restricción de fechas (`fromDate`/`toDate`) y navegación por desplegables (`captionLayout`).
+
 ### [0.3.0] - 2025-11-29
 ### Changed
 - **BREAKING CHANGE**: Los componentes React ahora se importan desde  

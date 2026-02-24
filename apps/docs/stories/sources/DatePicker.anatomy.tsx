@@ -1,7 +1,7 @@
 export const DatePickerAnatomy = `
 ### Componentes disponibles
 
-Este módulo exporta cuatro componentes de selección de fechas y horas:
+Este módulo exporta tres componentes de selección de fechas:
 
 \`\`\`jsx
 // Selector de fecha única
@@ -9,9 +9,6 @@ Este módulo exporta cuatro componentes de selección de fechas y horas:
 
 // Selector de rango de fechas
 <DateRangePicker value={range} onChange={setRange} />
-
-// Selector de hora (input nativo del navegador)
-<TimePicker value="14:30" onChange={handleChange} />
 
 // Selector combinado de fecha y hora
 <DateTimePicker value={datetime} onChange={setDatetime} />

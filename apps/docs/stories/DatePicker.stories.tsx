@@ -1,6 +1,9 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { DatePicker } from "@traxion-global/design-system/react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { DatePicker, toast } from "@traxion-global/design-system/react";
+import ToasterDecorator from "./decorators/ToasterDecorator";
 
 import { DatePickerAnatomy } from "./sources/DatePicker.anatomy";
 import DatePickerUncontrolled from "./sources/DatePicker.uncontrolled";
@@ -13,8 +16,6 @@ import DatePickerWithDateRestrictions from "./sources/DatePicker.withDateRestric
 import DatePickerWithDateRestrictionsCode from "./sources/DatePicker.withDateRestrictions?raw";
 import DatePickerRangePicker from "./sources/DatePicker.rangePicker";
 import DatePickerRangePickerCode from "./sources/DatePicker.rangePicker?raw";
-import DatePickerTimePicker from "./sources/DatePicker.timePicker";
-import DatePickerTimePickerCode from "./sources/DatePicker.timePicker?raw";
 import DatePickerDateTimePicker from "./sources/DatePicker.dateTimePicker";
 import DatePickerDateTimePickerCode from "./sources/DatePicker.dateTimePicker?raw";
 import DatePickerWithForm from "./sources/DatePicker.withForm";
@@ -31,14 +32,13 @@ const meta = {
         docs: {
             description: {
                 component: `
-El módulo **DatePicker** proporciona cuatro componentes de selección de fechas y horas para formularios y filtros.
+El módulo **DatePicker** proporciona tres componentes de selección de fechas para formularios y filtros.
 
 ### Importación
 \`\`\`tsx
 import {
     DatePicker,
     DateRangePicker,
-    TimePicker,
     DateTimePicker,
 } from "@traxion-global/design-system/react";
 
@@ -87,7 +87,7 @@ ${DatePickerAnatomy}
         className: {
             control: "text",
             description:
-                "Clases CSS adicionales aplicadas al botón disparador.",
+                "Clases CSS adicionales aplicadas al contenedor externo.",
         },
     },
 } satisfies Meta<typeof DatePicker>;
@@ -100,6 +100,7 @@ type Story = StoryObj<typeof meta>;
 export const Demo: Story = {
     name: "Área de pruebas",
     tags: ["!autodocs"],
+    decorators: [ToasterDecorator],
     parameters: {
         controls: { disable: false },
         actions: { disable: false },
@@ -115,7 +116,10 @@ export const Demo: Story = {
                 fromDate={fromDate}
                 toDate={toDate}
                 value={date}
-                onChange={setDate}
+                onChange={(d) => {
+                    setDate(d);
+                    if (d) toast.success(`Fecha: ${format(d, "PPP", { locale: es })}`);
+                }}
             />
         );
     },
@@ -125,6 +129,7 @@ export const Demo: Story = {
 
 export const Uncontrolled: Story = {
     name: "Implementación no controlada",
+    decorators: [ToasterDecorator],
     render: () => <DatePickerUncontrolled />,
     parameters: {
         docs: {
@@ -138,6 +143,7 @@ export const Uncontrolled: Story = {
 
 export const Controlled: Story = {
     name: "Implementación controlada",
+    decorators: [ToasterDecorator],
     render: () => <DatePickerControlled />,
     parameters: {
         docs: {
@@ -151,6 +157,7 @@ export const Controlled: Story = {
 
 export const WithDropdown: Story = {
     name: "Con navegación por desplegables",
+    decorators: [ToasterDecorator],
     render: () => <DatePickerWithDropdown />,
     parameters: {
         docs: {
@@ -164,6 +171,7 @@ export const WithDropdown: Story = {
 
 export const WithDateRestrictions: Story = {
     name: "Con restricción de fechas",
+    decorators: [ToasterDecorator],
     render: () => <DatePickerWithDateRestrictions />,
     parameters: {
         docs: {
@@ -179,6 +187,7 @@ export const WithDateRestrictions: Story = {
 
 export const RangePicker: Story = {
     name: "Selector de rango de fechas",
+    decorators: [ToasterDecorator],
     render: () => <DatePickerRangePicker />,
     parameters: {
         docs: {
@@ -190,30 +199,16 @@ export const RangePicker: Story = {
     },
 };
 
-// ─── TimePicker ───────────────────────────────────────────────────────────────
-
-export const TimePickerStory: Story = {
-    name: "Selector de hora",
-    render: () => <DatePickerTimePicker />,
-    parameters: {
-        docs: {
-            description: {
-                story: "El componente `TimePicker` es un `<input type=\"time\">` estilizado con el sistema de diseño. Utiliza los controles nativos del navegador (teclado, rueda del ratón, AM/PM según el sistema). Paso de 1 minuto, sin segundos.",
-            },
-            source: { code: DatePickerTimePickerCode },
-        },
-    },
-};
-
 // ─── DateTimePicker ───────────────────────────────────────────────────────────
 
 export const DateTimePickerStory: Story = {
     name: "Selector de fecha y hora",
+    decorators: [ToasterDecorator],
     render: () => <DatePickerDateTimePicker />,
     parameters: {
         docs: {
             description: {
-                story: "El componente `DateTimePicker` combina el calendario y el selector de hora en un único popover. Selecciona el día en el calendario, ajusta la hora con los controles nativos y confirma con **Aplicar**. La hora se preserva al cambiar de día.",
+                story: "El componente `DateTimePicker` combina el calendario y el selector de hora en un único popover. Selecciona el día en el calendario, ajusta la hora con los controles nativos y confirma con **Aplicar**. La hora se preserva al cambiar de día. Si solo necesitas seleccionar una hora sin fecha, usa el componente [`TimePicker`](?path=/docs/timepicker--docs).",
             },
             source: { code: DatePickerDateTimePickerCode },
         },
@@ -224,11 +219,12 @@ export const DateTimePickerStory: Story = {
 
 export const InForm: Story = {
     name: "Integración en formulario",
+    decorators: [ToasterDecorator],
     render: () => <DatePickerWithForm />,
     parameters: {
         docs: {
             description: {
-                story: "Ejemplo de los cuatro componentes usados juntos dentro de un formulario real: `DatePicker` con fecha mínima, `DateRangePicker`, `DateTimePicker` con dropdown y `TimePicker` autónomo.",
+                story: "Ejemplo de los tres componentes de fecha usados junto con `TimePicker` dentro de un formulario real: `DatePicker` con fecha mínima, `DateRangePicker`, `DateTimePicker` con dropdown y `TimePicker` autónomo.",
             },
             source: { code: DatePickerWithFormCode },
         },

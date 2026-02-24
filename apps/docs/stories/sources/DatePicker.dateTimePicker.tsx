@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { DateTimePicker, Label } from "@traxion-global/design-system/react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { DateTimePicker, Label, toast } from "@traxion-global/design-system/react";
 
 export default function DatePickerDateTimePicker() {
     const [datetime, setDatetime] = useState<Date | undefined>();
@@ -9,7 +11,10 @@ export default function DatePickerDateTimePicker() {
             <Label>Inicio del evento</Label>
             <DateTimePicker
                 value={datetime}
-                onChange={setDatetime}
+                onChange={(d) => {
+                    setDatetime(d);
+                    if (d) toast.success(`Seleccionado: ${format(d, "PPP HH:mm", { locale: es })}`);
+                }}
                 placeholder="Selecciona fecha y hora"
                 localeCode="es"
                 captionLayout="dropdown"
