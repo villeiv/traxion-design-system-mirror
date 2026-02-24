@@ -10,6 +10,7 @@ export * from "./components/Card";
 export * from "./components/Checkbox";
 export * from "./components/Command";
 export * from "./components/DataTable";
+export * from "./components/Date-picker";
 export * from "./components/Dialog";
 export * from "./components/Dropdown-menu";
 export * from "./components/File-drop-zone";
