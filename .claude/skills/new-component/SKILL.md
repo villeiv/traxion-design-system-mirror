@@ -16,9 +16,13 @@ You are guiding the user through the Traxion Design System component creation/ed
    - **If the file does NOT exist** → **Create mode** (run all 8 phases)
    - **If the file exists** → **Edit mode** (read current state, ask what's changing, run only relevant phases)
 
+## Phase Gate Rule
+
+**Execute ONE phase at a time.** After completing each phase, stop, present the result to the user, and wait for explicit confirmation before starting the next phase. Do not batch phases together. If the user says "continue", "move forward", or "proceed", treat that as approval for the **next single phase only**.
+
 ## Create Mode
 
-Walk through each phase sequentially. At the end of each phase, confirm with the user before proceeding to the next.
+Walk through each phase sequentially, applying the Phase Gate Rule at every boundary.
 
 ### Phase 1: Research & Discovery
 - Search existing components for reuse/composition opportunities
@@ -87,7 +91,8 @@ Walk through each phase sequentially. At the end of each phase, confirm with the
 
 ## Important Reminders
 
-- Always confirm with the user before proceeding to the next phase
+- **One phase at a time** — never start the next phase until the user explicitly confirms the current one is good
+- Adding new components or features = **MINOR** version bump (`0.X+1.0`). Bug fixes = **PATCH** (`0.x.Y+1`)
 - Reference real examples from the codebase (listed at the bottom of the methodology doc) when building each artifact
 - Stories and MCP metadata are teaching material for AI agents — quality matters
 - All descriptions in stories should be in Spanish
