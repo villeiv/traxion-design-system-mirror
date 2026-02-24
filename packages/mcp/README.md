@@ -17,7 +17,7 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 |   GitHub Package            |   MCP Server                       |
 |   (Source of Truth)         |   (Smart Documentation Layer)      |
 +-----------------------------+------------------------------------+
-| - 33 React components       | - Component discovery              |
+| - 35 React components       | - Component discovery              |
 | - Published to GitHub       | - AI-assisted scaffolding          |
 | - Locked (no edits)         | - Usage validation                 |
 | - Versioned releases        | - Smart suggestions                |
@@ -75,7 +75,7 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 ```
 +-----------------------+     +---------------------------+
 | metadata/             |     | apps/docs/stories/        |
-|   components/*.json   |     |   *.stories.tsx   (32)    |
+|   components/*.json   |     |   *.stories.tsx   (34)    |
 |   guidelines/*.md     |     |   sources/*.tsx   (71)    |
 |                       |     +---------------------------+
 | design-system/        |
@@ -86,8 +86,8 @@ A Model Context Protocol server that provides intelligent documentation and scaf
                           | ComponentRegistry   |
                           | (In-Memory Cache)   |
                           |                     |
-                          | 33 components       |
-                          | 32 story sets       |
+                          | 35 components       |
+                          | 34 story sets       |
                           | 3 token categories  |
                           | 3 guidelines        |
                           +----------+----------+

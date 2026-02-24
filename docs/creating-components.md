@@ -2,6 +2,14 @@
 
 A comprehensive methodology for adding new components to the Traxion Design System monorepo. Each component touches 4 packages: design-system, docs (Storybook), MCP metadata, and showcase. This guide ensures consistency across all of them.
 
+## Phase Gate Rule
+
+> **Each phase must be completed and validated by the user before the next phase begins.**
+>
+> After finishing a phase, stop and present the result. Do not proceed to the next phase until the user explicitly confirms. This applies even when the user says "continue" or "move forward" — treat that as approval for the **next single phase only**, not a blanket approval for all remaining phases.
+>
+> This rule prevents wasted work when the user wants to make tweaks mid-process (which is normal and expected).
+
 ## Quick-Reference Checklist
 
 ### New Component — Files to Create/Modify
@@ -46,7 +54,7 @@ Before writing any code, understand the design space.
 
 ### 1.2 Check Existing Components
 
-Search the current 33 components for reuse or composition opportunities:
+Search the current 35 components for reuse or composition opportunities:
 
 | Category | Components |
 |----------|-----------|
@@ -54,7 +62,7 @@ Search the current 33 components for reuse or composition opportunities:
 | **overlay** | AlertDialog, Dialog, HoverCard, Popover, Sheet, Tooltip |
 | **data-display** | Avatar, Badge, DataTable, InfoCard, SortableBoard, Table |
 | **actions** | Button |
-| **forms** | Calendar, Checkbox, FileDropZone, Input, Label, RadioGroup, Select, Switch, Textarea |
+| **forms** | Calendar, Checkbox, DatePicker, DateRangePicker, DateTimePicker, FileDropZone, Input, Label, RadioGroup, Select, Switch, Textarea, TimePicker |
 | **layout** | Card, Separator |
 | **feedback** | FullPageOverlayLoader, InlineLoader, NoDataMessage, Progress, ToasterService |
 
@@ -477,8 +485,9 @@ Check localhost:3000 — confirm the Section renders correctly.
 ### 5.1 Determine the New Version
 
 While on `0.x.y`:
-- **PATCH** (`0.x.Y+1`): Adding a new component (non-breaking addition)
-- **MINOR** (`0.X+1.0`): Any breaking change to existing component APIs
+- **MINOR** (`0.X+1.0`): Adding a new component or new feature (non-breaking addition)
+- **PATCH** (`0.x.Y+1`): Bug fixes and internal improvements with no API changes
+- Any breaking change to existing component APIs also warrants a MINOR bump
 
 ### 5.2 Update package.json
 
@@ -671,16 +680,16 @@ If the root `README.md` lists components or component count, update it.
 **Path:** `packages/mcp/README.md`
 
 Update:
-- Component count (currently "33 React components" / "33 components")
+- Component count (currently "35 React components" / "35 components")
 - Category listing if the component belongs to a new category
-- Story count (currently "32 story files" / "32 story sets")
+- Story count (currently "34 story files" / "34 story sets")
 - Architecture diagram numbers if maintained
 
 ### 8.3 Update CLAUDE.md
 
 **Path:** `CLAUDE.md` (monorepo root)
 
-Update the component count in the Project Overview section (currently "33 components").
+Update the component count in the Project Overview section (currently "35 components").
 
 ---
 

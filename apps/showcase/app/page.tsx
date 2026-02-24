@@ -21,6 +21,8 @@ import {
     Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow,
     Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
     Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Switch, Textarea, toast,
+    DatePicker, DateRangePicker, DateTimePicker, TimePicker,
+    type DateRange,
     InfoCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
     DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions, DataTableContent,
     type ColumnDef,
@@ -1081,6 +1083,11 @@ export default function DesignSystemShowcase() {
                 <Calendar mode="single" className="rounded-md border" />
             </Section>
 
+            {/* DatePicker */}
+            <Section title="DatePicker" description="Selectores de fecha, rango de fechas, hora y fecha+hora sobre un Popover.">
+                <DatePickerShowcase />
+            </Section>
+
             {/* Command */}
             <Section title="Paleta de comandos" description="Busca y ejecuta acciones. Mapea tus comandos a items.">
                 <div className="max-w-md rounded-lg border">
@@ -1503,6 +1510,35 @@ const sampleShipments: Shipment[] = [
         amount: 3450.00
     },
 ]
+
+// DatePicker showcase
+function DatePickerShowcase() {
+    const [date, setDate] = useState<Date | undefined>()
+    const [range, setRange] = useState<DateRange | undefined>()
+    const [datetime, setDatetime] = useState<Date | undefined>()
+    const [time, setTime] = useState("")
+
+    return (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 max-w-2xl">
+            <div className="flex flex-col gap-1.5">
+                <Label>Fecha única</Label>
+                <DatePicker value={date} onChange={setDate} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+                <Label>Rango de fechas</Label>
+                <DateRangePicker value={range} onChange={setRange} numberOfMonths={2} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+                <Label>Fecha y hora</Label>
+                <DateTimePicker value={datetime} onChange={setDatetime} captionLayout="dropdown" />
+            </div>
+            <div className="flex flex-col gap-1.5">
+                <Label>Hora</Label>
+                <TimePicker value={time} onChange={(e) => setTime(e.target.value)} />
+            </div>
+        </div>
+    )
+}
 
 // DataTable with URL State Demo
 function DataTableURLDemo() {
