@@ -1079,8 +1079,14 @@ export default function DesignSystemShowcase() {
             </Section>
 
             {/* Calendar */}
-            <Section title="Calendario" description="Componente controlado/no controlado para selección de fechas.">
-                <Calendar mode="single" className="rounded-md border" />
+            <Section title="Calendar" description="Primitivo para casos especiales: modificadores personalizados, días reservados, múltiple selección. Para selección de fecha estándar usa DatePicker.">
+                <Calendar
+                    mode="single"
+                    className="rounded-md border"
+                    modifiers={{ booked: [new Date(2026, 1, 5), new Date(2026, 1, 12), new Date(2026, 1, 19)] }}
+                    modifiersClassNames={{ booked: "line-through text-muted-foreground" }}
+                    showOutsideDays={false}
+                />
             </Section>
 
             {/* DatePicker */}

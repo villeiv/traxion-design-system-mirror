@@ -2,16 +2,20 @@
   "name": "TimePicker",
   "packageVersion": "0.5.0",
   "slug": "time-picker",
-  "description": "A styled native <input type=\"time\"> that integrates with the Traxion Design System. Uses the browser's built-in time picker controls (keyboard increment/decrement, scroll wheel, AM/PM per system locale). Step is fixed at 60 seconds (1-minute precision, no seconds). Extends all standard HTML input attributes except type. For combined date and time selection in a single popover, use DateTimePicker instead.",
+  "description": "A styled native <input type=\"time\"> that integrates with the Traxion Design System. The go-to component for any time-of-day input: forms, filter panels, DataTableToolbar, report scheduling, shift configuration, and any other UI where the user picks a time. Uses the browser's built-in time picker controls (keyboard increment/decrement, scroll wheel, AM/PM per system locale). Step is fixed at 60 seconds (1-minute precision, no seconds). Extends all standard HTML input attributes except type. For combined date and time selection in a single popover, use DateTimePicker instead.",
   "category": "forms",
   "tags": [
     "time",
     "time-picker",
     "input",
     "form",
+    "filter",
     "clock",
     "hour",
-    "minute"
+    "minute",
+    "schedule",
+    "report",
+    "backoffice"
   ],
   "props": [
     {
@@ -60,15 +64,19 @@
     "label",
     "form",
     "card",
+    "datatable",
     "date-picker"
   ],
   "recommendations": {
     "do": [
+      "Use TimePicker everywhere a user needs to enter a time: forms, filter panels, DataTableToolbar time-of-day filters, report scheduling, shift start/end times, and any other time input in the UI.",
       "Always pair with a Label using htmlFor/id: <Label htmlFor=\"hora\">Hora</Label><TimePicker id=\"hora\" />",
       "Use DateTimePicker when the user needs to select both a date and a time in the same interaction.",
-      "Control width from the parent container — the input is w-full by default."
+      "Control width from the parent container — the input is w-full by default.",
+      "Prefer TimePicker over <input type=\"time\"> — it is styled consistently with the design system."
     ],
     "dont": [
+      "Do not use <input type=\"time\"> directly — use TimePicker for consistent styling and design system integration.",
       "Do not use TimePicker when date selection is also needed — use DateTimePicker instead.",
       "Do not try to display seconds — the step is fixed at 60s (1 minute precision)."
     ]

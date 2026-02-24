@@ -16,7 +16,7 @@ const meta = {
     parameters: {
         docs:{
             description: {
-                component: "Componente de calendario para seleccionar fechas, con soporte para selección única, múltiple o por rangos. Incluye opciones de personalización y localización."
+                component: "Primitivo de calendario construido sobre react-day-picker. Úsalo directamente cuando necesites control total sobre el UI: modificadores personalizados (días reservados, destacados o bloqueados con estilos propios), selección múltiple, o un calendario embebido sin botón disparador. Para selección de fecha estándar en formularios, filtros o DataTableToolbar, usa **DatePicker**, **DateRangePicker** o **DateTimePicker** en su lugar — ya incluyen el botón disparador, el popover, la lógica de Aplicar/Limpiar y accesibilidad completa."
             }
         }
     },
@@ -173,14 +173,14 @@ export const CalendarWithTodayBtn = {
 }
 
 export const InputWithCalendar = {
-    name: "Campo de texto con calendario desplegable",
+    name: "Selección de fecha en formulario — usa DatePicker",
     parameters: {
         actions: {disable: true},
         a11y: {disable: true},
         controls:{disable: true},
         docs: {
             description: {
-                story: "Ejemplo de un input que despliega un calendario al hacer foco, permitiendo seleccionar fechas."
+                story: "Para selección de fecha en formularios usa **DatePicker** en lugar de Calendar+Popover manualmente. DatePicker gestiona el estado del popover, el formato de la fecha, el ícono y la accesibilidad por ti con una sola línea de código."
             },
             source: {
                 code: CalendarInputFormCode

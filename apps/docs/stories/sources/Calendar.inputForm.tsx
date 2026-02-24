@@ -1,43 +1,20 @@
-import {Popover, PopoverTrigger, Button, PopoverContent, Calendar, Label} from "@traxion-global/design-system/react";
-import {CalendarIcon} from "lucide-react";
-import {useState} from "react";
+import { DatePicker, Label } from "@traxion-global/design-system/react";
+import { useState } from "react";
 
+// Para selección de fecha en formularios y filtros, usa DatePicker en lugar de Calendar + Popover manualmente.
+// DatePicker gestiona el estado del popover, el formato de la fecha, el ícono y la accesibilidad por ti.
 export default function CalendarInputForm() {
+    const [date, setDate] = useState<Date | undefined>();
 
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState();
-
-    function onSelect(date) {
-        if (date) {
-            setValue(date);
-        } else {
-            setValue(undefined);
-        }
-        setOpen(false);
-    }
-
-    return <Popover open={open} onOpenChange={setOpen}>
-        <div className={"flex flex-col gap-2"}>
-            <Label htmlFor={"dueDate"}>
-                Fecha de vencimiento
-            </Label>
-            <PopoverTrigger asChild>
-                <Button id={"dueDate"} variant="outline" className={"w-48 h-10 font-normal"}>
-                    <CalendarIcon className="h-4 w-4" />
-                    {value
-                        ? value.toISOString().split("T")[0]
-                        : "Selecciona una fecha"}
-                </Button>
-            </PopoverTrigger>
-        </div>
-
-        <PopoverContent align="start">
-            <Calendar
-                mode="single"
-                selected={value ? new Date(value) : undefined}
-                onSelect={onSelect}
-                localeCode={"en"}
+    return (
+        <div className="flex flex-col gap-2 w-56">
+            <Label htmlFor="dueDate">Fecha de vencimiento</Label>
+            <DatePicker
+                id="dueDate"
+                value={date}
+                onChange={setDate}
+                placeholder="Selecciona una fecha"
             />
-        </PopoverContent>
-    </Popover>
+        </div>
+    );
 }

@@ -154,12 +154,21 @@
       "blocks": [
         {
           "type": "text",
-          "content": "Use `Calendar` (from `@traxion-global/design-system/react`) inside a `Popover` for date filters in `DataTableToolbar`. **Never use `<input type=\"date\">`** — it bypasses the design system's styling, locale support, and accessibility features."
+          "content": "Use `DateRangePicker` (from `@traxion-global/design-system/react`) for date range filters in `DataTableToolbar`. It replaces the manual Calendar+Popover+Button pattern with a single self-contained component that handles the trigger button, popover open/close, Apply/Clear logic, and locale formatting. For a single-date filter use `DatePicker`. **Never use `<input type=\"date\">`** — it bypasses design system styling, locale support, and accessibility."
         },
         {
           "type": "code",
           "language": "tsx",
-          "content": "import {\n  Calendar, Popover, PopoverContent, PopoverTrigger, Button,\n} from \"@traxion-global/design-system/react\";\nimport { CalendarIcon } from \"lucide-react\";\nimport { useState } from \"react\";\nimport type { DateRange } from \"react-day-picker\";\n\n// State inside the component\nconst [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);\nconst [calendarOpen, setCalendarOpen] = useState(false);\n\nconst formatDate = (date: Date) =>\n  date.toLocaleDateString(\"es-ES\", { day: \"2-digit\", month: \"2-digit\", year: \"numeric\" });\n\n// Inside DataTableToolbar — never use <input type=\"date\">\n<Popover open={calendarOpen} onOpenChange={setCalendarOpen}>\n  <PopoverTrigger asChild>\n    <Button variant=\"outline\" className=\"h-8 px-2 lg:px-3\">\n      <CalendarIcon className=\"mr-2 h-4 w-4\" />\n      {dateRange?.from\n        ? dateRange.to\n          ? `${formatDate(dateRange.from)} \u2013 ${formatDate(dateRange.to)}`\n          : formatDate(dateRange.from)\n        : \"Fecha\"}\n    </Button>\n  </PopoverTrigger>\n  <PopoverContent className=\"w-auto p-0\" align=\"start\">\n    <Calendar\n      mode=\"range\"\n      selected={dateRange}\n      onSelect={(range) => {\n        setDateRange(range);\n        tableState.setColumnFilters((prev) => {\n          const without = prev.filter((f) => f.id !== \"myDateColumn\");\n          return range?.from ? [...without, { id: \"myDateColumn\", value: range }] : without;\n        });\n        if (range?.from && range?.to) setCalendarOpen(false);\n      }}\n      localeCode=\"es\"\n    />\n  </PopoverContent>\n</Popover>"
+          "content": "import {\n  DateRangePicker,\n} from \"@traxion-global/design-system/react\";\nimport type { DateRange } from \"@traxion-global/design-system/react\";\nimport { useState } from \"react\";\n\n// State inside the component\nconst [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);\n\n// Inside DataTableToolbar — use DateRangePicker, never <input type=\"date\"> or manual Calendar+Popover\n<DateRangePicker\n  value={dateRange}\n  onChange={(range) => {\n    setDateRange(range);\n    tableState.setColumnFilters((prev) => {\n      const without = prev.filter((f) => f.id !== \"myDateColumn\");\n      return range?.from ? [...without, { id: \"myDateColumn\", value: range }] : without;\n    });\n  }}\n  numberOfMonths={2}\n  localeCode=\"es\"\n/>"
+        },
+        {
+          "type": "text",
+          "content": "For time-of-day filters (e.g. filtering by hour in a report or log table), use `TimePicker` in the toolbar:"
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "import { TimePicker, Label } from \"@traxion-global/design-system/react\";\nimport { useState } from \"react\";\n\nconst [fromTime, setFromTime] = useState(\"\");\n\n<div className=\"flex items-center gap-2\">\n  <Label htmlFor=\"from-time\">Desde</Label>\n  <TimePicker\n    id=\"from-time\"\n    value={fromTime}\n    onChange={(e) => {\n      setFromTime(e.target.value);\n      tableState.setColumnFilters((prev) => {\n        const without = prev.filter((f) => f.id !== \"time\");\n        return e.target.value ? [...without, { id: \"time\", value: e.target.value }] : without;\n      });\n    }}\n    className=\"w-32\"\n  />\n</div>"
         }
       ]
     }
@@ -325,7 +334,10 @@
       "Use mixed-content cells (multiple lines in one cell) for related data that doesn't justify its own column",
       "Use icons from lucide-react only — never emoji, unicode, or other icon libraries",
       "Place DataTableViewOptions inside DataTableToolbar for consistent layout",
-      "Use Calendar inside a Popover for date filters in DataTableToolbar — never use <input type=\"date\"> (native browser picker)."
+      "Use DateRangePicker for date range filters in DataTableToolbar — it replaces the manual Calendar+Popover pattern with a single component.",
+      "Use DatePicker for single-date filters in DataTableToolbar.",
+      "Use TimePicker for time-of-day filters in DataTableToolbar or filter panels.",
+      "Never use <input type=\"date\"> or <input type=\"time\"> directly — always use DatePicker, DateRangePicker, or TimePicker."
     ],
     "dont": [
       "Don't use DataTable for simple static tables — use the Table component instead",
@@ -353,12 +365,12 @@
   "commonlyUsedWith": [
     "badge",
     "button",
-    "calendar",
     "checkbox",
+    "date-picker",
     "dropdown-menu",
     "input",
     "no-data-message",
-    "popover",
-    "select"
+    "select",
+    "time-picker"
   ]
 }

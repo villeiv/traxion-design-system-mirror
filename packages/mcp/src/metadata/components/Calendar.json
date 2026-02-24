@@ -2,18 +2,17 @@
   "name": "Calendar",
   "packageVersion": "0.3.3",
   "slug": "calendar",
-  "description": "A date picker calendar component built on react-day-picker (DayPicker). Supports single date selection, date ranges, and multiple date selection. Features locale support for Spanish (es) and English (en) via date-fns, configurable caption layouts (label or dropdown), and custom day button rendering with range highlighting. Navigation buttons use the Traxion Button component. Commonly used as a date-range filter inside a Popover within DataTableToolbar.",
+  "description": "Low-level calendar primitive built on react-day-picker. Use Calendar directly when you need full control: custom day modifiers (booked/highlighted/disabled dates with custom styles), multiple date selection, an embedded calendar without a popover trigger, or a bespoke booking UI. For standard date and range selection in forms and filters, prefer DatePicker, DateRangePicker, or DateTimePicker — they wrap Calendar with a trigger button, popover management, Apply/Clear patterns, and a consistent UX out of the box.",
   "category": "forms",
   "tags": [
     "calendar",
-    "date-picker",
     "date",
     "range",
     "day-picker",
     "locale",
-    "filter",
-    "date-filter",
-    "backoffice"
+    "modifiers",
+    "booking",
+    "primitive"
   ],
   "props": [
     {
@@ -105,8 +104,23 @@
     "notes": "The CalendarDayButton sub-component uses data attributes (data-selected-single, data-range-start, data-range-end, data-range-middle) for styling different selection states. A focus effect is triggered via React.useEffect when modifiers.focused is true."
   },
   "commonlyUsedWith": [
+    "date-picker",
     "popover",
-    "input",
-    "datatable"
-  ]
+    "card"
+  ],
+  "recommendations": {
+    "do": [
+      "Use DatePicker for single date selection in forms and filters — it wraps Calendar with a trigger button, popover, and date formatting.",
+      "Use DateRangePicker for date range selection in DataTableToolbar and filter panels — it replaces the manual Calendar+Popover+Button pattern.",
+      "Use DateTimePicker when the user must select both a date and a time in a single interaction.",
+      "Use Calendar directly when you need the modifiers system: custom styles for booked, highlighted, or disabled dates (e.g. booking interfaces, availability pickers).",
+      "Use Calendar directly for multiple date selection (mode='multiple') or when you want the calendar inline (not inside a popover).",
+      "Format selected dates with date-fns format() when displaying values outside the calendar."
+    ],
+    "dont": [
+      "Don't use Calendar + Popover + Button manually to build a basic date picker — use DatePicker or DateRangePicker instead.",
+      "Don't use Calendar inside DataTableToolbar for date range filters — use DateRangePicker which handles the Popover, trigger button, and Apply/Clear logic.",
+      "Don't format dates with toLocaleDateString() — use date-fns format() for consistent locale-aware output."
+    ]
+  }
 }

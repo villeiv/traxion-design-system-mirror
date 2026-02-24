@@ -2,7 +2,7 @@
   "name": "DatePicker",
   "packageVersion": "0.5.0",
   "slug": "date-picker",
-  "description": "A set of three date picker components built on top of Calendar and Popover. DatePicker selects a single date (controlled via value/onChange or uncontrolled via defaultValue). DateRangePicker selects a date range with a pending state — the selection is not committed until the user presses Aplicar; Limpiar clears the pending selection. DateTimePicker combines a calendar and a native time input in one popover with a pending state confirmed via Aplicar, preserving the time when the day changes. All pickers support locale (es/en), custom date-fns format tokens, date restrictions (fromDate/toDate), and caption layout for navigation. For time-only selection, use the standalone TimePicker component.",
+  "description": "A set of three date picker components built on top of Calendar and Popover. DatePicker selects a single date (controlled via value/onChange or uncontrolled via defaultValue). DateRangePicker selects a date range with a pending state — the selection is not committed until the user presses Aplicar; Limpiar clears the pending selection. DateTimePicker combines a calendar and a native time input in one popover with a pending state confirmed via Aplicar, preserving the time when the day changes. All pickers support locale (es/en), custom date-fns format tokens, date restrictions (fromDate/toDate), and caption layout for navigation. These are the go-to components for all date and date-range selection needs: forms, filter panels, DataTableToolbar, report configuration, and any UI where the user picks a date. For time-only selection use the standalone TimePicker component.",
   "category": "forms",
   "tags": [
     "date-picker",
@@ -99,20 +99,23 @@
     "label",
     "form",
     "card",
+    "datatable",
     "separator",
     "calendar",
     "time-picker"
   ],
   "recommendations": {
     "do": [
+      "Use DatePicker or DateRangePicker everywhere a user needs to select a date: forms, filter panels, DataTableToolbar, report configuration, scheduling UIs.",
+      "Use DateRangePicker in DataTableToolbar for date range filters — it replaces the manual Calendar+Popover+Button pattern.",
       "Wrap the picker in a container that defines the width — the component stretches to fill its parent. Example: <div className=\"w-64\"><DatePicker ... /></div>",
       "Use captionLayout=\"dropdown\" when selecting dates far from today (e.g. birth dates, historical records).",
-      "Use DateRangePicker for period filters — the Apply/Clear pattern prevents accidental range changes.",
       "Import the DateRange type from the design system: import type { DateRange } from \"@traxion-global/design-system/react\"",
       "Use dateFormat with date-fns tokens to match your regional format (e.g. \"dd/MM/yyyy\" for Latin America).",
       "Use date-fns format() instead of toLocaleDateString() when displaying selected dates in your app."
     ],
     "dont": [
+      "Do not use Calendar + Popover + Button manually for standard date selection — DatePicker and DateRangePicker already do this.",
       "Do not set a fixed width on the picker directly — control width from the parent container.",
       "Do not use DateTimePicker when only a date is needed — use DatePicker to keep the UX simpler.",
       "Do not use DateTimePicker when only a time is needed — use the standalone TimePicker component instead.",
