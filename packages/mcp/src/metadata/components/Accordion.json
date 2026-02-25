@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "accordion",
   "description": "A vertically stacked set of interactive headings that each reveal an associated section of content. Built on @radix-ui/react-accordion with animated expand/collapse transitions and a chevron indicator.",
-  "category": "navigation",
   "tags": [
     "accordion",
     "collapsible",

@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "sheet",
   "description": "A panel that slides in from a screen edge, built on Radix UI Dialog primitive. Uses class-variance-authority (CVA) for side variants (top, bottom, left, right). Includes an overlay backdrop, close button, and layout sub-components for header, footer, title, and description.",
-  "category": "overlay",
   "tags": [
     "sheet",
     "drawer",

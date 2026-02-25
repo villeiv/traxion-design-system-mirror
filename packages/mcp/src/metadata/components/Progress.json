@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "progress",
   "description": "A progress bar component built on @radix-ui/react-progress. Displays a horizontal bar that fills proportionally to the given value (0-100). The indicator animates via CSS translateX transitions.",
-  "category": "feedback",
   "tags": [
     "progress",
     "progress-bar",

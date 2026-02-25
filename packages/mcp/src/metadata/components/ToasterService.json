@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "toaster-service",
   "description": "A toast notification system built on the Sonner library. Consists of two exports: a Toaster component that mounts the toast container infrastructure, and a toast API object with methods for triggering success, error, info, and warning notifications. Each toast type has a corresponding Lucide icon (CheckCircle, OctagonX, Info, TriangleAlert).",
-  "category": "feedback",
   "tags": [
     "toast",
     "notification",

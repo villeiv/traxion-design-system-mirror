@@ -42,7 +42,7 @@ npm run dev --workspace=@traxion-global/mcp
 - `packages/design-system/` — The component library (source of truth). Built with tsup. Two entry points:
   - `src/index.ts` — Utilities only (`cn`)
   - `src/react.ts` — All React components and hooks (marked `"use client"`)
-- `packages/mcp/` — MCP server providing 10 tools for AI agents to discover, scaffold, and validate component usage
+- `packages/mcp/` — MCP server providing 7 tools for AI agents to discover and document component usage
 - `apps/docs/` — Storybook 10 (React + Vite). Stories live in `apps/docs/stories/`
 - `apps/showcase/` — Next.js demo application
 - `packages/eslint-config/` and `packages/typescript-config/` — Shared configs
@@ -79,7 +79,7 @@ Components follow a consistent structure:
 
 ### MCP Server
 
-Located in `packages/mcp/`. Provides 11 tools: `list_components`, `search_components`, `get_component`, `get_component_stories`, `get_design_tokens`, `get_guideline`, `suggest_components`, `scaffold_feature`, `validate_usage`, `install_design_system`, `version`. Component metadata JSON files live in `packages/mcp/src/metadata/components/`. **Key principle**: MCP generates code that *imports from* the package, never copies source code.
+Located in `packages/mcp/`. Provides 7 tools: `list_components`, `get_component`, `get_component_stories`, `get_design_tokens`, `get_guideline`, `install_design_system`, `version`. Component metadata JSON files live in `packages/mcp/src/metadata/components/`. **Key principle**: MCP generates code that *imports from* the package, never copies source code.
 
 ## Adding New Components
 

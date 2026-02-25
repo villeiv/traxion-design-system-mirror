@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "alert-dialog",
   "description": "A modal dialog that interrupts the user with important content and expects a response. Built on @radix-ui/react-alert-dialog with animated overlay and content transitions. The action button uses the default buttonVariants style, and the cancel button uses the outline variant.",
-  "category": "overlay",
   "tags": [
     "alert",
     "dialog",

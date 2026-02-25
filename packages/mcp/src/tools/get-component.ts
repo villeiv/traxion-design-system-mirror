@@ -25,7 +25,6 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
       // Build response with npm import guide (NOT source code by default)
       let response = `# ${entry.meta.name}\n\n`;
       response += `${entry.meta.description}\n\n`;
-      response += `**Category:** ${entry.meta.category}\n`;
       response += `**Tags:** ${entry.meta.tags.join(', ')}\n`;
       if (entry.meta.packageVersion) {
         response += `**Package Version:** ${entry.meta.packageVersion}\n`;
