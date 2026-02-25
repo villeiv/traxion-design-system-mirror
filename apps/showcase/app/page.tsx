@@ -1090,7 +1090,7 @@ export default function DesignSystemShowcase() {
             </Section>
 
             {/* DatePicker */}
-            <Section title="DatePicker" description="Selectores de fecha, rango de fechas, hora y fecha+hora sobre un Popover.">
+            <Section title="DatePicker y TimePicker" description="Selectores de fecha, rango de fechas, hora y fecha+hora sobre un Popover.">
                 <DatePickerShowcase />
             </Section>
 
