@@ -5,6 +5,135 @@ import { execSync } from 'child_process';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
+/** Walk balanced braces starting at searchFrom; returns inner content or empty string */
+function extractBalancedBlock(content: string, searchFrom: number): string {
+  const start = content.indexOf('{', searchFrom);
+  if (start === -1) return '';
+  let depth = 0;
+  let i = start;
+  while (i < content.length) {
+    if (content[i] === '{') depth++;
+    else if (content[i] === '}') {
+      depth--;
+      if (depth === 0) return content.slice(start + 1, i);
+    }
+    i++;
+  }
+  return '';
+}
+
+interface ThemeConflict { key: string; description: string; }
+
+/** Scan a tailwind config string for entries that conflict with the DS preset */
+function detectTailwindConflicts(configContent: string): ThemeConflict[] {
+  const conflicts: ThemeConflict[] = [];
+
+  // Strip comments
+  const stripped = configContent
+    .replace(/\/\/[^\n]*/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+
+  function blockHasKey(block: string, key: string): boolean {
+    return new RegExp(`['"]?\\b${key}\\b['"]?\\s*:`).test(block);
+  }
+
+  // Find `extend:` block inside theme
+  const extendMatch = /\bextend\s*:/.exec(stripped);
+  const extendBlock = extendMatch ? extractBalancedBlock(stripped, extendMatch.index) : '';
+
+  // theme.extend.colors
+  if (extendBlock) {
+    const colorsMatch = /\bcolors\s*:/.exec(extendBlock);
+    const colorsBlock = colorsMatch ? extractBalancedBlock(extendBlock, colorsMatch.index) : '';
+    if (colorsBlock) {
+      const colorKeys = ['border', 'input', 'ring', 'background', 'foreground', 'primary', 'secondary', 'destructive', 'muted', 'accent', 'popover', 'card'];
+      for (const key of colorKeys) {
+        if (blockHasKey(colorsBlock, key)) {
+          conflicts.push({
+            key: `theme.extend.colors.${key}`,
+            description: 'overrides the design system color token and may break component theming',
+          });
+        }
+      }
+    }
+  }
+
+  // theme.extend.borderRadius
+  if (extendBlock) {
+    const radiusMatch = /\bborderRadius\s*:/.exec(extendBlock);
+    const radiusBlock = radiusMatch ? extractBalancedBlock(extendBlock, radiusMatch.index) : '';
+    if (radiusBlock) {
+      for (const key of ['lg', 'md', 'sm']) {
+        if (blockHasKey(radiusBlock, key)) {
+          conflicts.push({
+            key: `theme.extend.borderRadius.${key}`,
+            description: 'overrides the design system border radius token',
+          });
+        }
+      }
+    }
+  }
+
+  // theme.extend.fontFamily.sans
+  if (extendBlock) {
+    const fontMatch = /\bfontFamily\s*:/.exec(extendBlock);
+    const fontBlock = fontMatch ? extractBalancedBlock(extendBlock, fontMatch.index) : '';
+    if (fontBlock && blockHasKey(fontBlock, 'sans')) {
+      conflicts.push({
+        key: 'theme.extend.fontFamily.sans',
+        description: 'overrides the design system font stack',
+      });
+    }
+  }
+
+  // theme.extend.screens.xs
+  if (extendBlock) {
+    const screensMatch = /\bscreens\s*:/.exec(extendBlock);
+    const screensBlock = screensMatch ? extractBalancedBlock(extendBlock, screensMatch.index) : '';
+    if (screensBlock && blockHasKey(screensBlock, 'xs')) {
+      conflicts.push({
+        key: 'theme.extend.screens.xs',
+        description: 'overrides the design system breakpoint token',
+      });
+    }
+  }
+
+  // theme.container (root-level inside theme, before extend)
+  const themeMatch = /\btheme\s*:/.exec(stripped);
+  const themeBlock = themeMatch ? extractBalancedBlock(stripped, themeMatch.index) : '';
+  if (themeBlock) {
+    const containerIdx = /\bcontainer\s*:/.exec(themeBlock)?.index ?? -1;
+    const extendIdx = /\bextend\s*:/.exec(themeBlock)?.index ?? Infinity;
+    if (containerIdx !== -1 && containerIdx < extendIdx) {
+      conflicts.push({
+        key: 'theme.container',
+        description: 'overrides the design system container configuration (center, padding, screens)',
+      });
+    }
+  }
+
+  // darkMode
+  const darkModeArrayMatch = /\bdarkMode\s*:\s*\[([^\]]*)\]/.exec(stripped);
+  if (darkModeArrayMatch) {
+    if (!darkModeArrayMatch[1].includes('class')) {
+      conflicts.push({
+        key: 'darkMode',
+        description: `is set to [${darkModeArrayMatch[1].trim()}] — the design system requires ["class"] for dark mode to work`,
+      });
+    }
+  } else {
+    const darkModeStringMatch = /\bdarkMode\s*:\s*['"]([^'"]+)['"]/.exec(stripped);
+    if (darkModeStringMatch && darkModeStringMatch[1] !== 'class') {
+      conflicts.push({
+        key: 'darkMode',
+        description: `is set to "${darkModeStringMatch[1]}" — the design system requires ["class"] for dark mode to work`,
+      });
+    }
+  }
+
+  return conflicts;
+}
+
 export function registerInstallDesignSystem(server: McpServer, _registry: ComponentRegistry): void {
   server.tool(
     'install_design_system',
@@ -16,8 +145,10 @@ export function registerInstallDesignSystem(server: McpServer, _registry: Compon
         .describe('Skip NODE_AUTH_TOKEN check (use if you know token is set)'),
       confirmBackup: z.boolean().optional()
         .describe('User confirms they have backed up their CSS file before clearing existing styles'),
+      confirmThemeConflicts: z.boolean().optional()
+        .describe('User acknowledges Tailwind theme conflicts with the design system preset and wants to proceed anyway'),
     },
-    async ({ projectPath = process.cwd(), skipTokenCheck = false, confirmBackup = false }) => {
+    async ({ projectPath = process.cwd(), skipTokenCheck = false, confirmBackup = false, confirmThemeConflicts = false }) => {
       let response = '# Installing Traxion Design System\n\n';
       const issues: string[] = [];
       const warnings: string[] = [];
@@ -184,6 +315,45 @@ export function registerInstallDesignSystem(server: McpServer, _registry: Compon
           }
         } catch (error) {
           warnings.push(`Could not read CSS file: ${error}`);
+        }
+      }
+
+      // Check tailwind config for theme conflicts BEFORE any modifications
+      if (tailwindConfigPath && !confirmThemeConflicts) {
+        try {
+          const rawConfig = readFileSync(tailwindConfigPath, 'utf-8');
+          const themeConflicts = detectTailwindConflicts(rawConfig);
+          if (themeConflicts.length > 0) {
+            response += '## ⚠️ WARNING: Tailwind Theme Conflicts\n\n';
+            response += 'Your Tailwind config defines entries that conflict with the design system preset. '
+                      + 'Tailwind\'s merge rules mean **your values will override the preset** and may silently '
+                      + 'break component colors, dark mode, or layout.\n\n';
+            response += '### Conflicting keys:\n';
+            themeConflicts.forEach(({ key, description }) => {
+              response += `- **${key}**: ${description}\n`;
+            });
+            response += '\n### Options:\n';
+            response += '1. **Remove** the conflicting keys from your config and let the preset supply them\n';
+            response += '2. **Acknowledge** the conflicts and continue anyway (components may not render correctly):\n';
+            response += '```\ninstall_design_system({ confirmThemeConflicts: true })\n```\n\n';
+            response += '---\n\n**AI ASSISTANT:** Show the user the conflicting keys and ask which option they prefer before proceeding.\n';
+            return { content: [{ type: 'text' as const, text: response }] };
+          }
+        } catch (error) {
+          warnings.push(`Could not read Tailwind config for conflict check: ${error}`);
+        }
+      }
+
+      // If confirmThemeConflicts is true, still log conflicts as warnings in the summary
+      if (tailwindConfigPath && confirmThemeConflicts) {
+        try {
+          const rawConfig = readFileSync(tailwindConfigPath, 'utf-8');
+          const themeConflicts = detectTailwindConflicts(rawConfig);
+          themeConflicts.forEach(({ key, description }) => {
+            warnings.push(`Theme conflict acknowledged: **${key}** — ${description}`);
+          });
+        } catch {
+          // non-fatal
         }
       }
 
