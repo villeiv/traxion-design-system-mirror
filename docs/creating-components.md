@@ -54,7 +54,7 @@ Before writing any code, understand the design space.
 
 ### 1.2 Check Existing Components
 
-Search the current 35 components for reuse or composition opportunities:
+Search the current 36 components for reuse or composition opportunities:
 
 | Category | Components |
 |----------|-----------|
@@ -708,16 +708,16 @@ If the root `README.md` lists components or component count, update it.
 **Path:** `packages/mcp/README.md`
 
 Update:
-- Component count (currently "35 React components" / "35 components")
+- Component count (currently "36 React components" / "36 components")
 - Category listing if the component belongs to a new category
-- Story count (currently "34 story files" / "34 story sets")
+- Story count (currently "35 story files" / "35 story sets")
 - Architecture diagram numbers if maintained
 
 ### 8.3 Update CLAUDE.md
 
 **Path:** `CLAUDE.md` (monorepo root)
 
-Update the component count in the Project Overview section (currently "35 components").
+Update the component count in the Project Overview section (currently "36 components").
 
 ---
 

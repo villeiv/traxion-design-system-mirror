@@ -20,7 +20,7 @@ import {
     Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger,
     Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow,
     Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
-    Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Switch, Textarea, toast,
+    Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Stepper, StepperList, StepperItem, Switch, Textarea, toast,
     DatePicker, DateRangePicker, DateTimePicker, TimePicker,
     type DateRange,
     InfoCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
@@ -87,9 +87,26 @@ function ColorSwatch({ name, color, className }: ColorSwatchProps) {
 }
 
 
+const STEPPER_STEPS = [
+    { value: "cuenta", title: "Cuenta", description: "Datos de acceso" },
+    { value: "perfil", title: "Perfil", description: "Información personal" },
+    { value: "empresa", title: "Empresa", description: "Datos de la empresa" },
+    { value: "confirmacion", title: "Confirmación", description: "Revisión final" },
+]
+
 export default function DesignSystemShowcase() {
     const [progress, setProgress] = useState(33);
     const [loading, setLoading] = useState(false);
+    const [stepperStep, setStepperStep] = useState("cuenta");
+    const [stepperCompleted, setStepperCompleted] = useState<string[]>([]);
+    const stepperIndex = STEPPER_STEPS.findIndex((s) => s.value === stepperStep);
+    const navigateToStep = (stepValue: string) => {
+        const newIndex = STEPPER_STEPS.findIndex((s) => s.value === stepValue);
+        setStepperCompleted(STEPPER_STEPS.slice(0, newIndex).map((s) => s.value));
+        setStepperStep(stepValue);
+    };
+    const goStepBack = () => { const prev = STEPPER_STEPS[stepperIndex - 1]; if (prev) navigateToStep(prev.value); };
+    const goStepNext = () => { const next = STEPPER_STEPS[stepperIndex + 1]; if (next) navigateToStep(next.value); };
 
     /* Demo react-hook-form
     const form = useForm<{ email: string; role: string; newsletter: boolean }>({
@@ -1224,6 +1241,63 @@ export default function DesignSystemShowcase() {
                     />
                 </div>
             </Section>
+            {/* Stepper */}
+            <Section title="Stepper" description="Indicador visual de progreso para procesos secuenciales. Modo navegación (asistente interactivo) y modo display (estado informativo). Ambos modos pueden ser verticales u horizontales.">
+                <div className="grid gap-10 md:grid-cols-2">
+                    {/* Navigation mode */}
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Modo navegación</p>
+                        <Stepper
+                            value={stepperStep}
+                            onValueChange={navigateToStep}
+                            completedSteps={stepperCompleted}
+                            clickable="all"
+                        >
+                            <StepperList>
+                                {STEPPER_STEPS.map((step) => (
+                                    <StepperItem
+                                        key={step.value}
+                                        value={step.value}
+                                        title={step.title}
+                                        description={step.description}
+                                    />
+                                ))}
+                            </StepperList>
+                        </Stepper>
+                        <div className="flex justify-between">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={goStepBack}
+                                disabled={stepperIndex === 0}
+                            >
+                                Anterior
+                            </Button>
+                            <Button
+                                size="sm"
+                                onClick={goStepNext}
+                                disabled={stepperIndex === STEPPER_STEPS.length - 1}
+                            >
+                                {stepperIndex === STEPPER_STEPS.length - 1 ? "Finalizar" : "Siguiente"}
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Display mode */}
+                    <div className="flex flex-col gap-4">
+                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Modo display</p>
+                        <Stepper value="transito" completedSteps={["recibido", "preparacion"]} orientation="vertical">
+                            <StepperList>
+                                <StepperItem value="recibido" title="Pedido recibido" description="Lun 24 feb, 10:32" />
+                                <StepperItem value="preparacion" title="En preparación" description="Lun 24 feb, 11:15" />
+                                <StepperItem value="transito" title="En camino" description={<Badge variant="gray">En ruta</Badge>} />
+                                <StepperItem value="entregado" title="Entregado" description="Est. Mar 25 feb" />
+                            </StepperList>
+                        </Stepper>
+                    </div>
+                </div>
+            </Section>
+
             {/* DataTable */}
             <Section
                 title="DataTable"

@@ -17,7 +17,7 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 |   GitHub Package            |   MCP Server                       |
 |   (Source of Truth)         |   (Smart Documentation Layer)      |
 +-----------------------------+------------------------------------+
-| - 35 React components       | - Component discovery              |
+| - 36 React components       | - Component discovery              |
 | - Published to GitHub       | - AI-assisted scaffolding          |
 | - Locked (no edits)         | - Usage validation                 |
 | - Versioned releases        | - Smart suggestions                |
@@ -32,7 +32,7 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 
 **Location:** `packages/design-system/`
 
-The actual React hooks and components (33 components), design tokens, utilities, and styles. Published to GitHub Packages as `@traxion-global/design-system`.
+The actual React hooks and components (36 components), design tokens, utilities, and styles. Published to GitHub Packages as `@traxion-global/design-system`.
 
 ```bash
 npm install @traxion-global/design-system
@@ -75,7 +75,7 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 ```
 +-----------------------+     +---------------------------+
 | metadata/             |     | apps/docs/stories/        |
-|   components/*.json   |     |   *.stories.tsx   (34)    |
+|   components/*.json   |     |   *.stories.tsx   (35)    |
 |   guidelines/*.md     |     |   sources/*.tsx   (71)    |
 |                       |     +---------------------------+
 | design-system/        |
@@ -86,8 +86,8 @@ A Model Context Protocol server that provides intelligent documentation and scaf
                           | ComponentRegistry   |
                           | (In-Memory Cache)   |
                           |                     |
-                          | 35 components       |
-                          | 34 story sets       |
+                          | 36 components       |
+                          | 35 story sets       |
                           | 3 token categories  |
                           | 3 guidelines        |
                           +----------+----------+
@@ -307,7 +307,7 @@ The registry auto-discovers everything:
 +-- packages/
 |   +-- design-system/                    <- Source of Truth
 |   |   +-- src/
-|   |   |   +-- components/               (33 .tsx files)
+|   |   |   +-- components/               (36 .tsx files)
 |   |   |   +-- tokens/tokens.json        (Design tokens)
 |   |   |   +-- styles/theme.css
 |   |   |   +-- lib/utils.ts
@@ -327,7 +327,7 @@ The registry auto-discovers everything:
     +-- showcase/                         (Next.js demo app)
     +-- docs/                             (Storybook)
         +-- stories/
-        |   +-- *.stories.tsx             (32 story files)
+        |   +-- *.stories.tsx             (35 story files)
         |   +-- sources/                  (71 source files + anatomy)
 ```
 
@@ -447,7 +447,7 @@ export function Button({ children, className, ...props }: ButtonProps) {
 
 ## Component Categories
 
-- **navigation** — Accordion, Command, DropdownMenu, Pagination
+- **navigation** — Accordion, Command, DropdownMenu, Pagination, Stepper
 - **overlay** — AlertDialog, Dialog, HoverCard, Popover, Sheet, Tooltip
 - **data-display** — Avatar, Badge, DataTable, InfoCard, SortableBoard, Table
 - **actions** — Button

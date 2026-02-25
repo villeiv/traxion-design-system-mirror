@@ -1,0 +1,166 @@
+{
+  "name": "Stepper",
+  "slug": "stepper",
+  "packageVersion": "0.6.0",
+  "description": "A visual progress indicator for sequential processes. Works in two modes: navigation (interactive multi-step wizard where the consumer controls Next/Back) and display (read-only status tracker like a delivery timeline). Supports horizontal and vertical orientations, numbered or dots indicator styles, explicit completion tracking, per-step error state, and configurable click navigation.",
+  "category": "navigation",
+  "tags": [
+    "stepper",
+    "wizard",
+    "steps",
+    "multi-step",
+    "progress",
+    "form-wizard",
+    "timeline",
+    "status-tracker",
+    "onboarding"
+  ],
+  "props": [
+    {
+      "name": "value",
+      "type": "string",
+      "default": "undefined",
+      "description": "The currently active step value (controlled mode). Marks which StepperItem is highlighted as active."
+    },
+    {
+      "name": "defaultValue",
+      "type": "string",
+      "default": "undefined",
+      "description": "The initial active step value (uncontrolled mode). Internal state is managed by the component."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "default": "undefined",
+      "description": "Callback fired when a step is clicked and navigation occurs. Omit for pure display mode."
+    },
+    {
+      "name": "completedSteps",
+      "type": "string[]",
+      "default": "[]",
+      "description": "Array of step values explicitly marked as completed. Steps in this array show a check icon and have their connector lines lit. Consumer owns this state — it is not auto-computed."
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"horizontal\"",
+      "description": "Layout direction. Horizontal renders steps left-to-right; vertical stacks them top-to-bottom with a side connector line."
+    },
+    {
+      "name": "variant",
+      "type": "\"numbered\" | \"dots\"",
+      "default": "\"numbered\"",
+      "description": "Indicator style. \"numbered\" shows the step index; completed steps replace the number with a check icon. \"dots\" shows a filled circle with no number; completed steps show a check icon."
+    },
+    {
+      "name": "clickable",
+      "type": "\"none\" | \"completed\" | \"all\"",
+      "default": "\"none\"",
+      "description": "Controls which steps respond to click for navigation. \"none\" — no steps are clickable (ideal for display mode). \"completed\" — only completed steps can be clicked (go back). \"all\" — all non-disabled steps can be clicked (free navigation)."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged via cn() on the root div."
+    }
+  ],
+  "dependencies": [
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
+  "accessibility": {
+    "role": "StepperList renders as an <ol> (ordered list). Each StepperItem renders as an <li>. The active step's <li> receives aria-current=\"step\".",
+    "keyboard": "When clickable is \"completed\" or \"all\", step indicators render as <button> elements and are reachable via Tab. When clickable is \"none\", indicators render as <div> and are not in the tab order.",
+    "aria": "aria-current=\"step\" is set on the active StepperItem. Each clickable indicator has an aria-label of \"Paso N: title\".",
+    "notes": "Color alone does not convey step state — icons (check, X) and aria-current are also used. Ensure step titles are descriptive enough to be meaningful without visual context."
+  },
+  "commonlyUsedWith": [
+    "button",
+    "card",
+    "badge",
+    "progress"
+  ],
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use completedSteps to explicitly track which steps are done. Update it as the user advances through the wizard.",
+      "code": "const [completedSteps, setCompletedSteps] = useState<string[]>([])\n\nconst goNext = () => {\n  setCompletedSteps(prev => [...prev, currentStep])\n  setCurrentStep(nextStep)\n}"
+    },
+    {
+      "type": "do",
+      "description": "Use display mode (no onValueChange, clickable=\"none\") for read-only status indicators like delivery trackers.",
+      "code": "<Stepper value=\"transito\" completedSteps={[\"recibido\", \"preparacion\"]}>\n  <StepperList>\n    <StepperItem value=\"recibido\" title=\"Pedido recibido\" description=\"24 feb, 10:32\" />\n    <StepperItem value=\"transito\" title=\"En camino\" description={<Badge variant=\"gray\">En ruta</Badge>} />\n    <StepperItem value=\"entregado\" title=\"Entregado\" />\n  </StepperList>\n</Stepper>"
+    },
+    {
+      "type": "dont",
+      "description": "Do not rely on the step order to auto-compute completedSteps — the component never infers completion. Always pass completedSteps explicitly.",
+      "code": "// Wrong — steps before value are NOT auto-completed\n<Stepper value=\"step3\">\n  ...\n</Stepper>"
+    },
+    {
+      "type": "dont",
+      "description": "Do not use Stepper as a tab bar or for non-sequential navigation. It is designed for ordered, progressive flows.",
+      "code": "// Wrong — use Tabs for non-sequential switching\n<Stepper value={activeTab} clickable=\"all\">\n  ...\n</Stepper>"
+    }
+  ],
+  "sections": [
+    {
+      "title": "Anatomy",
+      "blocks": [
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "<Stepper value=\"...\" completedSteps={[...]}>\n  <StepperList>\n    <StepperItem value=\"...\" title=\"...\" description=\"...\" />\n    <StepperItem value=\"...\" title=\"...\" error />\n    <StepperItem value=\"...\" title=\"...\" disabled />\n  </StepperList>\n</Stepper>"
+        }
+      ]
+    },
+    {
+      "title": "StepperItem props",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Prop", "Type", "Default", "Description"],
+          "rows": [
+            ["value", "string", "required", "Unique identifier for this step. Used as the lookup key in Stepper's value and completedSteps props."],
+            ["title", "string", "required", "Step label rendered below (horizontal) or beside (vertical) the indicator."],
+            ["description", "React.ReactNode", "undefined", "Optional secondary content below the title. Accepts ReactNode for rich content like timestamps or badges."],
+            ["error", "boolean", "false", "When true, renders the step in an error state: destructive-colored indicator with an X icon. Takes priority over all other states."],
+            ["disabled", "boolean", "false", "When true, prevents this step from being clicked even when the Stepper's clickable prop allows navigation."],
+            ["className", "string", "undefined", "Additional CSS classes merged via cn() on the <li> element."]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Navigation mode — interactive wizard",
+      "blocks": [
+        {
+          "type": "text",
+          "content": "The consumer owns navigation state. The Stepper renders only the step indicators — content panels, Next/Back buttons, and validation logic all live outside the component."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "const STEPS = [\n  { value: \"info\", title: \"Información\" },\n  { value: \"address\", title: \"Dirección\" },\n  { value: \"payment\", title: \"Pago\" },\n]\n\nfunction Wizard() {\n  const [step, setStep] = useState(\"info\")\n  const [completed, setCompleted] = useState<string[]>([])\n\n  const navigateTo = (next: string) => {\n    const newIndex = STEPS.findIndex(s => s.value === next)\n    setCompleted(STEPS.slice(0, newIndex).map(s => s.value))\n    setStep(next)\n  }\n\n  const index = STEPS.findIndex(s => s.value === step)\n\n  return (\n    <div className=\"flex flex-col gap-6\">\n      <Stepper value={step} onValueChange={navigateTo} completedSteps={completed} clickable=\"all\">\n        <StepperList>\n          {STEPS.map(s => (\n            <StepperItem key={s.value} value={s.value} title={s.title} />\n          ))}\n        </StepperList>\n      </Stepper>\n\n      {/* Step content panel */}\n      <div>{/* render current step UI */}</div>\n\n      <div className=\"flex justify-between\">\n        <Button variant=\"outline\" disabled={index === 0} onClick={() => navigateTo(STEPS[index - 1]!.value)}>Anterior</Button>\n        <Button disabled={index === STEPS.length - 1} onClick={() => navigateTo(STEPS[index + 1]!.value)}>Siguiente</Button>\n      </div>\n    </div>\n  )\n}"
+        }
+      ]
+    },
+    {
+      "title": "Display mode — status tracker",
+      "blocks": [
+        {
+          "type": "text",
+          "content": "Omit onValueChange and leave clickable at its default \"none\" to create a purely informational status display. The description prop accepts ReactNode for rich content like dates or badges."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "<Stepper value=\"transito\" completedSteps={[\"recibido\", \"preparacion\"]}>\n  <StepperList>\n    <StepperItem value=\"recibido\" title=\"Pedido recibido\" description=\"24 feb, 10:32\" />\n    <StepperItem value=\"preparacion\" title=\"En preparación\" description=\"24 feb, 11:15\" />\n    <StepperItem\n      value=\"transito\"\n      title=\"En camino\"\n      description={<Badge variant=\"gray\">En ruta</Badge>}\n    />\n    <StepperItem value=\"entregado\" title=\"Entregado\" description=\"Est. 25 feb\" />\n  </StepperList>\n</Stepper>"
+        }
+      ]
+    }
+  ]
+}

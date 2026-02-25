@@ -1,5 +1,17 @@
 # Changelog
 
+### [0.6.0] - 2026-02-25
+### Added
+- Componente **Stepper** — indicador visual de progreso para procesos secuenciales. Soporta dos modos de uso: navegación (asistente interactivo multi-paso) y display (estado informativo como seguimiento de pedidos).
+  - Sub-componentes: `Stepper`, `StepperList`, `StepperItem`.
+  - Orientación `horizontal` (por defecto) y `vertical`.
+  - Variante de indicador `numbered` (por defecto, con números y check al completar) y `dots` (círculos sin número).
+  - Estados por paso: `pending`, `active`, `completed` y `error`.
+  - Prop `clickable`: `"none"` | `"completed"` | `"all"` para controlar la navegación por clic.
+  - Prop `completedSteps` explícita para control total del estado de completado.
+  - Soporte controlado (`value` + `onValueChange`) y no controlado (`defaultValue`).
+  - Prop `description` en `StepperItem` acepta `ReactNode` para contenido enriquecido (fechas, badges, etc.).
+
 ### [0.5.0] - 2026-02-24
 ### Added
 - Módulo **DatePicker** con tres componentes de selección de fechas:

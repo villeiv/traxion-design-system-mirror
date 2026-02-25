@@ -28,6 +28,7 @@ export * from "./components/Progress";
 export * from "./components/Radio-group";
 export * from "./components/Select";
 export * from "./components/Separator";
+export * from "./components/Stepper";
 export * from "./components/Sortable-board";
 export * from "./components/Switch";
 export * from "./components/Sheet";
