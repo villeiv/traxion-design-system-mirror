@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "file-drop-zone",
   "description": "A drag-and-drop file upload zone that also supports click-to-browse. Validates files against an optional accept filter and supports single or multiple file selection.",
-  "category": "forms",
   "tags": [
     "file",
     "upload",

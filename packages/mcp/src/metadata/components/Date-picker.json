@@ -3,7 +3,6 @@
   "packageVersion": "0.5.0",
   "slug": "date-picker",
   "description": "A set of three date picker components built on top of Calendar and Popover. DatePicker selects a single date (controlled via value/onChange or uncontrolled via defaultValue). DateRangePicker selects a date range with a pending state — the selection is not committed until the user presses Aplicar; Limpiar clears the pending selection. DateTimePicker combines a calendar and a native time input in one popover with a pending state confirmed via Aplicar, preserving the time when the day changes. All pickers support locale (es/en), custom date-fns format tokens, date restrictions (fromDate/toDate), and caption layout for navigation. These are the go-to components for all date and date-range selection needs: forms, filter panels, DataTableToolbar, report configuration, and any UI where the user picks a date. For time-only selection use the standalone TimePicker component.",
-  "category": "forms",
   "tags": [
     "date-picker",
     "date",
@@ -21,64 +20,274 @@
       "name": "DatePicker",
       "description": "Single date picker. Supports controlled (value/onChange) and uncontrolled (defaultValue) modes. Closes the popover immediately on day selection.",
       "props": [
-        { "name": "value", "type": "Date | undefined", "default": "undefined", "description": "Controlled selected date." },
-        { "name": "defaultValue", "type": "Date | undefined", "default": "undefined", "description": "Initial date for uncontrolled usage." },
-        { "name": "onChange", "type": "(date: Date | undefined) => void", "default": "undefined", "description": "Callback fired when a date is selected or cleared." },
-        { "name": "placeholder", "type": "string", "default": "\"Selecciona una fecha\"", "description": "Text shown when no date is selected." },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the trigger button and calendar." },
-        { "name": "localeCode", "type": "\"es\" | \"en\"", "default": "\"es\"", "description": "Calendar locale for month/weekday names and date formatting." },
-        { "name": "dateFormat", "type": "string", "default": "\"PPP\"", "description": "date-fns format string used to display the selected date (e.g. 'dd/MM/yyyy', 'PPP')." },
-        { "name": "fromDate", "type": "Date | undefined", "default": "undefined", "description": "Minimum selectable date. Days before this date are disabled." },
-        { "name": "toDate", "type": "Date | undefined", "default": "undefined", "description": "Maximum selectable date. Days after this date are disabled." },
-        { "name": "captionLayout", "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"", "default": "\"label\"", "description": "Calendar header layout. Use 'dropdown' for fast navigation to distant dates (e.g. birth dates)." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes applied to the outer wrapper div. Use this to control the width (e.g. className=\"w-full\")." }
+        {
+          "name": "value",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Controlled selected date."
+        },
+        {
+          "name": "defaultValue",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Initial date for uncontrolled usage."
+        },
+        {
+          "name": "onChange",
+          "type": "(date: Date | undefined) => void",
+          "default": "undefined",
+          "description": "Callback fired when a date is selected or cleared."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "\"Selecciona una fecha\"",
+          "description": "Text shown when no date is selected."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the trigger button and calendar."
+        },
+        {
+          "name": "localeCode",
+          "type": "\"es\" | \"en\"",
+          "default": "\"es\"",
+          "description": "Calendar locale for month/weekday names and date formatting."
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "default": "\"PPP\"",
+          "description": "date-fns format string used to display the selected date (e.g. 'dd/MM/yyyy', 'PPP')."
+        },
+        {
+          "name": "fromDate",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Minimum selectable date. Days before this date are disabled."
+        },
+        {
+          "name": "toDate",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Maximum selectable date. Days after this date are disabled."
+        },
+        {
+          "name": "captionLayout",
+          "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"",
+          "default": "\"label\"",
+          "description": "Calendar header layout. Use 'dropdown' for fast navigation to distant dates (e.g. birth dates)."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes applied to the outer wrapper div. Use this to control the width (e.g. className=\"w-full\")."
+        }
       ]
     },
     {
       "name": "DateRangePicker",
       "description": "Date range picker with an internal pending state. The selected range is not committed to onChange until the user clicks Aplicar. Limpiar clears the pending selection without affecting the committed value.",
       "props": [
-        { "name": "value", "type": "DateRange | undefined", "default": "undefined", "description": "Controlled selected range { from: Date, to?: Date }." },
-        { "name": "onChange", "type": "(range: DateRange | undefined) => void", "default": "undefined", "description": "Callback fired when the user confirms the range via Aplicar." },
-        { "name": "placeholder", "type": "string", "default": "\"Selecciona un rango de fechas\"", "description": "Text shown when no range is selected." },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the trigger button and calendar." },
-        { "name": "localeCode", "type": "\"es\" | \"en\"", "default": "\"es\"", "description": "Calendar locale." },
-        { "name": "dateFormat", "type": "string", "default": "\"PPP\"", "description": "date-fns format string for displaying each date in the trigger." },
-        { "name": "fromDate", "type": "Date | undefined", "default": "undefined", "description": "Minimum selectable date." },
-        { "name": "toDate", "type": "Date | undefined", "default": "undefined", "description": "Maximum selectable date." },
-        { "name": "captionLayout", "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"", "default": "\"label\"", "description": "Calendar header layout." },
-        { "name": "numberOfMonths", "type": "number", "default": "2", "description": "Number of months displayed side by side in the calendar." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes applied to the outer wrapper div." }
+        {
+          "name": "value",
+          "type": "DateRange | undefined",
+          "default": "undefined",
+          "description": "Controlled selected range { from: Date, to?: Date }."
+        },
+        {
+          "name": "onChange",
+          "type": "(range: DateRange | undefined) => void",
+          "default": "undefined",
+          "description": "Callback fired when the user confirms the range via Aplicar."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "\"Selecciona un rango de fechas\"",
+          "description": "Text shown when no range is selected."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the trigger button and calendar."
+        },
+        {
+          "name": "localeCode",
+          "type": "\"es\" | \"en\"",
+          "default": "\"es\"",
+          "description": "Calendar locale."
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "default": "\"PPP\"",
+          "description": "date-fns format string for displaying each date in the trigger."
+        },
+        {
+          "name": "fromDate",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Minimum selectable date."
+        },
+        {
+          "name": "toDate",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Maximum selectable date."
+        },
+        {
+          "name": "captionLayout",
+          "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"",
+          "default": "\"label\"",
+          "description": "Calendar header layout."
+        },
+        {
+          "name": "numberOfMonths",
+          "type": "number",
+          "default": "2",
+          "description": "Number of months displayed side by side in the calendar."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes applied to the outer wrapper div."
+        }
       ]
     },
     {
       "name": "DateTimePicker",
       "description": "Combined date and time picker. The user selects a day in the calendar, adjusts the time with the native time input, and confirms with Aplicar. The time is preserved when changing day. Nothing is committed to onChange until Aplicar is pressed. For time-only selection use the standalone TimePicker component.",
       "props": [
-        { "name": "value", "type": "Date | undefined", "default": "undefined", "description": "Controlled selected date+time." },
-        { "name": "onChange", "type": "(date: Date | undefined) => void", "default": "undefined", "description": "Callback fired when the user confirms via Aplicar." },
-        { "name": "placeholder", "type": "string", "default": "\"Selecciona fecha y hora\"", "description": "Text shown when no date is selected." },
-        { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the trigger button and calendar." },
-        { "name": "localeCode", "type": "\"es\" | \"en\"", "default": "\"es\"", "description": "Calendar locale." },
-        { "name": "dateFormat", "type": "string", "default": "\"PPP\"", "description": "date-fns format string for the date portion displayed in the trigger." },
-        { "name": "fromDate", "type": "Date | undefined", "default": "undefined", "description": "Minimum selectable date." },
-        { "name": "toDate", "type": "Date | undefined", "default": "undefined", "description": "Maximum selectable date." },
-        { "name": "captionLayout", "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"", "default": "\"label\"", "description": "Calendar header layout." },
-        { "name": "className", "type": "string", "default": "undefined", "description": "Additional CSS classes applied to the outer wrapper div." }
+        {
+          "name": "value",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Controlled selected date+time."
+        },
+        {
+          "name": "onChange",
+          "type": "(date: Date | undefined) => void",
+          "default": "undefined",
+          "description": "Callback fired when the user confirms via Aplicar."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "\"Selecciona fecha y hora\"",
+          "description": "Text shown when no date is selected."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the trigger button and calendar."
+        },
+        {
+          "name": "localeCode",
+          "type": "\"es\" | \"en\"",
+          "default": "\"es\"",
+          "description": "Calendar locale."
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "default": "\"PPP\"",
+          "description": "date-fns format string for the date portion displayed in the trigger."
+        },
+        {
+          "name": "fromDate",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Minimum selectable date."
+        },
+        {
+          "name": "toDate",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Maximum selectable date."
+        },
+        {
+          "name": "captionLayout",
+          "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"",
+          "default": "\"label\"",
+          "description": "Calendar header layout."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes applied to the outer wrapper div."
+        }
       ]
     }
   ],
   "props": [
-    { "name": "value", "type": "Date | DateRange | undefined", "default": "undefined", "description": "Controlled selected value. Use Date for DatePicker/DateTimePicker, DateRange for DateRangePicker." },
-    { "name": "onChange", "type": "function", "default": "undefined", "description": "Callback fired when a selection is confirmed." },
-    { "name": "placeholder", "type": "string", "default": "varies per component", "description": "Text shown in the trigger button when nothing is selected." },
-    { "name": "disabled", "type": "boolean", "default": "false", "description": "Disables the trigger button and the calendar." },
-    { "name": "localeCode", "type": "\"es\" | \"en\"", "default": "\"es\"", "description": "Locale used for month/weekday names and date formatting." },
-    { "name": "dateFormat", "type": "string", "default": "\"PPP\"", "description": "date-fns format string for the selected date displayed in the trigger button." },
-    { "name": "fromDate", "type": "Date | undefined", "default": "undefined", "description": "Minimum selectable date. Days before this are disabled." },
-    { "name": "toDate", "type": "Date | undefined", "default": "undefined", "description": "Maximum selectable date. Days after this are disabled." },
-    { "name": "captionLayout", "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"", "default": "\"label\"", "description": "Calendar header style. Use 'dropdown' when navigating to distant dates (e.g. birth date fields)." },
-    { "name": "className", "type": "string", "default": "undefined", "description": "CSS classes applied to the outermost wrapper element. Use this to set the width." }
+    {
+      "name": "value",
+      "type": "Date | DateRange | undefined",
+      "default": "undefined",
+      "description": "Controlled selected value. Use Date for DatePicker/DateTimePicker, DateRange for DateRangePicker."
+    },
+    {
+      "name": "onChange",
+      "type": "function",
+      "default": "undefined",
+      "description": "Callback fired when a selection is confirmed."
+    },
+    {
+      "name": "placeholder",
+      "type": "string",
+      "default": "varies per component",
+      "description": "Text shown in the trigger button when nothing is selected."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "default": "false",
+      "description": "Disables the trigger button and the calendar."
+    },
+    {
+      "name": "localeCode",
+      "type": "\"es\" | \"en\"",
+      "default": "\"es\"",
+      "description": "Locale used for month/weekday names and date formatting."
+    },
+    {
+      "name": "dateFormat",
+      "type": "string",
+      "default": "\"PPP\"",
+      "description": "date-fns format string for the selected date displayed in the trigger button."
+    },
+    {
+      "name": "fromDate",
+      "type": "Date | undefined",
+      "default": "undefined",
+      "description": "Minimum selectable date. Days before this are disabled."
+    },
+    {
+      "name": "toDate",
+      "type": "Date | undefined",
+      "default": "undefined",
+      "description": "Maximum selectable date. Days after this are disabled."
+    },
+    {
+      "name": "captionLayout",
+      "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"",
+      "default": "\"label\"",
+      "description": "Calendar header style. Use 'dropdown' when navigating to distant dates (e.g. birth date fields)."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "CSS classes applied to the outermost wrapper element. Use this to set the width."
+    }
   ],
   "dependencies": [
     "react-day-picker",

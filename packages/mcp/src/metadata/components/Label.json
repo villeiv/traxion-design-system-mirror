@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "label",
   "description": "An accessible label component built on @radix-ui/react-label. Uses class-variance-authority for variant-based styling. Automatically disables visual appearance when its associated peer input is disabled.",
-  "category": "forms",
   "tags": [
     "label",
     "form",

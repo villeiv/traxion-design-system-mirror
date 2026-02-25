@@ -3,7 +3,6 @@
   "slug": "datatable",
   "packageVersion": "0.4.0",
   "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
-  "category": "data-display",
   "tags": [
     "datatable",
     "table",
@@ -43,13 +42,43 @@
         },
         {
           "type": "table",
-          "headers": ["Name", "Type", "Default", "Description"],
+          "headers": [
+            "Name",
+            "Type",
+            "Default",
+            "Description"
+          ],
           "rows": [
-            ["pageSize", "number", "10", "Initial number of rows per page."],
-            ["namespace", "string", "undefined", "Prefix for URL params when multiple tables share the same page."],
-            ["debounceMs", "number", "300", "Debounce delay in ms for filter changes when syncing to URL."],
-            ["router", "{ push: (url: string) => void }", "undefined", "Next.js router instance. When provided, table state is synced to URL."],
-            ["searchParams", "URLSearchParams or null", "undefined", "Next.js searchParams for reading initial state from URL."]
+            [
+              "pageSize",
+              "number",
+              "10",
+              "Initial number of rows per page."
+            ],
+            [
+              "namespace",
+              "string",
+              "undefined",
+              "Prefix for URL params when multiple tables share the same page."
+            ],
+            [
+              "debounceMs",
+              "number",
+              "300",
+              "Debounce delay in ms for filter changes when syncing to URL."
+            ],
+            [
+              "router",
+              "{ push: (url: string) => void }",
+              "undefined",
+              "Next.js router instance. When provided, table state is synced to URL."
+            ],
+            [
+              "searchParams",
+              "URLSearchParams or null",
+              "undefined",
+              "Next.js searchParams for reading initial state from URL."
+            ]
           ]
         },
         {
@@ -58,20 +87,72 @@
         },
         {
           "type": "table",
-          "headers": ["Name", "Type", "Description"],
+          "headers": [
+            "Name",
+            "Type",
+            "Description"
+          ],
           "rows": [
-            ["pagination", "PaginationState", "{ pageIndex: number, pageSize: number }"],
-            ["setPagination", "(updater) => void", "Setter for pagination state."],
-            ["sorting", "SortingState", "[{ id: string, desc: boolean }]"],
-            ["setSorting", "(updater) => void", "Setter for sorting state."],
-            ["columnFilters", "ColumnFiltersState", "[{ id: string, value: unknown }]"],
-            ["setColumnFilters", "(updater) => void", "Setter for column filters."],
-            ["columnVisibility", "VisibilityState", "Object mapping column IDs to boolean."],
-            ["setColumnVisibility", "(updater) => void", "Setter for column visibility."],
-            ["columnOrder", "ColumnOrderState", "Array of column IDs for display order."],
-            ["setColumnOrder", "(updater) => void", "Setter for column order."],
-            ["isPending", "boolean", "True while URL transition is pending."],
-            ["getSearchParams", "() => URLSearchParams", "Serializes table state for API calls."]
+            [
+              "pagination",
+              "PaginationState",
+              "{ pageIndex: number, pageSize: number }"
+            ],
+            [
+              "setPagination",
+              "(updater) => void",
+              "Setter for pagination state."
+            ],
+            [
+              "sorting",
+              "SortingState",
+              "[{ id: string, desc: boolean }]"
+            ],
+            [
+              "setSorting",
+              "(updater) => void",
+              "Setter for sorting state."
+            ],
+            [
+              "columnFilters",
+              "ColumnFiltersState",
+              "[{ id: string, value: unknown }]"
+            ],
+            [
+              "setColumnFilters",
+              "(updater) => void",
+              "Setter for column filters."
+            ],
+            [
+              "columnVisibility",
+              "VisibilityState",
+              "Object mapping column IDs to boolean."
+            ],
+            [
+              "setColumnVisibility",
+              "(updater) => void",
+              "Setter for column visibility."
+            ],
+            [
+              "columnOrder",
+              "ColumnOrderState",
+              "Array of column IDs for display order."
+            ],
+            [
+              "setColumnOrder",
+              "(updater) => void",
+              "Setter for column order."
+            ],
+            [
+              "isPending",
+              "boolean",
+              "True while URL transition is pending."
+            ],
+            [
+              "getSearchParams",
+              "() => URLSearchParams",
+              "Serializes table state for API calls."
+            ]
           ]
         },
         {
@@ -98,10 +179,25 @@
         },
         {
           "type": "table",
-          "headers": ["Prop", "Type", "Default", "Description"],
+          "headers": [
+            "Prop",
+            "Type",
+            "Default",
+            "Description"
+          ],
           "rows": [
-            ["children", "React.ReactNode", "required", "Filter inputs, buttons, DataTableViewOptions, or any controls."],
-            ["className", "string", "undefined", "Additional CSS classes."]
+            [
+              "children",
+              "React.ReactNode",
+              "required",
+              "Filter inputs, buttons, DataTableViewOptions, or any controls."
+            ],
+            [
+              "className",
+              "string",
+              "undefined",
+              "Additional CSS classes."
+            ]
           ]
         },
         {
@@ -110,11 +206,31 @@
         },
         {
           "type": "table",
-          "headers": ["Prop", "Type", "Default", "Description"],
+          "headers": [
+            "Prop",
+            "Type",
+            "Default",
+            "Description"
+          ],
           "rows": [
-            ["column", "Column<TData, TValue>", "required", "TanStack Table column instance from header render function."],
-            ["title", "string", "required", "Display text for the column header."],
-            ["className", "string", "undefined", "Additional CSS classes."]
+            [
+              "column",
+              "Column<TData, TValue>",
+              "required",
+              "TanStack Table column instance from header render function."
+            ],
+            [
+              "title",
+              "string",
+              "required",
+              "Display text for the column header."
+            ],
+            [
+              "className",
+              "string",
+              "undefined",
+              "Additional CSS classes."
+            ]
           ]
         },
         {
@@ -127,10 +243,25 @@
         },
         {
           "type": "table",
-          "headers": ["Prop", "Type", "Default", "Description"],
+          "headers": [
+            "Prop",
+            "Type",
+            "Default",
+            "Description"
+          ],
           "rows": [
-            ["pageSizeOptions", "number[]", "[3, 5, 10, 20, 30, 50]", "Page size options in the rows-per-page selector."],
-            ["showRowSelection", "boolean", "true", "Shows 'X of Y row(s) selected' when rows are selected."]
+            [
+              "pageSizeOptions",
+              "number[]",
+              "[3, 5, 10, 20, 30, 50]",
+              "Page size options in the rows-per-page selector."
+            ],
+            [
+              "showRowSelection",
+              "boolean",
+              "true",
+              "Shows 'X of Y row(s) selected' when rows are selected."
+            ]
           ]
         }
       ]

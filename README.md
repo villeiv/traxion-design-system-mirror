@@ -77,12 +77,10 @@ Este servidor actúa como una **capa de documentación inteligente** para el Des
 
 ### ¿Qué hace el MCP?
 
-- **Proporciona una guía de instalación** - Ayuda a instalar el design system 
-- **Descubrimiento de componentes** - Encuentra componentes relevantes por palabra clave
-- **Documentación contextual** - Proporciona props, ejemplos y guías de uso
-- **Scaffolding de código** - Genera código inicial con imports correctos del paquete
-- **Validación de uso** - Verifica que el código siga los patrones del Design System
-- **Sugerencias inteligentes** - Recomienda componentes según el caso de uso
+- **Proporciona una guía de instalación** — Ayuda a instalar el design system
+- **Descubrimiento de componentes** — Lista todos los componentes con tags y relaciones
+- **Documentación contextual** — Proporciona props, ejemplos reales de Storybook y guías de uso
+- **Design tokens y guidelines** — Acceso a colores, tipografía, accesibilidad y patrones
 
 ### Configuración
 
@@ -113,12 +111,10 @@ El Traxion Design System usa una **arquitectura híbrida** que combina distribuc
 │   (Fuente de verdad)    │                                   │
 ├─────────────────────────┼───────────────────────────────────┤
 │ • Componentes React     │ • Descubrimiento de componentes   │
-│ • Publicado en GitHub   │ • Scaffolding asistido por IA     │
-│ • Componentes bloqueados│ • Validación de uso               │
-│ • Versionado semántico  │ • Sugerencias contextuales        │
-│ • Import tradicional    │ • Ejemplos personalizados         │
-│ • Import tradicional    │ • Acceso a stories                │
-│                         │ • Helper de instalación del DS    │
+│ • Publicado en GitHub   │ • Documentación contextual        │
+│ • Componentes bloqueados│ • Ejemplos reales de Storybook    │
+│ • Versionado semántico  │ • Design tokens y guidelines      │
+│ • Import tradicional    │ • Helper de instalación del DS    │
 └─────────────────────────┴───────────────────────────────────┘
 ```
 

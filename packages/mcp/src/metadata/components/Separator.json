@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "separator",
   "description": "A visual divider between content sections. Built on Radix UI Separator primitive. Renders as a 1px line that adapts orientation between horizontal (full width) and vertical (full height).",
-  "category": "layout",
   "tags": [
     "separator",
     "divider",

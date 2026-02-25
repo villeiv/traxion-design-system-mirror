@@ -3,7 +3,6 @@
   "packageVersion": "0.5.0",
   "slug": "time-picker",
   "description": "A styled native <input type=\"time\"> that integrates with the Traxion Design System. The go-to component for any time-of-day input: forms, filter panels, DataTableToolbar, report scheduling, shift configuration, and any other UI where the user picks a time. Uses the browser's built-in time picker controls (keyboard increment/decrement, scroll wheel, AM/PM per system locale). Step is fixed at 60 seconds (1-minute precision, no seconds). Extends all standard HTML input attributes except type. For combined date and time selection in a single popover, use DateTimePicker instead.",
-  "category": "forms",
   "tags": [
     "time",
     "time-picker",

@@ -4,7 +4,7 @@
 
 ## Overview
 
-This MCP server helps developers and AI agents use the `@traxion-global/design-system` package effectively through AI-assisted development. It provides component discovery, documentation, real-world Storybook examples, and code generation capabilities.
+This MCP server helps developers and AI agents use the `@traxion-global/design-system` package effectively through AI-assisted development. It provides component discovery, documentation, and real-world Storybook examples.
 
 ## Hybrid Architecture
 
@@ -18,11 +18,10 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 |   (Source of Truth)         |   (Smart Documentation Layer)      |
 +-----------------------------+------------------------------------+
 | - 36 React components       | - Component discovery              |
-| - Published to GitHub       | - AI-assisted scaffolding          |
-| - Locked (no edits)         | - Usage validation                 |
-| - Versioned releases        | - Smart suggestions                |
-| - Traditional import        | - Context-aware examples           |
-|                             | - Design system installation guide |
+| - Published to GitHub       | - Context-aware documentation      |
+| - Locked (no edits)         | - Real Storybook examples          |
+| - Versioned releases        | - Design tokens & guidelines       |
+| - Traditional import        | - Design system installation guide |
 +-----------------------------+------------------------------------+
 ```
 
@@ -64,9 +63,6 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 1. **Installation** — Run `install_design_system()` to automatically install and configure the design system
 2. **Discovery** — "What components are available?"
 3. **Documentation** — "How do I use the Button component?"
-4. **Scaffolding** — "Generate a login form for me"
-5. **Validation** — "Is my code using components correctly?"
-6. **Suggestions** — "What components should I use for X?"
 
 ---
 
@@ -94,13 +90,11 @@ A Model Context Protocol server that provides intelligent documentation and scaf
                                      |
                               registerTools()
                                      |
-         +------------+---------+----+----+-----------+
-         |            |         |         |           |
-    list_components  get_    suggest_  scaffold_  install_
-    search_         component components feature  design_system
-                    get_stories        validate_
-                    get_tokens          usage
-                    get_guideline
+         +-------+--------+--------+--------+
+         |       |        |        |        |
+    list_    get_      get_     get_    install_
+    components component tokens  guideline design_system
+             get_stories              version
                                      |
                                stdio transport
                                      |
@@ -110,9 +104,8 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 ### Typical AI Workflow
 
 ```
-1. suggest_components("invoice table")
-   -> Table (paired with: badge, card, no-data-message)
-   -> Badge, Pagination
+1. list_components()
+   -> Alphabetical list with tags and commonlyUsedWith
 
 2. get_component("table")
    -> Package version, props, accessibility, anatomy
@@ -144,29 +137,15 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 |------|-----------|---------|
 | **`install_design_system`** | `projectPath?`, `skipTokenCheck?`, `confirmBackup?` | Interactive installer: configures `.npmrc`, installs packages, sets up CSS and Tailwind |
 
-### Discovery Tools
+### Discovery & Documentation
 
 | Tool | Parameters | Purpose |
 |------|-----------|---------|
-| **`list_components`** | `category?: string` | Entry point. Lists all components, optionally filtered by category (actions, forms, layout, feedback, overlay, navigation, data-display) |
-| **`search_components`** | `query: string` | Full-text search across component name, description, tags, and category |
-
-### Detail Tools
-
-| Tool | Parameters | Purpose |
-|------|-----------|---------|
+| **`list_components`** | _(none)_ | Entry point. Lists all components alphabetically with tags and commonly paired components |
 | **`get_component`** | `slug: string`, `include_source?: bool` | Complete docs: import, props, accessibility, **stories with real source code**, best practices, commonly used with, dependencies, package version, and documentation sections (for complex components) |
 | **`get_component_stories`** | `slug: string`, `story_name?: string` | All stories for a component with full source code. Useful for filtering a specific story |
 | **`get_design_tokens`** | `category?: string` | Design tokens: colors, radius, font. HSL format, Tailwind-compatible |
 | **`get_guideline`** | `name: string` | Design guidelines in markdown: `accessibility`, `patterns`, `z-index` |
-
-### Smart Tools
-
-| Tool | Parameters | Purpose |
-|------|-----------|---------|
-| **`suggest_components`** | `use_case: string`, `max_results?: number` | Given a use case ("login form", "data table"), suggests components ranked by relevance + companion boost |
-| **`scaffold_feature`** | `description: string`, `components?: string[]` | Generates starter code with imports, components, and TODOs |
-| **`validate_usage`** | `code: string` | Validates correct imports from `@traxion-global/design-system/react`, no source copying, no component redefinition |
 
 ### Utility Tools
 
@@ -199,7 +178,6 @@ File: `packages/mcp/src/metadata/components/MyComponent.json`
   "slug": "my-component",
   "packageVersion": "0.1.0",
   "description": "Clear description of what it does and when to use it.",
-  "category": "layout",
   "tags": ["my-component", "layout", "container"],
   "props": [
     {
@@ -279,7 +257,6 @@ The registry auto-discovers everything:
 **Verification:**
 - `version()` -> confirm component count increased by 1
 - `get_component("my-component")` -> should show stories inline with real code
-- `suggest_components("my use case")` -> should appear if tags/keywords match
 - `get_component_stories("my-component")` -> should list all stories with source
 
 ### Checklist
@@ -445,29 +422,15 @@ export function Button({ children, className, ...props }: ButtonProps) {
 
 ---
 
-## Component Categories
-
-- **navigation** — Accordion, Command, DropdownMenu, Pagination, Stepper
-- **overlay** — AlertDialog, Dialog, HoverCard, Popover, Sheet, Tooltip
-- **data-display** — Avatar, Badge, DataTable, InfoCard, SortableBoard, Table
-- **actions** — Button
-- **forms** — Calendar, Checkbox, FileDropZone, Input, Label, RadioGroup, Select, Switch, Textarea
-- **layout** — Card, Separator
-- **feedback** — FullPageOverlayLoader, InlineLoader, NoDataMessage, Progress, ToasterService
-
----
-
 ## Design Philosophy
 
 This MCP server follows an **AI-first development philosophy**. Rather than relying solely on traditional documentation or manual browsing, the design system is built to be consumed primarily through AI agents. The MCP server is the primary interface for developers to discover, learn, and use components — making AI the first-class citizen in the development workflow.
 
 ### What MCP Should Do:
-- Help developers **use** components from the package
-- Generate code with proper imports
-- Provide documentation and real Storybook examples
-- Scaffold complete features
-- Validate usage patterns
-- Suggest companion components via `commonlyUsedWith`
+- Help developers **discover** and **use** components from the package
+- Provide documentation, props, accessibility, and real Storybook examples
+- Surface companion components via `commonlyUsedWith`
+- Expose design tokens and guidelines
 
 ### What MCP Should NOT Do:
 - Copy component source code

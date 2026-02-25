@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "switch",
   "description": "A toggle switch control built on Radix UI Switch primitive. Renders as a small track (h-5 w-9) with a sliding circular thumb that transitions between checked and unchecked states. Supports primary color when checked and input color when unchecked.",
-  "category": "forms",
   "tags": [
     "switch",
     "toggle",

@@ -56,9 +56,9 @@ Before writing any code, understand the design space.
 
 Search the current 36 components for reuse or composition opportunities:
 
-| Category | Components |
-|----------|-----------|
-| **navigation** | Accordion, Command, DropdownMenu, Pagination |
+| Functional Area | Components |
+|-----------------|-----------|
+| **navigation** | Accordion, Command, DropdownMenu, Pagination, Stepper |
 | **overlay** | AlertDialog, Dialog, HoverCard, Popover, Sheet, Tooltip |
 | **data-display** | Avatar, Badge, DataTable, InfoCard, SortableBoard, Table |
 | **actions** | Button |
@@ -528,7 +528,6 @@ File naming: match the component file name but with `.json` extension. Use kebab
   "slug": "component-name",
   "packageVersion": "0.x.y",
   "description": "Clear description of what it does and when to use it.",
-  "category": "category-here",
   "tags": ["component-name", "relevant", "tags"],
   "props": [
     {
@@ -608,19 +607,7 @@ For components that need documentation beyond props and examples (hook APIs, sub
 
 Most simple components do **not** need `sections`. See `packages/mcp/src/metadata/components/DataTable.json` for a full example.
 
-### 6.5 Valid Categories
-
-| Category | When to use |
-|----------|------------|
-| `navigation` | Components for navigating content or menus |
-| `overlay` | Dialogs, popovers, tooltips — anything that floats above the page |
-| `data-display` | Showing data: tables, badges, avatars, cards with data |
-| `actions` | Buttons and interactive triggers |
-| `forms` | Form inputs, selectors, toggles |
-| `layout` | Structural components: cards, separators, containers |
-| `feedback` | Loaders, progress bars, empty states, toasts |
-
-### 6.6 Slug Convention
+### 6.5 Slug Convention
 
 The slug is the kebab-case version of the component name, used as the lookup key in MCP tools:
 - `Button` → `button`
@@ -628,7 +615,7 @@ The slug is the kebab-case version of the component name, used as the lookup key
 - `AlertDialog` → `alert-dialog`
 - `NoDataMessage` → `no-data-message`
 
-### 6.7 MCP Version Bump
+### 6.6 MCP Version Bump
 
 **Every time the MCP registry changes** (new component metadata, updated metadata, new tools, changed tool behaviour) you must bump the MCP version in **three places in sync**:
 
@@ -668,7 +655,6 @@ npm run dev --workspace=@traxion-global/mcp
 
 Test these queries:
 - `get_component("component-slug")` — should return full metadata with stories
-- `suggest_components("relevant use case")` — should appear in results
 - `get_component_stories("component-slug")` — should list all stories with source
 
 ### 7.3 Verify Storybook

@@ -49,7 +49,7 @@ export interface ComponentMeta {
   slug: string;
   packageVersion?: string;
   description: string;
-  category: string;
+
   tags: string[];
   props: ComponentProp[];
   dependencies: string[];
@@ -249,23 +249,6 @@ export class ComponentRegistry {
     return Array.from(this.components.values()).map(c => c.meta);
   }
 
-  searchComponents(query: string): ComponentMeta[] {
-    const q = query.toLowerCase();
-    return this.listComponents().filter(c =>
-      c.name.toLowerCase().includes(q) ||
-      c.description.toLowerCase().includes(q) ||
-      c.tags.some(t => t.toLowerCase().includes(q)) ||
-      c.category.toLowerCase().includes(q)
-    );
-  }
-
-  getComponentsByCategory(category: string): ComponentMeta[] {
-    return this.listComponents().filter(c => c.category === category);
-  }
-
-  getCategories(): string[] {
-    return [...new Set(this.listComponents().map(c => c.category))];
-  }
 
   getTokens(): Record<string, unknown> {
     return this.tokens;

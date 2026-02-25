@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "card",
   "description": "A container component for grouping related content with a rounded border, background, and shadow. Composed of six sub-components for structured layout: Card (root), CardHeader, CardTitle, CardDescription, CardContent, and CardFooter. All sub-components are forwardRef div elements with className merging.",
-  "category": "layout",
   "tags": [
     "card",
     "container",

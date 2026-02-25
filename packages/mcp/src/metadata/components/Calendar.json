@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "calendar",
   "description": "Low-level calendar primitive built on react-day-picker. Use Calendar directly when you need full control: custom day modifiers (booked/highlighted/disabled dates with custom styles), multiple date selection, an embedded calendar without a popover trigger, or a bespoke booking UI. For standard date and range selection in forms and filters, prefer DatePicker, DateRangePicker, or DateTimePicker — they wrap Calendar with a trigger button, popover management, Apply/Clear patterns, and a consistent UX out of the box.",
-  "category": "forms",
   "tags": [
     "calendar",
     "date",

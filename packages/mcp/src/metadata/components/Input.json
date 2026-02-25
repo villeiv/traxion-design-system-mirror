@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "input",
   "description": "A styled text input component that extends the native HTML input element. Supports all standard input attributes via React.ComponentProps<\"input\"> and merges custom classes via the cn utility. Includes focus ring, placeholder, disabled, and file-input styles.",
-  "category": "forms",
   "tags": [
     "input",
     "text",

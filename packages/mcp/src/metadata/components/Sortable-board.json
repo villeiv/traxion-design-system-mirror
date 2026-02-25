@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "sortable-board",
   "description": "A drag-and-drop Kanban-style board component built on @dnd-kit. Renders columns with draggable items that can be reordered within a column or moved between columns. Supports custom item rendering via a renderItem prop. Columns auto-fit to fill available width using CSS grid.",
-  "category": "data-display",
   "tags": [
     "sortable",
     "kanban",

@@ -3,7 +3,6 @@
   "packageVersion": "0.3.3",
   "slug": "popover",
   "description": "A compound popover component built on @radix-ui/react-popover. Provides Popover (root), PopoverTrigger, PopoverAnchor, and PopoverContent sub-components. Content is rendered through a portal with animated enter/exit transitions.",
-  "category": "overlay",
   "tags": [
     "popover",
     "popup",

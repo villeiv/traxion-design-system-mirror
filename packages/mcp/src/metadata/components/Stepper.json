@@ -3,7 +3,6 @@
   "slug": "stepper",
   "packageVersion": "0.6.0",
   "description": "A visual progress indicator for sequential processes. Works in two modes: navigation (interactive multi-step wizard where the consumer controls Next/Back) and display (read-only status tracker like a delivery timeline). Supports horizontal and vertical orientations, numbered or dots indicator styles, explicit completion tracking, per-step error state, and configurable click navigation.",
-  "category": "navigation",
   "tags": [
     "stepper",
     "wizard",
@@ -122,14 +121,49 @@
       "blocks": [
         {
           "type": "table",
-          "headers": ["Prop", "Type", "Default", "Description"],
+          "headers": [
+            "Prop",
+            "Type",
+            "Default",
+            "Description"
+          ],
           "rows": [
-            ["value", "string", "required", "Unique identifier for this step. Used as the lookup key in Stepper's value and completedSteps props."],
-            ["title", "string", "required", "Step label rendered below (horizontal) or beside (vertical) the indicator."],
-            ["description", "React.ReactNode", "undefined", "Optional secondary content below the title. Accepts ReactNode for rich content like timestamps or badges."],
-            ["error", "boolean", "false", "When true, renders the step in an error state: destructive-colored indicator with an X icon. Takes priority over all other states."],
-            ["disabled", "boolean", "false", "When true, prevents this step from being clicked even when the Stepper's clickable prop allows navigation."],
-            ["className", "string", "undefined", "Additional CSS classes merged via cn() on the <li> element."]
+            [
+              "value",
+              "string",
+              "required",
+              "Unique identifier for this step. Used as the lookup key in Stepper's value and completedSteps props."
+            ],
+            [
+              "title",
+              "string",
+              "required",
+              "Step label rendered below (horizontal) or beside (vertical) the indicator."
+            ],
+            [
+              "description",
+              "React.ReactNode",
+              "undefined",
+              "Optional secondary content below the title. Accepts ReactNode for rich content like timestamps or badges."
+            ],
+            [
+              "error",
+              "boolean",
+              "false",
+              "When true, renders the step in an error state: destructive-colored indicator with an X icon. Takes priority over all other states."
+            ],
+            [
+              "disabled",
+              "boolean",
+              "false",
+              "When true, prevents this step from being clicked even when the Stepper's clickable prop allows navigation."
+            ],
+            [
+              "className",
+              "string",
+              "undefined",
+              "Additional CSS classes merged via cn() on the <li> element."
+            ]
           ]
         }
       ]

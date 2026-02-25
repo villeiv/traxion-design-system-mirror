@@ -60,7 +60,7 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 
 ### Phase 6: MCP Registration
 - Create `packages/mcp/src/metadata/components/ComponentName.json`
-- Fill all required fields: name, slug, packageVersion, description, category, tags, props, dependencies, peerDependencies, accessibility
+- Fill all required fields: name, slug, packageVersion, description, tags, props, dependencies, peerDependencies, accessibility
 - Add recommended fields: commonlyUsedWith, recommendations (do/dont)
 - For complex components: add sections with documentation blocks
 - Use the Badge.json and DataTable.json examples in the codebase as references
