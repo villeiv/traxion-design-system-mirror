@@ -24,6 +24,29 @@ function extractBalancedBlock(content: string, searchFrom: number): string {
 
 interface ThemeConflict { key: string; description: string; }
 
+// Standard source-directory globs that should always be in the content array.
+// Tailwind silently skips patterns that match nothing, so adding "./features/**"
+// when the folder doesn't exist yet costs nothing — but it stays correct forever.
+const STANDARD_CONTENT_PATTERNS = [
+  '"./src/**/*.{js,ts,jsx,tsx,mdx}"',
+  '"./app/**/*.{js,ts,jsx,tsx,mdx}"',
+  '"./pages/**/*.{js,ts,jsx,tsx,mdx}"',
+  '"./components/**/*.{js,ts,jsx,tsx,mdx}"',
+  '"./features/**/*.{js,ts,jsx,tsx,mdx}"',
+];
+
+/**
+ * Returns patterns from STANDARD_CONTENT_PATTERNS not already covered by the
+ * existing content array string. A pattern is considered covered when the array
+ * already references its root directory (e.g. "./src/") or a total catch-all.
+ */
+function getMissingContentPatterns(contentArrayStr: string): string[] {
+  return STANDARD_CONTENT_PATTERNS.filter(pattern => {
+    const root = pattern.replace(/["']/g, '').split('**')[0]; // e.g. "./src/"
+    return !contentArrayStr.includes(root) && !contentArrayStr.includes('./**');
+  });
+}
+
 /** Scan a tailwind config string for entries that conflict with the DS preset */
 function detectTailwindConflicts(configContent: string): ThemeConflict[] {
   const conflicts: ThemeConflict[] = [];
@@ -456,23 +479,35 @@ export function registerInstallDesignSystem(server: McpServer, _registry: Compon
             modified = true;
           }
 
-          // Add design system to content array
+          // Add design system dist path + standard source patterns to content array
+          const contentMatch = configContent.match(/content:\s*\[([\s\S]*?)\]/);
+          const currentContentStr = contentMatch ? contentMatch[1] : '';
+          const entriesToAdd: string[] = [];
+
           if (!configContent.includes(designSystemContent)) {
-            const contentMatch = configContent.match(/content:\s*\[([\s\S]*?)\]/);
-            if (contentMatch) {
-              const contentArray = contentMatch[1];
-              const newContent = contentArray.trim() + ',\n    ' + designSystemContent;
-              configContent = configContent.replace(
-                /content:\s*\[([\s\S]*?)\]/,
-                `content: [\n    ${newContent}\n  ]`
-              );
-              modified = true;
-            }
+            entriesToAdd.push(designSystemContent);
+          }
+
+          getMissingContentPatterns(currentContentStr).forEach(p => entriesToAdd.push(p));
+
+          if (entriesToAdd.length > 0 && contentMatch) {
+            const base = currentContentStr.trim();
+            const appended = entriesToAdd.join(',\n    ');
+            const newContent = base ? base + ',\n    ' + appended : appended;
+            configContent = configContent.replace(
+              /content:\s*\[([\s\S]*?)\]/,
+              `content: [\n    ${newContent}\n  ]`
+            );
+            modified = true;
           }
 
           if (modified) {
             writeFileSync(tailwindConfigPath, configContent, 'utf-8');
-            response += `✅ Updated ${tailwindConfigPath}\n\n`;
+            response += `✅ Updated ${tailwindConfigPath}\n`;
+            if (entriesToAdd.length > 0) {
+              response += `   - Added ${entriesToAdd.length} content path(s): ${entriesToAdd.join(', ')}\n`;
+            }
+            response += '\n';
           } else {
             response += `✅ Tailwind already configured\n\n`;
           }
