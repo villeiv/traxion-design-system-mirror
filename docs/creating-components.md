@@ -20,7 +20,7 @@ A comprehensive methodology for adding new components to the Traxion Design Syst
 | **Edit** | `packages/design-system/src/react.ts` (add export) | 2 |
 | **Create** | `apps/docs/stories/ComponentName.stories.tsx` | 3 |
 | **Create** | `apps/docs/stories/sources/ComponentName.anatomy.tsx` (compound only) | 3 |
-| **Create** | `apps/docs/stories/sources/ComponentName.variant.tsx` (optional) | 3 |
+| **Create** | `apps/docs/stories/sources/ComponentName.variant.tsx` (one per story, mandatory) | 3 |
 | **Edit** | `apps/showcase/app/page.tsx` (add Section) | 4 |
 | **Edit** | `packages/design-system/package.json` (version bump) | 5 |
 | **Edit** | `packages/design-system/CHANGELOG.md` | 5 |
@@ -401,25 +401,45 @@ ${ComponentNameAnatomy}
 `,
 ```
 
-### 3.5 External Source Files
+### 3.5 External Source Files (Mandatory)
 
-When a story's code needs to be fully displayed in Storybook preview (for clarity), extract it to an external source file:
+**Every named story must be extracted to a separate source file.** This is required — not optional — so that Storybook users can read the full implementation directly from the docs page.
 
-**Path:** `apps/docs/stories/sources/ComponentName.variant.tsx`
+**Naming convention:** `apps/docs/stories/sources/ComponentName.variant.tsx`
 
-Import with `?raw` for code display:
+Each source file exports a default function component:
+
 ```tsx
-import VariantSource from "./sources/ComponentName.variant.tsx?raw";
+// apps/docs/stories/sources/ComponentName.variant.tsx
+import { ComponentName } from "@traxion-global/design-system/react";
+
+export default function ComponentNameVariant() {
+    return (
+        <ComponentName>...</ComponentName>
+    );
+}
+```
+
+Import both the component and raw source in the stories file:
+
+```tsx
+import ComponentNameVariant from "./sources/ComponentName.variant";
+import ComponentNameVariantCode from "./sources/ComponentName.variant?raw";
 
 export const Variant: Story = {
-    render: () => <VariantComponent />,
+    render: ComponentNameVariant,
     parameters: {
         docs: {
-            source: { code: VariantSource },
+            source: { code: ComponentNameVariantCode },
+            description: { story: "Descripción en español." },
         },
     },
 };
 ```
+
+**Rule:** The stories file (`ComponentName.stories.tsx`) must contain **no inline JSX** inside story `render` functions. All JSX lives in the `sources/` files. The stories file is only meta, imports, and story descriptors.
+
+See `apps/docs/stories/DataTable.stories.tsx` and `apps/docs/stories/Chat.stories.tsx` as reference implementations.
 
 ### 3.6 Available Decorators
 
