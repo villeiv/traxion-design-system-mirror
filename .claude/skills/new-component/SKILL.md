@@ -42,8 +42,8 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 - Create the story file at `apps/docs/stories/ComponentName.stories.tsx`
 - Follow the story structure: meta with autodocs tag, disabled controls globally, Spanish descriptions, argTypes, named story exports for each variant, Demo story ("Área de pruebas") with controls enabled
 - For compound components: create anatomy file at `apps/docs/stories/sources/ComponentName.anatomy.tsx`
-- For stories needing full code display: extract to `apps/docs/stories/sources/` and import with `?raw`
-- Write high-quality code in stories — they serve as reference implementations for AI agents
+- **Every story must have its JSX extracted to a separate source file** at `apps/docs/stories/sources/ComponentName.variant.tsx` — this is mandatory, not optional. Each source file exports a default function component. Import it twice: once as the component (`render: ComponentNameVariant`) and once as raw string (`source: { code: ComponentNameVariantCode }`). The stories file must contain no inline JSX in render functions.
+- Write high-quality code in source files — they serve as reference implementations for AI agents and are shown verbatim in Storybook docs
 - Verify with `npm run dev --workspace=docs`
 
 ### Phase 4: Showcase Example

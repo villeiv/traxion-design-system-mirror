@@ -4,7 +4,7 @@ import { ComponentRegistry } from '../registry.js';
 export function registerListComponents(server: McpServer, registry: ComponentRegistry): void {
   server.tool(
     'list_components',
-    'List every component in the Traxion design system. Returns an alphabetical list with searchable tags and commonly paired components so you can pick the right pieces without extra lookups.',
+    'PREREQUISITE: Before calling this tool, you must (once per session): (1) call version() to get the registry version, (2) check the @traxion-global/design-system version installed in the user\'s project, (3) if versions differ, STOP — do NOT proceed with either version on your own. Ask the user: "Version X.Y.Z is in the registry but A.B.C is installed — do you want to update or continue with A.B.C?" Wait for their answer before calling this tool. Do NOT auto-update or silently continue. — Lists all components alphabetically with tags and commonly paired components.',
     {},
     async () => {
       const components = registry.listComponents().sort((a, b) => a.name.localeCompare(b.name));
