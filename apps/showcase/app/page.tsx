@@ -26,6 +26,8 @@ import {
     InfoCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
     DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions, DataTableContent,
     type ColumnDef,
+    Chat, ChatTrigger, ChatPanel, ChatHeader, ChatMessages, ChatDateSeparator,
+    ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleTimestamp, ChatInput,
 } from "@traxion-global/design-system/react";
 
 import {
@@ -97,6 +99,8 @@ const STEPPER_STEPS = [
 export default function DesignSystemShowcase() {
     const [progress, setProgress] = useState(33);
     const [loading, setLoading] = useState(false);
+    const [chatMessage, setChatMessage] = useState("");
+    const [chatMessageFloating, setChatMessageFloating] = useState("");
     const [stepperStep, setStepperStep] = useState("cuenta");
     const [stepperCompleted, setStepperCompleted] = useState<string[]>([]);
     const stepperIndex = STEPPER_STEPS.findIndex((s) => s.value === stepperStep);
@@ -1015,6 +1019,125 @@ export default function DesignSystemShowcase() {
                         </SheetContent>
                     </Sheet>
                 </div>
+            </Section>
+
+            {/* Chat */}
+            <Section title="Chat" description="Dos modos de uso: embebido (ChatPanel directo) y flotante (Chat + ChatTrigger FAB + ChatPanel fixed). El botón flotante está activo en esta página — búscalo en la esquina inferior derecha.">
+
+                {/* Modo embebido */}
+                <p className="text-sm font-medium">Modo embebido</p>
+                <ChatPanel className="h-[480px] w-full">
+                    <ChatHeader>
+                        <Avatar className="h-8 w-8">
+                            <AvatarFallback>MG</AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                            <span className="text-sm font-medium">María García</span>
+                            <span className="text-xs text-muted-foreground">En línea</span>
+                        </div>
+                    </ChatHeader>
+                    <ChatMessages>
+                        <ChatBubble variant="system">
+                            <ChatBubbleMessage variant="system">Ticket #8821 abierto</ChatBubbleMessage>
+                        </ChatBubble>
+                        <ChatDateSeparator>Hoy</ChatDateSeparator>
+                        <ChatBubble variant="received">
+                            <ChatBubbleAvatar>
+                                <Avatar className="h-8 w-8">
+                                    <AvatarFallback>MG</AvatarFallback>
+                                </Avatar>
+                            </ChatBubbleAvatar>
+                            <ChatBubbleMessage variant="received">
+                                Hola, ¿cómo puedo ayudarte hoy?
+                            </ChatBubbleMessage>
+                            <ChatBubbleTimestamp>09:00</ChatBubbleTimestamp>
+                        </ChatBubble>
+                        <ChatBubble variant="sent">
+                            <ChatBubbleMessage variant="sent">
+                                Necesito reportar un retraso en la entrega del embarque TRX-9043.
+                            </ChatBubbleMessage>
+                            <ChatBubbleTimestamp>09:02</ChatBubbleTimestamp>
+                        </ChatBubble>
+                        <ChatBubble variant="received">
+                            <ChatBubbleAvatar>
+                                <Avatar className="h-8 w-8">
+                                    <AvatarFallback>MG</AvatarFallback>
+                                </Avatar>
+                            </ChatBubbleAvatar>
+                            <ChatBubbleMessage variant="received">
+                                Entendido. ¿Puedes confirmarme la fecha de entrega original?
+                            </ChatBubbleMessage>
+                            <ChatBubbleTimestamp>09:03</ChatBubbleTimestamp>
+                        </ChatBubble>
+                        <ChatBubble variant="sent">
+                            <ChatBubbleMessage variant="sent">
+                                La entrega original estaba programada para el 24 de febrero.
+                            </ChatBubbleMessage>
+                            <ChatBubbleTimestamp>09:05</ChatBubbleTimestamp>
+                        </ChatBubble>
+                    </ChatMessages>
+                    <ChatInput onSubmit={(e) => { e.preventDefault(); if (chatMessage.trim()) setChatMessage(""); }}>
+                        <Textarea
+                            placeholder="Escribe un mensaje... (Ctrl+Enter para enviar)"
+                            className="min-h-0 resize-none"
+                            rows={1}
+                            value={chatMessage}
+                            onChange={(e) => setChatMessage(e.target.value)}
+                        />
+                        <Button type="submit" className="h-auto aspect-square p-0">
+                            <Send />
+                        </Button>
+                    </ChatInput>
+                </ChatPanel>
+
+                {/* Modo flotante */}
+                <p className="text-sm font-medium">Modo flotante</p>
+                <p className="text-sm text-muted-foreground">
+                    El botón FAB y el panel están activos en esta página. Usa el botón en la esquina inferior derecha para abrir y cerrar el chat.
+                </p>
+                <Chat defaultOpen={false}>
+                    <ChatTrigger />
+                    <ChatPanel className="fixed bottom-24 right-6 h-[480px] w-[380px]">
+                        <ChatHeader>
+                            <Avatar className="h-8 w-8">
+                                <AvatarFallback>TR</AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <span className="text-sm font-medium">Soporte Traxion</span>
+                                <span className="text-xs text-muted-foreground">En línea</span>
+                            </div>
+                        </ChatHeader>
+                        <ChatMessages>
+                            <ChatBubble variant="system">
+                                <ChatBubbleMessage variant="system">Sesión iniciada</ChatBubbleMessage>
+                            </ChatBubble>
+                            <ChatDateSeparator>Hoy</ChatDateSeparator>
+                            <ChatBubble variant="received">
+                                <ChatBubbleAvatar>
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarFallback>TR</AvatarFallback>
+                                    </Avatar>
+                                </ChatBubbleAvatar>
+                                <ChatBubbleMessage variant="received">
+                                    Hola, ¿en qué puedo ayudarte?
+                                </ChatBubbleMessage>
+                                <ChatBubbleTimestamp>Ahora</ChatBubbleTimestamp>
+                            </ChatBubble>
+                        </ChatMessages>
+                        <ChatInput onSubmit={(e) => { e.preventDefault(); if (chatMessageFloating.trim()) setChatMessageFloating(""); }}>
+                            <Textarea
+                                placeholder="Escribe un mensaje... (Ctrl+Enter para enviar)"
+                                className="min-h-0 resize-none"
+                                rows={1}
+                                value={chatMessageFloating}
+                                onChange={(e) => setChatMessageFloating(e.target.value)}
+                            />
+                            <Button type="submit" className="h-auto aspect-square p-0">
+                                <Send />
+                            </Button>
+                        </ChatInput>
+                    </ChatPanel>
+                </Chat>
             </Section>
 
             {/* Toast */}
