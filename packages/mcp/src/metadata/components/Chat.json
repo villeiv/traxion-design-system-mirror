@@ -1,7 +1,7 @@
 {
   "name": "Chat",
   "slug": "chat",
-  "packageVersion": "0.7.0",
+  "packageVersion": "0.8.0",
   "description": "A composable chat UI built from 11 sub-components. Supports two usage modes: embedded (ChatPanel rendered directly in the layout) and floating (Chat context root + ChatTrigger FAB + ChatPanel fixed to the viewport corner). Open/close state is managed by Chat with controlled (open + onOpenChange) and uncontrolled (defaultOpen) patterns. ChatBubble and ChatBubbleMessage support three variants: received (left-aligned, muted background), sent (right-aligned, primary background), and system (centered, secondary background, italic). ChatInput renders as a <form> and intercepts Ctrl+Enter / Cmd+Enter to submit.",
   "tags": [
     "chat",
@@ -197,6 +197,24 @@
           "description": "Additional CSS classes."
         }
       ]
+    },
+    {
+      "name": "ChatSendButton",
+      "description": "A pre-styled submit button designed for use inside ChatInput. Renders as a square button (aspect-square, max-h-9) with type=\"submit\" and a Send icon by default. Accepts children to replace the icon and className to override styles. Eliminates the boilerplate of setting h-auto, aspect-square, p-0, and max-h-9 on every ChatInput.",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "<Send className=\"h-4 w-4\" />",
+          "description": "Custom icon or content to replace the default Send icon."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes merged via cn() on top of the default square button styles."
+        }
+      ]
     }
   ],
   "dependencies": [
@@ -231,8 +249,8 @@
     },
     {
       "type": "do",
-      "description": "Use a square send button by omitting explicit width and adding aspect-square. CSS Grid in ChatInput makes the button height equal to the textarea height.",
-      "code": "<ChatInput onSubmit={handleSubmit}>\n  <Textarea rows={1} value={message} onChange={...} />\n  <Button type=\"submit\" className=\"h-auto aspect-square p-0\">\n    <Send />\n  </Button>\n</ChatInput>"
+      "description": "Use ChatSendButton inside ChatInput — it handles type=\"submit\", square sizing, and the Send icon automatically.",
+      "code": "<ChatInput onSubmit={handleSubmit}>\n  <Textarea rows={1} value={message} onChange={...} />\n  <ChatSendButton />\n</ChatInput>"
     },
     {
       "type": "dont",
@@ -247,7 +265,7 @@
         {
           "type": "code",
           "language": "tsx",
-          "content": "// Floating mode\n<Chat defaultOpen={false}>\n  <ChatTrigger />\n  <ChatPanel className=\"fixed bottom-24 right-6 h-[480px] w-[380px]\">\n    <ChatHeader>...</ChatHeader>\n    <ChatMessages>\n      <ChatDateSeparator>Hoy</ChatDateSeparator>\n      <ChatBubble variant=\"received\">\n        <ChatBubbleAvatar>...</ChatBubbleAvatar>\n        <ChatBubbleMessage variant=\"received\">Mensaje</ChatBubbleMessage>\n        <ChatBubbleTimestamp>10:32</ChatBubbleTimestamp>\n      </ChatBubble>\n      <ChatBubble variant=\"sent\">\n        <ChatBubbleMessage variant=\"sent\">Respuesta</ChatBubbleMessage>\n        <ChatBubbleTimestamp>10:33</ChatBubbleTimestamp>\n      </ChatBubble>\n      <ChatBubble variant=\"system\">\n        <ChatBubbleMessage variant=\"system\">Sesión iniciada</ChatBubbleMessage>\n      </ChatBubble>\n    </ChatMessages>\n    <ChatInput onSubmit={handleSubmit}>\n      <Textarea rows={1} value={message} onChange={e => setMessage(e.target.value)} />\n      <Button type=\"submit\" className=\"h-auto aspect-square p-0\"><Send /></Button>\n    </ChatInput>\n  </ChatPanel>\n</Chat>"
+          "content": "// Floating mode\n<Chat defaultOpen={false}>\n  <ChatTrigger />\n  <ChatPanel className=\"fixed bottom-24 right-6 h-[480px] w-[380px]\">\n    <ChatHeader>...</ChatHeader>\n    <ChatMessages>\n      <ChatDateSeparator>Hoy</ChatDateSeparator>\n      <ChatBubble variant=\"received\">\n        <ChatBubbleAvatar>...</ChatBubbleAvatar>\n        <ChatBubbleMessage variant=\"received\">Mensaje</ChatBubbleMessage>\n        <ChatBubbleTimestamp>10:32</ChatBubbleTimestamp>\n      </ChatBubble>\n      <ChatBubble variant=\"sent\">\n        <ChatBubbleMessage variant=\"sent\">Respuesta</ChatBubbleMessage>\n        <ChatBubbleTimestamp>10:33</ChatBubbleTimestamp>\n      </ChatBubble>\n      <ChatBubble variant=\"system\">\n        <ChatBubbleMessage variant=\"system\">Sesión iniciada</ChatBubbleMessage>\n      </ChatBubble>\n    </ChatMessages>\n    <ChatInput onSubmit={handleSubmit}>\n      <Textarea rows={1} value={message} onChange={e => setMessage(e.target.value)} />\n      <ChatSendButton />\n    </ChatInput>\n  </ChatPanel>\n</Chat>"
         }
       ]
     },
@@ -261,7 +279,7 @@
         {
           "type": "code",
           "language": "tsx",
-          "content": "function SupportChat() {\n  const [message, setMessage] = useState(\"\")\n  const [messages, setMessages] = useState([\n    { id: 1, text: \"¿En qué puedo ayudarte?\", variant: \"received\" as const },\n  ])\n\n  function handleSubmit(e: React.FormEvent) {\n    e.preventDefault()\n    if (!message.trim()) return\n    setMessages(prev => [...prev, { id: Date.now(), text: message, variant: \"sent\" }])\n    setMessage(\"\")\n  }\n\n  return (\n    <ChatPanel className=\"h-[480px] w-full\">\n      <ChatHeader>\n        <div className=\"flex h-8 w-8 items-center justify-center rounded-full bg-primary\">\n          <Bot className=\"h-4 w-4 text-primary-foreground\" />\n        </div>\n        <div className=\"flex flex-col\">\n          <span className=\"text-sm font-medium\">Soporte</span>\n          <span className=\"text-xs text-muted-foreground\">En línea</span>\n        </div>\n      </ChatHeader>\n      <ChatMessages>\n        {messages.map(msg => (\n          <ChatBubble key={msg.id} variant={msg.variant}>\n            <ChatBubbleMessage variant={msg.variant}>{msg.text}</ChatBubbleMessage>\n          </ChatBubble>\n        ))}\n      </ChatMessages>\n      <ChatInput onSubmit={handleSubmit}>\n        <Textarea rows={1} value={message} onChange={e => setMessage(e.target.value)} />\n        <Button type=\"submit\" className=\"h-auto aspect-square p-0\"><Send /></Button>\n      </ChatInput>\n    </ChatPanel>\n  )\n}"
+          "content": "function SupportChat() {\n  const [message, setMessage] = useState(\"\")\n  const [messages, setMessages] = useState([\n    { id: 1, text: \"¿En qué puedo ayudarte?\", variant: \"received\" as const },\n  ])\n\n  function handleSubmit(e: React.FormEvent) {\n    e.preventDefault()\n    if (!message.trim()) return\n    setMessages(prev => [...prev, { id: Date.now(), text: message, variant: \"sent\" }])\n    setMessage(\"\")\n  }\n\n  return (\n    <ChatPanel className=\"h-[480px] w-full\">\n      <ChatHeader>\n        <div className=\"flex h-8 w-8 items-center justify-center rounded-full bg-primary\">\n          <Bot className=\"h-4 w-4 text-primary-foreground\" />\n        </div>\n        <div className=\"flex flex-col\">\n          <span className=\"text-sm font-medium\">Soporte</span>\n          <span className=\"text-xs text-muted-foreground\">En línea</span>\n        </div>\n      </ChatHeader>\n      <ChatMessages>\n        {messages.map(msg => (\n          <ChatBubble key={msg.id} variant={msg.variant}>\n            <ChatBubbleMessage variant={msg.variant}>{msg.text}</ChatBubbleMessage>\n          </ChatBubble>\n        ))}\n      </ChatMessages>\n      <ChatInput onSubmit={handleSubmit}>\n        <Textarea rows={1} value={message} onChange={e => setMessage(e.target.value)} />\n        <ChatSendButton />\n      </ChatInput>\n    </ChatPanel>\n  )\n}"
         }
       ]
     },

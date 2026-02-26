@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Send } from "lucide-react";
 import {
     Avatar,
     AvatarFallback,
-    Button,
     ChatBubble,
     ChatBubbleAvatar,
     ChatBubbleMessage,
@@ -13,6 +11,7 @@ import {
     ChatInput,
     ChatMessages,
     ChatPanel,
+    ChatSendButton,
     Textarea,
 } from "@traxion-global/design-system/react";
 
@@ -97,13 +96,11 @@ export default function ChatBasic() {
                 <Textarea
                     placeholder="Escribe un mensaje... (Ctrl+Enter para enviar)"
                     className="min-h-0 resize-none"
-                    rows={1}
+                    rows={2}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                 />
-                <Button type="submit" className="h-auto aspect-square p-0">
-                    <Send />
-                </Button>
+                <ChatSendButton />
             </ChatInput>
         </ChatPanel>
     );

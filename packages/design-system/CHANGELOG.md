@@ -1,5 +1,9 @@
 # Changelog
 
+### [0.8.0] - 2026-02-26
+### Added
+- Sub-componente **ChatSendButton** — botón de envío pre-estilizado para usar dentro de `ChatInput`. Encapsula `Button` con `type="submit"`, layout cuadrado (`aspect-square`, `max-h-9`) y el ícono `Send` por defecto. Acepta `children` para reemplazar el ícono y `className` para sobreescribir estilos.
+
 ### [0.7.0] - 2026-02-25
 ### Added
 - Componente **Chat** — interfaz de conversación compuesta por 11 sub-componentes.

@@ -1,8 +1,9 @@
 import * as React from "react"
-import { MessageCircle, X } from "lucide-react"
+import { MessageCircle, Send, X } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { Button } from "./Button"
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -269,6 +270,23 @@ const ChatInput = React.forwardRef<
 })
 ChatInput.displayName = "ChatInput"
 
+// ─── ChatSendButton ───────────────────────────────────────────────────────────
+
+const ChatSendButton = React.forwardRef<
+    HTMLButtonElement,
+    React.ComponentPropsWithoutRef<typeof Button>
+>(({ className, children, ...props }, ref) => (
+    <Button
+        ref={ref}
+        type="submit"
+        className={cn("h-auto aspect-square p-0 max-h-9", className)}
+        {...props}
+    >
+        {children ?? <Send className="h-4 w-4" />}
+    </Button>
+))
+ChatSendButton.displayName = "ChatSendButton"
+
 // ─── Exports ──────────────────────────────────────────────────────────────────
 
 export {
@@ -285,4 +303,5 @@ export {
     chatBubbleMessageVariants,
     ChatBubbleTimestamp,
     ChatInput,
+    ChatSendButton,
 }

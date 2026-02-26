@@ -27,7 +27,7 @@ import {
     DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions, DataTableContent,
     type ColumnDef,
     Chat, ChatTrigger, ChatPanel, ChatHeader, ChatMessages, ChatDateSeparator,
-    ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleTimestamp, ChatInput,
+    ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleTimestamp, ChatInput, ChatSendButton,
 } from "@traxion-global/design-system/react";
 
 import {
@@ -1084,9 +1084,7 @@ export default function DesignSystemShowcase() {
                             value={chatMessage}
                             onChange={(e) => setChatMessage(e.target.value)}
                         />
-                        <Button type="submit" className="h-auto aspect-square p-0">
-                            <Send />
-                        </Button>
+                        <ChatSendButton />
                     </ChatInput>
                 </ChatPanel>
 
@@ -1132,9 +1130,7 @@ export default function DesignSystemShowcase() {
                                 value={chatMessageFloating}
                                 onChange={(e) => setChatMessageFloating(e.target.value)}
                             />
-                            <Button type="submit" className="h-auto aspect-square p-0">
-                                <Send />
-                            </Button>
+                            <ChatSendButton />
                         </ChatInput>
                     </ChatPanel>
                 </Chat>

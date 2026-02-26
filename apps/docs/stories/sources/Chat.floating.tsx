@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Send, Bot } from "lucide-react";
+import { Bot } from "lucide-react";
 import {
-    Button,
     Chat,
     ChatBubble,
     ChatBubbleAvatar,
@@ -11,6 +10,7 @@ import {
     ChatInput,
     ChatMessages,
     ChatPanel,
+    ChatSendButton,
     ChatTrigger,
     Textarea,
 } from "@traxion-global/design-system/react";
@@ -67,9 +67,7 @@ export default function ChatFloating() {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                     />
-                    <Button type="submit" className="h-auto aspect-square p-0">
-                        <Send />
-                    </Button>
+                    <ChatSendButton />
                 </ChatInput>
             </ChatPanel>
         </Chat>
