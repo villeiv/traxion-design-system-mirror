@@ -1,5 +1,20 @@
 # Changelog
 
+### [0.7.0] - 2026-02-25
+### Added
+- Componente **Chat** — interfaz de conversación compuesta por 11 sub-componentes.
+  - `Chat` — proveedor de contexto que gestiona el estado `open`/`close`. Soporta modo controlado (`open` + `onOpenChange`) y no controlado (`defaultOpen`).
+  - `ChatTrigger` — botón FAB fijo (`fixed bottom-6 right-6`) que alterna el chat. Muestra `MessageCircle` cuando cerrado y `X` cuando abierto; acepta `children` para icono personalizado.
+  - `ChatPanel` — contenedor visual del chat con animación de entrada/salida. Usado directamente (sin `Chat`) siempre aparece visible.
+  - `ChatHeader` — barra superior con avatar, nombre y estado del contacto.
+  - `ChatMessages` — área de scroll para la lista de mensajes.
+  - `ChatDateSeparator` — separador de fecha con líneas a ambos lados.
+  - `ChatBubble` — fila de mensaje con variante `received` (izquierda), `sent` (derecha) y `system` (centrado).
+  - `ChatBubbleAvatar` — envoltorio para `Avatar` dentro de una fila de mensaje.
+  - `ChatBubbleMessage` — burbuja de texto con variantes `received` (fondo muted), `sent` (fondo primary) y `system` (fondo secondary, itálico).
+  - `ChatBubbleTimestamp` — texto de hora/fecha asociado a un mensaje.
+  - `ChatInput` — área de entrada que renderiza como `<form>`. Intercepta `Ctrl+Enter` / `Cmd+Enter` para llamar a `onSubmit`. Layout de grid `1fr auto` para alinear textarea y botón de envío.
+
 ### [0.6.0] - 2026-02-25
 ### Added
 - Componente **Stepper** — indicador visual de progreso para procesos secuenciales. Soporta dos modos de uso: navegación (asistente interactivo multi-paso) y display (estado informativo como seguimiento de pedidos).

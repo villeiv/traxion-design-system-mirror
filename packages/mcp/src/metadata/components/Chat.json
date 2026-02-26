@@ -1,0 +1,283 @@
+{
+  "name": "Chat",
+  "slug": "chat",
+  "packageVersion": "0.7.0",
+  "description": "A composable chat UI built from 11 sub-components. Supports two usage modes: embedded (ChatPanel rendered directly in the layout) and floating (Chat context root + ChatTrigger FAB + ChatPanel fixed to the viewport corner). Open/close state is managed by Chat with controlled (open + onOpenChange) and uncontrolled (defaultOpen) patterns. ChatBubble and ChatBubbleMessage support three variants: received (left-aligned, muted background), sent (right-aligned, primary background), and system (centered, secondary background, italic). ChatInput renders as a <form> and intercepts Ctrl+Enter / Cmd+Enter to submit.",
+  "tags": [
+    "chat",
+    "messaging",
+    "conversation",
+    "chatbot",
+    "ai-chat",
+    "support-chat",
+    "bubble",
+    "floating",
+    "fab",
+    "widget"
+  ],
+  "props": [
+    {
+      "name": "open",
+      "type": "boolean",
+      "default": "undefined",
+      "description": "Controlled open state. Use together with onOpenChange to fully control visibility from outside."
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "default": "false",
+      "description": "Initial open state for uncontrolled mode. Internal state is managed by the Chat root."
+    },
+    {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "default": "undefined",
+      "description": "Callback fired when the open state changes (e.g., when ChatTrigger is clicked)."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "required",
+      "description": "Must contain at minimum a ChatPanel. For the floating pattern also include a ChatTrigger."
+    }
+  ],
+  "subComponents": [
+    {
+      "name": "ChatTrigger",
+      "description": "A fixed FAB (floating action button) that toggles the chat open/close state. Positioned at bottom-6 right-6 with z-50. Renders MessageCircle when closed, X when open. Accepts children to replace the default icon.",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes. Override position classes (e.g. bottom-4 right-4) if needed."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "undefined",
+          "description": "Custom icon or content to replace the default MessageCircle/X toggle icons."
+        }
+      ]
+    },
+    {
+      "name": "ChatPanel",
+      "description": "The visible container for the chat UI. Reads open state from Chat context — shows with opacity-100/scale-100 when open, hides with opacity-0/scale-95 when closed. When used without a Chat wrapper, the context default (open: true) keeps it always visible. Use className to set dimensions and position (e.g. fixed bottom-24 right-6 h-[480px] w-[380px] for floating mode).",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "CSS classes for dimensions and position. Required for floating mode — e.g. \"fixed bottom-24 right-6 h-[480px] w-[380px]\"."
+        }
+      ]
+    },
+    {
+      "name": "ChatHeader",
+      "description": "Top bar inside ChatPanel. Flex row with gap-3, border-b, px-4 py-3. Place an avatar, name, and status label inside.",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
+      ]
+    },
+    {
+      "name": "ChatMessages",
+      "description": "Scrollable area for the message list. Flex column with gap-4, overflow-y-auto, flex-1. Place ChatBubble and ChatDateSeparator elements inside.",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
+      ]
+    },
+    {
+      "name": "ChatDateSeparator",
+      "description": "A horizontal rule with a text label centered between two lines. Use children to set the date/time string (e.g. \"Hoy\", \"24 feb\").",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "required",
+          "description": "The date or time label rendered between the separator lines."
+        }
+      ]
+    },
+    {
+      "name": "ChatBubble",
+      "description": "Row wrapper for a single message. Controls alignment: received = flex-row (left), sent = flex-row-reverse (right), system = justify-center (centered). Place ChatBubbleAvatar, ChatBubbleMessage, and ChatBubbleTimestamp inside.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"received\" | \"sent\" | \"system\"",
+          "default": "\"received\"",
+          "description": "Controls the alignment direction of the bubble row."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
+      ]
+    },
+    {
+      "name": "ChatBubbleAvatar",
+      "description": "Wrapper div with shrink-0 to prevent the avatar from being compressed. Place an Avatar component or custom element inside.",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
+      ]
+    },
+    {
+      "name": "ChatBubbleMessage",
+      "description": "The message bubble. received = bg-muted, rounded-xl rounded-bl-sm, max-w-[75%]. sent = bg-primary text-primary-foreground, rounded-xl rounded-br-sm, max-w-[75%]. system = bg-secondary text-secondary-foreground, centered, italic, no max-width cap.",
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"received\" | \"sent\" | \"system\"",
+          "default": "\"received\"",
+          "description": "Visual style and color scheme of the bubble. Must match the parent ChatBubble variant."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
+      ]
+    },
+    {
+      "name": "ChatBubbleTimestamp",
+      "description": "Inline timestamp rendered as a <span> with text-xs text-muted-foreground and shrink-0. Place after ChatBubbleMessage inside ChatBubble.",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "default": "required",
+          "description": "The time or date string to display (e.g. \"10:32\", \"Ahora\")."
+        }
+      ]
+    },
+    {
+      "name": "ChatInput",
+      "description": "The message compose area. Renders as a <form> with a CSS grid layout (1fr auto) so a Textarea fills available width and a Button stretches to match it. Intercepts Ctrl+Enter / Cmd+Enter on the form to call requestSubmit(). Pass onSubmit to handle submission.",
+      "props": [
+        {
+          "name": "onSubmit",
+          "type": "React.FormEventHandler<HTMLFormElement>",
+          "default": "undefined",
+          "description": "Called when the form is submitted via the button click or Ctrl+Enter / Cmd+Enter keyboard shortcut."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes."
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
+  "accessibility": {
+    "role": "ChatMessages renders as a div. For production use, add role=\"log\" aria-live=\"polite\" to ChatMessages so screen readers announce new messages. ChatInput renders as a <form> element.",
+    "keyboard": "ChatTrigger is a <button> and reachable via Tab. ChatInput intercepts Ctrl+Enter (Windows/Linux) and Cmd+Enter (macOS) to submit the form without requiring the user to click the button.",
+    "aria": "For floating mode, add aria-label to ChatTrigger (e.g. \"Abrir chat\"). For ChatMessages, add aria-live=\"polite\" and role=\"log\" to announce incoming messages to screen readers.",
+    "notes": "ChatBubble variant conveys alignment visually but not semantically — bubble content is accessible through normal reading order. Ensure the send button inside ChatInput has an accessible label (aria-label=\"Enviar\") when no visible text is present."
+  },
+  "commonlyUsedWith": [
+    "button",
+    "textarea",
+    "avatar",
+    "badge"
+  ],
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use ChatPanel directly (without Chat) for an always-visible embedded chat. Only wrap with Chat when you need the show/hide trigger.",
+      "code": "// Embedded — always visible\n<ChatPanel className=\"h-[480px] w-full\">\n  <ChatHeader>...</ChatHeader>\n  <ChatMessages>...</ChatMessages>\n  <ChatInput onSubmit={handleSubmit}>...</ChatInput>\n</ChatPanel>\n\n// Floating — trigger toggles visibility\n<Chat defaultOpen={false}>\n  <ChatTrigger />\n  <ChatPanel className=\"fixed bottom-24 right-6 h-[480px] w-[380px]\">\n    ...\n  </ChatPanel>\n</Chat>"
+    },
+    {
+      "type": "do",
+      "description": "Match the variant on ChatBubble and ChatBubbleMessage — they are not linked automatically.",
+      "code": "<ChatBubble variant=\"sent\">\n  <ChatBubbleMessage variant=\"sent\">Hola</ChatBubbleMessage>\n  <ChatBubbleTimestamp>10:32</ChatBubbleTimestamp>\n</ChatBubble>"
+    },
+    {
+      "type": "do",
+      "description": "Use a square send button by omitting explicit width and adding aspect-square. CSS Grid in ChatInput makes the button height equal to the textarea height.",
+      "code": "<ChatInput onSubmit={handleSubmit}>\n  <Textarea rows={1} value={message} onChange={...} />\n  <Button type=\"submit\" className=\"h-auto aspect-square p-0\">\n    <Send />\n  </Button>\n</ChatInput>"
+    },
+    {
+      "type": "dont",
+      "description": "Do not add ChatBubbleAvatar to system bubbles — the system variant is centered and does not support an avatar on the side.",
+      "code": "// Wrong\n<ChatBubble variant=\"system\">\n  <ChatBubbleAvatar>...</ChatBubbleAvatar>\n  <ChatBubbleMessage variant=\"system\">Sesión iniciada</ChatBubbleMessage>\n</ChatBubble>"
+    }
+  ],
+  "sections": [
+    {
+      "title": "Anatomy",
+      "blocks": [
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "// Floating mode\n<Chat defaultOpen={false}>\n  <ChatTrigger />\n  <ChatPanel className=\"fixed bottom-24 right-6 h-[480px] w-[380px]\">\n    <ChatHeader>...</ChatHeader>\n    <ChatMessages>\n      <ChatDateSeparator>Hoy</ChatDateSeparator>\n      <ChatBubble variant=\"received\">\n        <ChatBubbleAvatar>...</ChatBubbleAvatar>\n        <ChatBubbleMessage variant=\"received\">Mensaje</ChatBubbleMessage>\n        <ChatBubbleTimestamp>10:32</ChatBubbleTimestamp>\n      </ChatBubble>\n      <ChatBubble variant=\"sent\">\n        <ChatBubbleMessage variant=\"sent\">Respuesta</ChatBubbleMessage>\n        <ChatBubbleTimestamp>10:33</ChatBubbleTimestamp>\n      </ChatBubble>\n      <ChatBubble variant=\"system\">\n        <ChatBubbleMessage variant=\"system\">Sesión iniciada</ChatBubbleMessage>\n      </ChatBubble>\n    </ChatMessages>\n    <ChatInput onSubmit={handleSubmit}>\n      <Textarea rows={1} value={message} onChange={e => setMessage(e.target.value)} />\n      <Button type=\"submit\" className=\"h-auto aspect-square p-0\"><Send /></Button>\n    </ChatInput>\n  </ChatPanel>\n</Chat>"
+        }
+      ]
+    },
+    {
+      "title": "Embedded mode",
+      "blocks": [
+        {
+          "type": "text",
+          "content": "When ChatPanel is used without a Chat wrapper, the context default (open: true) keeps it always visible. This is ideal for support chats embedded directly in a page layout."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "function SupportChat() {\n  const [message, setMessage] = useState(\"\")\n  const [messages, setMessages] = useState([\n    { id: 1, text: \"¿En qué puedo ayudarte?\", variant: \"received\" as const },\n  ])\n\n  function handleSubmit(e: React.FormEvent) {\n    e.preventDefault()\n    if (!message.trim()) return\n    setMessages(prev => [...prev, { id: Date.now(), text: message, variant: \"sent\" }])\n    setMessage(\"\")\n  }\n\n  return (\n    <ChatPanel className=\"h-[480px] w-full\">\n      <ChatHeader>\n        <div className=\"flex h-8 w-8 items-center justify-center rounded-full bg-primary\">\n          <Bot className=\"h-4 w-4 text-primary-foreground\" />\n        </div>\n        <div className=\"flex flex-col\">\n          <span className=\"text-sm font-medium\">Soporte</span>\n          <span className=\"text-xs text-muted-foreground\">En línea</span>\n        </div>\n      </ChatHeader>\n      <ChatMessages>\n        {messages.map(msg => (\n          <ChatBubble key={msg.id} variant={msg.variant}>\n            <ChatBubbleMessage variant={msg.variant}>{msg.text}</ChatBubbleMessage>\n          </ChatBubble>\n        ))}\n      </ChatMessages>\n      <ChatInput onSubmit={handleSubmit}>\n        <Textarea rows={1} value={message} onChange={e => setMessage(e.target.value)} />\n        <Button type=\"submit\" className=\"h-auto aspect-square p-0\"><Send /></Button>\n      </ChatInput>\n    </ChatPanel>\n  )\n}"
+        }
+      ]
+    },
+    {
+      "title": "Floating mode with ChatTrigger",
+      "blocks": [
+        {
+          "type": "text",
+          "content": "Wrap everything in Chat and add ChatTrigger for the FAB. ChatPanel must have fixed positioning and explicit dimensions. The trigger renders at bottom-6 right-6 and the panel at bottom-24 right-6 to avoid overlap."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "function FloatingChat() {\n  const [message, setMessage] = useState(\"\")\n\n  function handleSubmit(e: React.FormEvent) {\n    e.preventDefault()\n    if (!message.trim()) return\n    setMessage(\"\")\n  }\n\n  return (\n    <Chat defaultOpen={false}>\n      <ChatTrigger />\n      <ChatPanel className=\"fixed bottom-24 right-6 h-[480px] w-[380px]\">\n        <ChatHeader>\n          <div className=\"flex h-8 w-8 items-center justify-center rounded-full bg-primary\">\n            <Bot className=\"h-4 w-4 text-primary-foreground\" />\n          </div>\n          <div className=\"flex flex-col\">\n            <span className=\"text-sm font-medium\">Asistente</span>\n            <span className=\"text-xs text-muted-foreground\">Siempre disponible</span>\n          </div>\n        </ChatHeader>\n        <ChatMessages>\n          <ChatBubble variant=\"received\">\n            <ChatBubbleMessage variant=\"received\">Hola, ¿en qué puedo ayudarte?</ChatBubbleMessage>\n            <ChatBubbleTimestamp>Ahora</ChatBubbleTimestamp>\n          </ChatBubble>\n        </ChatMessages>\n        <ChatInput onSubmit={handleSubmit}>\n          <Textarea rows={1} value={message} onChange={e => setMessage(e.target.value)}\n            placeholder=\"Escribe un mensaje... (Ctrl+Enter para enviar)\" />\n          <Button type=\"submit\" className=\"h-auto aspect-square p-0\"><Send /></Button>\n        </ChatInput>\n      </ChatPanel>\n    </Chat>\n  )\n}"
+        }
+      ]
+    }
+  ]
+}
