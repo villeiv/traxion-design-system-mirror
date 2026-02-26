@@ -72,7 +72,7 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 +-----------------------+     +---------------------------+
 | metadata/             |     | apps/docs/stories/        |
 |   components/*.json   |     |   *.stories.tsx   (36)    |
-|   guidelines/*.md     |     |   sources/*.tsx   (71)    |
+|   guidelines/*.md     |     |   sources/*.tsx   (94)    |
 |                       |     +---------------------------+
 | design-system/        |
 |   components/*.tsx    |     ComponentRegistry.load()

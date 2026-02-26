@@ -19,7 +19,7 @@ export * from "./components/File-drop-zone";
 export * from "./components/Full-page-overlay-loader";
 export * from "./components/Hover-card";
 export * from "./components/Inline-loader";
-export * from "./components/Info-card";
+export * from "./components/Stat-card";
 export * from "./components/Input";
 export * from "./components/Label";
 export * from "./components/No-data-message";

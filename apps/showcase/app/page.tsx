@@ -23,7 +23,7 @@ import {
     Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Stepper, StepperList, StepperItem, Switch, Textarea, toast,
     DatePicker, DateRangePicker, DateTimePicker, TimePicker,
     type DateRange,
-    InfoCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
+    StatCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
     DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions, DataTableContent,
     type ColumnDef,
     Chat, ChatTrigger, ChatPanel, ChatHeader, ChatMessages, ChatDateSeparator,
@@ -31,7 +31,7 @@ import {
 } from "@traxion-global/design-system/react";
 
 import {
-    Ban, BatteryLow, Calendar1Icon, CalendarIcon, ClockAlert, DollarSign, DoorOpen, MapPin, PackageOpen, RouteOff, Tag, ThermometerSnowflake, User, XIcon,
+    Ban, BatteryLow, Calendar1Icon, CalendarIcon, ClockAlert, DollarSign, DoorOpen, MapPin, PackageOpen, RouteOff, Tag, ThermometerSnowflake, User, Users, XIcon,
     Plus, PenLine, Trash2, Copy, Download, UploadIcon, Eye, EyeOff, SearchIcon, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Menu, X, Settings, Bell,
     Home, MailIcon, MessageSquare, Phone, Send, Share, Globe, Wifi, Bluetooth, File, FileText, FilePlus, Folder, FolderPlus, Save, Database, BarChart,
     Truck, Package, Warehouse, Map, Navigation, Compass, Route, Clipboard, ClipboardCheck, ShoppingCart, ShoppingBag, CreditCard, Percent, Bookmark, Gift, Smartphone,
@@ -406,15 +406,44 @@ export default function DesignSystemShowcase() {
 
             </Section>
 
-            {/* Info Cards */}
+            {/* Stat Cards */}
             <Section
-                title="Info Cards"
-                description="Cajas compactas para resaltar datos clave como periodos, fechas o totales."
+                title="Stat Cards"
+                description="KPI tiles con etiqueta, valor, ícono y señal de tendencia para dashboards."
             >
-                <div className="grid gap-4 sm:grid-cols-3">
-                    <InfoCard title="Periodo" value="Junio" icon={<Calendar1Icon className="h-6 w-6" />} />
-                    <InfoCard title="Fecha de pago" value="14/6/2025" icon={<Calendar1Icon className="h-6 w-6" />} />
-                    <InfoCard title="Total" value="$357,971.86" icon={<DollarSign className="h-6 w-6" />} />
+                <div className="grid gap-4 sm:grid-cols-2">
+                    <StatCard
+                        label="Ingresos Totales"
+                        value="$45,231.89"
+                        icon={<DollarSign className="h-6 w-6" />}
+                        iconVariant="green"
+                        trend={20.1}
+                        trendLabel="vs mes anterior"
+                    />
+                    <StatCard
+                        label="Usuarios Activos"
+                        value="2,350"
+                        icon={<Users className="h-6 w-6" />}
+                        iconVariant="primary"
+                        trend={15.3}
+                        trendLabel="vs mes anterior"
+                    />
+                    <StatCard
+                        label="Pedidos"
+                        value="1,247"
+                        icon={<ShoppingCart className="h-6 w-6" />}
+                        iconVariant="yellow"
+                        trend={-4.5}
+                        trendLabel="vs semana anterior"
+                    />
+                    <StatCard
+                        label="Inventario"
+                        value="573"
+                        icon={<Package className="h-6 w-6" />}
+                        iconVariant="secondary"
+                        trend={0}
+                        trendLabel="sin cambios"
+                    />
                 </div>
             </Section>
 

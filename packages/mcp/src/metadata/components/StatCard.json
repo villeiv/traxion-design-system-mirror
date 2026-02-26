@@ -1,0 +1,125 @@
+{
+  "name": "StatCard",
+  "packageVersion": "0.9.0",
+  "slug": "stat-card",
+  "description": "A KPI tile that displays a metric label, a bold value, an optional icon inside a colored circular badge, and an optional trend indicator (up/down/neutral with percentage change). Built on top of Card and CardContent.",
+  "tags": [
+    "stat",
+    "kpi",
+    "metric",
+    "dashboard",
+    "card",
+    "trend",
+    "indicator",
+    "data-display"
+  ],
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "description": "Metric name displayed as a small muted label above the value (e.g. \"Total Revenue\")."
+    },
+    {
+      "name": "value",
+      "type": "string | number",
+      "required": true,
+      "description": "Main KPI value displayed in bold (e.g. \"$12,400\" or 1200)."
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "default": "undefined",
+      "description": "Optional React node (typically a Lucide icon) displayed inside a colored circular badge on desktop, hidden on mobile."
+    },
+    {
+      "name": "iconVariant",
+      "type": "\"primary\" | \"secondary\" | \"green\" | \"yellow\" | \"red\"",
+      "default": "\"primary\"",
+      "description": "Determines the background and text color of the icon circle badge."
+    },
+    {
+      "name": "trend",
+      "type": "number",
+      "default": "undefined",
+      "description": "Percentage change to display as a trend indicator. Positive (e.g. 12.5) shows TrendingUp in green, negative (e.g. -3.2) shows TrendingDown in red, zero shows Minus in muted. Omit to hide the trend row entirely."
+    },
+    {
+      "name": "trendSentiment",
+      "type": "\"positive\" | \"negative\" | \"neutral\"",
+      "default": "undefined",
+      "description": "Overrides the automatic trend color derived from the sign of `trend`. Use when the number direction and its business meaning don't match — e.g. an accident rate going down is positive, so pass `trendSentiment=\"positive\"` even though `trend` is negative. The arrow icon always follows the number direction; only the color is overridden."
+    },
+    {
+      "name": "trendLabel",
+      "type": "string",
+      "default": "undefined",
+      "description": "Optional contextual text shown next to the trend percentage (e.g. \"vs last month\")."
+    },
+    {
+      "name": "loading",
+      "type": "boolean",
+      "default": "false",
+      "description": "When true, renders an animate-pulse skeleton that matches the card's real layout dimensions instead of the actual content."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes applied to the root Card element."
+    }
+  ],
+  "usage": {
+    "import": "import { StatCard } from '@traxion-global/design-system/react';",
+    "basic": "<StatCard label=\"Total Revenue\" value=\"$12,400\" />",
+    "withTrend": "<StatCard\n  label=\"Total Revenue\"\n  value=\"$12,400\"\n  icon={<DollarSign className=\"h-6 w-6\" />}\n  iconVariant=\"green\"\n  trend={12.5}\n  trendLabel=\"vs last month\"\n/>",
+    "loading": "<StatCard label=\"Total Revenue\" value=\"$0\" loading />",
+    "dashboard": "<div className=\"grid gap-4 sm:grid-cols-2\">\n  <StatCard label=\"Revenue\" value=\"$45,231\" icon={<DollarSign className=\"h-6 w-6\" />} iconVariant=\"green\" trend={20.1} trendLabel=\"vs last month\" />\n  <StatCard label=\"Users\" value=\"2,350\" icon={<Users className=\"h-6 w-6\" />} iconVariant=\"primary\" trend={15.3} trendLabel=\"vs last month\" />\n</div>"
+  },
+  "dependencies": [
+    "lucide-react",
+    "./Card"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
+  "accessibility": {
+    "role": "Inherits from Card component (rendered as a div).",
+    "keyboard": "No interactive elements; purely presentational.",
+    "aria": "No explicit ARIA attributes. Label and value are conveyed through visible text. Consider wrapping in a region with aria-label when grouping multiple StatCards in a dashboard.",
+    "notes": "The icon circle badge is hidden on small screens to maintain compact layout. Trend icon is decorative and does not have aria-hidden — screen readers will announce the trend percentage text."
+  },
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use StatCard for KPI metrics that benefit from a trend indicator (revenue, user counts, order volumes)."
+    },
+    {
+      "type": "do",
+      "description": "Match iconVariant color to the metric sentiment: green for positive KPIs, red for negative, secondary for neutral."
+    },
+    {
+      "type": "do",
+      "description": "Always provide a trendLabel to give context to the percentage (e.g. 'vs last month', 'this week')."
+    },
+    {
+      "type": "do",
+      "description": "Use loading={true} while fetching data to preserve layout and prevent cumulative layout shift."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use StatCard without any trend data if the metric has no historical context — omit the trend prop entirely rather than forcing a meaningless 0%."
+    },
+    {
+      "type": "dont",
+      "description": "Do not place interactive controls inside StatCard — it is purely presentational."
+    }
+  ],
+  "commonlyUsedWith": [
+    "badge",
+    "card",
+    "data-table",
+    "progress"
+  ]
+}

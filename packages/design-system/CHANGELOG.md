@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.9.0] - 2026-02-26
+### Added
+- Componente **StatCard** — KPI tile para dashboards con etiqueta, valor en negrita, ícono opcional en círculo de color y señal de tendencia opcional (sube/baja/neutral con porcentaje). Variantes de ícono: `primary`, `secondary`, `green`, `yellow`, `red`. Prop `trendSentiment` para disociar la dirección del número de su significado (e.g. una tasa de accidentes a la baja es positiva). Estado de carga (`loading`) con skeleton animado.
+
+### Removed
+- Componente **InfoCard** — reemplazado por `StatCard`, que ofrece todas las mismas capacidades más indicadores de tendencia.
+
 ### [0.8.0] - 2026-02-26
 ### Added
 - Sub-componente **ChatSendButton** — botón de envío pre-estilizado para usar dentro de `ChatInput`. Encapsula `Button` con `type="submit"`, layout cuadrado (`aspect-square`, `max-h-9`) y el ícono `Send` por defecto. Acepta `children` para reemplazar el ícono y `className` para sobreescribir estilos.
