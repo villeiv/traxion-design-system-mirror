@@ -21,7 +21,7 @@ import {
     Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow,
     Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
     Badge, Button, Calendar, Checkbox, Input, Label, Progress, Separator, Stepper, StepperList, StepperItem, Switch, Textarea, toast,
-    DatePicker, DateRangePicker, DateTimePicker, TimePicker,
+    DatePicker, DateRangePicker, DateTimePicker, DateTimeRangePicker, TimePicker,
     type DateRange,
     StatCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
     DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions, DataTableContent,
@@ -1744,6 +1744,7 @@ function DatePickerShowcase() {
     const [date, setDate] = useState<Date | undefined>()
     const [range, setRange] = useState<DateRange | undefined>()
     const [datetime, setDatetime] = useState<Date | undefined>()
+    const [dateTimeRange, setDateTimeRange] = useState<DateRange | undefined>()
     const [time, setTime] = useState("")
 
     return (
@@ -1759,6 +1760,10 @@ function DatePickerShowcase() {
             <div className="flex flex-col gap-1.5">
                 <Label>Fecha y hora</Label>
                 <DateTimePicker value={datetime} onChange={setDatetime} captionLayout="dropdown" />
+            </div>
+            <div className="flex flex-col gap-1.5">
+                <Label>Rango de fechas y hora</Label>
+                <DateTimeRangePicker value={dateTimeRange} onChange={setDateTimeRange} />
             </div>
             <div className="flex flex-col gap-1.5">
                 <Label>Hora</Label>

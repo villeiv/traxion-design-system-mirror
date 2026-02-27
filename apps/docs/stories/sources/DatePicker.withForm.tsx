@@ -4,6 +4,7 @@ import {
     DatePicker,
     DateRangePicker,
     DateTimePicker,
+    DateTimeRangePicker,
     TimePicker,
     Label,
     Card,
@@ -22,6 +23,7 @@ export default function DatePickerWithForm() {
     const [deliveryDate, setDeliveryDate] = useState<Date | undefined>();
     const [period, setPeriod] = useState<DateRange | undefined>();
     const [eventStart, setEventStart] = useState<Date | undefined>();
+    const [pickupWindow, setPickupWindow] = useState<DateRange | undefined>();
     const [reminderTime, setReminderTime] = useState("");
 
     return (
@@ -66,6 +68,16 @@ export default function DatePickerWithForm() {
                         value={eventStart}
                         onChange={setEventStart}
                         captionLayout="dropdown"
+                        className="w-full"
+                    />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                    <Label>Ventana de recolección</Label>
+                    <DateTimeRangePicker
+                        value={pickupWindow}
+                        onChange={setPickupWindow}
+                        numberOfMonths={1}
+                        fromDate={new Date()}
                         className="w-full"
                     />
                 </div>

@@ -20,6 +20,8 @@ import DatePickerDateTimePicker from "./sources/DatePicker.dateTimePicker";
 import DatePickerDateTimePickerCode from "./sources/DatePicker.dateTimePicker?raw";
 import DatePickerWithForm from "./sources/DatePicker.withForm";
 import DatePickerWithFormCode from "./sources/DatePicker.withForm?raw";
+import DatePickerDateTimeRangePickerDashboard from "./sources/DatePicker.dateTimeRangePickerDashboard";
+import DatePickerDateTimeRangePickerDashboardCode from "./sources/DatePicker.dateTimeRangePickerDashboard?raw";
 
 const meta = {
     title: "DatePicker",
@@ -40,6 +42,7 @@ import {
     DatePicker,
     DateRangePicker,
     DateTimePicker,
+    DateTimeRangePicker,
 } from "@traxion-global/design-system/react";
 
 // Tipo auxiliar (no requiere instalar react-day-picker)
@@ -215,16 +218,31 @@ export const DateTimePickerStory: Story = {
     },
 };
 
-// ─── Uso en formulario ────────────────────────────────────────────────────────
+// ─── DateTimeRangePicker ──────────────────────────────────────────────────────
 
-export const InForm: Story = {
-    name: "Integración en formulario",
-    decorators: [ToasterDecorator],
-    render: () => <DatePickerWithForm />,
+export const DateTimeRangePickerDashboard: Story = {
+    name: "Selector de rango de fechas y hora",
+    render: DatePickerDateTimeRangePickerDashboard,
     parameters: {
         docs: {
             description: {
-                story: "Ejemplo de los tres componentes de fecha usados junto con `TimePicker` dentro de un formulario real: `DatePicker` con fecha mínima, `DateRangePicker`, `DateTimePicker` con dropdown y `TimePicker` autónomo.",
+                story: "El componente `DateTimeRangePicker` combina la selección de rango de fechas con controles de hora para el inicio y el fin del período. Selecciona las fechas en el calendario, ajusta las horas con los selectores nativos y confirma con **Aplicar**. Al aplicar, las tarjetas de métricas se actualizan simulando la carga de datos del período seleccionado.",
+            },
+            source: { code: DatePickerDateTimeRangePickerDashboardCode },
+        },
+    },
+};
+
+// ─── Uso en formulario ────────────────────────────────────────────────────────
+
+export const InForm: Story = {
+    name: "Ejemplo con todos los selectores",
+    decorators: [ToasterDecorator],
+    render: DatePickerWithForm,
+    parameters: {
+        docs: {
+            description: {
+                story: "Ejemplo de los cuatro componentes de fecha usados junto con `TimePicker` dentro de un formulario real: `DatePicker` con fecha mínima, `DateRangePicker`, `DateTimePicker` con dropdown, `DateTimeRangePicker` para una ventana de recolección y `TimePicker` autónomo.",
             },
             source: { code: DatePickerWithFormCode },
         },

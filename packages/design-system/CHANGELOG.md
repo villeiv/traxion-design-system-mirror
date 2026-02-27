@@ -1,5 +1,9 @@
 # Changelog
 
+### [0.10.0] - 2026-02-27
+### Added
+- Componente **DateTimeRangePicker** — selector de rango de fechas con hora para inicio y fin del período. Combina un calendario en modo rango (`react-day-picker`) con dos controles de hora nativos. Patrón de estado pendiente: la selección no se confirma hasta presionar **Aplicar**. Formato del disparador compacto (`d MMM`) configurable vía `dateFormat`. Los controles de hora se adaptan al espacio disponible: apilados verticalmente con `numberOfMonths=1`, en línea horizontal con `numberOfMonths≥2`.
+
 ### [0.9.0] - 2026-02-26
 ### Added
 - Componente **StatCard** — KPI tile para dashboards con etiqueta, valor en negrita, ícono opcional en círculo de color y señal de tendencia opcional (sube/baja/neutral con porcentaje). Variantes de ícono: `primary`, `secondary`, `green`, `yellow`, `red`. Prop `trendSentiment` para disociar la dirección del número de su significado (e.g. una tasa de accidentes a la baja es positiva). Estado de carga (`loading`) con skeleton animado.
