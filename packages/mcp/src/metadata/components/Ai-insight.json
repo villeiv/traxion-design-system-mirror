@@ -1,0 +1,72 @@
+{
+  "name": "AiInsight",
+  "slug": "ai-insight",
+  "packageVersion": "0.11.0",
+  "description": "A panel that surfaces AI-generated insights derived from operational data, KPIs, or statistics. Each message carries a title, a description, and a variant that communicates its importance level (info, warning, critical, success). With a single message the panel is static; with two or more messages a chevron toggle appears in the header so the user can collapse and expand the list.",
+  "tags": [
+    "ai",
+    "insight",
+    "intelligence",
+    "alert",
+    "panel",
+    "dashboard",
+    "kpi",
+    "notification"
+  ],
+  "props": [
+    {
+      "name": "messages",
+      "type": "AiInsightMessage[]",
+      "default": "undefined",
+      "description": "Array of messages to display. Each message has a title, description, and variant. A single message renders a static panel; two or more messages enable the collapsible toggle."
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "default": "true",
+      "description": "Initial open/closed state of the panel when it is collapsible (i.e. when messages.length > 1). Has no effect when there is only one message."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "undefined",
+      "description": "Additional CSS classes merged via cn() on the outer panel element."
+    }
+  ],
+  "dependencies": [
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
+  "accessibility": {
+    "role": "Renders as a div. The collapsible toggle button uses aria-expanded and aria-controls to associate the button with the message list region.",
+    "keyboard": "When the panel is collapsible the chevron button is keyboard-focusable and activates on Enter/Space. No other interactive elements.",
+    "aria": "Toggle button exposes aria-expanded (true/false) and aria-controls pointing to the message list id. Variant icons are aria-hidden; the button includes a visually-hidden sr-only label.",
+    "notes": "Variant meaning is communicated through both color and icon shape, so the component does not rely on color alone."
+  },
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Pasa múltiples mensajes cuando el análisis produce varios hallazgos. El panel colapsable mantiene el dashboard ordenado.",
+      "code": "<AiInsight messages={[\n  { title: \"Servicio al 92%\", description: \"...\", variant: \"info\" },\n  { title: \"Flotilla al 78%\", description: \"...\", variant: \"warning\" }\n]} />"
+    },
+    {
+      "type": "do",
+      "description": "Usa defaultOpen={false} cuando el AiInsight sea secundario en la jerarquía visual del dashboard.",
+      "code": "<AiInsight defaultOpen={false} messages={[...]} />"
+    },
+    {
+      "type": "dont",
+      "description": "No uses AiInsight para mensajes de confirmación de acciones del usuario. Para eso usa ToasterService.",
+      "code": "<AiInsight messages={[{ title: \"Guardado\", description: \"Registro actualizado.\", variant: \"success\" }]} />"
+    }
+  ],
+  "commonlyUsedWith": [
+    "stat-card",
+    "card",
+    "data-table"
+  ]
+}

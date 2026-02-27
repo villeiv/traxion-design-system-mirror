@@ -1,6 +1,7 @@
 "use client";
 
 export * from "./components/Accordion";
+export * from "./components/Ai-insight";
 export * from "./components/Alert-dialog";
 export * from "./components/Avatar";
 export * from "./components/Badge";

@@ -1,5 +1,9 @@
 # Changelog
 
+### [0.11.0] - 2026-02-27
+### Added
+- Componente **AiInsight** — panel de insights generados por IA con cuatro variantes de importancia (`info`, `warning`, `critical`, `success`). Acepta un arreglo de mensajes con título y descripción. Con un solo mensaje el panel se muestra directamente; con dos o más aparece un control de colapso en el encabezado. El estado inicial del panel es configurable mediante `defaultOpen`.
+
 ### [0.10.0] - 2026-02-27
 ### Added
 - Componente **DateTimeRangePicker** — selector de rango de fechas con hora para inicio y fin del período. Combina un calendario en modo rango (`react-day-picker`) con dos controles de hora nativos. Patrón de estado pendiente: la selección no se confirma hasta presionar **Aplicar**. Formato del disparador compacto (`d MMM`) configurable vía `dateFormat`. Los controles de hora se adaptan al espacio disponible: apilados verticalmente con `numberOfMonths=1`, en línea horizontal con `numberOfMonths≥2`.

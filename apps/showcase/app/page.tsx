@@ -28,6 +28,7 @@ import {
     type ColumnDef,
     Chat, ChatTrigger, ChatPanel, ChatHeader, ChatMessages, ChatDateSeparator,
     ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleTimestamp, ChatInput, ChatSendButton,
+    AiInsight,
 } from "@traxion-global/design-system/react";
 
 import {
@@ -1163,6 +1164,34 @@ export default function DesignSystemShowcase() {
                         </ChatInput>
                     </ChatPanel>
                 </Chat>
+            </Section>
+
+            {/* AiInsight */}
+            <Section title="AiInsight" description="Panel de insights generados por IA con cuatro niveles de importancia: info, warning, critical y success.">
+                <AiInsight
+                    messages={[
+                        {
+                            title: "Nivel de servicio Dedicado: 92%",
+                            description: "La unidad de negocio Dedicado reporta un nivel de servicio del 92% para el período seleccionado. Se mantiene dentro del rango objetivo.",
+                            variant: "info",
+                        },
+                        {
+                            title: "Ocupación de flotilla al 78%",
+                            description: "La ocupación general de la flotilla se encuentra por debajo del umbral del 85%. Se recomienda revisar la asignación de unidades en las rutas de menor demanda.",
+                            variant: "warning",
+                        },
+                        {
+                            title: "3 unidades sin telemetría activa",
+                            description: "Las unidades TRX-041, TRX-089 y TRX-112 no han reportado datos de telemetría en las últimas 4 horas. Verificar conectividad o estado del dispositivo GPS.",
+                            variant: "critical",
+                        },
+                        {
+                            title: "Reducción de incidentes viales: −18%",
+                            description: "El número de incidentes viales reportados disminuyó un 18% respecto al período anterior. La capacitación reciente de operadores muestra resultados positivos.",
+                            variant: "success",
+                        },
+                    ]}
+                />
             </Section>
 
             {/* Toast */}
