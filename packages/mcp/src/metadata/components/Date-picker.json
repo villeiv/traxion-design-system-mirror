@@ -1,16 +1,19 @@
 {
   "name": "DatePicker",
-  "packageVersion": "0.5.0",
+  "packageVersion": "0.10.0",
   "slug": "date-picker",
-  "description": "A set of three date picker components built on top of Calendar and Popover. DatePicker selects a single date (controlled via value/onChange or uncontrolled via defaultValue). DateRangePicker selects a date range with a pending state — the selection is not committed until the user presses Aplicar; Limpiar clears the pending selection. DateTimePicker combines a calendar and a native time input in one popover with a pending state confirmed via Aplicar, preserving the time when the day changes. All pickers support locale (es/en), custom date-fns format tokens, date restrictions (fromDate/toDate), and caption layout for navigation. These are the go-to components for all date and date-range selection needs: forms, filter panels, DataTableToolbar, report configuration, and any UI where the user picks a date. For time-only selection use the standalone TimePicker component.",
+  "description": "A set of four date picker components built on top of Calendar and Popover. DatePicker selects a single date (controlled via value/onChange or uncontrolled via defaultValue). DateRangePicker selects a date range with a pending state — the selection is not committed until the user presses Aplicar; Limpiar clears the pending selection. DateTimePicker combines a calendar and a native time input in one popover with a pending state confirmed via Aplicar, preserving the time when the day changes. DateTimeRangePicker selects a full date+time range (start and end, each with date and time) — the go-to picker for dashboard report filters and any UI that needs hour-level precision on both ends of a period. All pickers support locale (es/en), custom date-fns format tokens, date restrictions (fromDate/toDate), and caption layout for navigation. For time-only selection use the standalone TimePicker component.",
   "tags": [
     "date-picker",
     "date",
     "range",
     "datetime",
+    "datetime-range",
+    "time-range",
     "calendar",
     "popover",
     "filter",
+    "dashboard",
     "form",
     "locale",
     "backoffice"
@@ -225,6 +228,78 @@
           "description": "Additional CSS classes applied to the outer wrapper div."
         }
       ]
+    },
+    {
+      "name": "DateTimeRangePicker",
+      "description": "Date+time range picker. Selects a full period where both the start (from) and end (to) carry date and time. Uses a range-mode calendar (same DateRange type as DateRangePicker) plus two native time inputs — one for the start time, one for the end time. Each time input is disabled until its corresponding date is selected. Nothing is committed to onChange until Aplicar is pressed; Limpiar resets the pending selection. The trigger displays a compact label: 'dd MMM HH:mm – dd MMM HH:mm'. The time row adapts to available space: stacked vertically when numberOfMonths=1, displayed in a single horizontal line when numberOfMonths≥2. Primary use case: dashboard report period filters where hour-level precision is required on both ends.",
+      "props": [
+        {
+          "name": "value",
+          "type": "DateRange | undefined",
+          "default": "undefined",
+          "description": "Controlled selected range. { from: Date, to?: Date } — each Date carries date and time."
+        },
+        {
+          "name": "onChange",
+          "type": "(range: DateRange | undefined) => void",
+          "default": "undefined",
+          "description": "Callback fired when the user confirms via Aplicar."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "\"Selecciona un rango de fechas y hora\"",
+          "description": "Text shown in the trigger when nothing is selected."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the trigger button and calendar."
+        },
+        {
+          "name": "localeCode",
+          "type": "\"es\" | \"en\"",
+          "default": "\"es\"",
+          "description": "Calendar locale."
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "default": "\"d MMM\"",
+          "description": "date-fns format string for the date portion in the trigger label. Defaults to 'd MMM' (e.g. '27 feb.') to keep the trigger compact when showing two date+time endpoints."
+        },
+        {
+          "name": "fromDate",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Minimum selectable date."
+        },
+        {
+          "name": "toDate",
+          "type": "Date | undefined",
+          "default": "undefined",
+          "description": "Maximum selectable date."
+        },
+        {
+          "name": "captionLayout",
+          "type": "\"label\" | \"dropdown\" | \"dropdown-months\" | \"dropdown-years\"",
+          "default": "\"label\"",
+          "description": "Calendar header layout."
+        },
+        {
+          "name": "numberOfMonths",
+          "type": "number",
+          "default": "2",
+          "description": "Number of months displayed side by side. Also controls the time row layout: 1 = stacked vertically, 2+ = single horizontal line."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "default": "undefined",
+          "description": "Additional CSS classes applied to the outer wrapper div."
+        }
+      ]
     }
   ],
   "props": [
@@ -232,13 +307,13 @@
       "name": "value",
       "type": "Date | DateRange | undefined",
       "default": "undefined",
-      "description": "Controlled selected value. Use Date for DatePicker/DateTimePicker, DateRange for DateRangePicker."
+      "description": "Controlled selected value. Use Date for DatePicker/DateTimePicker; DateRange ({ from: Date, to?: Date }) for DateRangePicker/DateTimeRangePicker. In DateTimeRangePicker, the Date objects carry both date and time."
     },
     {
       "name": "onChange",
       "type": "function",
       "default": "undefined",
-      "description": "Callback fired when a selection is confirmed."
+      "description": "Callback fired when a selection is confirmed. DatePicker fires immediately on day click; DateRangePicker, DateTimePicker, and DateTimeRangePicker fire only when the user presses Aplicar."
     },
     {
       "name": "placeholder",
@@ -261,8 +336,8 @@
     {
       "name": "dateFormat",
       "type": "string",
-      "default": "\"PPP\"",
-      "description": "date-fns format string for the selected date displayed in the trigger button."
+      "default": "\"PPP\" (\"d MMM\" for DateTimeRangePicker)",
+      "description": "date-fns format string for the selected date displayed in the trigger button. DateTimeRangePicker defaults to 'd MMM' to keep the compact two-endpoint label readable."
     },
     {
       "name": "fromDate",
@@ -283,6 +358,12 @@
       "description": "Calendar header style. Use 'dropdown' when navigating to distant dates (e.g. birth date fields)."
     },
     {
+      "name": "numberOfMonths",
+      "type": "number",
+      "default": "2 (DateRangePicker and DateTimeRangePicker only)",
+      "description": "Number of months shown side by side. In DateTimeRangePicker also controls the time row layout: 1 = stacked, 2+ = inline."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "undefined",
@@ -301,13 +382,14 @@
   ],
   "accessibility": {
     "role": "The trigger is a Button (role=button). The popover uses Radix UI Popover which manages focus trapping and aria-expanded/aria-controls automatically. The calendar inside uses react-day-picker's table-based structure with proper ARIA semantics.",
-    "keyboard": "Enter/Space opens the popover. Arrow keys navigate days in the calendar. Escape closes the popover. Tab moves between the calendar, time input, and action buttons inside DateTimePicker.",
-    "aria": "The trigger button communicates selected state via its visible text content. Disabled dates receive aria-disabled. The Popover sets aria-expanded and manages focus return on close."
+    "keyboard": "Enter/Space opens the popover. Arrow keys navigate days in the calendar. Escape closes the popover. Tab moves focus between the calendar, time input(s), and action buttons. In DateTimeRangePicker, Tab cycles through the calendar, the start time input, the end time input (disabled until its date is selected), and the Aplicar/Limpiar buttons.",
+    "aria": "The trigger button communicates selected state via its visible text content. Disabled dates receive aria-disabled. The Popover sets aria-expanded and manages focus return on close. Time inputs are native <input type=\"time\"> elements with full browser accessibility support."
   },
   "commonlyUsedWith": [
     "label",
     "form",
     "card",
+    "stat-card",
     "datatable",
     "separator",
     "calendar",
@@ -315,15 +397,19 @@
   ],
   "recommendations": {
     "do": [
+      "Use DateTimeRangePicker for dashboard report filters and any UI that needs hour-level precision on both ends of a period (e.g. 'Show data from Feb 26 08:00 to Mar 1 18:00').",
+      "Use DateRangePicker (not DateTimeRangePicker) when time precision is not needed — it is simpler and more familiar to users.",
       "Use DatePicker or DateRangePicker everywhere a user needs to select a date: forms, filter panels, DataTableToolbar, report configuration, scheduling UIs.",
       "Use DateRangePicker in DataTableToolbar for date range filters — it replaces the manual Calendar+Popover+Button pattern.",
-      "Wrap the picker in a container that defines the width — the component stretches to fill its parent. Example: <div className=\"w-64\"><DatePicker ... /></div>",
+      "Use numberOfMonths=1 on DateTimeRangePicker when space is constrained (e.g. inside a sidebar or narrow panel) — the time row automatically stacks vertically.",
+      "Wrap the picker in a container that defines the width — the component stretches to fill its parent. Example: <div className=\"w-full\"><DateTimeRangePicker ... /></div>",
       "Use captionLayout=\"dropdown\" when selecting dates far from today (e.g. birth dates, historical records).",
       "Import the DateRange type from the design system: import type { DateRange } from \"@traxion-global/design-system/react\"",
-      "Use dateFormat with date-fns tokens to match your regional format (e.g. \"dd/MM/yyyy\" for Latin America).",
       "Use date-fns format() instead of toLocaleDateString() when displaying selected dates in your app."
     ],
     "dont": [
+      "Do not use DateTimeRangePicker when you only need a date range without time — use DateRangePicker instead.",
+      "Do not use DateTimeRangePicker when you only need a single datetime — use DateTimePicker instead.",
       "Do not use Calendar + Popover + Button manually for standard date selection — DatePicker and DateRangePicker already do this.",
       "Do not set a fixed width on the picker directly — control width from the parent container.",
       "Do not use DateTimePicker when only a date is needed — use DatePicker to keep the UX simpler.",

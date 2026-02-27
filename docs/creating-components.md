@@ -54,7 +54,7 @@ Before writing any code, understand the design space.
 
 ### 1.2 Check Existing Components
 
-Search the current 36 components for reuse or composition opportunities:
+Search the current 38 components for reuse or composition opportunities:
 
 | Functional Area | Components |
 |-----------------|-----------|
@@ -62,7 +62,7 @@ Search the current 36 components for reuse or composition opportunities:
 | **overlay** | AlertDialog, Dialog, HoverCard, Popover, Sheet, Tooltip |
 | **data-display** | Avatar, Badge, DataTable, InfoCard, SortableBoard, Table |
 | **actions** | Button |
-| **forms** | Calendar, Checkbox, DatePicker, DateRangePicker, DateTimePicker, FileDropZone, Input, Label, RadioGroup, Select, Switch, Textarea, TimePicker |
+| **forms** | Calendar, Checkbox, DatePicker, DateRangePicker, DateTimePicker, DateTimeRangePicker, FileDropZone, Input, Label, RadioGroup, Select, Switch, Textarea, TimePicker |
 | **layout** | Card, Separator |
 | **feedback** | FullPageOverlayLoader, InlineLoader, NoDataMessage, Progress, ToasterService |
 
@@ -714,16 +714,16 @@ If the root `README.md` lists components or component count, update it.
 **Path:** `packages/mcp/README.md`
 
 Update:
-- Component count (currently "36 React components" / "36 components")
+- Component count (currently "38 React components" / "38 components")
 - Category listing if the component belongs to a new category
-- Story count (currently "35 story files" / "35 story sets")
+- Story count (currently "36 story files" / "36 story sets")
 - Architecture diagram numbers if maintained
 
 ### 8.3 Update CLAUDE.md
 
 **Path:** `CLAUDE.md` (monorepo root)
 
-Update the component count in the Project Overview section (currently "36 components").
+Update the component count in the Project Overview section (currently "38 components").
 
 ---
 
