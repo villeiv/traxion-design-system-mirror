@@ -38,7 +38,7 @@
         },
         {
           "type": "text",
-          "content": "### What the hook manages\n\nThe hook handles ALL table state internally. You do NOT need separate `useState` calls for any of these:\n\n- **pagination** — `{ pageIndex, pageSize }` — current page and rows per page\n- **sorting** — `[{ id, desc }]` — which columns are sorted and their direction\n- **columnFilters** — `[{ id, value }]` — active filters per column\n- **columnVisibility** — `{ [columnId]: boolean }` — which columns are visible/hidden\n- **columnOrder** — `string[]` — display order of columns\n- **rowSelection** — `{ [rowIndex]: boolean }` — which rows are selected\n\nAll of these are spread onto `<DataTable>` via `{...tableState}`. The only props you still pass manually are:\n- `columns` — your column definitions\n- `data` — the fetched data array\n- `pageCount` — total pages from API (`Math.ceil(total / pageSize)`)\n- `enableRowSelection` — boolean to enable checkboxes (config, not state)\n- `enableColumnReordering` — boolean to enable drag-and-drop (config, not state)\n- `isLoading` / `loadingRowCount` — loading state you manage from your fetch logic"
+          "content": "### What the hook manages\n\nThe hook handles ALL table state internally. You do NOT need separate `useState` calls for any of these:\n\n- **pagination** — `{ pageIndex, pageSize }` — current page and rows per page\n- **sorting** — `[{ id, desc }]` — which columns are sorted and their direction\n- **columnFilters** — `[{ id, value }]` — active filters per column\n- **columnVisibility** — `{ [columnId]: boolean }` — which columns are visible/hidden\n- **columnOrder** — `string[]` — display order of columns\n- **selectedRows** — `Record<string, TData>` — selected rows keyed by ID, with full row data as values\n\nAll of these are spread onto `<DataTable>` via `{...tableState}`. The only props you still pass manually are:\n- `columns` — your column definitions\n- `data` — the fetched data array\n- `pageCount` — total pages from API (`Math.ceil(total / pageSize)`)\n- `enableRowSelection` — boolean to enable checkboxes (config, not state)\n- `rowSelectionKey` — required when `enableRowSelection` is true, a function returning a unique ID per row\n- `enableColumnReordering` — boolean to enable drag-and-drop (config, not state)\n- `isLoading` / `loadingRowCount` — loading state you manage from your fetch logic"
         },
         {
           "type": "text",
@@ -142,14 +142,14 @@
               "Setter for column order."
             ],
             [
-              "rowSelection",
-              "RowSelectionState",
-              "Object mapping row indices to boolean. Access selected rows via Object.keys(tableState.rowSelection)."
+              "selectedRows",
+              "Record<string, TData>",
+              "Object mapping row IDs to full row data. Access selected IDs via Object.keys(tableState.selectedRows) or full data via Object.values(tableState.selectedRows). Selection persists across pages."
             ],
             [
-              "setRowSelection / onRowSelectionChange",
-              "(updater) => void",
-              "Setter for row selection."
+              "setSelectedRows / onSelectedRowsChange",
+              "(selectedRows: Record<string, TData>) => void",
+              "Setter for selected rows."
             ],
             [
               "isPending",
@@ -179,7 +179,7 @@
         {
           "type": "code",
           "language": "tsx",
-          "content": "const tableState = useDataTable();\n\n// Access selected rows for business logic\nconst selectedIds = Object.keys(tableState.rowSelection);\n\n<DataTable columns={columns} data={data} pageCount={pageCount} enableRowSelection {...tableState}>\n  <DataTableToolbar>\n    {selectedIds.length > 0 && (\n      <Button onClick={() => handleBulkDelete(selectedIds)}>\n        Delete ({selectedIds.length})\n      </Button>\n    )}\n  </DataTableToolbar>\n  <DataTableContent />\n  <DataTablePagination />\n</DataTable>"
+          "content": "const tableState = useDataTable<User>();\n\n// Access selected rows — full row data, persists across pages\nconst selected = Object.values(tableState.selectedRows);\nconst selectedIds = Object.keys(tableState.selectedRows);\n\n<DataTable\n  columns={columns}\n  data={data}\n  pageCount={pageCount}\n  enableRowSelection\n  rowSelectionKey={(row) => String(row.id)}\n  {...tableState}\n>\n  <DataTableToolbar>\n    {selectedIds.length > 0 && (\n      <Button onClick={() => handleBulkDelete(selectedIds)}>\n        Delete ({selectedIds.length})\n      </Button>\n    )}\n  </DataTableToolbar>\n  <DataTableContent />\n  <DataTablePagination />\n</DataTable>"
         },
         {
           "type": "text",
@@ -386,28 +386,28 @@
       "description": "Column filters change handler. Provided by useDataTable via {...tableState}."
     },
     {
-      "name": "rowSelection",
-      "type": "RowSelectionState",
+      "name": "selectedRows",
+      "type": "Record<string, TData>",
       "default": "{}",
-      "description": "Controlled row selection state. Provided by useDataTable via {...tableState}. Access selected rows via Object.keys(tableState.rowSelection)."
+      "description": "Controlled selected rows state. Maps row IDs (from rowSelectionKey) to full row data objects. Provided by useDataTable via {...tableState}. Selection persists across pages."
     },
     {
-      "name": "onRowSelectionChange",
-      "type": "OnChangeFn<RowSelectionState>",
+      "name": "onSelectedRowsChange",
+      "type": "(selectedRows: Record<string, TData>) => void",
       "default": "undefined",
-      "description": "Row selection change handler. Provided by useDataTable via {...tableState}."
+      "description": "Selected rows change handler. Provided by useDataTable via {...tableState}."
     },
     {
       "name": "enableRowSelection",
       "type": "boolean | ((row: Row<TData>) => boolean)",
       "default": "false",
-      "description": "Enables row selection. This is a config flag, NOT state — pass it directly (not from the hook). Set to true to allow all rows, or pass a function for conditional selection per row."
+      "description": "Enables row selection. This is a config flag, NOT state — pass it directly (not from the hook). Set to true to allow all rows, or pass a function for conditional selection per row. Requires rowSelectionKey when enabled."
     },
     {
-      "name": "getRowId",
-      "type": "(row: TData, index: number) => string",
+      "name": "rowSelectionKey",
+      "type": "(row: TData) => string",
       "default": "undefined",
-      "description": "Custom row ID getter. Useful for stable selection across page changes. If not provided, TanStack Table uses the row index."
+      "description": "Required when enableRowSelection is true. A function that returns a unique string identifier for each row (e.g., (row) => String(row.id)). Used to track selection across pages."
     },
     {
       "name": "columnVisibility",
@@ -491,7 +491,7 @@
       "Use mixed-content cells (multiple lines in one cell) for related data that doesn't justify its own column",
       "Use icons from lucide-react only — never emoji, unicode, or other icon libraries",
       "Place DataTableViewOptions inside DataTableToolbar for consistent layout",
-      "Access selected rows via Object.keys(tableState.rowSelection) — no separate useState needed",
+      "Access selected rows via Object.values(tableState.selectedRows) for full row data, or Object.keys(tableState.selectedRows) for IDs — no separate useState needed. Always provide rowSelectionKey when enableRowSelection is true.",
       "Use DateRangePicker for date range filters in DataTableToolbar — it replaces the manual Calendar+Popover pattern with a single component.",
       "Use DatePicker for single-date filters in DataTableToolbar.",
       "Use TimePicker for time-of-day filters in DataTableToolbar or filter panels.",
@@ -499,7 +499,7 @@
     ],
     "dont": [
       "Don't use DataTable for simple static tables — use the Table component instead",
-      "Don't create separate useState() calls for pagination, sorting, filters, column visibility, column order, or row selection — useDataTable() manages all of these. If you prefer custom handlers, you can pass props individually instead of using the hook",
+      "Don't create separate useState() calls for pagination, sorting, filters, column visibility, column order, or selected rows — useDataTable() manages all of these. If you prefer custom handlers, you can pass props individually instead of using the hook",
       "Don't import from @tanstack/react-table directly — import ColumnDef, Row, Column from @traxion-global/design-system/react",
       "Don't use client-side pagination — DataTable is designed for server-side (manual) pagination only",
       "Don't forget to pass pageCount — it is required for server-side pagination to work",
