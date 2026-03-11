@@ -11,7 +11,7 @@ const registry = new ComponentRegistry();
 // Create MCP server
 const server = new McpServer({
   name: 'traxion-design-system',
-  version: '0.12.0',
+  version: '0.12.1',
   description: 'MCP server for the Traxion Design System — serves components, tokens, and guidelines to AI assistants.',
 });
 

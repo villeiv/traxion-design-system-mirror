@@ -1,5 +1,9 @@
 # Changelog
 
+### [0.12.1] - 2026-03-11
+### Fixed
+- **DataTable.json**: Regla de estado de filtros clarificada — solo los inputs de texto necesitan `useState` local (para debounce). `Select`, `DateRangePicker` y `TimePicker` deben derivar su valor directamente de `tableState.columnFilters`.
+
 ### [0.12.0] - 2026-03-11
 ### Changed
 - **DataTable.json**: `packageVersion` actualizado a `0.12.0`.
