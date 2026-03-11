@@ -310,6 +310,11 @@ export function DataTablePagination<TData>({
     )
   }
 
+  const currentPageSize = table.getState().pagination.pageSize
+  const resolvedPageSizeOptions = pageSizeOptions.includes(currentPageSize)
+    ? pageSizeOptions
+    : [...pageSizeOptions, currentPageSize].sort((a, b) => a - b)
+
   const selectedRowCount = table.getSelectedRowModel().rows.length
   const totalRowCount = table.getRowModel().rows.length
 
@@ -339,7 +344,7 @@ export function DataTablePagination<TData>({
               />
             </SelectTrigger>
             <SelectContent side="top">
-              {pageSizeOptions.map((pageSize) => (
+              {resolvedPageSizeOptions.map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

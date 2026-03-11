@@ -239,7 +239,7 @@ export default function DataTableAllFunctionality() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [rowSelection, setRowSelection] = useState({});
     const [idSearch, setIdSearch] = useState<string>("");
-    const tableState = useDataTable({ pageSize: 5 });
+    const tableState = useDataTable({ pageSize: 7 });
 
     // Data fetching effect
     useEffect(() => {
