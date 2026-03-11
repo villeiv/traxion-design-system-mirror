@@ -25,7 +25,7 @@ export default function DataTableBasic() {
     const [data, setData] = useState<User[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
 
-    //Inicializa el estado de la tabla con useDataTable, estableciendo un tamaño de página predeterminado
+    //Inicializa el estado de la tabla con useDataTable, useDataTable se encarga de manejar la paginación, ordenamiento y otras funcionalidades de la tabla. Al usar este hook, obtenemos acceso al estado actual de la tabla, como el índice de página y el tamaño de página.
     const tableState = useDataTable();
 
     //UseEffect se vuelve a ejecutar cada vez que cambian pageIndex o pageSize, lo que ocurre al cambiar de página
