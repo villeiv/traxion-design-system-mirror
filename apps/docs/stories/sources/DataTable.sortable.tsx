@@ -27,7 +27,7 @@ const columns:ColumnDef<User>[] = [
 export default function DataTableSortable() {
     const [data, setData] = useState<User[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
-    const tableState = useDataTable({ pageSize: 10 });
+    const tableState = useDataTable();
 
     useEffect(() => {
         const { pageIndex, pageSize } = tableState.pagination;

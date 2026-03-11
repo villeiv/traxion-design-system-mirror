@@ -100,7 +100,7 @@ function parseSearchParams(searchParams: URLSearchParams | null, namespace?: str
   if (!searchParams) {
     return {
       page: 0,
-      pageSize: 10,
+      pageSize: undefined,
       sorting: [] as SortingState,
       columnFilters: [] as ColumnFiltersState,
     }
@@ -112,7 +112,8 @@ function parseSearchParams(searchParams: URLSearchParams | null, namespace?: str
   }
 
   const page = Number(getParam("page")) || 1
-  const pageSize = Number(getParam("pageSize")) || 10
+  const pageSizeParam = Number(getParam("pageSize"))
+  const pageSize = pageSizeParam > 0 ? pageSizeParam : undefined
 
   // Parse sorting: format is "columnId.asc" or "columnId.desc"
   const sortParam = getParam("sort")
@@ -242,7 +243,7 @@ export function useDataTable(
   // Table state
   const [pagination, setPaginationState] = useState<PaginationState>({
     pageIndex: initialState.page,
-    pageSize: initialState.pageSize || initialPageSize,
+    pageSize: initialState.pageSize ?? initialPageSize,
   })
 
   const [sorting, setSortingState] = useState<SortingState>(

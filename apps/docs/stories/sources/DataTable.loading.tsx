@@ -18,7 +18,7 @@ export default function DataTableBasic() {
     const [pageCount, setPageCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const tableState = useDataTable({ pageSize: 10 });
+    const tableState = useDataTable();
 
     return (
         <DataTable

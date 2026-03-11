@@ -28,7 +28,7 @@ export default function DataTableFiltering() {
     // Estado local para el valor del campo de búsqueda, que se actualiza instantáneamente
     const [idSearch, setIdSearch] = useState<string>("");
 
-    const tableState = useDataTable({ pageSize: 10 });
+    const tableState = useDataTable();
 
     useEffect(() => {
         const { pageIndex, pageSize } = tableState.pagination;

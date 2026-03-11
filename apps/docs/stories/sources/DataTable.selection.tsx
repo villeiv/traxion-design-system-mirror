@@ -51,7 +51,7 @@ export default function DataTableRowSelection() {
     // Estado para almacenar las filas seleccionadas
     const [rowSelection, setRowSelection] = useState({});
 
-    const tableState = useDataTable({ pageSize: 10 });
+    const tableState = useDataTable();
 
     useEffect(() => {
         const { pageIndex, pageSize } = tableState.pagination;
