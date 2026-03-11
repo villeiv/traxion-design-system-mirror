@@ -518,7 +518,7 @@
       "Always include <DataTablePagination /> — every backoffice table must have pagination",
       "Hide pagination during loading: {!isLoading && <DataTablePagination />}",
       "Reset pagination to page 0 when filters change: useEffect(() => { tableState.setPagination(prev => ({ ...prev, pageIndex: 0 })); }, [tableState.columnFilters])",
-      "Use useDebouncedCallback for filter inputs to avoid excessive API calls while the user types",
+      "Use useDebouncedCallback for text filter inputs to avoid excessive API calls while the user types. This is the only filter type that needs local useState — the local state intentionally lags behind the actual filter for debounce. All other filter controls (Select, DateRangePicker, TimePicker) should derive their value directly from tableState.columnFilters.",
       "Set enableSorting: false and enableHiding: false on action and checkbox columns",
       "Use DataTableColumnHeader for any column that should be sortable — it provides consistent sort indicators",
       "Set a column id (e.g., id: 'Name') when using DataTableViewOptions so the toggle menu shows human-readable names instead of accessorKey paths",
@@ -537,6 +537,7 @@
     "dont": [
       "Don't use DataTable for simple static tables — use the Table component instead",
       "Don't create separate useState() calls for pagination, sorting, filters, column visibility, column order, or selected rows — useDataTable() manages all of these. If you prefer custom handlers, you can pass props individually instead of using the hook",
+      "Don't create a separate useState to track the current value of filter controls like Select, DateRangePicker, or TimePicker. Derive their value directly from tableState.columnFilters — it's already the source of truth. Example: value={tableState.columnFilters.find(f => f.id === 'role')?.value as string ?? 'all'}. The only exception is text inputs using useDebouncedCallback, where local state is intentional so the input lags behind the actual filter.",
       "Don't import from @tanstack/react-table directly — import ColumnDef, Row, Column from @traxion-global/design-system/react",
       "Don't use client-side pagination — DataTable is designed for server-side (manual) pagination only",
       "Don't forget to pass pageCount — it is required for server-side pagination to work",
