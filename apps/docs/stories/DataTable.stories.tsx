@@ -132,8 +132,9 @@ export const RowSelection = {
         docs: {
             source: { code: DataTableRowSelectionCode },
             description: {
-                story: "Ejemplo de **DataTable** con selección de filas. Este ejemplo muestra cómo permitir a los usuarios seleccionar una o "+
-                "varias filas dentro de la tabla."
+                story: "Ejemplo de **DataTable** con selección de filas y **DataTableSelectionBar**. " +
+                "Muestra cómo seleccionar filas y presentar acciones masivas (eliminar, exportar) en una barra fija en la parte inferior de la página. " +
+                "La selección persiste entre páginas y el botón Deselect limpia toda la selección."
             },
         },
     },

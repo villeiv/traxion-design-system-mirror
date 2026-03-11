@@ -24,7 +24,7 @@ import {
     DatePicker, DateRangePicker, DateTimePicker, DateTimeRangePicker, TimePicker,
     type DateRange,
     StatCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
-    DataTable, DataTableColumnHeader, DataTablePagination, DataTableToolbar, DataTableViewOptions, DataTableContent,
+    DataTable, DataTableColumnHeader, DataTablePagination, DataTableSelectionBar, DataTableToolbar, DataTableViewOptions, DataTableContent,
     type ColumnDef,
     Chat, ChatTrigger, ChatPanel, ChatHeader, ChatMessages, ChatDateSeparator,
     ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleTimestamp, ChatInput, ChatSendButton,
@@ -42,7 +42,7 @@ import {
 } from "lucide-react";
 
 import { useDataTable, useDebouncedCallback } from "@traxion-global/design-system/react";
-import { useRouter, useSearchParams } from "next/navigation";
+
 
 /*import {cn} from "@/lib/utils";
 
@@ -1809,23 +1809,9 @@ function DataTableURLDemo() {
     // Local state for instant input feedback
     const [trackingSearch, setTrackingSearch] = React.useState("")
 
-    // Get Next.js hooks
-    const router = useRouter()
-    const searchParams = useSearchParams()
-
-    // Use the URL state management hook (URL sync auto-detected from router)
-    const tableState = useDataTable({
-        pageSize: 5, // Smaller page size to demonstrate pagination better
-        namespace: "shipments", // Namespace to avoid conflicts with other tables
-        router,
-        searchParams,
+    const tableState = useDataTable<Shipment>({
+        pageSize: 5,
     })
-
-    // Sync local tracking search with table filter value on mount/URL change
-    React.useEffect(() => {
-        const currentFilter = tableState.columnFilters.find(f => f.id === "tracking")
-        setTrackingSearch((currentFilter?.value as string) ?? "")
-    }, [searchParams])
 
     // Debounced callback to update actual filter state
     const debouncedSetTrackingFilter = useDebouncedCallback((value: string) => {
@@ -1990,40 +1976,13 @@ function DataTableURLDemo() {
 
     return (
         <div className="space-y-4">
-            {/* Demo controls */}
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border p-4 bg-muted/20">
-                <Label className="text-sm font-medium">Controles del demo:</Label>
-                <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                        setIsLoading(true)
-                        setTimeout(() => setIsLoading(false), 2000)
-                    }}
-                >
-                    {isLoading && <InlineLoader />}
-                    {!isLoading && "Simular carga"}
-                </Button>
-                <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                        // Reset to defaults
-                        tableState.setPagination({ pageIndex: 0, pageSize: 5 })
-                        tableState.setSorting([])
-                        tableState.setColumnFilters([])
-                    }}
-                >
-                    Reiniciar URL
-                </Button>
-            </div>
-
             {/* DataTable with children pattern — no useReactTable needed */}
             <DataTable
                 columns={columns}
                 data={processedData.data}
                 pageCount={processedData.pageCount}
                 enableRowSelection
+                rowSelectionKey={(row) => row.id}
                 enableColumnReordering
                 isLoading={isLoading}
                 {...tableState}
@@ -2081,6 +2040,22 @@ function DataTableURLDemo() {
                 </DataTableToolbar>
                 <DataTableContent />
                 <DataTablePagination />
+                <DataTableSelectionBar>
+                    <Button variant="destructive" size="sm" onClick={() =>{
+                        const selectedIds = Object.keys(tableState.selectedRows);
+                        alert(`Eliminar envíos con IDs: ${selectedIds.join(", ")}`) 
+                    }}>
+                        <Trash2 className="mr-1 h-4 w-4" />
+                        Eliminar
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => {
+                        const selectedRows = Object.keys(tableState.selectedRows);
+                        alert(`Exportar envíos seleccionados: ${selectedRows.join(", ")}`)
+                    }}>
+                        <Download className="mr-1 h-4 w-4" />
+                        Exportar
+                    </Button>
+                </DataTableSelectionBar>
             </DataTable>
         </div>
     )

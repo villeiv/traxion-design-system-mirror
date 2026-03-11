@@ -45,6 +45,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Settings2,
+  X,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -85,6 +86,7 @@ interface DataTableContextValue<TData = unknown> {
   emptyState?: React.ReactNode
   enableColumnReordering: boolean
   selectedRowsCount: number
+  clearSelection: () => void
 }
 
 const DataTableContext = React.createContext<DataTableContextValue | null>(null)
@@ -500,6 +502,79 @@ export function DataTableContent() {
 DataTableContent.displayName = "DataTableContent"
 
 /* ─────────────────────────────────────────────
+ * 6.5. DataTableSelectionBar
+ * ───────────────────────────────────────────── */
+
+export interface DataTableSelectionBarProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode
+}
+
+export function DataTableSelectionBar({
+  children,
+  className,
+  ...props
+}: DataTableSelectionBarProps) {
+  const { selectedRowsCount, clearSelection } = useDataTableInstance()
+
+  if (selectedRowsCount === 0) return null
+
+  return (
+    <div
+      className={cn(
+        "fixed z-50",
+        "bottom-2 left-2 right-2 rounded-lg border sm:bottom-6 sm:left-1/2 sm:right-auto sm:-translate-x-1/2",
+        "bg-secondary px-4 py-3 shadow-lg",
+        "animate-in fade-in-0 slide-in-from-bottom-4 duration-300",
+        className
+      )}
+      role="toolbar"
+      aria-label="Bulk actions"
+      {...props}
+    >
+      {/* Mobile: two rows / Desktop: single row */}
+      <div className="flex items-center justify-center sm:hidden">
+        <span className="text-sm font-medium text-secondary-foreground">
+          {selectedRowsCount} selected
+        </span>
+      </div>
+      <div className="mt-2 flex items-center justify-center gap-2 overflow-x-auto sm:hidden">
+        {children}
+        <Button
+          variant="outline"
+          size="sm"
+          className="shrink-0"
+          onClick={clearSelection}
+        >
+          <X className="mr-1 h-4 w-4" />
+          Deselect
+        </Button>
+      </div>
+
+      {/* Desktop: single row */}
+      <div className="hidden sm:flex sm:items-center sm:gap-4">
+        <span className="text-sm font-medium text-secondary-foreground whitespace-nowrap">
+          {selectedRowsCount} selected
+        </span>
+        <div className="h-4 w-px bg-border" />
+        <div className="flex items-center gap-2">{children}</div>
+        <div className="h-4 w-px bg-border" />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={clearSelection}
+        >
+          <X className="mr-1 h-4 w-4" />
+          Deselect
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+DataTableSelectionBar.displayName = "DataTableSelectionBar"
+
+/* ─────────────────────────────────────────────
  * 7. DataTable (main component)
  * ───────────────────────────────────────────── */
 
@@ -713,6 +788,11 @@ export function DataTable<TData, TValue = unknown>({
 
   // Context value
   const selectedRowsCount = Object.keys(selectedRows).length
+  const clearSelection = React.useCallback(() => {
+    const changeFn = onSelectedRowsChange ?? setInternalSelectedRows
+    changeFn({})
+  }, [onSelectedRowsChange])
+
   const contextValue: DataTableContextValue<TData> = React.useMemo(
     () => ({
       table,
@@ -721,8 +801,9 @@ export function DataTable<TData, TValue = unknown>({
       emptyState,
       enableColumnReordering,
       selectedRowsCount,
+      clearSelection,
     }),
-    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering, selectedRowsCount]
+    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering, selectedRowsCount, clearSelection]
   )
 
   // Only enable DndContext after hydration AND if prop is true

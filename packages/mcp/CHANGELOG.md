@@ -1,5 +1,19 @@
 # Changelog
 
+### [0.12.0] - 2026-03-11
+### Changed
+- **DataTable.json**: `packageVersion` actualizado a `0.12.0`.
+- **DataTable.json**: Props `rowSelection`, `onRowSelectionChange` y `getRowId` reemplazados por `selectedRows`, `onSelectedRowsChange` y `rowSelectionKey`.
+- **DataTable.json**: Estado `rowSelection` del hook renombrado a `selectedRows: Record<string, TData>` — ahora almacena datos completos de las filas seleccionadas.
+- **DataTable.json**: Retornos del hook actualizados: `setRowSelection / onRowSelectionChange` → `setSelectedRows / onSelectedRowsChange`.
+- **DataTable.json**: Ejemplos de código actualizados para reflejar la nueva API de selección.
+- **DataTable.json**: Recomendaciones actualizadas para referenciar `selectedRows` y `rowSelectionKey`.
+
+### Added
+- **DataTable.json**: Documentación del sub-componente `DataTableSelectionBar` — barra fija inferior con conteo de selección, botones de acciones masivas y botón de deseleccionar. Incluye ejemplo de uso.
+- **DataTable.json**: `DataTableSelectionBar` agregado al patrón de importación.
+- **DataTable.json**: Recomendación de uso de `DataTableSelectionBar` para acciones masivas.
+
 ### [0.11.1] - 2026-03-10
 ### Changed
 - **DataTable.json**: Documentación del hook `useDataTable` reescrita — ahora incluye sección "What the hook manages" que lista explícitamente los 6 estados que maneja (pagination, sorting, columnFilters, columnVisibility, columnOrder, rowSelection).

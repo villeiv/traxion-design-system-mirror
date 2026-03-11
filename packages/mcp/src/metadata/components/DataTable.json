@@ -1,7 +1,7 @@
 {
   "name": "DataTable",
   "slug": "datatable",
-  "packageVersion": "0.11.1",
+  "packageVersion": "0.12.0",
   "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
   "tags": [
     "datatable",
@@ -25,7 +25,7 @@
         {
           "type": "code",
           "language": "tsx",
-          "content": "import {\n  DataTable,\n  DataTableContent,\n  DataTablePagination,\n  DataTableToolbar,\n  DataTableViewOptions,\n  DataTableColumnHeader,\n  useDataTable,\n  ColumnDef,\n} from \"@traxion-global/design-system/react\";"
+          "content": "import {\n  DataTable,\n  DataTableContent,\n  DataTablePagination,\n  DataTableToolbar,\n  DataTableViewOptions,\n  DataTableColumnHeader,\n  DataTableSelectionBar,\n  useDataTable,\n  ColumnDef,\n} from \"@traxion-global/design-system/react\";"
         }
       ]
     },
@@ -289,6 +289,42 @@
               "Shows 'X of Y row(s) selected' when rows are selected."
             ]
           ]
+        },
+        {
+          "type": "text",
+          "content": "### DataTableSelectionBar\n\nA fixed bottom bar that appears when rows are selected. Shows the selection count, developer-provided bulk action buttons (children), and a Deselect button. Automatically hides when no rows are selected. Responsive: on mobile it uses two rows (label + horizontally-scrollable actions); on desktop it renders as a single row with dividers. Place inside `<DataTable>` after `<DataTablePagination>`."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Prop",
+            "Type",
+            "Default",
+            "Description"
+          ],
+          "rows": [
+            [
+              "children",
+              "React.ReactNode",
+              "undefined",
+              "Bulk action buttons (e.g., Delete, Export). Rendered between the selection count and the Deselect button."
+            ],
+            [
+              "className",
+              "string",
+              "undefined",
+              "Additional CSS classes merged with the default bar styling."
+            ]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "#### Usage"
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "<DataTable\n  columns={columns}\n  data={data}\n  pageCount={pageCount}\n  enableRowSelection\n  rowSelectionKey={(row) => String(row.id)}\n  {...tableState}\n>\n  <DataTableToolbar>...</DataTableToolbar>\n  <DataTableContent />\n  {!isLoading && <DataTablePagination />}\n  <DataTableSelectionBar>\n    <Button variant=\"destructive\" size=\"sm\" onClick={handleBulkDelete}>\n      <Trash className=\"mr-1 h-4 w-4\" /> Delete\n    </Button>\n    <Button variant=\"outline\" size=\"sm\" onClick={handleExport}>\n      <Download className=\"mr-1 h-4 w-4\" /> Export\n    </Button>\n  </DataTableSelectionBar>\n</DataTable>"
         }
       ]
     },
@@ -492,6 +528,7 @@
       "Use icons from lucide-react only — never emoji, unicode, or other icon libraries",
       "Place DataTableViewOptions inside DataTableToolbar for consistent layout",
       "Access selected rows via Object.values(tableState.selectedRows) for full row data, or Object.keys(tableState.selectedRows) for IDs — no separate useState needed. Always provide rowSelectionKey when enableRowSelection is true.",
+      "Use DataTableSelectionBar for bulk actions on selected rows — it provides a fixed bottom bar with selection count, action buttons, and a Deselect button. Place it inside <DataTable> after <DataTablePagination>.",
       "Use DateRangePicker for date range filters in DataTableToolbar — it replaces the manual Calendar+Popover pattern with a single component.",
       "Use DatePicker for single-date filters in DataTableToolbar.",
       "Use TimePicker for time-of-day filters in DataTableToolbar or filter panels.",

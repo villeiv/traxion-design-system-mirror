@@ -1,4 +1,5 @@
-import { DataTable, DataTableContent, DataTablePagination, DataTableToolbar, ColumnDef, useDataTable, Checkbox, Button } from "@traxion-global/design-system/react";
+import { DataTable, DataTableContent, DataTablePagination, DataTableSelectionBar, ColumnDef, useDataTable, Checkbox, Button } from "@traxion-global/design-system/react";
+import { Trash, Download } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface User {
@@ -70,21 +71,25 @@ export default function DataTableRowSelection() {
             enableRowSelection
             rowSelectionKey={(row) => String(row.id)}
         >
-            {
-                Object.keys(tableState.selectedRows).length > 0 &&
-                // Usa DataTableToolbar para mostrar acciones relacionadas con las filas seleccionadas o controles adicionales
-                <DataTableToolbar>
-                    <Button variant="outline" onClick={() => {
-                        // Obtener los datos completos de las filas seleccionadas
-                        const selected = Object.values(tableState.selectedRows);
-                        alert(`IDs seleccionados: ${selected.map(u => u.id).join(", ")}`);
-                    }}>
-                        Mostrar IDs seleccionados
-                    </Button>
-                </DataTableToolbar>
-            }
             <DataTableContent />
             <DataTablePagination />
+            {/* DataTableSelectionBar aparece fijo en la parte inferior cuando hay filas seleccionadas */}
+            <DataTableSelectionBar>
+                <Button variant="destructive" size="sm" onClick={() => {
+                    const selected = Object.values(tableState.selectedRows);
+                    alert(`Eliminar usuarios: ${selected.map(u => `${u.firstName} (${u.id})`).join(", ")}`);
+                }}>
+                    <Trash className="mr-1 h-4 w-4" />
+                    Eliminar
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => {
+                    const selected = Object.values(tableState.selectedRows);
+                    alert(`Exportar usuarios: ${selected.map(u => u.id).join(", ")}`);
+                }}>
+                    <Download className="mr-1 h-4 w-4" />
+                    Exportar
+                </Button>
+            </DataTableSelectionBar>
         </DataTable>
     );
 }

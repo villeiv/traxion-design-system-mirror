@@ -37,8 +37,8 @@ export interface UseDataTableOptions {
   }
 
   /**
-   * Next.js searchParams (for reading URL state)
-   * If not provided, hook will attempt to use Next.js useSearchParams
+   * Current URL search params (for reading initial state and preserving other params).
+   * Required when `router` is provided for URL sync to work correctly.
    */
   searchParams?: URLSearchParams | null
 }
@@ -295,8 +295,12 @@ export function useDataTable<TData = unknown>(
       searchParams
     )
 
+    // Skip if URL already matches to prevent redirect loops
+    const newParamsString = params.toString()
+    if ((searchParams?.toString() ?? "") === newParamsString) return
+
     startTransition(() => {
-      router.push(`?${params.toString()}`)
+      router.push(`?${newParamsString}`)
     })
   }, [pagination, sorting, columnFilters, syncToUrl, router, namespace, searchParams])
 

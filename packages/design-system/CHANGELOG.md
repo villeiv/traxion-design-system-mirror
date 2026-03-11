@@ -1,5 +1,21 @@
 # Changelog
 
+### [0.12.0] - 2026-03-11
+
+### Breaking Changes
+- **DataTable**: Las props `rowSelection`, `onRowSelectionChange` y `getRowId` fueron reemplazadas por `selectedRows`, `onSelectedRowsChange` y `rowSelectionKey`.
+- **useDataTable**: `rowSelection` / `setRowSelection` / `onRowSelectionChange` reemplazados por `selectedRows` / `setSelectedRows` / `onSelectedRowsChange`. El hook ahora es genérico: `useDataTable<TData>()`.
+- **DataTable**: `rowSelectionKey` es obligatorio cuando `enableRowSelection` está habilitado.
+
+### Added
+- **DataTableSelectionBar**: Nuevo sub-componente que muestra una barra fija en la parte inferior con el conteo de selección, botones de acciones masivas y un botón de deseleccionar. Responsive: en móvil muestra dos filas (label + acciones con scroll horizontal).
+- **DataTable**: `selectedRows` (`Record<string, TData>`) almacena los datos completos de las filas seleccionadas, persistiendo entre páginas.
+- **DataTable**: `clearSelection` disponible en el contexto interno para limpiar la selección desde sub-componentes.
+
+### Fixed
+- **DataTable**: La selección de filas ya no se transfiere entre páginas al cambiar de página (antes usaba índices de array).
+- **useDataTable**: Prevenido bucle de redirección infinita en sincronización con URL cuando `searchParams` no cambia.
+
 ### [0.11.1] - 2026-03-10
 ### Fixed
 - **DataTable**: Skeleton de carga ahora respeta columnas ocultas (`getVisibleLeafColumns` en vez de `getAllLeafColumns`).

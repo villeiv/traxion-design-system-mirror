@@ -2,6 +2,7 @@ import {
     DataTable,
     DataTableContent,
     DataTablePagination,
+    DataTableSelectionBar,
     DataTableToolbar,
     DataTableViewOptions,
     DataTableColumnHeader,
@@ -401,24 +402,21 @@ export default function DataTableAllFunctionality() {
                     </Button>
                 )}
 
-                {Object.keys(tableState.selectedRows).length > 0 && (
-                    <Button
-                        variant="destructive"
-                        onClick={() => {
-                            const selected = Object.values(tableState.selectedRows);
-                            alert(`Eliminar usuarios: ${selected.map(u => `${u.firstName} (${u.id})`).join(", ")}`);
-                        }}
-                        className="h-8 px-2 lg:px-3"
-                    >
-                        Eliminar usuarios ({Object.keys(tableState.selectedRows).length})
-                    </Button>
-                )}
-
                 <DataTableViewOptions />
             </DataTableToolbar>
 
             <DataTableContent />
             {!isLoading && <DataTablePagination />}
+
+            <DataTableSelectionBar>
+                <Button variant="destructive" size="sm" onClick={() => {
+                    const selected = Object.values(tableState.selectedRows);
+                    alert(`Eliminar usuarios: ${selected.map(u => `${u.firstName} (${u.id})`).join(", ")}`);
+                }}>
+                    <Trash className="mr-1 h-4 w-4" />
+                    Eliminar
+                </Button>
+            </DataTableSelectionBar>
         </DataTable>
     );
 }
