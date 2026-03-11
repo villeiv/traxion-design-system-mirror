@@ -10,7 +10,7 @@ El hook \`useDataTable\` centraliza **todo** el estado de la tabla en un solo lu
 | \`columnFilters\` | \`[{ id, value }]\` | Filtros activos por columna |
 | \`columnVisibility\` | \`{ [columnId]: boolean }\` | Columnas visibles/ocultas |
 | \`columnOrder\` | \`string[]\` | Orden de las columnas |
-| \`rowSelection\` | \`{ [rowIndex]: boolean }\` | Filas seleccionadas |
+| \`selectedRows\` | \`Record<string, TData>\` | Filas seleccionadas (clave = ID, valor = datos completos de la fila) |
 
 Cada estado incluye su setter (ej: \`setPagination\`) y un alias \`onXxxChange\` (ej: \`onPaginationChange\`) que permite usar \`{...tableState}\` directamente como props del componente \`DataTable\`.
 
@@ -37,8 +37,9 @@ const tableState = useDataTable();
 \`\`\`tsx
 const tableState = useDataTable();
 
-// Filas seleccionadas
-const selectedIds = Object.keys(tableState.rowSelection);
+// Filas seleccionadas — Record<string, User> con datos completos
+const selected = Object.values(tableState.selectedRows);
+const selectedIds = Object.keys(tableState.selectedRows);
 
 // Filtros activos (para llamadas a API)
 const activeFilters = tableState.columnFilters;
@@ -46,6 +47,8 @@ const activeFilters = tableState.columnFilters;
 // Paginación actual (para fetch)
 const { pageIndex, pageSize } = tableState.pagination;
 \`\`\`
+
+> **Importante:** Cuando uses \`enableRowSelection\`, debes proporcionar \`rowSelectionKey\` — una función que retorne un identificador único por fila (ej: \`(row) => String(row.id)\`). Esto garantiza que la selección persista correctamente entre páginas.
 
 > **Nota:** Recomendamos usar \`useDataTable\` para manejar el estado, pero si lo prefieres puedes crear tus propios handlers con \`useState\` y pasarlos como props individuales al componente.
 `;

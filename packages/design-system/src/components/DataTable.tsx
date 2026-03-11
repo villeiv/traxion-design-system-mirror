@@ -84,6 +84,7 @@ interface DataTableContextValue<TData = unknown> {
   loadingRowCount: number
   emptyState?: React.ReactNode
   enableColumnReordering: boolean
+  selectedRowsCount: number
 }
 
 const DataTableContext = React.createContext<DataTableContextValue | null>(null)
@@ -315,7 +316,7 @@ export function DataTablePagination<TData>({
     ? pageSizeOptions
     : [...pageSizeOptions, currentPageSize].sort((a, b) => a - b)
 
-  const selectedRowCount = table.getSelectedRowModel().rows.length
+  const selectedRowCount = ctx?.selectedRowsCount ?? table.getSelectedRowModel().rows.length
   const totalRowCount = table.getRowModel().rows.length
 
   return (
@@ -512,9 +513,9 @@ export interface DataTableProps<TData, TValue = unknown> {
   onSortingChange?: OnChangeFn<SortingState>
   columnFilters?: ColumnFiltersState
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>
-  rowSelection?: RowSelectionState
-  onRowSelectionChange?: OnChangeFn<RowSelectionState>
-  getRowId?: (row: TData, index: number) => string
+  selectedRows?: Record<string, TData>
+  onSelectedRowsChange?: (selectedRows: Record<string, TData>) => void
+  rowSelectionKey?: (row: TData) => string
   enableRowSelection?: boolean | ((row: Row<TData>) => boolean)
   columnVisibility?: VisibilityState
   onColumnVisibilityChange?: OnChangeFn<VisibilityState>
@@ -538,9 +539,9 @@ export function DataTable<TData, TValue = unknown>({
   onSortingChange,
   columnFilters: controlledColumnFilters,
   onColumnFiltersChange,
-  rowSelection: controlledRowSelection,
-  onRowSelectionChange,
-  getRowId,
+  selectedRows: controlledSelectedRows,
+  onSelectedRowsChange,
+  rowSelectionKey,
   enableRowSelection = false,
   columnVisibility: controlledColumnVisibility,
   onColumnVisibilityChange,
@@ -553,21 +554,28 @@ export function DataTable<TData, TValue = unknown>({
   loadingRowCount = 5,
   children,
 }: DataTableProps<TData, TValue>) {
+  // Validate: rowSelectionKey is required when enableRowSelection is true
+  if (enableRowSelection && !rowSelectionKey) {
+    throw new Error(
+      "DataTable: `rowSelectionKey` is required when `enableRowSelection` is true. " +
+        "Provide a function that returns a unique identifier for each row, " +
+        "e.g. rowSelectionKey={(row) => String(row.id)}"
+    )
+  }
+
   // Internal hydration tracking - prevents SSR hydration mismatches with @dnd-kit
   const [isHydrated, setIsHydrated] = React.useState(false)
 
   React.useEffect(() => {
-
     setIsHydrated(true)
-    
   }, [])
 
   // Internal state for optional controlled props
   const [internalSorting, setInternalSorting] = React.useState<SortingState>([])
   const [internalColumnFilters, setInternalColumnFilters] =
     React.useState<ColumnFiltersState>([])
-  const [internalRowSelection, setInternalRowSelection] =
-    React.useState<RowSelectionState>({})
+  const [internalSelectedRows, setInternalSelectedRows] =
+    React.useState<Record<string, TData>>({})
   const [internalColumnVisibility, setInternalColumnVisibility] =
     React.useState<VisibilityState>({})
   const [internalColumnOrder, setInternalColumnOrder] =
@@ -581,9 +589,56 @@ export function DataTable<TData, TValue = unknown>({
   // Use controlled state if provided, otherwise use internal state
   const sorting = controlledSorting ?? internalSorting
   const columnFilters = controlledColumnFilters ?? internalColumnFilters
-  const rowSelection = controlledRowSelection ?? internalRowSelection
+  const selectedRows = controlledSelectedRows ?? internalSelectedRows
   const columnVisibility = controlledColumnVisibility ?? internalColumnVisibility
   const columnOrder = controlledColumnOrder ?? internalColumnOrder
+
+  // Derive TanStack's RowSelectionState (Record<string, boolean>) from selectedRows
+  const tanstackRowSelection = React.useMemo<RowSelectionState>(
+    () =>
+      Object.fromEntries(
+        Object.keys(selectedRows).map((key) => [key, true])
+      ),
+    [selectedRows]
+  )
+
+  // Intercept TanStack's onRowSelectionChange to maintain selectedRows with full row data
+  const handleRowSelectionChange: OnChangeFn<RowSelectionState> =
+    React.useCallback(
+      (updaterOrValue) => {
+        const newTanstackState =
+          typeof updaterOrValue === "function"
+            ? updaterOrValue(tanstackRowSelection)
+            : updaterOrValue
+
+        // Build lookup for current page data
+        const dataByKey = new Map<string, TData>()
+        if (rowSelectionKey) {
+          data.forEach((row) => {
+            dataByKey.set(rowSelectionKey(row), row)
+          })
+        }
+
+        // Build new selectedRows: keep existing entries that are still selected,
+        // add new entries from current page data
+        const newSelectedRows: Record<string, TData> = {}
+        for (const [key, isSelected] of Object.entries(newTanstackState)) {
+          if (isSelected) {
+            newSelectedRows[key] = selectedRows[key] ?? dataByKey.get(key)!
+          }
+        }
+
+        const changeFn = onSelectedRowsChange ?? setInternalSelectedRows
+        changeFn(newSelectedRows)
+      },
+      [
+        tanstackRowSelection,
+        data,
+        rowSelectionKey,
+        selectedRows,
+        onSelectedRowsChange,
+      ]
+    )
 
   const table = useReactTable({
     data,
@@ -593,7 +648,7 @@ export function DataTable<TData, TValue = unknown>({
       pagination: controlledPagination,
       sorting,
       columnFilters,
-      rowSelection,
+      rowSelection: tanstackRowSelection,
       columnVisibility,
       columnOrder,
     },
@@ -601,7 +656,7 @@ export function DataTable<TData, TValue = unknown>({
     onPaginationChange,
     onSortingChange: onSortingChange ?? setInternalSorting,
     onColumnFiltersChange: onColumnFiltersChange ?? setInternalColumnFilters,
-    onRowSelectionChange: onRowSelectionChange ?? setInternalRowSelection,
+    onRowSelectionChange: handleRowSelectionChange,
     onColumnVisibilityChange:
       onColumnVisibilityChange ?? setInternalColumnVisibility,
     onColumnOrderChange: onColumnOrderChange ?? setInternalColumnOrder,
@@ -610,7 +665,9 @@ export function DataTable<TData, TValue = unknown>({
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
-    getRowId,
+    getRowId: rowSelectionKey
+      ? (row: TData) => rowSelectionKey(row)
+      : undefined,
   })
 
   // Drag-and-drop sensors
@@ -655,6 +712,7 @@ export function DataTable<TData, TValue = unknown>({
   )
 
   // Context value
+  const selectedRowsCount = Object.keys(selectedRows).length
   const contextValue: DataTableContextValue<TData> = React.useMemo(
     () => ({
       table,
@@ -662,8 +720,9 @@ export function DataTable<TData, TValue = unknown>({
       loadingRowCount,
       emptyState,
       enableColumnReordering,
+      selectedRowsCount,
     }),
-    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering]
+    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering, selectedRowsCount]
   )
 
   // Only enable DndContext after hydration AND if prop is true

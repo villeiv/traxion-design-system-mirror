@@ -5,7 +5,6 @@ import { useCallback, useState, useTransition } from "react"
 import type {
   ColumnFiltersState,
   PaginationState,
-  RowSelectionState,
   SortingState,
   VisibilityState,
   ColumnOrderState,
@@ -47,7 +46,7 @@ export interface UseDataTableOptions {
 /**
  * Return type for useDataTable hook
  */
-export interface UseDataTableReturn {
+export interface UseDataTableReturn<TData = unknown> {
   // Pagination state
   pagination: PaginationState
   setPagination: (
@@ -80,10 +79,12 @@ export interface UseDataTableReturn {
     updater: ColumnOrderState | ((old: ColumnOrderState) => ColumnOrderState)
   ) => void
 
-  // Row selection state
-  rowSelection: RowSelectionState
-  setRowSelection: (
-    updater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)
+  // Row selection state — Record<rowId, fullRowData>
+  selectedRows: Record<string, TData>
+  setSelectedRows: (
+    updater:
+      | Record<string, TData>
+      | ((old: Record<string, TData>) => Record<string, TData>)
   ) => void
 
   // onXxxChange aliases (so {...tableState} works with DataTable props)
@@ -92,7 +93,7 @@ export interface UseDataTableReturn {
   onColumnFiltersChange: OnChangeFn<ColumnFiltersState>
   onColumnVisibilityChange: OnChangeFn<VisibilityState>
   onColumnOrderChange: OnChangeFn<ColumnOrderState>
-  onRowSelectionChange: OnChangeFn<RowSelectionState>
+  onSelectedRowsChange: (selectedRows: Record<string, TData>) => void
 
   // True while a URL transition is pending (useful for loading indicators)
   isPending: boolean
@@ -230,9 +231,9 @@ function serializeSearchParams(
  * </DataTable>
  * ```
  */
-export function useDataTable(
+export function useDataTable<TData = unknown>(
   options: UseDataTableOptions = {}
-): UseDataTableReturn {
+): UseDataTableReturn<TData> {
   const {
     pageSize: initialPageSize = 10,
     namespace,
@@ -266,7 +267,7 @@ export function useDataTable(
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
 
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  const [selectedRows, setSelectedRows] = useState<Record<string, TData>>({})
 
   // Track if we're updating the URL
   const [isPending, startTransition] = useTransition()
@@ -322,8 +323,8 @@ export function useDataTable(
     setColumnVisibility,
     columnOrder,
     setColumnOrder,
-    rowSelection,
-    setRowSelection,
+    selectedRows,
+    setSelectedRows,
     isPending,
     getSearchParams,
     // onXxxChange aliases — same references, so {...tableState} just works
@@ -332,6 +333,6 @@ export function useDataTable(
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnOrderChange: setColumnOrder,
-    onRowSelectionChange: setRowSelection,
+    onSelectedRowsChange: setSelectedRows,
   }
 }
