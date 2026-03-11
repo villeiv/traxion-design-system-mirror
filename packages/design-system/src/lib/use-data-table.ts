@@ -5,6 +5,7 @@ import { useCallback, useState, useTransition } from "react"
 import type {
   ColumnFiltersState,
   PaginationState,
+  RowSelectionState,
   SortingState,
   VisibilityState,
   ColumnOrderState,
@@ -79,12 +80,19 @@ export interface UseDataTableReturn {
     updater: ColumnOrderState | ((old: ColumnOrderState) => ColumnOrderState)
   ) => void
 
+  // Row selection state
+  rowSelection: RowSelectionState
+  setRowSelection: (
+    updater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)
+  ) => void
+
   // onXxxChange aliases (so {...tableState} works with DataTable props)
   onPaginationChange: OnChangeFn<PaginationState>
   onSortingChange: OnChangeFn<SortingState>
   onColumnFiltersChange: OnChangeFn<ColumnFiltersState>
   onColumnVisibilityChange: OnChangeFn<VisibilityState>
   onColumnOrderChange: OnChangeFn<ColumnOrderState>
+  onRowSelectionChange: OnChangeFn<RowSelectionState>
 
   // True while a URL transition is pending (useful for loading indicators)
   isPending: boolean
@@ -258,6 +266,8 @@ export function useDataTable(
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
 
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+
   // Track if we're updating the URL
   const [isPending, startTransition] = useTransition()
 
@@ -312,6 +322,8 @@ export function useDataTable(
     setColumnVisibility,
     columnOrder,
     setColumnOrder,
+    rowSelection,
+    setRowSelection,
     isPending,
     getSearchParams,
     // onXxxChange aliases — same references, so {...tableState} just works
@@ -320,5 +332,6 @@ export function useDataTable(
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnOrderChange: setColumnOrder,
+    onRowSelectionChange: setRowSelection,
   }
 }

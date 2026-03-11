@@ -237,7 +237,6 @@ export default function DataTableAllFunctionality() {
     const [data, setData] = useState<UserData[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [rowSelection, setRowSelection] = useState({});
     const [idSearch, setIdSearch] = useState<string>("");
     const tableState = useDataTable({ pageSize: 7 });
 
@@ -323,8 +322,6 @@ export default function DataTableAllFunctionality() {
             pageCount={pageCount}
             isLoading={isLoading}
             enableRowSelection
-            rowSelection={rowSelection}
-            onRowSelectionChange={setRowSelection}
             enableColumnReordering
             {...tableState}
         >
@@ -403,19 +400,19 @@ export default function DataTableAllFunctionality() {
                     </Button>
                 )}
 
-                {Object.keys(rowSelection).length > 0 && (
+                {Object.keys(tableState.rowSelection).length > 0 && (
                     <Button
                         variant="destructive"
                         onClick={() => {
                             const selectedUsers = data
-                                .filter((_, index) => (rowSelection as Record<number, boolean>)[index])
+                                .filter((_, index) => (tableState.rowSelection as Record<number, boolean>)[index])
                                 .map(user => `${user.firstName} ${user.lastName}`)
                                 .join(", ");
                             alert(`Eliminar usuarios: ${selectedUsers}`);
                         }}
                         className="h-8 px-2 lg:px-3"
                     >
-                        Eliminar usuarios ({Object.keys(rowSelection).length})
+                        Eliminar usuarios ({Object.keys(tableState.rowSelection).length})
                     </Button>
                 )}
 

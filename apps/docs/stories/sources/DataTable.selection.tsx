@@ -48,9 +48,6 @@ export default function DataTableRowSelection() {
     const [data, setData] = useState<User[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
 
-    // Estado para almacenar las filas seleccionadas
-    const [rowSelection, setRowSelection] = useState({});
-
     const tableState = useDataTable();
 
     useEffect(() => {
@@ -70,18 +67,15 @@ export default function DataTableRowSelection() {
             columns={columns}
             pageCount={pageCount}
             {...tableState}
-            //Props para manejar la selección de filas
             enableRowSelection
-            rowSelection={rowSelection}
-            onRowSelectionChange={setRowSelection}
         >
             {
-                rowSelection && Object.keys(rowSelection).length > 0 &&
+                Object.keys(tableState.rowSelection).length > 0 &&
                 // Usa DataTableToolbar para mostrar acciones relacionadas con las filas seleccionadas o controles adicionales
                 <DataTableToolbar>
                     <Button variant="outline" onClick={() => {
                         // Obtener los IDs de las filas seleccionadas
-                        const selectedIds = Object.keys(rowSelection).map(index => data[parseInt(index)].id);
+                        const selectedIds = Object.keys(tableState.rowSelection).map(index => data[parseInt(index)].id);
                         alert(`IDs seleccionados: ${selectedIds.join(", ")}`);
                     }}>
                         Mostrar IDs seleccionados
