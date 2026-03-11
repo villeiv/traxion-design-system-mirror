@@ -1,5 +1,6 @@
 import { DataTable } from "@traxion-global/design-system/react";
 import { DataTableAnatomy } from "./sources/DataTable.anatomy";
+import { UseDataTableHookDocs } from "./sources/DataTable.useDataTableHook";
 import DataTableBasic from "./sources/DataTable.basic";
 import DataTableBasicCode from "./sources/DataTable.basic?raw";
 import DataTableSortable from "./sources/DataTable.sortable";
@@ -36,7 +37,8 @@ export default {
                     "integrado para ordenamiento, filtrado, paginación, visibilidad de columnas y reordenamiento. " +
                     "\n\n**Recomendación de uso:** Este componente está diseñado para tablas de datos complejas que requieren funcionalidades avanzadas. " +
                     "Si necesitas una tabla más simple para mostrar datos estáticos o con poca interactividad, considera usar el componente **Table** en su lugar. " +
-                    DataTableAnatomy,
+                    DataTableAnatomy +
+                    UseDataTableHookDocs,
             },
         },
     },

@@ -1,5 +1,22 @@
 # Changelog
 
+### [0.11.1] - 2026-03-10
+### Fixed
+- **DataTable**: Skeleton de carga ahora respeta columnas ocultas (`getVisibleLeafColumns` en vez de `getAllLeafColumns`).
+- **DataTable**: `colSpan` del estado vacío ahora usa el conteo de columnas visibles en lugar del total de columnas.
+- **DataTable**: Detección de reordenamiento de columnas usa contexto interno en vez de depender de comportamiento no documentado de dnd-kit.
+- **DataTablePagination**: El selector de filas por página incluye automáticamente el `pageSize` actual en las opciones.
+- **useDataTable**: Corregido `searchParams` faltante en dependencias del `useEffect` de sincronización con URL.
+- **useDataTable**: Parsing de filtros en URL ahora preserva valores que contienen `:` (ej: horarios `10:30`).
+- **useDataTable**: Parsing de ordenamiento en URL ahora soporta IDs de columna que contienen `.`.
+- **useDataTable**: La opción `pageSize` ahora funciona correctamente (antes era ignorada por un fallback hardcodeado).
+
+### Changed
+- **useDataTable**: El hook ahora maneja `rowSelection` internamente — ya no es necesario un `useState` separado. El estado se pasa automáticamente vía `{...tableState}`.
+
+### Removed
+- **useDataTable**: Eliminada la opción `debounceMs` que no tenía efecto.
+
 ### [0.11.0] - 2026-02-27
 ### Added
 - Componente **AiInsight** — panel de insights generados por IA con cuatro variantes de importancia (`info`, `warning`, `critical`, `success`). Acepta un arreglo de mensajes con título y descripción. Con un solo mensaje el panel se muestra directamente; con dos o más aparece un control de colapso en el encabezado. El estado inicial del panel es configurable mediante `defaultOpen`.

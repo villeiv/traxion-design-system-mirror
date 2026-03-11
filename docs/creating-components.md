@@ -25,6 +25,7 @@ A comprehensive methodology for adding new components to the Traxion Design Syst
 | **Edit** | `packages/design-system/package.json` (version bump) | 5 |
 | **Edit** | `packages/design-system/CHANGELOG.md` | 5 |
 | **Create** | `packages/mcp/src/metadata/components/ComponentName.json` | 6 |
+| **Edit** | `packages/mcp/CHANGELOG.md` | 6 |
 | **Edit** | `packages/mcp/README.md` (counts) | 8 |
 | **Edit** | `CLAUDE.md` (component count if referenced) | 8 |
 
@@ -654,6 +655,12 @@ The slug is the kebab-case version of the component name, used as the lookup key
 **Relationship to the design-system version:**
 - An MCP bump is almost always needed when the design-system adds components (new metadata = new registry state).
 - Never skip the MCP bump when you add or modify metadata; the `version()` tool is the only signal consumers have that the registry is up to date.
+
+### 6.7 Update MCP CHANGELOG
+
+**Path:** `packages/mcp/CHANGELOG.md`
+
+Add a new entry at the top describing what changed in the metadata or tools. Follow the same format as the design-system changelog (in Spanish).
 
 ---
 

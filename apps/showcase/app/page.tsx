@@ -1805,7 +1805,6 @@ function DatePickerShowcase() {
 // DataTable with URL State Demo
 function DataTableURLDemo() {
     const [isLoading, setIsLoading] = React.useState(false)
-    const [rowSelection, setRowSelection] = React.useState({})
 
     // Local state for instant input feedback
     const [trackingSearch, setTrackingSearch] = React.useState("")
@@ -2027,8 +2026,6 @@ function DataTableURLDemo() {
                 enableRowSelection
                 enableColumnReordering
                 isLoading={isLoading}
-                rowSelection={rowSelection}
-                onRowSelectionChange={setRowSelection}
                 {...tableState}
             >
                 <DataTableToolbar>
