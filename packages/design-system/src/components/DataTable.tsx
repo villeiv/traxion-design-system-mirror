@@ -83,7 +83,7 @@ interface DataTableContextValue<TData = unknown> {
   isLoading: boolean
   loadingRowCount: number
   emptyState?: React.ReactNode
-  columnCount: number
+  enableColumnReordering: boolean
 }
 
 const DataTableContext = React.createContext<DataTableContextValue | null>(null)
@@ -162,7 +162,8 @@ export function DataTableColumnHeader<TData, TValue>({
     transition,
   }
 
-  const isReorderingEnabled = listeners !== undefined
+  const ctx = useOptionalDataTableInstance()
+  const isReorderingEnabled = ctx?.enableColumnReordering ?? false
 
   if (!column.getCanSort() && !isReorderingEnabled) {
     return (
@@ -400,7 +401,7 @@ DataTablePagination.displayName = "DataTablePagination"
  * ───────────────────────────────────────────── */
 
 export function DataTableContent() {
-  const { table, isLoading, loadingRowCount, emptyState, columnCount } =
+  const { table, isLoading, loadingRowCount, emptyState } =
     useDataTableInstance()
 
   if (isLoading) {
@@ -426,7 +427,7 @@ export function DataTableContent() {
           <TableBody>
             {Array.from({ length: loadingRowCount }).map((_, index) => (
               <TableRow key={index}>
-                {table.getAllLeafColumns().map((column) => (
+                {table.getVisibleLeafColumns().map((column) => (
                   <TableCell key={column.id}>
                     <div className="h-4 w-full animate-pulse rounded bg-muted" />
                   </TableCell>
@@ -464,7 +465,7 @@ export function DataTableContent() {
         <TableBody>
           {showEmptyState ? (
             <TableRow>
-              <TableCell colSpan={columnCount} className="h-24 text-center">
+              <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
                 {emptyState ?? (
                   <NoDataMessage title="No data" message="No records found." />
                 )}
@@ -551,7 +552,9 @@ export function DataTable<TData, TValue = unknown>({
   const [isHydrated, setIsHydrated] = React.useState(false)
 
   React.useEffect(() => {
+
     setIsHydrated(true)
+    
   }, [])
 
   // Internal state for optional controlled props
@@ -653,9 +656,9 @@ export function DataTable<TData, TValue = unknown>({
       isLoading,
       loadingRowCount,
       emptyState,
-      columnCount: columns.length,
+      enableColumnReordering,
     }),
-    [table, isLoading, loadingRowCount, emptyState, columns.length]
+    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering]
   )
 
   // Only enable DndContext after hydration AND if prop is true

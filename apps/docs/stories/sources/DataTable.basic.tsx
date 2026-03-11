@@ -26,7 +26,7 @@ export default function DataTableBasic() {
     const [pageCount, setPageCount] = useState<number>(0);
 
     //Inicializa el estado de la tabla con useDataTable, estableciendo un tamaño de página predeterminado
-    const tableState = useDataTable({ pageSize: 10 });
+    const tableState = useDataTable();
 
     //UseEffect se vuelve a ejecutar cada vez que cambian pageIndex o pageSize, lo que ocurre al cambiar de página
     useEffect(() => {

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useCallback, useEffect, useState, useTransition } from "react"
+import { useCallback, useState, useTransition } from "react"
 import type {
   ColumnFiltersState,
   PaginationState,
@@ -27,12 +27,6 @@ export interface UseDataTableOptions {
    * @default undefined (no prefix)
    */
   namespace?: string
-
-  /**
-   * Debounce delay for filter changes (in milliseconds)
-   * @default 300
-   */
-  debounceMs?: number
 
   /**
    * Next.js router instance (for client-side navigation)
@@ -124,8 +118,10 @@ function parseSearchParams(searchParams: URLSearchParams | null, namespace?: str
   const sortParam = getParam("sort")
   const sorting: SortingState = sortParam
     ? sortParam.split(",").map((sort) => {
-        const [id, desc] = sort.split(".")
-        return { id, desc: desc === "desc" }
+        const lastDot = sort.lastIndexOf(".")
+        const id = sort.slice(0, lastDot)
+        const desc = sort.slice(lastDot + 1) === "desc"
+        return { id, desc }
       })
     : []
 
@@ -133,7 +129,9 @@ function parseSearchParams(searchParams: URLSearchParams | null, namespace?: str
   const filtersParam = getParam("filters")
   const columnFilters: ColumnFiltersState = filtersParam
     ? filtersParam.split(",").map((filter) => {
-        const [id, value] = filter.split(":")
+        const colonIdx = filter.indexOf(":")
+        const id = filter.slice(0, colonIdx)
+        const value = filter.slice(colonIdx + 1)
         return { id, value }
       })
     : []
@@ -229,7 +227,6 @@ export function useDataTable(
   const {
     pageSize: initialPageSize = 10,
     namespace,
-    debounceMs = 300,
     router: customRouter,
     searchParams: customSearchParams,
   } = options
@@ -289,43 +286,12 @@ export function useDataTable(
     startTransition(() => {
       router.push(`?${params.toString()}`)
     })
-  }, [pagination, sorting, columnFilters, syncToUrl, router, namespace])
+  }, [pagination, sorting, columnFilters, syncToUrl, router, namespace, searchParams])
 
-  /**
-   * Pagination setter
-   */
-  const setPagination = useCallback(
-    (
-      updater: PaginationState | ((old: PaginationState) => PaginationState)
-    ) => {
-      setPaginationState(updater)
-    },
-    []
-  )
-
-  /**
-   * Sorting setter
-   */
-  const setSorting = useCallback(
-    (updater: SortingState | ((old: SortingState) => SortingState)) => {
-      setSortingState(updater)
-    },
-    []
-  )
-
-  /**
-   * Column filters setter
-   */
-  const setColumnFilters = useCallback(
-    (
-      updater:
-        | ColumnFiltersState
-        | ((old: ColumnFiltersState) => ColumnFiltersState)
-    ) => {
-      setColumnFiltersState(updater)
-    },
-    []
-  )
+  // React guarantees stable setter references, no wrappers needed
+  const setPagination = setPaginationState
+  const setSorting = setSortingState
+  const setColumnFilters = setColumnFiltersState
 
   /**
    * Helper to get search params for API calls
