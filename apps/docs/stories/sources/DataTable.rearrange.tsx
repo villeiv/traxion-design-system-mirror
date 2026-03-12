@@ -15,15 +15,14 @@ interface FetchResponse {
 const columns: ColumnDef<User>[] = [
     { header: "ID", accessorKey: "id", size: 50 },
     {
-        //El id se mostrará al usuario como "Nombre" mientras se arrastra la columna
-        id: "Nombre",
+        id: "firstName",
         accessorKey: "firstName",
         //Todas las columnas que se puedan ordenar deben usar el componente DataTableColumnHeader en su encabezado para mostrar los indicadores de ordenamiento 
         header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
         enableSorting: false,
     },
     {
-        id: "Correo electrónico",
+        id: "email",
         accessorKey: "email",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Correo electrónico" />,
         enableSorting: false,
@@ -34,7 +33,7 @@ export default function DataTableRearrangeColumns() {
     const [data, setData] = useState<User[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
 
-    const tableState = useDataTable();
+    const tableState = useDataTable<User>();
 
     useEffect(() => {
         const { pageIndex, pageSize } = tableState.pagination;

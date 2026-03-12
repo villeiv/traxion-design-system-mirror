@@ -15,7 +15,6 @@ interface FetchResponse {
 const columns:ColumnDef<User>[] = [
     //Puedes definir qué columnas no se pueden ocultar añadiendo la propiedad enableHiding: false
     { header: "ID", accessorKey: "id", enableHiding: false, size: 50 },
-    //El id se usará para mostrar el nombre de la columna en el control de visibilidad de columnas
     { id:"Nombre", header: "Nombre", accessorKey: "firstName" },
     { id:"Correo electrónico",  header: "Correo electrónico", accessorKey: "email" },
 ];
@@ -23,7 +22,7 @@ const columns:ColumnDef<User>[] = [
 export default function DataTableToggle() {
     const [data, setData] = useState<User[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
-    const tableState = useDataTable();
+    const tableState = useDataTable<User>();
 
     useEffect(() => {
         const { pageIndex, pageSize } = tableState.pagination;

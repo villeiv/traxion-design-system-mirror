@@ -88,7 +88,7 @@ const columns: ColumnDef<UserData>[] = [
         size: 50,
     },
     {
-        id: "Usuario",
+        id: "firstName",
         accessorKey: "firstName",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Usuario" />
@@ -107,7 +107,7 @@ const columns: ColumnDef<UserData>[] = [
         enableHiding: true,
     },
     {
-        id: "Email",
+        id: "email",
         accessorKey: "email",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Email" />
@@ -115,7 +115,7 @@ const columns: ColumnDef<UserData>[] = [
         enableHiding: true,
     },
     {
-        id: "Rol",
+        id: "role",
         accessorKey: "role",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Rol" />
@@ -167,7 +167,7 @@ const columns: ColumnDef<UserData>[] = [
         enableSorting: false,
     },
     {
-        id: "Nacimiento",
+        id: "birthDate",
         accessorKey: "birthDate",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Nacimiento" />
@@ -250,8 +250,8 @@ export default function DataTableAllFunctionality() {
             const skip = pageIndex * pageSize;
 
             const idFilterValue = tableState.columnFilters.find(f => f.id === "ID")?.value as string | undefined;
-            const roleFilterValue = tableState.columnFilters.find(f => f.id === "Rol")?.value as string | undefined;
-            const birthDateFilterValue = tableState.columnFilters.find(f => f.id === "Nacimiento")?.value as string | undefined;
+            const roleFilterValue = tableState.columnFilters.find(f => f.id === "role")?.value as string | undefined;
+            const birthDateFilterValue = tableState.columnFilters.find(f => f.id === "birthDate")?.value as string | undefined;
 
             // Build URL with filters
             let url: string;
@@ -269,12 +269,7 @@ export default function DataTableAllFunctionality() {
             // Add sorting parameters if present
             if (tableState.sorting.length > 0) {
                 const sort = tableState.sorting[0]!;
-                // Map column IDs to API field names
-                const sortField = sort.id === "Usuario" ? "firstName" :
-                                  sort.id === "Email" ? "email" :
-                                  sort.id === "Rol" ? "role" :
-                                  sort.id;
-                url += `&sortBy=${sortField}&order=${sort.desc ? "desc" : "asc"}`;
+                url += `&sortBy=${sort.id}&order=${sort.desc ? "desc" : "asc"}`;
             }
 
             try {
@@ -340,12 +335,12 @@ export default function DataTableAllFunctionality() {
 
                 {/* Role filter */}
                 <Select
-                    value={tableState.columnFilters.find(f => f.id === "Rol")?.value as string ?? "all"}
+                    value={tableState.columnFilters.find(f => f.id === "role")?.value as string ?? "all"}
                     onValueChange={(value) => {
                         const newRole = value === "all" ? "" : value;
                         tableState.setColumnFilters((prev) => {
-                            const without = prev.filter(f => f.id !== "Rol");
-                            return newRole ? [...without, { id: "Rol", value: newRole }] : without;
+                            const without = prev.filter(f => f.id !== "role");
+                            return newRole ? [...without, { id: "role", value: newRole }] : without;
                         });
                     }}
                 >
@@ -366,8 +361,8 @@ export default function DataTableAllFunctionality() {
                         <Button variant="outline" className="h-8 px-2 lg:px-3">
                             <CalendarIcon className="mr-2 h-4 w-4" />
                             {
-                                tableState.columnFilters.find(f => f.id === "Nacimiento") ? 
-                                format(new Date(tableState.columnFilters.find(f => f.id === "Nacimiento")!.value as string), "dd/MM/yyyy")
+                                tableState.columnFilters.find(f => f.id === "birthDate") ?
+                                format(new Date(tableState.columnFilters.find(f => f.id === "birthDate")!.value as string), "dd/MM/yyyy")
                                 : "Fecha de nacimiento"
                             }
                         </Button>
@@ -380,8 +375,8 @@ export default function DataTableAllFunctionality() {
                             onSelect={(date) => {
                                 console.log("Selected date:", date, date?.toISOString());
                                 tableState.setColumnFilters((prev) => {
-                                    const without = prev.filter(f => f.id !== "Nacimiento");
-                                    return date ? [...without, { id: "Nacimiento", value: format(date, "yyyy-M-d") }] : without;
+                                    const without = prev.filter(f => f.id !== "birthDate");
+                                    return date ? [...without, { id: "birthDate", value: format(date, "yyyy-M-d") }] : without;
                                 });
                             }}
                         />

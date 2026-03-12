@@ -87,6 +87,8 @@ interface DataTableContextValue<TData = unknown> {
   enableColumnReordering: boolean
   selectedRowsCount: number
   clearSelection: () => void
+  columnTitles: React.RefObject<Map<string, string>>
+  registerColumnTitle: (id: string, title: string) => void
 }
 
 const DataTableContext = React.createContext<DataTableContextValue | null>(null)
@@ -168,6 +170,10 @@ export function DataTableColumnHeader<TData, TValue>({
   const ctx = useOptionalDataTableInstance()
   const isReorderingEnabled = ctx?.enableColumnReordering ?? false
 
+  React.useEffect(() => {
+    ctx?.registerColumnTitle(column.id, title)
+  }, [column.id, title])
+
   if (!column.getCanSort() && !isReorderingEnabled) {
     return (
       <div className={cn(className)} {...props}>
@@ -204,27 +210,25 @@ export function DataTableColumnHeader<TData, TValue>({
         </button>
       )}
 
-      {column.getCanSort() ? (
+      <span>{title}</span>
+      {column.getCanSort() && (
         <Button
           variant="ghost"
           size="sm"
-          className="-ml-3 h-8 data-[state=open]:bg-accent"
+          className="h-8 w-8 p-0"
           onClick={(e) => {
             e.stopPropagation()
             column.toggleSorting(column.getIsSorted() === "asc")
           }}
         >
-          <span>{title}</span>
           {column.getIsSorted() === "desc" ? (
-            <ChevronDown className="ml-2 h-4 w-4" />
+            <ChevronDown className="h-4 w-4" />
           ) : column.getIsSorted() === "asc" ? (
-            <ChevronUp className="ml-2 h-4 w-4" />
+            <ChevronUp className="h-4 w-4" />
           ) : (
-            <ChevronsUpDown className="ml-2 h-4 w-4" />
+            <ChevronsUpDown className="h-4 w-4" />
           )}
         </Button>
-      ) : (
-        <span>{title}</span>
       )}
     </div>
   )
@@ -278,7 +282,7 @@ export function DataTableViewOptions<TData>({
               checked={column.getIsVisible()}
               onCheckedChange={(value) => column.toggleVisibility(!!value)}
             >
-              {column.id}
+              {ctx?.columnTitles.current.get(column.id) ?? (typeof column.columnDef.header === "string" ? column.columnDef.header : column.id)}
             </DropdownMenuCheckboxItem>
           )
         })}
@@ -793,6 +797,11 @@ export function DataTable<TData, TValue = unknown>({
     changeFn({})
   }, [onSelectedRowsChange])
 
+  const columnTitles = React.useRef<Map<string, string>>(new Map())
+  const registerColumnTitle = React.useCallback((id: string, title: string) => {
+    columnTitles.current.set(id, title)
+  }, [])
+
   const contextValue: DataTableContextValue<TData> = React.useMemo(
     () => ({
       table,
@@ -802,8 +811,10 @@ export function DataTable<TData, TValue = unknown>({
       enableColumnReordering,
       selectedRowsCount,
       clearSelection,
+      columnTitles,
+      registerColumnTitle,
     }),
-    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering, selectedRowsCount, clearSelection]
+    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering, selectedRowsCount, clearSelection, registerColumnTitle]
   )
 
   // Only enable DndContext after hydration AND if prop is true
@@ -835,7 +846,7 @@ export function DataTable<TData, TValue = unknown>({
             <DragOverlay>
               {activeColumnId ? (
                 <div className="rounded bg-muted p-2 shadow-lg">
-                  {activeColumnId}
+                  {columnTitles.current.get(activeColumnId) ?? activeColumnId}
                 </div>
               ) : null}
             </DragOverlay>
