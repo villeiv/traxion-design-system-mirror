@@ -136,21 +136,27 @@ export function DataTableToolbar({
 DataTableToolbar.displayName = "DataTableToolbar"
 
 /* ─────────────────────────────────────────────
- * 3. DataTableColumnHeader
+ * 3. ColumnHeaderWrapper (internal)
  * ───────────────────────────────────────────── */
 
-export interface DataTableColumnHeaderProps<TData, TValue>
+interface ColumnHeaderWrapperProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>
   title: string
 }
 
-export function DataTableColumnHeader<TData, TValue>({
+function ColumnHeaderWrapper<TData, TValue>({
   column,
   title,
   className,
   ...props
-}: DataTableColumnHeaderProps<TData, TValue>) {
+}: ColumnHeaderWrapperProps<TData, TValue>) {
+  const ctx = useOptionalDataTableInstance()
+  const isReorderingEnabled = ctx?.enableColumnReordering ?? false
+
+  // Register title synchronously — safe because it only writes to a ref
+  ctx?.registerColumnTitle(column.id, title)
+
   const {
     attributes,
     listeners,
@@ -166,13 +172,6 @@ export function DataTableColumnHeader<TData, TValue>({
     transform: CSS.Transform.toString(transform),
     transition,
   }
-
-  const ctx = useOptionalDataTableInstance()
-  const isReorderingEnabled = ctx?.enableColumnReordering ?? false
-
-  React.useEffect(() => {
-    ctx?.registerColumnTitle(column.id, title)
-  }, [column.id, title])
 
   if (!column.getCanSort() && !isReorderingEnabled) {
     return (
@@ -233,8 +232,6 @@ export function DataTableColumnHeader<TData, TValue>({
     </div>
   )
 }
-
-DataTableColumnHeader.displayName = "DataTableColumnHeader"
 
 /* ─────────────────────────────────────────────
  * 4. DataTableViewOptions
@@ -425,12 +422,9 @@ export function DataTableContent() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                    {header.isPlaceholder ? null : typeof header.column.columnDef.header === "string"
+                      ? <ColumnHeaderWrapper column={header.column} title={header.column.columnDef.header} />
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -463,12 +457,9 @@ export function DataTableContent() {
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <TableHead key={header.id} style={{ width: header.getSize() }}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                  {header.isPlaceholder ? null : typeof header.column.columnDef.header === "string"
+                    ? <ColumnHeaderWrapper column={header.column} title={header.column.columnDef.header} />
+                    : flexRender(header.column.columnDef.header, header.getContext())}
                 </TableHead>
               ))}
             </TableRow>
@@ -723,6 +714,7 @@ export function DataTable<TData, TValue = unknown>({
     data,
     columns,
     pageCount,
+    defaultColumn: { enableSorting: false },
     state: {
       pagination: controlledPagination,
       sorting,

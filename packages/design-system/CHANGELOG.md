@@ -1,5 +1,19 @@
 # Changelog
 
+### [0.13.0] - 2026-03-12
+
+### Breaking Changes
+- **DataTable**: `DataTableColumnHeader` eliminado. Las columnas con `header` de tipo string ahora renderizan automáticamente el botón de ordenamiento y el manejador de arrastre según `enableSorting` y `enableColumnReordering`. Las columnas con `header` de tipo función pasan sin cambios.
+- **DataTable**: El ordenamiento es ahora opt-in — el valor por defecto de todas las columnas es `enableSorting: false`. Añade `enableSorting: true` explícitamente en cada columna que deba ser ordenable.
+- **DataTable**: Soporte de `meta: { enableReordering: false }` eliminado. Cuando `enableColumnReordering` está activo, todas las columnas con `header` string obtienen manejador de arrastre automáticamente.
+
+### Added
+- **DataTable**: Registro de títulos de columna en contexto interno — `DragOverlay` y `DataTableViewOptions` muestran el título legible en lugar del `id` de la columna.
+- **DataTable**: `DataTableViewOptions` resuelve etiquetas con la siguiente prioridad: título registrado → `header` string → `column.id`.
+
+### Changed
+- **DataTable**: El botón de ordenamiento muestra únicamente el ícono chevron. El título de la columna se renderiza como `<span>` independiente fuera del botón.
+
 ### [0.12.0] - 2026-03-11
 
 ### Breaking Changes

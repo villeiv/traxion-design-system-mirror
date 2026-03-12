@@ -1,5 +1,14 @@
 # Changelog
 
+### [0.13.0] - 2026-03-12
+
+### Changed
+- **DataTable.json**: `DataTableColumnHeader` eliminado del patrón de importación y marcado como removido en la sección de sub-componentes.
+- **DataTable.json**: Patrones de definición de columnas actualizados — `header` string con `enableSorting: true` es el patrón primario para columnas ordenables.
+- **DataTable.json**: Descripción de `enableColumnReordering` actualizada — el manejador de arrastre se renderiza automáticamente en columnas con `header` string.
+- **DataTable.json**: Reglas do/don't actualizadas para reflejar la nueva API de columnas.
+- **DataTable.json**: `packageVersion` actualizado a `0.13.0`.
+
 ### [0.12.1] - 2026-03-11
 ### Fixed
 - **DataTable.json**: Regla de estado de filtros clarificada — solo los inputs de texto necesitan `useState` local (para debounce). `Select`, `DateRangePicker` y `TimePicker` deben derivar su valor directamente de `tableState.columnFilters`.

@@ -24,7 +24,7 @@ import {
     DatePicker, DateRangePicker, DateTimePicker, DateTimeRangePicker, TimePicker,
     type DateRange,
     StatCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
-    DataTable, DataTableColumnHeader, DataTablePagination, DataTableSelectionBar, DataTableToolbar, DataTableViewOptions, DataTableContent,
+    DataTable, DataTablePagination, DataTableSelectionBar, DataTableToolbar, DataTableViewOptions, DataTableContent,
     type ColumnDef,
     Chat, ChatTrigger, ChatPanel, ChatHeader, ChatMessages, ChatDateSeparator,
     ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleTimestamp, ChatInput, ChatSendButton,
@@ -1886,30 +1886,26 @@ function DataTableURLDemo() {
         },
         {
             accessorKey: "tracking",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Tracking #" />
-            ),
+            header: "Tracking #",
+            enableSorting: true,
             cell: ({ row }) => (
                 <div className="font-mono text-sm">{row.getValue("tracking")}</div>
             ),
         },
         {
             accessorKey: "origin",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Origen" />
-            ),
+            header: "Origen",
+            enableSorting: true,
         },
         {
             accessorKey: "destination",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Destino" />
-            ),
+            header: "Destino",
+            enableSorting: true,
         },
         {
             accessorKey: "status",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Estado" />
-            ),
+            header: "Estado",
+            enableSorting: true,
             cell: ({ row }) => {
                 const status = row.getValue("status") as string
                 const variants: Record<string, "green" | "yellow" | "red" | "gray"> = {
@@ -1929,9 +1925,8 @@ function DataTableURLDemo() {
         },
         {
             accessorKey: "amount",
-            header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Monto" />
-            ),
+            header: "Monto",
+            enableSorting: true,
             cell: ({ row }) => {
                 const amount = parseFloat(row.getValue("amount"))
                 const formatted = new Intl.NumberFormat("en-US", {

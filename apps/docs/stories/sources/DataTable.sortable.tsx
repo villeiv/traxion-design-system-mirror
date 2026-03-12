@@ -1,4 +1,4 @@
-import { DataTable, DataTableColumnHeader, DataTableContent, DataTablePagination, ColumnDef, useDataTable } from "@traxion-global/design-system/react";
+import { DataTable, DataTableContent, DataTablePagination, ColumnDef, useDataTable } from "@traxion-global/design-system/react";
 import { useEffect, useState } from "react";
 
 interface User {
@@ -15,13 +15,8 @@ interface FetchResponse {
 const columns:ColumnDef<User>[] = [
     { header: "ID", accessorKey: "id", size: 50 },
     { header: "Nombre", accessorKey: "firstName" },
-    {
-        //Para hacer una columna ordenable, personaliza el encabezado usando DataTableColumnHeader y pasa la propiedad column. Esto habilitará el ordenamiento al hacer clic en el encabezado.  
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Correo electrónico" />
-        ),
-        accessorKey: "email",
-    },
+    //Para hacer una columna ordenable, añade enableSorting: true — la tabla renderiza automáticamente el botón de ordenamiento
+    { header: "Correo electrónico", accessorKey: "email", enableSorting: true },
 ];
 
 export default function DataTableSortable() {

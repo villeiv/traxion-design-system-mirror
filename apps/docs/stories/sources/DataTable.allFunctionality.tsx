@@ -5,7 +5,6 @@ import {
     DataTableSelectionBar,
     DataTableToolbar,
     DataTableViewOptions,
-    DataTableColumnHeader,
     ColumnDef,
     useDataTable,
     Checkbox,
@@ -58,6 +57,9 @@ interface FetchResponse {
 const columns: ColumnDef<UserData>[] = [
     {
         id: "select",
+        // Encabezado personalizado: cuando header es una función, DataTable la renderiza tal cual —
+        // sin agregar botón de ordenamiento ni manejador de arrastre.
+        // Úsalo cuando necesitas un control interactivo en el encabezado, como este checkbox de selección masiva.
         header: ({ table }) => (
             <Checkbox
                 checked={
@@ -83,16 +85,13 @@ const columns: ColumnDef<UserData>[] = [
         id: "ID",
         accessorKey: "id",
         header: "ID",
-        enableSorting: false,
         enableHiding: false,
         size: 50,
     },
     {
         id: "firstName",
         accessorKey: "firstName",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Usuario" />
-        ),
+        header: "Usuario",
         cell: ({ row }) => {
             const user = row.original;
             return (
@@ -104,22 +103,21 @@ const columns: ColumnDef<UserData>[] = [
                 </div>
             );
         },
+        enableSorting: true,
         enableHiding: true,
     },
     {
         id: "email",
         accessorKey: "email",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Email" />
-        ),
+        header: "Email",
+        enableSorting: true,
         enableHiding: true,
     },
     {
         id: "role",
         accessorKey: "role",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Rol" />
-        ),
+        header: "Rol",
+        enableSorting: true,
         cell: ({ row }) => {
             const role = row.original.role;
             const roleVariants: Record<string, "primary" | "green" | "blue" | "violet" | "orange"> = {
@@ -140,18 +138,14 @@ const columns: ColumnDef<UserData>[] = [
     {
         id: "Empresa",
         accessorKey: "company.name",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Empresa" />
-        ),
+        header: "Empresa",
         enableHiding: true,
-        enableSorting: false,
+        enableSorting: true,
     },
     {
         id: "Ubicación",
         accessorKey: "address.city",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Ubicación" />
-        ),
+        header: "Ubicación",
         cell: ({ row }) => {
             const address = row.original.address;
             return (
@@ -169,9 +163,7 @@ const columns: ColumnDef<UserData>[] = [
     {
         id: "birthDate",
         accessorKey: "birthDate",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Nacimiento" />
-        ),
+        header: "Nacimiento",
         cell: ({ row }) => {
             //use fns
             const date = row.original.birthDate;
@@ -183,6 +175,9 @@ const columns: ColumnDef<UserData>[] = [
     },
     {
         id: "actions",
+        // Encabezado personalizado: función que devuelve JSX directamente.
+        // Aquí se usa para alinear el texto a la derecha, coincidiendo con los botones de la celda.
+        // Cualquier JSX válido puede usarse — íconos, badges, tooltips, etc.
         header: () => <div className="text-right">Acciones</div>,
         cell: ({ row }) => {
             const user = row.original;

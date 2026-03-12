@@ -1,4 +1,4 @@
-import { DataTable, DataTableContent, DataTablePagination, ColumnDef, useDataTable, DataTableColumnHeader } from "@traxion-global/design-system/react";
+import { DataTable, DataTableContent, DataTablePagination, ColumnDef, useDataTable } from "@traxion-global/design-system/react";
 import { useEffect, useState } from "react";
 
 interface User {
@@ -17,15 +17,12 @@ const columns: ColumnDef<User>[] = [
     {
         id: "firstName",
         accessorKey: "firstName",
-        //Todas las columnas que se puedan ordenar deben usar el componente DataTableColumnHeader en su encabezado para mostrar los indicadores de ordenamiento 
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Nombre" />,
-        enableSorting: false,
+        header: "Nombre"
     },
     {
         id: "email",
         accessorKey: "email",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Correo electrónico" />,
-        enableSorting: false,
+        header: "Correo electrónico"
     }
 ];
 

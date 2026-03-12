@@ -1,7 +1,7 @@
 {
   "name": "DataTable",
   "slug": "datatable",
-  "packageVersion": "0.12.0",
+  "packageVersion": "0.13.0",
   "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
   "tags": [
     "datatable",
@@ -25,7 +25,7 @@
         {
           "type": "code",
           "language": "tsx",
-          "content": "import {\n  DataTable,\n  DataTableContent,\n  DataTablePagination,\n  DataTableToolbar,\n  DataTableViewOptions,\n  DataTableColumnHeader,\n  DataTableSelectionBar,\n  useDataTable,\n  ColumnDef,\n} from \"@traxion-global/design-system/react\";"
+          "content": "import {\n  DataTable,\n  DataTableContent,\n  DataTablePagination,\n  DataTableToolbar,\n  DataTableViewOptions,\n  DataTableSelectionBar,\n  useDataTable,\n  ColumnDef,\n} from \"@traxion-global/design-system/react\";"
         }
       ]
     },
@@ -228,7 +228,7 @@
         },
         {
           "type": "text",
-          "content": "### DataTableColumnHeader\n\nSortable column header. Renders a ghost Button with sort indicators (ChevronUp/ChevronDown/ChevronsUpDown). When `enableColumnReordering` is active, also renders a GripVertical drag handle. Use in the column definition's `header` property."
+          "content": "### DataTableColumnHeader\n\nRemoved. Use a plain string for `header` in your column definition — the table automatically renders sort buttons and drag handles based on `enableSorting` and `enableColumnReordering`."
         },
         {
           "type": "table",
@@ -338,7 +338,7 @@
         {
           "type": "code",
           "language": "tsx",
-          "content": "// Simple text column\n{ header: \"Name\", accessorKey: \"firstName\" }\n\n// Fixed-width column\n{ header: \"ID\", accessorKey: \"id\", size: 50 }\n\n// Sortable column (use DataTableColumnHeader)\n{\n  header: ({ column }) => (\n    <DataTableColumnHeader column={column} title=\"Email\" />\n  ),\n  accessorKey: \"email\",\n}\n\n// Custom cell renderer\n{\n  header: \"User\",\n  accessorKey: \"firstName\",\n  cell: ({ row }) => (\n    <div className=\"flex items-center gap-2\">\n      <User className=\"h-4 w-4 text-muted-foreground\" />\n      <span>{row.original.firstName} {row.original.lastName}</span>\n    </div>\n  ),\n}\n\n// Action buttons column (non-sortable, non-hideable)\n{\n  id: \"actions\",\n  header: () => <div className=\"text-right\">Actions</div>,\n  size: 100,\n  enableSorting: false,\n  enableHiding: false,\n  cell: ({ row }) => (\n    <div className=\"flex gap-2 justify-end\">\n      <Button size=\"icon\" variant=\"outline\" onClick={() => handleEdit(row.original.id)}>\n        <Pencil className=\"h-4 w-4\" />\n      </Button>\n    </div>\n  ),\n}\n\n// Row selection checkbox column\n{\n  id: \"select\",\n  header: ({ table }) => (\n    <Checkbox\n      checked={\n        table.getIsAllPageRowsSelected() ||\n        (table.getIsSomePageRowsSelected() && \"indeterminate\")\n      }\n      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}\n      aria-label=\"Select all\"\n    />\n  ),\n  cell: ({ row }) => (\n    <Checkbox\n      checked={row.getIsSelected()}\n      onCheckedChange={(value) => row.toggleSelected(!!value)}\n      aria-label=\"Select row\"\n    />\n  ),\n  enableSorting: false,\n  enableHiding: false,\n  size: 50,\n}\n\n// Column with visibility toggle (set id for display name in menu)\n{ id: \"Email\", header: \"Email\", accessorKey: \"email\", enableHiding: true }\n\n// Nested object accessor\n{\n  id: \"Company\",\n  accessorKey: \"company.name\",\n  header: ({ column }) => (\n    <DataTableColumnHeader column={column} title=\"Company\" />\n  ),\n}\n\n// Multi-line cell for related data\n{\n  id: \"Location\",\n  accessorKey: \"address.city\",\n  cell: ({ row }) => (\n    <div className=\"flex flex-col\">\n      <span className=\"font-medium\">{row.original.address.city}</span>\n      <span className=\"text-xs text-muted-foreground\">\n        {row.original.address.state}, {row.original.address.country}\n      </span>\n    </div>\n  ),\n}"
+          "content": "// Simple non-sortable column — default, no sort button rendered\n{ header: \"Name\", accessorKey: \"firstName\" }\n\n// Fixed-width non-sortable column\n{ header: \"ID\", accessorKey: \"id\", size: 50 }\n\n// Sortable column — add enableSorting: true, table auto-renders sort button\n{ header: \"Email\", accessorKey: \"email\", enableSorting: true }\n\n// Non-sortable column (default, explicit for clarity)\n{ header: \"Company\", accessorKey: \"company.name\", enableSorting: false }\n\n// Custom cell renderer — string header still gets sort button automatically\n{\n  id: \"firstName\",\n  header: \"User\",\n  accessorKey: \"firstName\",\n  cell: ({ row }) => (\n    <div className=\"flex items-center gap-2\">\n      <User className=\"h-4 w-4 text-muted-foreground\" />\n      <span>{row.original.firstName} {row.original.lastName}</span>\n    </div>\n  ),\n}\n\n// Action buttons column (non-sortable, non-hideable, render function header)\n{\n  id: \"actions\",\n  header: () => <div className=\"text-right\">Actions</div>,\n  size: 100,\n  enableSorting: false,\n  enableHiding: false,\n  cell: ({ row }) => (\n    <div className=\"flex gap-2 justify-end\">\n      <Button size=\"icon\" variant=\"outline\" onClick={() => handleEdit(row.original.id)}>\n        <Pencil className=\"h-4 w-4\" />\n      </Button>\n    </div>\n  ),\n}\n\n// Row selection checkbox column (render function header)\n{\n  id: \"select\",\n  header: ({ table }) => (\n    <Checkbox\n      checked={\n        table.getIsAllPageRowsSelected() ||\n        (table.getIsSomePageRowsSelected() && \"indeterminate\")\n      }\n      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}\n      aria-label=\"Select all\"\n    />\n  ),\n  cell: ({ row }) => (\n    <Checkbox\n      checked={row.getIsSelected()}\n      onCheckedChange={(value) => row.toggleSelected(!!value)}\n      aria-label=\"Select row\"\n    />\n  ),\n  enableSorting: false,\n  enableHiding: false,\n  size: 50,\n}\n\n// Nested object accessor — use id matching the API field name for sorting/filtering\n{\n  id: \"company.name\",\n  accessorKey: \"company.name\",\n  header: \"Company\",\n  enableSorting: false,\n}\n\n// Multi-line cell for related data\n{\n  id: \"address.city\",\n  accessorKey: \"address.city\",\n  header: \"Location\",\n  enableSorting: false,\n  cell: ({ row }) => (\n    <div className=\"flex flex-col\">\n      <span className=\"font-medium\">{row.original.address.city}</span>\n      <span className=\"text-xs text-muted-foreground\">\n        {row.original.address.state}, {row.original.address.country}\n      </span>\n    </div>\n  ),\n}"
         }
       ]
     },
@@ -473,7 +473,7 @@
       "name": "enableColumnReordering",
       "type": "boolean",
       "default": "false",
-      "description": "Enables drag-and-drop column reordering. This is a config flag, NOT state — pass it directly (not from the hook). When true, DataTableColumnHeader renders a drag handle."
+      "description": "Enables drag-and-drop column reordering. This is a config flag, NOT state — pass it directly (not from the hook). When true, columns with a string header automatically render a GripVertical drag handle."
     },
     {
       "name": "isLoading",
@@ -520,8 +520,8 @@
       "Reset pagination to page 0 when filters change: useEffect(() => { tableState.setPagination(prev => ({ ...prev, pageIndex: 0 })); }, [tableState.columnFilters])",
       "Use useDebouncedCallback for text filter inputs to avoid excessive API calls while the user types. This is the only filter type that needs local useState — the local state intentionally lags behind the actual filter for debounce. All other filter controls (Select, DateRangePicker, TimePicker) should derive their value directly from tableState.columnFilters.",
       "Set enableSorting: false and enableHiding: false on action and checkbox columns",
-      "Use DataTableColumnHeader for any column that should be sortable — it provides consistent sort indicators",
-      "Set a column id (e.g., id: 'Name') when using DataTableViewOptions so the toggle menu shows human-readable names instead of accessorKey paths",
+      "Columns are non-sortable by default. Add `enableSorting: true` on any column that should be sortable — the table automatically renders the sort button. Only use a render function header for fully custom headers (like select checkboxes or action buttons).",
+      "Use the column `id` field to match the API field name used for sorting and filtering (e.g., id: 'firstName'). The string `header` value is used as the display label everywhere (ViewOptions menu, drag overlay) — so id and header can differ.",
       "Include tableState.sorting and tableState.columnFilters in your useEffect dependencies when they are used",
       "Use the cell render function with row.original to access the full row data object for custom cell content",
       "Use mixed-content cells (multiple lines in one cell) for related data that doesn't justify its own column",
@@ -542,7 +542,7 @@
       "Don't use client-side pagination — DataTable is designed for server-side (manual) pagination only",
       "Don't forget to pass pageCount — it is required for server-side pagination to work",
       "Don't show DataTablePagination while isLoading is true — it will show stale data",
-      "Don't use enableColumnReordering without DataTableColumnHeader on the columns — the drag handle is rendered by DataTableColumnHeader",
+      "Don't use a render function header on columns that should be sortable or reorderable — render function headers bypass the automatic sort button and drag handle. Use a plain string header instead.",
       "Don't create separate columns for closely related data (city + state + country) — use a multi-line cell instead",
       "Don't hardcode color values — use semantic Tailwind classes (text-muted-foreground, text-destructive, etc.)"
     ]

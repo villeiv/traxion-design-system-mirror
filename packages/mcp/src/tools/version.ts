@@ -7,7 +7,7 @@ import { ComponentRegistry } from '../registry.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const MCP_VERSION = '0.12.1';
+const MCP_VERSION = '0.13.0';
 
 export function registerVersion(server: McpServer, registry: ComponentRegistry): void {
   server.tool(
