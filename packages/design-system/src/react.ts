@@ -13,6 +13,7 @@ export * from "./components/Checkbox";
 export * from "./components/Command";
 export * from "./components/DataTable";
 export * from "./components/Date-picker";
+export * from "./components/Language-provider";
 export * from "./components/TimePicker";
 export * from "./components/Dialog";
 export * from "./components/Dropdown-menu";

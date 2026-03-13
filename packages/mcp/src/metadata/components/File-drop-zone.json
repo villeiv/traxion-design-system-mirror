@@ -1,6 +1,6 @@
 {
   "name": "FileDropZone",
-  "packageVersion": "0.3.3",
+  "packageVersion": "0.14.0",
   "slug": "file-drop-zone",
   "description": "A drag-and-drop file upload zone that also supports click-to-browse. Validates files against an optional accept filter and supports single or multiple file selection.",
   "tags": [

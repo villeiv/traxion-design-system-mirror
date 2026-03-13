@@ -49,6 +49,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useDesignSystemLanguage } from "./Language-provider"
 import {
   Table as UITable,
   TableBody,
@@ -76,7 +77,50 @@ import {
 } from "./Dropdown-menu"
 
 /* ─────────────────────────────────────────────
- * 1. Internal Context (not exported)
+ * 1. i18n strings
+ * ───────────────────────────────────────────── */
+
+const DATA_TABLE_TEXTS = {
+  en: {
+    dragToReorder: "Drag to reorder column",
+    viewButton: "View",
+    toggleColumns: "Toggle columns",
+    rowsSelected: (selected: number, total: number) => `${selected} of ${total} row(s) selected`,
+    rows: (total: number) => `${total} row(s)`,
+    rowsPerPage: "Rows per page",
+    page: (index: number, count: number) => `Page ${index} of ${count}`,
+    goToFirstPage: "Go to first page",
+    goToPreviousPage: "Go to previous page",
+    goToNextPage: "Go to next page",
+    goToLastPage: "Go to last page",
+    noData: "No data",
+    noRecordsFound: "No records found.",
+    bulkActions: "Bulk actions",
+    selected: (count: number) => `${count} selected`,
+    deselect: "Deselect",
+  },
+  es: {
+    dragToReorder: "Arrastrar para reordenar columna",
+    viewButton: "Vista",
+    toggleColumns: "Alternar columnas",
+    rowsSelected: (selected: number, total: number) => `${selected} de ${total} fila(s) seleccionada(s)`,
+    rows: (total: number) => `${total} fila(s)`,
+    rowsPerPage: "Filas por página",
+    page: (index: number, count: number) => `Página ${index} de ${count}`,
+    goToFirstPage: "Ir a la primera página",
+    goToPreviousPage: "Ir a la página anterior",
+    goToNextPage: "Ir a la siguiente página",
+    goToLastPage: "Ir a la última página",
+    noData: "Sin datos",
+    noRecordsFound: "No se encontraron registros.",
+    bulkActions: "Acciones en masa",
+    selected: (count: number) => `${count} seleccionado(s)`,
+    deselect: "Deseleccionar",
+  },
+} as const
+
+/* ─────────────────────────────────────────────
+ * 2. Internal Context (not exported)
  * ───────────────────────────────────────────── */
 
 interface DataTableContextValue<TData = unknown> {
@@ -153,6 +197,8 @@ function ColumnHeaderWrapper<TData, TValue>({
 }: ColumnHeaderWrapperProps<TData, TValue>) {
   const ctx = useOptionalDataTableInstance()
   const isReorderingEnabled = ctx?.enableColumnReordering ?? false
+  const language = useDesignSystemLanguage()
+  const t = DATA_TABLE_TEXTS[language]
 
   // Register title synchronously — safe because it only writes to a ref
   ctx?.registerColumnTitle(column.id, title)
@@ -203,7 +249,7 @@ function ColumnHeaderWrapper<TData, TValue>({
           )}
           {...attributes}
           {...listeners}
-          aria-label="Drag to reorder column"
+          aria-label={t.dragToReorder}
         >
           <GripVertical className="h-4 w-4" />
         </button>
@@ -246,6 +292,8 @@ export function DataTableViewOptions<TData>({
 }: DataTableViewOptionsProps<TData>) {
   const ctx = useOptionalDataTableInstance<TData>()
   const table = tableProp ?? ctx?.table
+  const language = useDesignSystemLanguage()
+  const t = DATA_TABLE_TEXTS[language]
 
   if (!table) {
     throw new Error(
@@ -265,11 +313,11 @@ export function DataTableViewOptions<TData>({
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="ml-auto h-8">
           <Settings2 className="mr-2 h-4 w-4" />
-          View
+          {t.viewButton}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>{t.toggleColumns}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {columns.map((column) => {
           return (
@@ -307,6 +355,8 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
   const ctx = useOptionalDataTableInstance<TData>()
   const table = tableProp ?? ctx?.table
+  const language = useDesignSystemLanguage()
+  const t = DATA_TABLE_TEXTS[language]
 
   if (!table) {
     throw new Error(
@@ -326,16 +376,14 @@ export function DataTablePagination<TData>({
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
         {showRowSelection && selectedRowCount > 0 ? (
-          <span>
-            {selectedRowCount} of {totalRowCount} row(s) selected
-          </span>
+          <span>{t.rowsSelected(selectedRowCount, totalRowCount)}</span>
         ) : (
-          <span>{totalRowCount} row(s)</span>
+          <span>{t.rows(totalRowCount)}</span>
         )}
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Rows per page</p>
+          <p className="text-sm font-medium">{t.rowsPerPage}</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
@@ -357,8 +405,7 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
+          {t.page(table.getState().pagination.pageIndex + 1, table.getPageCount())}
         </div>
         <div className="flex items-center space-x-2">
           <Button
@@ -367,7 +414,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">Go to first page</span>
+            <span className="sr-only">{t.goToFirstPage}</span>
             <ChevronsLeft className="h-4 w-4" />
           </Button>
           <Button
@@ -376,7 +423,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">Go to previous page</span>
+            <span className="sr-only">{t.goToPreviousPage}</span>
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
@@ -385,7 +432,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">Go to next page</span>
+            <span className="sr-only">{t.goToNextPage}</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
           <Button
@@ -394,7 +441,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">Go to last page</span>
+            <span className="sr-only">{t.goToLastPage}</span>
             <ChevronsRight className="h-4 w-4" />
           </Button>
         </div>
@@ -412,6 +459,8 @@ DataTablePagination.displayName = "DataTablePagination"
 export function DataTableContent() {
   const { table, isLoading, loadingRowCount, emptyState } =
     useDataTableInstance()
+  const language = useDesignSystemLanguage()
+  const t = DATA_TABLE_TEXTS[language]
 
   if (isLoading) {
     return (
@@ -470,7 +519,7 @@ export function DataTableContent() {
             <TableRow>
               <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
                 {emptyState ?? (
-                  <NoDataMessage title="No data" message="No records found." />
+                  <NoDataMessage title={t.noData} message={t.noRecordsFound} />
                 )}
               </TableCell>
             </TableRow>
@@ -511,6 +560,8 @@ export function DataTableSelectionBar({
   ...props
 }: DataTableSelectionBarProps) {
   const { selectedRowsCount, clearSelection } = useDataTableInstance()
+  const language = useDesignSystemLanguage()
+  const t = DATA_TABLE_TEXTS[language]
 
   if (selectedRowsCount === 0) return null
 
@@ -524,13 +575,13 @@ export function DataTableSelectionBar({
         className
       )}
       role="toolbar"
-      aria-label="Bulk actions"
+      aria-label={t.bulkActions}
       {...props}
     >
       {/* Mobile: two rows / Desktop: single row */}
       <div className="flex items-center justify-center sm:hidden">
         <span className="text-sm font-medium text-secondary-foreground">
-          {selectedRowsCount} selected
+          {t.selected(selectedRowsCount)}
         </span>
       </div>
       <div className="mt-2 flex items-center justify-center gap-2 overflow-x-auto sm:hidden">
@@ -542,14 +593,14 @@ export function DataTableSelectionBar({
           onClick={clearSelection}
         >
           <X className="mr-1 h-4 w-4" />
-          Deselect
+          {t.deselect}
         </Button>
       </div>
 
       {/* Desktop: single row */}
       <div className="hidden sm:flex sm:items-center sm:gap-4">
         <span className="text-sm font-medium text-secondary-foreground whitespace-nowrap">
-          {selectedRowsCount} selected
+          {t.selected(selectedRowsCount)}
         </span>
         <div className="h-4 w-px bg-border" />
         <div className="flex items-center gap-2">{children}</div>
@@ -560,7 +611,7 @@ export function DataTableSelectionBar({
           onClick={clearSelection}
         >
           <X className="mr-1 h-4 w-4" />
-          Deselect
+          {t.deselect}
         </Button>
       </div>
     </div>

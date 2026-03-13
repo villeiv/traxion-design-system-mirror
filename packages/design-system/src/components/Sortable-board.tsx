@@ -1,6 +1,12 @@
 import {closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, UniqueIdentifier} from "@dnd-kit/core";
 import {arrayMove, SortableContext, useSortable, verticalListSortingStrategy} from "@dnd-kit/sortable";
 import {HTMLAttributes, ReactNode, useState} from "react";
+import {useDesignSystemLanguage} from "./Language-provider";
+
+const SORTABLE_BOARD_TEXTS = {
+    en: { emptyColumn: "You can drag elements here." },
+    es: { emptyColumn: "Puedes arrastrar elementos aquí." },
+} as const
 import {CSS} from "@dnd-kit/utilities";
 import {Badge} from "./Badge";
 import {GripVertical} from "lucide-react";
@@ -45,7 +51,7 @@ type ItemOverlayProps = {
     activeId: UniqueIdentifier | null;
 } & RenderItem;
 
-type ColumnProps = ColumnType & RenderItem;
+type ColumnProps = ColumnType & RenderItem & { emptyText: string };
 
 function SortableBoard({defaultColumns, onChange, renderItem}: SortableBoardProps) {
     // Si la columna no define id, asignamos uno determinista para evitar errores de hydration
@@ -53,6 +59,8 @@ function SortableBoard({defaultColumns, onChange, renderItem}: SortableBoardProp
         defaultColumns.map((c, idx) => ({...c, id: c.id ?? `col-${idx}`}))
     );
     const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+    const language = useDesignSystemLanguage();
+    const t = SORTABLE_BOARD_TEXTS[language];
 
     function findContainerIndex(id: UniqueIdentifier): number {
         return columns.findIndex((c) => c.id === id || c.items.includes(String(id)));
@@ -143,7 +151,7 @@ function SortableBoard({defaultColumns, onChange, renderItem}: SortableBoardProp
         onDragEnd={handleDragEnd}
     >
         <ColumnsWrapper>{
-            columns.map(col => <Column key={col.id} id={col.id} title={col.title} items={col.items} renderItem={renderItem}/>)
+            columns.map(col => <Column key={col.id} id={col.id} title={col.title} items={col.items} renderItem={renderItem} emptyText={t.emptyColumn}/>)
         }</ColumnsWrapper>
 
         <ItemOverlay renderItem={renderItem} activeId={activeId}/>
@@ -158,7 +166,7 @@ function ColumnsWrapper({children}: { children: ReactNode }) {
     return <div className={styles.wrapper}>{children}</div>;
 }
 
-function Column({id, title, items, renderItem}: ColumnProps) {
+function Column({id, title, items, renderItem, emptyText}: ColumnProps) {
     const {active, over, setNodeRef} = useSortable({id});
     const styles = {
         //Las columnas ocuparan to do el ancho disponible
@@ -193,7 +201,7 @@ function Column({id, title, items, renderItem}: ColumnProps) {
                 </SortableContext>
                 {items.length === 0 && (
                     <div className={styles.dragItemsWrapper}>
-                        Puedes arrastrar elementos aquí.
+                        {emptyText}
                     </div>
                 )}
             </div>

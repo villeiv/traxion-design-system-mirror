@@ -1,7 +1,7 @@
 {
   "name": "Stepper",
   "slug": "stepper",
-  "packageVersion": "0.6.0",
+  "packageVersion": "0.14.0",
   "description": "A visual progress indicator for sequential processes. Works in two modes: navigation (interactive multi-step wizard where the consumer controls Next/Back) and display (read-only status tracker like a delivery timeline). Supports horizontal and vertical orientations, numbered or dots indicator styles, explicit completion tracking, per-step error state, and configurable click navigation.",
   "tags": [
     "stepper",

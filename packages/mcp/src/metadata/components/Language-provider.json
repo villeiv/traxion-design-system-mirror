@@ -1,0 +1,76 @@
+{
+  "name": "LanguageProvider",
+  "packageVersion": "0.14.0",
+  "slug": "language-provider",
+  "description": "A React context provider that sets the active UI language ('es' | 'en') for all Traxion design system components it wraps. Default language is Spanish ('es'), so components work correctly without a provider. Exports LanguageProvider, LanguageProviderProps, DesignSystemLanguage, and the useDesignSystemLanguage hook.",
+  "tags": [
+    "language",
+    "i18n",
+    "internationalization",
+    "localization",
+    "provider",
+    "context",
+    "spanish",
+    "english"
+  ],
+  "props": [
+    {
+      "name": "language",
+      "type": "\"es\" | \"en\"",
+      "default": "\"es\"",
+      "description": "The active language for all descendant design system components. Affects all internal UI strings (labels, placeholders, ARIA text, empty states, etc.)."
+    },
+    {
+      "name": "children",
+      "type": "React.ReactNode",
+      "default": "undefined",
+      "description": "The component tree to wrap. All design system components inside will read the language from this provider."
+    }
+  ],
+  "dependencies": [],
+  "peerDependencies": [
+    "react",
+    "react-dom"
+  ],
+  "accessibility": {
+    "role": "Renders no DOM element — pure context provider.",
+    "keyboard": "No keyboard behavior of its own. Affects ARIA labels of descendant components.",
+    "aria": "No ARIA attributes. Component affects aria-label, aria-labelledby, and title strings of descendant components (e.g. DataTable pagination buttons, Dialog close button).",
+    "notes": "Wrapping the entire application ensures consistent language across all components. Per-subtree wrapping is valid for mixed-language layouts."
+  },
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Coloca el LanguageProvider cerca de la raíz de tu aplicación para que todos los componentes hereden el idioma consistentemente.",
+      "code": "<LanguageProvider language=\"en\">\n  <App />\n</LanguageProvider>"
+    },
+    {
+      "type": "dont",
+      "description": "No uses el hook useDesignSystemLanguage fuera del árbol del LanguageProvider (o sin provider). Sin provider, el idioma por defecto es 'es', lo cual puede ser inesperado en apps en inglés.",
+      "code": "// ❌ Sin proveedor en una app en inglés\nfunction App() {\n  return <DataTable ... />; // mostrará strings en español\n}"
+    }
+  ],
+  "commonlyUsedWith": [
+    "data-table",
+    "date-picker",
+    "pagination",
+    "dialog",
+    "sheet",
+    "stepper",
+    "file-drop-zone"
+  ],
+  "sections": [
+    {
+      "title": "Components affected",
+      "content": "The following components read the active language from LanguageProvider and adapt their internal UI strings accordingly:\n\n- **DataTable** — column drag tooltip, view options, pagination controls, empty states, selection bar\n- **DatePicker** / **DateRangePicker** / **DateTimePicker** / **DateTimeRangePicker** — placeholders, clear/apply buttons, time labels\n- **Pagination** — navigation aria-labels, ellipsis label\n- **Dialog** — close button aria-label\n- **Sheet** — close button aria-label\n- **Stepper** — step indicator aria-labels\n- **AiInsight** — collapse/expand button aria-labels\n- **FileDropZone** — drop zone aria-label and instruction text\n- **SortableBoard** — empty column placeholder text"
+    },
+    {
+      "title": "useDesignSystemLanguage hook",
+      "content": "Use this hook to read the active language from a custom component inside a LanguageProvider:\n\n```tsx\nimport { useDesignSystemLanguage } from '@traxion-global/design-system/react';\n\nfunction MyComponent() {\n  const language = useDesignSystemLanguage(); // 'es' | 'en'\n  return <span>{language === 'es' ? 'Hola' : 'Hello'}</span>;\n}\n```\n\nWithout a LanguageProvider ancestor, the hook returns `'es'` (the context default)."
+    },
+    {
+      "title": "DatePicker localeCode interaction",
+      "content": "DatePicker components have a separate `localeCode` prop that controls date formatting via date-fns. When `localeCode` is not explicitly set, it defaults to the active `language` from the provider. You can always override it independently:\n\n```tsx\n// Uses 'en' formatting because localeCode is not set, inherits from provider\n<LanguageProvider language=\"en\">\n  <DatePicker />\n</LanguageProvider>\n\n// Forces Spanish date format even inside an English LanguageProvider\n<LanguageProvider language=\"en\">\n  <DatePicker localeCode=\"es\" />\n</LanguageProvider>\n```"
+    }
+  ]
+}

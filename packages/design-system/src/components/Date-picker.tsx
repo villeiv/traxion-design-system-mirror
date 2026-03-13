@@ -5,6 +5,7 @@ import { CalendarIcon, ClockIcon } from "lucide-react"
 import type { DateRange } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
+import { useDesignSystemLanguage } from "./Language-provider"
 import { Button } from "./Button"
 import { Calendar } from "./Calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover"
@@ -17,6 +18,31 @@ const localeMap = {
 } as const
 
 type LocaleCode = keyof typeof localeMap
+
+const DATE_PICKER_TEXTS = {
+    en: {
+        placeholderDate: "Select a date",
+        placeholderRange: "Select a date range",
+        placeholderDateTime: "Select date and time",
+        placeholderDateTimeRange: "Select a date and time range",
+        clear: "Clear",
+        apply: "Apply",
+        time: "Time:",
+        startTime: "Start time:",
+        endTime: "End time:",
+    },
+    es: {
+        placeholderDate: "Selecciona una fecha",
+        placeholderRange: "Selecciona un rango de fechas",
+        placeholderDateTime: "Selecciona fecha y hora",
+        placeholderDateTimeRange: "Selecciona un rango de fechas y hora",
+        clear: "Limpiar",
+        apply: "Aplicar",
+        time: "Hora:",
+        startTime: "Hora día inicial:",
+        endTime: "Hora día final:",
+    },
+} as const
 
 type CalendarDisabled = React.ComponentProps<typeof Calendar>["disabled"]
 
@@ -53,9 +79,9 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             value,
             defaultValue,
             onChange,
-            placeholder = "Selecciona una fecha",
+            placeholder,
             disabled = false,
-            localeCode = "es",
+            localeCode,
             dateFormat = "PPP",
             fromDate,
             toDate,
@@ -64,12 +90,16 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
         },
         ref
     ) => {
+        const language = useDesignSystemLanguage()
+        const t = DATE_PICKER_TEXTS[language]
+        const resolvedLocaleCode = localeCode ?? language
+        const resolvedPlaceholder = placeholder ?? t.placeholderDate
         const [open, setOpen] = React.useState(false)
         const [internalDate, setInternalDate] = React.useState<
             Date | undefined
         >(defaultValue)
 
-        const locale = localeMap[localeCode]
+        const locale = localeMap[resolvedLocaleCode]
         const selectedDate = value ?? internalDate
 
         function handleSelect(date: Date | undefined) {
@@ -95,7 +125,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                             <span className="truncate min-w-0 flex-1">
                                 {selectedDate
                                     ? format(selectedDate, dateFormat, { locale })
-                                    : placeholder}
+                                    : resolvedPlaceholder}
                             </span>
                         </Button>
                     </PopoverTrigger>
@@ -104,7 +134,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                             mode="single"
                             selected={selectedDate}
                             onSelect={handleSelect}
-                            localeCode={localeCode}
+                            localeCode={resolvedLocaleCode}
                             captionLayout={captionLayout}
                             disabled={buildDisabled(fromDate, toDate)}
                             startMonth={fromDate}
@@ -142,9 +172,9 @@ const DateRangePicker = React.forwardRef<
         {
             value,
             onChange,
-            placeholder = "Selecciona un rango de fechas",
+            placeholder,
             disabled = false,
-            localeCode = "es",
+            localeCode,
             dateFormat = "d MMM",
             fromDate,
             toDate,
@@ -154,11 +184,15 @@ const DateRangePicker = React.forwardRef<
         },
         ref
     ) => {
+        const language = useDesignSystemLanguage()
+        const t = DATE_PICKER_TEXTS[language]
+        const resolvedLocaleCode = localeCode ?? language
+        const resolvedPlaceholder = placeholder ?? t.placeholderRange
         const [open, setOpen] = React.useState(false)
         const [pending, setPending] = React.useState<DateRange | undefined>(
             value
         )
-        const locale = localeMap[localeCode]
+        const locale = localeMap[resolvedLocaleCode]
 
         function handleOpenChange(nextOpen: boolean) {
             if (nextOpen) setPending(value)
@@ -196,7 +230,7 @@ const DateRangePicker = React.forwardRef<
                                         format(value.from, dateFormat, { locale })
                                     )
                                 ) : (
-                                    placeholder
+                                    resolvedPlaceholder
                                 )}
                             </span>
                         </Button>
@@ -206,7 +240,7 @@ const DateRangePicker = React.forwardRef<
                             mode="range"
                             selected={pending}
                             onSelect={setPending}
-                            localeCode={localeCode}
+                            localeCode={resolvedLocaleCode}
                             captionLayout={captionLayout}
                             numberOfMonths={numberOfMonths}
                             disabled={buildDisabled(fromDate, toDate)}
@@ -220,10 +254,10 @@ const DateRangePicker = React.forwardRef<
                                 size="sm"
                                 onClick={handleReset}
                             >
-                                Limpiar
+                                {t.clear}
                             </Button>
                             <Button size="sm" onClick={handleApply}>
-                                Aplicar
+                                {t.apply}
                             </Button>
                         </div>
                     </PopoverContent>
@@ -254,9 +288,9 @@ const DateTimePicker = React.forwardRef<HTMLButtonElement, DateTimePickerProps>(
         {
             value,
             onChange,
-            placeholder = "Selecciona fecha y hora",
+            placeholder,
             disabled = false,
-            localeCode = "es",
+            localeCode,
             dateFormat = "d MMM",
             fromDate,
             toDate,
@@ -265,9 +299,13 @@ const DateTimePicker = React.forwardRef<HTMLButtonElement, DateTimePickerProps>(
         },
         ref
     ) => {
+        const language = useDesignSystemLanguage()
+        const t = DATE_PICKER_TEXTS[language]
+        const resolvedLocaleCode = localeCode ?? language
+        const resolvedPlaceholder = placeholder ?? t.placeholderDateTime
         const [open, setOpen] = React.useState(false)
         const [pending, setPending] = React.useState<Date | undefined>(value)
-        const locale = localeMap[localeCode]
+        const locale = localeMap[resolvedLocaleCode]
 
         function handleOpenChange(nextOpen: boolean) {
             if (nextOpen) setPending(value)
@@ -325,7 +363,7 @@ const DateTimePicker = React.forwardRef<HTMLButtonElement, DateTimePickerProps>(
                             <span className="truncate min-w-0 flex-1">
                                 {value
                                     ? `${format(value, dateFormat, { locale })} ${displayTimeValue}`
-                                    : placeholder}
+                                    : resolvedPlaceholder}
                             </span>
                         </Button>
                     </PopoverTrigger>
@@ -334,7 +372,7 @@ const DateTimePicker = React.forwardRef<HTMLButtonElement, DateTimePickerProps>(
                             mode="single"
                             selected={pending}
                             onSelect={handleDaySelect}
-                            localeCode={localeCode}
+                            localeCode={resolvedLocaleCode}
                             captionLayout={captionLayout}
                             disabled={buildDisabled(fromDate, toDate)}
                             startMonth={fromDate}
@@ -344,7 +382,7 @@ const DateTimePicker = React.forwardRef<HTMLButtonElement, DateTimePickerProps>(
                         <div className="flex items-center gap-2 p-3">
                             <ClockIcon className="h-4 w-4 shrink-0 text-muted-foreground" />
                             <span className="text-sm font-medium whitespace-nowrap text-foreground">
-                                Hora:
+                                {t.time}
                             </span>
                             <TimePicker
                                 value={pendingTimeValue}
@@ -358,7 +396,7 @@ const DateTimePicker = React.forwardRef<HTMLButtonElement, DateTimePickerProps>(
                                 disabled={!pending}
                                 className="shrink-0"
                             >
-                                Aplicar
+                                {t.apply}
                             </Button>
                         </div>
                     </PopoverContent>
@@ -393,9 +431,9 @@ const DateTimeRangePicker = React.forwardRef<
         {
             value,
             onChange,
-            placeholder = "Selecciona un rango de fechas y hora",
+            placeholder,
             disabled = false,
-            localeCode = "es",
+            localeCode,
             dateFormat = "d MMM",
             fromDate,
             toDate,
@@ -405,11 +443,15 @@ const DateTimeRangePicker = React.forwardRef<
         },
         ref
     ) => {
+        const language = useDesignSystemLanguage()
+        const t = DATE_PICKER_TEXTS[language]
+        const resolvedLocaleCode = localeCode ?? language
+        const resolvedPlaceholder = placeholder ?? t.placeholderDateTimeRange
         const [open, setOpen] = React.useState(false)
         const [pending, setPending] = React.useState<DateRange | undefined>(
             value
         )
-        const locale = localeMap[localeCode]
+        const locale = localeMap[resolvedLocaleCode]
 
         function handleOpenChange(nextOpen: boolean) {
             if (nextOpen) setPending(value)
@@ -482,7 +524,7 @@ const DateTimeRangePicker = React.forwardRef<
         }
 
         function formatTriggerLabel(): string {
-            if (!value?.from) return placeholder
+            if (!value?.from) return resolvedPlaceholder
             const fromStr = `${format(value.from, dateFormat, { locale })} ${timeStringFromDate(value.from)}`
             if (!value.to) return fromStr
             const toStr = `${format(value.to, dateFormat, { locale })} ${timeStringFromDate(value.to)}`
@@ -513,7 +555,7 @@ const DateTimeRangePicker = React.forwardRef<
                             mode="range"
                             selected={pending}
                             onSelect={handleRangeSelect}
-                            localeCode={localeCode}
+                            localeCode={resolvedLocaleCode}
                             captionLayout={captionLayout}
                             numberOfMonths={numberOfMonths}
                             disabled={buildDisabled(fromDate, toDate)}
@@ -528,7 +570,7 @@ const DateTimeRangePicker = React.forwardRef<
                                 : "flex items-center justify-between gap-3"
                         )}>
                             <span className="text-sm font-medium whitespace-nowrap text-foreground">
-                                Hora día inicial:
+                                {t.startTime}
                             </span>
                             <TimePicker
                                 value={timeStringFromDate(pending?.from)}
@@ -537,7 +579,7 @@ const DateTimeRangePicker = React.forwardRef<
                                 className={numberOfMonths === 1 ? "w-full" : "w-24"}
                             />
                             <span className="text-sm font-medium whitespace-nowrap text-foreground">
-                                Hora día final:
+                                {t.endTime}
                             </span>
                             <TimePicker
                                 value={timeStringFromDate(pending?.to)}
@@ -553,14 +595,14 @@ const DateTimeRangePicker = React.forwardRef<
                                 size="sm"
                                 onClick={handleReset}
                             >
-                                Limpiar
+                                {t.clear}
                             </Button>
                             <Button
                                 size="sm"
                                 onClick={handleApply}
                                 disabled={!pending?.from}
                             >
-                                Aplicar
+                                {t.apply}
                             </Button>
                         </div>
                     </PopoverContent>

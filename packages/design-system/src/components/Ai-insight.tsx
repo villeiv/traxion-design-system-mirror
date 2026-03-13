@@ -3,6 +3,12 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { Info, AlertTriangle, AlertCircle, CheckCircle2, ChevronDown, Brain } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useDesignSystemLanguage } from "./Language-provider"
+
+const AI_INSIGHT_TEXTS = {
+    en: { collapse: "Collapse", expand: "Expand" },
+    es: { collapse: "Colapsar", expand: "Expandir" },
+} as const
 
 export type AiInsightVariant = "info" | "warning" | "critical" | "success"
 
@@ -72,6 +78,8 @@ function AiInsightMessageCard({ title, description, variant }: AiInsightMessageC
 const AiInsight = React.forwardRef<HTMLDivElement, AiInsightProps>(
     ({ className, messages, defaultOpen = true, ...props }, ref) => {
         const [isOpen, setIsOpen] = React.useState(defaultOpen)
+        const language = useDesignSystemLanguage()
+        const t = AI_INSIGHT_TEXTS[language]
         const contentId = React.useId()
         const isCollapsible = messages.length > 1
 
@@ -99,7 +107,7 @@ const AiInsight = React.forwardRef<HTMLDivElement, AiInsightProps>(
                                 className={cn("h-4 w-4 transition-transform duration-200", isOpen && "rotate-180")}
                                 aria-hidden="true"
                             />
-                            <span className="sr-only">{isOpen ? "Colapsar" : "Expandir"} insights</span>
+                            <span className="sr-only">{isOpen ? t.collapse : t.expand} insights</span>
                         </button>
                     )}
                 </div>

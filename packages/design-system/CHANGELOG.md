@@ -1,5 +1,14 @@
 # Changelog
 
+### [0.14.0] - 2026-03-13
+
+### Added
+- Componente **LanguageProvider** — proveedor de contexto que establece el idioma activo (`"es"` | `"en"`) para todos los componentes del design system. Idioma predeterminado: español. Exporta `LanguageProvider`, `LanguageProviderProps`, `DesignSystemLanguage` y el hook `useDesignSystemLanguage()`.
+
+### Changed
+- **DataTable**, **DatePicker**, **DateRangePicker**, **DateTimePicker**, **DateTimeRangePicker**, **Pagination**, **Dialog**, **Sheet**, **Stepper**, **AiInsight**, **FileDropZone**, **SortableBoard**: los textos internos de UI ahora se resuelven según el idioma del `LanguageProvider` más cercano (o español por defecto si no hay proveedor). Los textos ya no están hardcodeados en un solo idioma.
+- **DatePicker**, **DateRangePicker**, **DateTimePicker**, **DateTimeRangePicker**: la prop `localeCode` ahora toma como valor predeterminado el idioma del proveedor, manteniendo la posibilidad de sobreescribirla de forma explícita.
+
 ### [0.13.0] - 2026-03-12
 
 ### Breaking Changes

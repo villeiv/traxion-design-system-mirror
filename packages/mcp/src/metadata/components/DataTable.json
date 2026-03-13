@@ -1,7 +1,7 @@
 {
   "name": "DataTable",
   "slug": "datatable",
-  "packageVersion": "0.13.0",
+  "packageVersion": "0.14.0",
   "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
   "tags": [
     "datatable",

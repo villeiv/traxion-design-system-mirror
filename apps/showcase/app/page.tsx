@@ -26,6 +26,7 @@ import {
     StatCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
     DataTable, DataTablePagination, DataTableSelectionBar, DataTableToolbar, DataTableViewOptions, DataTableContent,
     type ColumnDef,
+    LanguageProvider,
     Chat, ChatTrigger, ChatPanel, ChatHeader, ChatMessages, ChatDateSeparator,
     ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleTimestamp, ChatInput, ChatSendButton,
     AiInsight,
@@ -197,6 +198,30 @@ export default function DesignSystemShowcase() {
 
                 </div>
             </div>
+            {/* LanguageProvider */}
+            <Section title="LanguageProvider" description="Establece el idioma de los textos internos de los componentes. Envuelve tu aplicación una sola vez en la raíz.">
+                <div className="grid grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                        <p className="text-sm font-medium text-muted-foreground">Español (por defecto)</p>
+                        <LanguageProvider language="es">
+                            <div className="space-y-3">
+                                <DatePicker />
+                                <FileDropZone onFiles={() => {}} />
+                            </div>
+                        </LanguageProvider>
+                    </div>
+                    <div className="space-y-3">
+                        <p className="text-sm font-medium text-muted-foreground">English</p>
+                        <LanguageProvider language="en">
+                            <div className="space-y-3">
+                                <DatePicker />
+                                <FileDropZone onFiles={() => {}} />
+                            </div>
+                        </LanguageProvider>
+                    </div>
+                </div>
+            </Section>
+
             {/* Tokens */}
             <Section title="Tokens" description="Colores de marca, escala de espacio, tipografía y sombras.">
                 {/* Colores */}

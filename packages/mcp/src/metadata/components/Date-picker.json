@@ -1,6 +1,6 @@
 {
   "name": "DatePicker",
-  "packageVersion": "0.10.0",
+  "packageVersion": "0.14.0",
   "slug": "date-picker",
   "description": "A set of four date picker components built on top of Calendar and Popover. DatePicker selects a single date (controlled via value/onChange or uncontrolled via defaultValue). DateRangePicker selects a date range with a pending state — the selection is not committed until the user presses Aplicar; Limpiar clears the pending selection. DateTimePicker combines a calendar and a native time input in one popover with a pending state confirmed via Aplicar, preserving the time when the day changes. DateTimeRangePicker selects a full date+time range (start and end, each with date and time) — the go-to picker for dashboard report filters and any UI that needs hour-level precision on both ends of a period. All pickers support locale (es/en), custom date-fns format tokens, date restrictions (fromDate/toDate), and caption layout for navigation. For time-only selection use the standalone TimePicker component.",
   "tags": [

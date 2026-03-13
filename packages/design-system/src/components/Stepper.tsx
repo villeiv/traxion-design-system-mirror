@@ -2,6 +2,12 @@ import * as React from "react"
 import { Check, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useDesignSystemLanguage } from "./Language-provider"
+
+const STEPPER_TEXTS = {
+    en: { step: (num: number | string, title: string) => `Step ${num}: ${title}` },
+    es: { step: (num: number | string, title: string) => `Paso ${num}: ${title}` },
+} as const
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -193,6 +199,8 @@ const StepperItem = React.forwardRef<HTMLLIElement, StepperItemProps>(
             registerStep,
             unregisterStep,
         } = useStepperContext()
+        const language = useDesignSystemLanguage()
+        const t = STEPPER_TEXTS[language]
 
         // Register on mount so Stepper knows the step order for numbering
         React.useLayoutEffect(() => {
@@ -275,14 +283,14 @@ const StepperItem = React.forwardRef<HTMLLIElement, StepperItemProps>(
                     "cursor-pointer hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 )}
                 onClick={() => onStepClick(value)}
-                aria-label={`Paso ${stepNumber > 0 ? stepNumber : ""}: ${title}`}
+                aria-label={t.step(stepNumber > 0 ? stepNumber : "", title)}
             >
                 {indicatorContent}
             </button>
         ) : (
             <div
                 className={cn(indicatorBaseClass, "cursor-default")}
-                aria-label={`Paso ${stepNumber > 0 ? stepNumber : ""}: ${title}`}
+                aria-label={t.step(stepNumber > 0 ? stepNumber : "", title)}
             >
                 {indicatorContent}
             </div>

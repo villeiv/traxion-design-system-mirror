@@ -1,6 +1,6 @@
 {
   "name": "Dialog",
-  "packageVersion": "0.3.3",
+  "packageVersion": "0.14.0",
   "slug": "dialog",
   "description": "A modal dialog overlay that renders content centered on the viewport. Built on @radix-ui/react-dialog with animated overlay (bg-black/80 fade) and content (zoom/slide transitions). Includes a built-in close button (X icon) in the top-right corner of DialogContent. Composed of sub-components for structured layout.",
   "tags": [

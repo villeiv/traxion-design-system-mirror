@@ -1,7 +1,7 @@
 {
   "name": "AiInsight",
   "slug": "ai-insight",
-  "packageVersion": "0.11.0",
+  "packageVersion": "0.14.0",
   "description": "A panel that surfaces AI-generated insights derived from operational data, KPIs, or statistics. Each message carries a title, a description, and a variant that communicates its importance level (info, warning, critical, success). With a single message the panel is static; with two or more messages a chevron toggle appears in the header so the user can collapse and expand the list.",
   "tags": [
     "ai",

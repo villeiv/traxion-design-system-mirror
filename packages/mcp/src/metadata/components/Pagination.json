@@ -1,6 +1,6 @@
 {
   "name": "Pagination",
-  "packageVersion": "0.3.3",
+  "packageVersion": "0.14.0",
   "slug": "pagination",
   "description": "A compound pagination component for navigating multi-page content. Composed of Pagination (nav wrapper), PaginationContent (list), PaginationItem (list item), PaginationLink (page link), PaginationPrevious, PaginationNext, and PaginationEllipsis sub-components. Uses Button variants for link styling.",
   "tags": [

@@ -1,5 +1,17 @@
 import {useRef, useState} from "react"
 import {FileUp} from "lucide-react"
+import {useDesignSystemLanguage} from "./Language-provider"
+
+const FILE_DROP_ZONE_TEXTS = {
+    en: {
+        ariaLabel: "Upload file: drag or click",
+        instruction: "Drag or click to upload files",
+    },
+    es: {
+        ariaLabel: "Subir archivo: arrastra o haz clic",
+        instruction: "Arrastra o haz clic para subir archivos",
+    },
+} as const
 
 const baseClasses = [
     "w-full rounded-lg border border-dashed",
@@ -24,6 +36,8 @@ export function FileDropZone({onFiles, accept, multiple = true}: {
 }) {
     const [isOver, setIsOver] = useState(false)
     const inputRef = useRef<HTMLInputElement>(null)
+    const language = useDesignSystemLanguage()
+    const t = FILE_DROP_ZONE_TEXTS[language]
 
     function matchesAccept(file: File, accept?: string) {
         if (!accept) return true
@@ -81,7 +95,7 @@ export function FileDropZone({onFiles, accept, multiple = true}: {
             onDragLeave={() => setIsOver(false)}
             onDrop={handleDrop}
             className={[...baseClasses, ...(isOver ? overClasses : normalClasses)].join(" ")}
-            aria-label="Subir archivo: arrastra o haz clic"
+            aria-label={t.ariaLabel}
         >
             <input
                 ref={inputRef}
@@ -93,7 +107,7 @@ export function FileDropZone({onFiles, accept, multiple = true}: {
             />
             <div className="flex items-center gap-2 pointer-events-none">
                 <FileUp className="h-4 w-4"/>
-                <span>Arrastra o haz clic para subir archivos</span>
+                <span>{t.instruction}</span>
             </div>
         </div>
     )

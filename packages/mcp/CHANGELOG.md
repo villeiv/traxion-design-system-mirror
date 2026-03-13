@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.14.0] - 2026-03-13
+
+### Added
+- **Language-provider.json**: Nuevo registro para el componente `LanguageProvider` — proveedor de contexto de idioma (`"es"` | `"en"`). Incluye props, accesibilidad, recomendaciones do/don't, `commonlyUsedWith` y tres secciones de documentación: componentes afectados, hook `useDesignSystemLanguage`, e interacción con `localeCode` en DatePicker.
+
+### Changed
+- **DataTable.json**, **Date-picker.json**, **Pagination.json**, **Dialog.json**, **Sheet.json**, **Stepper.json**, **Ai-insight.json**, **File-drop-zone.json**, **Sortable-board.json**: `packageVersion` actualizado a `0.14.0` — todos estos componentes recibieron soporte de internacionalización en esa versión.
+
 ### [0.13.0] - 2026-03-12
 
 ### Changed
