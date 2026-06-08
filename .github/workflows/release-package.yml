@@ -7,16 +7,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: packages/design-system
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      # Install from the monorepo root so the workspace resolves a single,
+      # deduped dependency tree (matching local builds). Installing inside
+      # packages/design-system in isolation pulls a second @types/react copy,
+      # which breaks the .d.ts build (Radix CSSProperties augmentation mismatch).
       - run: npm install
-      - run: npm test
+      - run: npm test --workspace=@traxion-global/design-system
 
   publish-gpr:
     needs: build
@@ -24,9 +25,6 @@ jobs:
     permissions:
       packages: write
       contents: read
-    defaults:
-      run:
-        working-directory: packages/design-system
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
@@ -34,7 +32,7 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
       - run: npm install
-      - run: npm run build
-      - run: npm publish
+      - run: npm run build --workspace=@traxion-global/design-system
+      - run: npm publish --workspace=@traxion-global/design-system
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

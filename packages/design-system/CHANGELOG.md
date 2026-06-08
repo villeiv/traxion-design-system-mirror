@@ -1,6 +1,6 @@
 # Changelog
 
-### [0.14.1] - 2026-06-08
+### [0.14.2] - 2026-06-08
 
 ### Changed
 - **Avatar**: `AvatarFallback` ahora usa `text-foreground` con `text-sm font-semibold` (antes `text-primary-foreground`), mejorando el contraste y la consistencia tipográfica del texto/ícono de respaldo sobre el fondo primario.
@@ -8,6 +8,7 @@
 
 ### Notes
 - Cambios únicamente de estilo. No hay modificaciones de API ni de props.
+- Build/CI: el workflow de release ahora instala y compila desde la raíz del monorepo para evitar una doble copia de `@types/react` que rompía la generación de tipos. La versión 0.14.1 no llegó a publicarse en el registro.
 
 ### [0.14.0] - 2026-03-13
 
