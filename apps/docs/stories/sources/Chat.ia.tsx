@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Bot } from "lucide-react";
 import {
+    Avatar,
+    AvatarFallback,
     ChatBubble,
     ChatBubbleAvatar,
     ChatBubbleMessage,
@@ -25,9 +27,13 @@ export default function ChatIA() {
     return (
         <ChatPanel className="h-[480px] w-[420px]">
             <ChatHeader>
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-                    <Bot className="h-4 w-4 text-primary-foreground" />
-                </div>
+                <ChatBubbleAvatar>
+                        <Avatar>
+                            <AvatarFallback>
+                                <Bot className="h-4 w-4 text-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
+                    </ChatBubbleAvatar>
                 <div className="flex flex-col">
                     <span className="text-sm font-medium">Asistente Traxion</span>
                     <span className="text-xs text-muted-foreground">Siempre disponible</span>
@@ -43,9 +49,11 @@ export default function ChatIA() {
 
                 <ChatBubble variant="received">
                     <ChatBubbleAvatar>
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
-                            <Bot className="h-4 w-4 text-primary-foreground" />
-                        </div>
+                        <Avatar>
+                            <AvatarFallback>
+                                <Bot className="h-4 w-4 text-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
                     </ChatBubbleAvatar>
                     <ChatBubbleMessage variant="received">
                         Hola, soy el asistente de Traxion. ¿En qué puedo ayudarte hoy?
@@ -62,9 +70,11 @@ export default function ChatIA() {
 
                 <ChatBubble variant="received">
                     <ChatBubbleAvatar>
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
-                            <Bot className="h-4 w-4 text-primary-foreground" />
-                        </div>
+                        <Avatar>
+                            <AvatarFallback>
+                                <Bot className="h-4 w-4 text-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
                     </ChatBubbleAvatar>
                     <ChatBubbleMessage variant="received">
                         La unidad ECO-1142 se encuentra en tránsito. Última ubicación registrada:
@@ -82,9 +92,11 @@ export default function ChatIA() {
 
                 <ChatBubble variant="received">
                     <ChatBubbleAvatar>
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
-                            <Bot className="h-4 w-4 text-primary-foreground" />
-                        </div>
+                        <Avatar>
+                            <AvatarFallback>
+                                <Bot className="h-4 w-4 text-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
                     </ChatBubbleAvatar>
                     <ChatBubbleMessage variant="received">
                         No hay alertas activas. La unidad opera dentro de parámetros normales.

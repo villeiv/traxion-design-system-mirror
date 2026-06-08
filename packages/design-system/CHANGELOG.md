@@ -1,5 +1,14 @@
 # Changelog
 
+### [0.14.1] - 2026-06-08
+
+### Changed
+- **Avatar**: `AvatarFallback` ahora usa `text-foreground` con `text-sm font-semibold` (antes `text-primary-foreground`), mejorando el contraste y la consistencia tipográfica del texto/ícono de respaldo sobre el fondo primario.
+- **Card**: `CardHeader` reduce su espaciado vertical interno (`space-y-0.5` en lugar de `space-y-1.5`). `CardTitle` ahora usa `text-lg font-bold` (antes `font-semibold leading-none tracking-tight`) para una jerarquía visual más marcada.
+
+### Notes
+- Cambios únicamente de estilo. No hay modificaciones de API ni de props.
+
 ### [0.14.0] - 2026-03-13
 
 ### Added

@@ -16,7 +16,7 @@ export default function ChatVariants() {
             <ChatMessages>
                 <ChatBubble variant="received">
                     <ChatBubbleAvatar>
-                        <Avatar className="h-8 w-8">
+                        <Avatar>
                             <AvatarImage src="https://github.com/shadcn.png" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>

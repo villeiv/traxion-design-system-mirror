@@ -27,7 +27,7 @@ export default function ChatBasic() {
     return (
         <ChatPanel className="h-[480px] w-[420px]">
             <ChatHeader>
-                <Avatar className="h-8 w-8">
+                <Avatar>
                     <AvatarFallback>MG</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
@@ -41,7 +41,7 @@ export default function ChatBasic() {
 
                 <ChatBubble variant="received">
                     <ChatBubbleAvatar>
-                        <Avatar className="h-8 w-8">
+                        <Avatar>
                             <AvatarFallback>MG</AvatarFallback>
                         </Avatar>
                     </ChatBubbleAvatar>
@@ -60,7 +60,7 @@ export default function ChatBasic() {
 
                 <ChatBubble variant="received">
                     <ChatBubbleAvatar>
-                        <Avatar className="h-8 w-8">
+                        <Avatar>
                             <AvatarFallback>MG</AvatarFallback>
                         </Avatar>
                     </ChatBubbleAvatar>
@@ -81,7 +81,7 @@ export default function ChatBasic() {
 
                 <ChatBubble variant="received">
                     <ChatBubbleAvatar>
-                        <Avatar className="h-8 w-8">
+                        <Avatar>
                             <AvatarFallback>MG</AvatarFallback>
                         </Avatar>
                     </ChatBubbleAvatar>

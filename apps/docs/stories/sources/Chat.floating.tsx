@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Bot } from "lucide-react";
 import {
+    Avatar,
+    AvatarFallback,
     Chat,
     ChatBubble,
     ChatBubbleAvatar,
@@ -30,9 +32,13 @@ export default function ChatFloating() {
 
             <ChatPanel className="fixed bottom-24 right-6 h-[480px] w-[380px]">
                 <ChatHeader>
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-                        <Bot className="h-4 w-4 text-primary-foreground" />
-                    </div>
+                    <ChatBubbleAvatar>
+                        <Avatar>
+                            <AvatarFallback>
+                                <Bot className="h-4 w-4 text-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
+                    </ChatBubbleAvatar>
                     <div className="flex flex-col">
                         <span className="text-sm font-medium">Asistente Traxion</span>
                         <span className="text-xs text-muted-foreground">Siempre disponible</span>
@@ -48,10 +54,12 @@ export default function ChatFloating() {
 
                     <ChatBubble variant="received">
                         <ChatBubbleAvatar>
-                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary">
-                                <Bot className="h-4 w-4 text-primary-foreground" />
-                            </div>
-                        </ChatBubbleAvatar>
+                        <Avatar>
+                            <AvatarFallback>
+                                <Bot className="h-4 w-4 text-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
+                    </ChatBubbleAvatar>
                         <ChatBubbleMessage variant="received">
                             Hola, soy el asistente de Traxion. ¿En qué puedo ayudarte?
                         </ChatBubbleMessage>
