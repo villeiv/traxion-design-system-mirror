@@ -69,30 +69,35 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
   - `packages/mcp/src/index.ts` → `version:` inside `new McpServer({…})`
   - `packages/mcp/src/tools/version.ts` → `MCP_VERSION` constant
 
-### Phase 7: Build, Verify & Publish
+### Phase 7: Build & Verify
 - Run full build: `npm run build`
 - Verify MCP: test `get_component("slug")` with MCP dev server
 - Verify Storybook renders correctly
-- Publish design-system: `npm publish --workspace=@traxion-global/design-system`
 - Rebuild MCP after the version bump: `npm run build --workspace=@traxion-global/mcp`
+- Do NOT publish here — publishing is the last step (Phase 9)
 
 ### Phase 8: Documentation Updates
-- Update `packages/mcp/README.md` component and story counts
-- Update `CLAUDE.md` component count in Project Overview
-- Update root `README.md` if it lists components
+- Update `packages/mcp/README.md` category listing only if the component is in a new functional category
+- Update root `README.md` only if it lists individual components by name
+- Do NOT add or update component/story counts anywhere — counts are intentionally untracked; `version()` reports them live
+
+### Phase 9: Publish (final step)
+- Single source of truth: the **"Proceso de Release"** section in the root `README.md`
+- In short: commit & push everything to `main` → create a GitHub Release tagged `vX.Y.Z` → verify the `build` and `publish-gpr` jobs are green in the Actions tab
+- Never publish locally with `npm publish`
 
 ## Edit Mode
 
 1. **Investigate current state**: Read the component source, stories, MCP metadata, and search the showcase page
 2. **Ask what's changing**: Present the current state and ask the user what modifications they want
 3. **Apply the change-impact matrix** from the methodology doc to determine which phases need to run:
-   - Internal logic only → Phase 5 + Phase 7
-   - Props/API changed → Phase 3 + Phase 4 + Phase 5 + Phase 6 + Phase 7
-   - New variant/sub-component → Phase 3 + Phase 4 + Phase 5 + Phase 6 + Phase 7
-   - Accessibility changed → Phase 5 + Phase 6 + Phase 7
-   - Bug fix → Phase 5 + Phase 7
+   - Internal logic only → Phase 5 + Phase 7 + Phase 9
+   - Props/API changed → Phase 3 + Phase 4 + Phase 5 + Phase 6 + Phase 7 + Phase 9
+   - New variant/sub-component → Phase 3 + Phase 4 + Phase 5 + Phase 6 + Phase 7 + Phase 9
+   - Accessibility changed → Phase 5 + Phase 6 + Phase 7 + Phase 9
+   - Bug fix → Phase 5 + Phase 7 + Phase 9
 4. **Run only the relevant phases**, confirming with the user at each boundary
-5. **Always end with Phase 7** (build/verify) and **Phase 8** (docs updates) if counts changed
+5. **Always end with Phase 7** (build/verify), **Phase 8** (docs updates, if listings changed), and **Phase 9** (publish via GitHub Release)
 
 ## Important Reminders
 

@@ -26,8 +26,7 @@ A comprehensive methodology for adding new components to the Traxion Design Syst
 | **Edit** | `packages/design-system/CHANGELOG.md` | 5 |
 | **Create** | `packages/mcp/src/metadata/components/ComponentName.json` | 6 |
 | **Edit** | `packages/mcp/CHANGELOG.md` | 6 |
-| **Edit** | `packages/mcp/README.md` (counts) | 8 |
-| **Edit** | `CLAUDE.md` (component count if referenced) | 8 |
+| **Edit** | `packages/mcp/README.md` (category listing, only if new category) | 8 |
 
 ### Conditional Files
 
@@ -55,7 +54,7 @@ Before writing any code, understand the design space.
 
 ### 1.2 Check Existing Components
 
-Search the current 38 components for reuse or composition opportunities:
+Search the existing components for reuse or composition opportunities:
 
 | Functional Area | Components |
 |-----------------|-----------|
@@ -664,7 +663,7 @@ Add a new entry at the top describing what changed in the metadata or tools. Fol
 
 ---
 
-## Phase 7: Build, Verify & Publish
+## Phase 7: Build & Verify
 
 ### 7.1 Full Build
 
@@ -696,17 +695,15 @@ Check localhost:6006:
 - Docs page shows description, props table, and examples
 - "Área de pruebas" story has working controls
 
-### 7.4 Publish
+### 7.4 Sync MCP Build
 
-1. Publish the design-system package to GitHub Packages:
-   ```bash
-   npm publish --workspace=@traxion-global/design-system
-   ```
-2. If MCP metadata or tools changed (Phase 6.7), rebuild MCP before committing:
-   ```bash
-   npm run build --workspace=@traxion-global/mcp
-   ```
-   MCP is not published to a registry for now — it runs directly from source. The rebuild ensures the committed `dist/` is in sync with the version bump.
+If MCP metadata or tools changed (Phase 6.7), rebuild MCP before committing:
+```bash
+npm run build --workspace=@traxion-global/mcp
+```
+MCP is not published to a registry for now — it runs directly from source. The rebuild ensures the committed `dist/` is in sync with the version bump.
+
+> **Publishing is not done here.** It is the final step (**Phase 9**), after the documentation updates. Nothing between this point and Phase 9 depends on the package being published, so the release is created last.
 
 ---
 
@@ -714,23 +711,23 @@ Check localhost:6006:
 
 ### 8.1 Update Root README.md
 
-If the root `README.md` lists components or component count, update it.
+If the root `README.md` lists individual components by name, update that list.
 
 ### 8.2 Update MCP README.md
 
 **Path:** `packages/mcp/README.md`
 
-Update:
-- Component count (currently "38 React components" / "38 components")
-- Category listing if the component belongs to a new category
-- Story count (currently "36 story files" / "36 story sets")
-- Architecture diagram numbers if maintained
+Update the **category listing** only if the component belongs to a new functional category.
 
-### 8.3 Update CLAUDE.md
+> **Counts are intentionally not tracked in prose.** Component and story counts drift and add no value to maintain. The `version()` MCP tool reports them live from the registry. Do not reintroduce hardcoded counts in any doc.
 
-**Path:** `CLAUDE.md` (monorepo root)
+---
 
-Update the component count in the Project Overview section (currently "38 components").
+## Phase 9: Publish
+
+Publishing is the **final step**. Everything above (component, stories, showcase, version bump, CHANGELOG, MCP metadata, documentation updates) is committed and pushed to `main` first; the release is created last. The package is published by **GitHub Actions**, never locally.
+
+**The publish process is documented as the single source of truth in the root [`README.md` → "Proceso de Release"](../README.md#proceso-de-release).** In short: push to `main` → create a GitHub Release tagged `vX.Y.Z` → confirm the `build` and `publish-gpr` jobs are green in the Actions tab.
 
 ---
 
@@ -752,13 +749,13 @@ Understand what exists before making changes.
 
 | What Changed | Phases to Run |
 |-------------|--------------|
-| Internal logic only (no API change) | Phase 5 (version bump) → Phase 7 (build/publish) |
-| Props / API changed | Phase 3 (update stories) → Phase 4 (update showcase) → Phase 5 → Phase 6 (update MCP props) → Phase 7 |
-| New variant or sub-component added | Phase 3 (new story) → Phase 4 (showcase) → Phase 5 → Phase 6 (MCP metadata) → Phase 7 |
-| Accessibility behavior changed | Phase 5 → Phase 6 (update MCP accessibility fields) → Phase 7 |
-| Bug fix (no API change) | Phase 5 (patch bump) → Phase 7 |
+| Internal logic only (no API change) | Phase 5 (version bump) → Phase 7 (build/verify) → Phase 9 (publish) |
+| Props / API changed | Phase 3 (update stories) → Phase 4 (update showcase) → Phase 5 → Phase 6 (update MCP props) → Phase 7 → Phase 9 |
+| New variant or sub-component added | Phase 3 (new story) → Phase 4 (showcase) → Phase 5 → Phase 6 (MCP metadata) → Phase 7 → Phase 9 |
+| Accessibility behavior changed | Phase 5 → Phase 6 (update MCP accessibility fields) → Phase 7 → Phase 9 |
+| Bug fix (no API change) | Phase 5 (patch bump) → Phase 7 (build/verify) → Phase 9 (publish) |
 
-All edit paths end with **Phase 7** (build/verify/publish) and **Phase 8** (documentation updates) if counts or listings changed.
+All edit paths end with **Phase 7** (build/verify), then **Phase 8** (documentation updates, if listings changed), and finally **Phase 9** (publish via GitHub Release).
 
 ---
 

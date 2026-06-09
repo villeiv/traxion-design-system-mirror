@@ -17,7 +17,7 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 |   GitHub Package            |   MCP Server                       |
 |   (Source of Truth)         |   (Smart Documentation Layer)      |
 +-----------------------------+------------------------------------+
-| - 39 React components       | - Component discovery              |
+| - React components          | - Component discovery              |
 | - Published to GitHub       | - Context-aware documentation      |
 | - Locked (no edits)         | - Real Storybook examples          |
 | - Versioned releases        | - Design tokens & guidelines       |
@@ -31,7 +31,7 @@ The Traxion Design System uses a **Hybrid Approach** that combines traditional p
 
 **Location:** `packages/design-system/`
 
-The actual React hooks and components (39 components), design tokens, utilities, and styles. Published to GitHub Packages as `@traxion-global/design-system`.
+The actual React hooks and components, design tokens, utilities, and styles. Published to GitHub Packages as `@traxion-global/design-system`.
 
 ```bash
 npm install @traxion-global/design-system
@@ -71,8 +71,8 @@ A Model Context Protocol server that provides intelligent documentation and scaf
 ```
 +-----------------------+     +---------------------------+
 | metadata/             |     | apps/docs/stories/        |
-|   components/*.json   |     |   *.stories.tsx   (38)    |
-|   guidelines/*.md     |     |   sources/*.tsx   (94)    |
+|   components/*.json   |     |   *.stories.tsx           |
+|   guidelines/*.md     |     |   sources/*.tsx           |
 |                       |     +---------------------------+
 | design-system/        |
 |   components/*.tsx    |     ComponentRegistry.load()
@@ -82,10 +82,10 @@ A Model Context Protocol server that provides intelligent documentation and scaf
                           | ComponentRegistry   |
                           | (In-Memory Cache)   |
                           |                     |
-                          | 39 components       |
-                          | 38 story sets       |
-                          | 3 token categories  |
-                          | 3 guidelines        |
+                          | components          |
+                          | story sets          |
+                          | token categories    |
+                          | guidelines          |
                           +----------+----------+
                                      |
                               registerTools()
@@ -164,9 +164,9 @@ Before registering a component in the MCP server, the following design system ta
 1. **Create the component** in `packages/design-system/src/components/MyComponent.tsx` and export it in `packages/design-system/src/index.ts`
 2. **Create Storybook stories** in `apps/docs/stories/MyComponent.stories.tsx` with usage examples (inline renders or external source files in `apps/docs/stories/sources/`)
 3. **(Optional) Create an anatomy file** in `apps/docs/stories/sources/MyComponent.anatomy.tsx` showing the component's structure
-4. **Build and publish a new version** of the `@traxion-global/design-system` package so the component is available to consumers
+4. **Decide the new design system version** — bump `packages/design-system/package.json` and add the `CHANGELOG.md` entry. You do **not** need to publish yet to register the component in the MCP: the MCP reads the design system **source from the local monorepo**, not the published package. **But** `version()` advertises this version to consumers and sends them to install it, so the release **must be completed** (it is the final step of the flow — see [root README → "Proceso de Release"](../../README.md#proceso-de-release)). Never register a component in the MCP for a version you do not intend to publish. You only need the target version number to fill `packageVersion` below.
 
-Once the component is published and has stories, follow these steps to make it visible to the MCP server.
+Once the component exists, has stories, and its target version is decided, follow these steps to register it in the MCP server.
 
 ### Step 1: Create the metadata JSON
 
@@ -226,7 +226,7 @@ File: `packages/mcp/src/metadata/components/MyComponent.json`
 ```
 
 **Key fields for AI code quality:**
-- `packageVersion` — must match the published version of the design system package where this component is available
+- `packageVersion` — must match the design system version this component ships in (the bumped version), even if it has not been published yet
 - `recommendations` — shown as "Best Practices" (do/don't patterns)
 - `commonlyUsedWith` — the AI will see links to companion components and suggest them together
 - `sections` — generic documentation blocks for complex components that need additional documentation beyond props and examples (e.g., hook APIs, sub-component guides, column definition patterns). Most simple components don't need this field. See `DataTable.json` for a full example
@@ -265,11 +265,11 @@ The registry auto-discovers everything:
 - [ ] Component TSX in `design-system/src/components/`
 - [ ] Export in `design-system/src/index.ts`
 - [ ] Stories in `apps/docs/stories/` (inline or with source files)
-- [ ] Design system package built and published with a new version
+- [ ] Design system version bumped + CHANGELOG entry (publishing happens last — see root README → "Proceso de Release")
 
 **MCP registration:**
 - [ ] JSON metadata in `mcp/src/metadata/components/`
-- [ ] `packageVersion` set to the published design system version
+- [ ] `packageVersion` set to the target design system version
 - [ ] `commonlyUsedWith` with companion components
 - [ ] (Optional) `sections` for complex components that need additional documentation (hooks, sub-components, etc.)
 - [ ] Version bumped in `package.json`, `src/index.ts`, and `src/tools/version.ts`
@@ -304,8 +304,8 @@ The registry auto-discovers everything:
     +-- showcase/                         (Next.js demo app)
     +-- docs/                             (Storybook)
         +-- stories/
-        |   +-- *.stories.tsx             (38 story files)
-        |   +-- sources/                  (71 source files + anatomy)
+        |   +-- *.stories.tsx             (story files)
+        |   +-- sources/                  (source files + anatomy)
 ```
 
 ### Data Flow

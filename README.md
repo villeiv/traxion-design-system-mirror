@@ -142,6 +142,27 @@ npm run dev --workspace=@traxion-global/mcp   # Ejecutar servidor MCP
 npm run build --workspace=@traxion-global/mcp # Construir servidor MCP
 ```
 
+## Agregar o editar componentes
+
+El proceso completo para crear o modificar un componente del Design System —investigación, implementación, stories de Storybook, ejemplo en showcase, registro en el MCP y publicación— está documentado en [`docs/creating-components.md`](./docs/creating-components.md). Esa guía es la metodología oficial (la misma que usa el skill `/new-component`). El último paso de ese flujo es la publicación, descrita abajo.
+
+## Proceso de Release
+
+El paquete `@traxion-global/design-system` se publica en **GitHub Packages** mediante **GitHub Actions** — **nunca** de forma local con `npm publish`. Crear un GitHub Release es lo que dispara la publicación.
+
+Flujo para promover una nueva versión:
+
+1. **Sube la versión** en `packages/design-system/package.json` (SemVer) y añade la entrada en `packages/design-system/CHANGELOG.md`.
+   - Si cambió la metadata o las tools del MCP, sube también la versión del MCP en sus tres lugares (ver `packages/mcp/`).
+2. **Verifica** localmente que la build pasa: `npm run build`.
+3. **Commit + push a `main`** de todos los cambios.
+4. **Crea un GitHub Release** con tag `vX.Y.Z` (la nueva versión del design-system), apuntando a `main`. Esto dispara el workflow `.github/workflows/release-package.yml`.
+5. **Verifica en la pestaña Actions** que los jobs `build` y `publish-gpr` terminen en verde. La nueva versión aparecerá en GitHub Packages.
+
+> **Por qué el workflow instala desde la raíz:** el workflow instala y compila desde la **raíz del monorepo**, no desde `packages/design-system` en aislamiento. Una instalación aislada resuelve una segunda copia de `@types/react`; como Radix augmenta `CSSProperties` con `--radix-${string}`, las dos copias divergen y la generación de tipos (`.d.ts`) falla. Instalar desde la raíz replica la build local y evita el problema.
+
+El proceso completo de creación/edición de componentes (del que la publicación es el paso final) vive en [`docs/creating-components.md`](./docs/creating-components.md).
+
 ## Convenciones
 
 - Versionado: SemVer

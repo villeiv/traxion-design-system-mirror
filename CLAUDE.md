@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Traxion Design System monorepo — a React component library (39 components) with Storybook documentation, an MCP server for AI-assisted development, and a Next.js showcase app. Published via GitHub Packages as `@traxion-global/design-system`.
+Traxion Design System monorepo — a React component library with Storybook documentation, an MCP server for AI-assisted development, and a Next.js showcase app. Published via GitHub Packages as `@traxion-global/design-system`.
 
 ## Common Commands
 
