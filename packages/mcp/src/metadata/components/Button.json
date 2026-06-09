@@ -1,6 +1,6 @@
 {
   "name": "Button",
-  "packageVersion": "0.3.3",
+  "packageVersion": "0.15.0",
   "slug": "button",
   "description": "A versatile button component with multiple visual variants and sizes. Uses class-variance-authority (CVA) for variant management and supports polymorphic rendering via the asChild prop (powered by @radix-ui/react-slot). Includes focus-visible ring styles and disabled state handling.",
   "tags": [
@@ -13,9 +13,9 @@
   "props": [
     {
       "name": "variant",
-      "type": "\"default\" | \"destructive\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
+      "type": "\"default\" | \"destructive\" | \"destructiveWarm\" | \"outline\" | \"secondary\" | \"ghost\" | \"link\"",
       "default": "\"default\"",
-      "description": "The visual style variant. 'default' uses primary bg, 'destructive' uses destructive bg, 'outline' has a border with transparent bg, 'secondary' uses secondary bg, 'ghost' has no bg until hover, 'link' renders as underlined text using primary-dark color."
+      "description": "The visual style variant. 'default' uses primary bg; 'destructive' uses a solid destructive bg, for critical and focused destructive actions (e.g. a confirmation dialog's confirm button); 'destructiveWarm' is a visually lighter destructive (subtle warm-red fill at low opacity, with warm-red text and border), for dense interfaces where the destructive action should not dominate attention; 'outline' has a border with transparent bg; 'secondary' uses secondary bg; 'ghost' has no bg until hover; 'link' renders as underlined text using primary-dark color."
     },
     {
       "name": "size",
@@ -67,5 +67,22 @@
     "input",
     "dialog",
     "dropdown-menu"
+  ],
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Usa `destructive` (rojo pleno) para la acción destructiva principal, crítica y enfocada — por ejemplo el botón de confirmación de un diálogo.",
+      "code": "<Button variant=\"destructive\">Eliminar cuenta</Button>"
+    },
+    {
+      "type": "do",
+      "description": "Usa `destructiveWarm` para acciones destructivas en interfaces densas o con muchos elementos, donde la acción no debe acaparar la atención (p. ej. eliminar una fila en una lista).",
+      "code": "<Button variant=\"destructiveWarm\" size=\"sm\">Eliminar</Button>"
+    },
+    {
+      "type": "dont",
+      "description": "No uses `destructiveWarm` para la acción destructiva principal de un diálogo de confirmación; ahí conviene el énfasis de `destructive`.",
+      "code": "<Button variant=\"destructiveWarm\">Confirmar eliminación</Button>"
+    }
   ]
 }

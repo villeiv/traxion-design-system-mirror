@@ -394,6 +394,7 @@ export default function DesignSystemShowcase() {
                     <Button variant="ghost">Ghost</Button>
                     <Button variant="link">Link</Button>
                     <Button variant="destructive">Destructive</Button>
+                    <Button variant="destructiveWarm">Destructive warm</Button>
                     <Button size="sm">sm</Button>
                     <Button size="lg">lg</Button>
                     <Button size="icon" aria-label="Icon button">

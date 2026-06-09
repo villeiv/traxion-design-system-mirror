@@ -62,7 +62,7 @@ const meta = {
         variant: {
             description: "Variante visual del botón",
             control: { type: "select" },
-            options: ["default", "secondary", "outline", "ghost", "link", "destructive"],
+            options: ["default", "secondary", "outline", "ghost", "link", "destructive", "destructiveWarm"],
         },
         asChild:{
             description: "Renderiza el contenido dentro de otro componente en lugar de un button. Útil para combinar con Link:",
@@ -158,7 +158,20 @@ export const Destructive = {
     args: { variant: "destructive" },
     parameters: {
         docs: {
-            description: { story: "Variante **destructive** (para acciones peligrosas)." },
+            description: { story: "Variante **destructive** (rojo pleno) para acciones peligrosas **críticas y enfocadas**, como un diálogo de confirmación. En interfaces densas, donde no quieras acaparar la atención, usa `destructiveWarm`." },
+        },
+    },
+};
+
+export const DestructiveWarm = {
+    name: "Variante destructive warm",
+    args: { variant: "destructiveWarm" },
+    parameters: {
+        docs: {
+            description: {
+                story:
+                    "Variante **destructiveWarm**: versión visualmente más ligera de `destructive` (relleno cálido tenue, con texto y borde en rojo cálido). Pensada para interfaces con muchos elementos donde una acción destructiva no debe acaparar la atención. Para acciones destructivas críticas y enfocadas, usa `destructive`.",
+            },
         },
     },
 };

@@ -1,5 +1,14 @@
 # Changelog
 
+### [0.15.0] - 2026-06-08
+
+### Added
+- **Button**: nueva variante `destructiveWarm` — versión visualmente más ligera de `destructive` (relleno cálido tenue, con texto y borde en rojo cálido). Pensada para interfaces densas donde una acción destructiva no debe acaparar la atención; `destructive` se mantiene para acciones críticas y enfocadas (p. ej. diálogos de confirmación).
+- **Tokens**: nuevos tokens de color `destructive-warm` (`#FF4E22`) y `destructive-warm-foreground` (`#9F2823`), expuestos en el preset de Tailwind como `destructive-warm` y `destructive-warm-foreground`.
+
+### Changed
+- **Tokens**: el color `destructive` global se suavizó a `#C8443D` (antes el rojo intenso por defecto) para alinearlo con la paleta del design system. Afecta a todos los componentes que consumen el token (`Button`, `Badge`, `Stepper` en estado error).
+
 ### [0.14.2] - 2026-06-08
 
 ### Changed

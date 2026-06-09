@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.15.0] - 2026-06-08
+
+### Changed
+- **Button.json**: documentada la nueva variante `destructiveWarm` en la prop `variant` (cuándo usarla frente a `destructive`). Añadidas recomendaciones do/don't para elegir entre `destructive` (acciones críticas/enfocadas) y `destructiveWarm` (interfaces densas). `packageVersion` actualizado a `0.15.0`.
+
+### Notes
+- Los nuevos tokens de color `destructive-warm` y `destructive-warm-foreground` se exponen automáticamente vía `get_design_tokens` (lee `tokens.json`), sin metadata adicional.
+
 ### [0.14.0] - 2026-03-13
 
 ### Added
