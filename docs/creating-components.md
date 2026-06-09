@@ -403,7 +403,9 @@ ${ComponentNameAnatomy}
 
 ### 3.5 External Source Files (Mandatory)
 
-**Every named story must be extracted to a separate source file.** This is required — not optional — so that Storybook users can read the full implementation directly from the docs page.
+**Every story that uses a custom `render` function must extract its JSX to a separate source file.** This is required — not optional — so that Storybook users can read the full implementation directly from the docs page.
+
+> **Args-based stories are exempt.** A story that only sets props on the meta component (e.g. `args: { variant: "secondary" }`, with no `render`) has no JSX to extract, so it needs no source file — Storybook autogenerates its code snippet. This pattern is common for simple, variant-only components (see `Button.stories.tsx`). When **editing** an existing story file, follow the pattern it already uses instead of mixing both.
 
 **Naming convention:** `apps/docs/stories/sources/ComponentName.variant.tsx`
 
