@@ -3,9 +3,11 @@ import {
     DataTableContent,
     DataTablePagination,
     DataTableSelectionBar,
+    DataTableEditBar,
     DataTableToolbar,
     DataTableViewOptions,
     ColumnDef,
+    CellsEditedPayload,
     useDataTable,
     Checkbox,
     Input,
@@ -112,6 +114,8 @@ const columns: ColumnDef<UserData>[] = [
         header: "Email",
         enableSorting: true,
         enableHiding: true,
+        // Celda editable con el editor de texto por defecto (se edita en la propia celda).
+        enableEditing: true,
     },
     {
         id: "role",
@@ -132,6 +136,27 @@ const columns: ColumnDef<UserData>[] = [
                 </Badge>
             );
         },
+        // Celda editable con editor custom: Select estilizado para mezclarse con la celda.
+        enableEditing: true,
+        editCell: ({ value, stage, cancel }) => (
+            <Select
+                defaultOpen
+                value={value as string}
+                onValueChange={(v) => stage(v)}
+                onOpenChange={(open) => {
+                    if (!open) cancel();
+                }}
+            >
+                <SelectTrigger className="h-auto border-0 px-0 py-0 shadow-none focus:ring-0">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="admin">admin</SelectItem>
+                    <SelectItem value="moderator">moderator</SelectItem>
+                    <SelectItem value="user">user</SelectItem>
+                </SelectContent>
+            </Select>
+        ),
         size:80,
         enableHiding: true,
     },
@@ -170,6 +195,30 @@ const columns: ColumnDef<UserData>[] = [
             if (!date) return null;
             return format(new Date(date), "dd/MM/yyyy");
         },
+        // Celda editable con editor custom de fecha: Popover + Calendar, con control
+        // total del commit vía stage/cancel. Se abre al entrar en edición (defaultOpen);
+        // al elegir una fecha hace stage(...), y si se cierra sin elegir hace cancel().
+        enableEditing: true,
+        editCell: ({ value, stage, cancel }) => (
+            <Popover defaultOpen onOpenChange={(open) => { if (!open) cancel(); }}>
+                <PopoverTrigger asChild>
+                    <button type="button" className="w-full text-left text-sm outline-none">
+                        {value ? format(new Date(value as string), "dd/MM/yyyy") : "Seleccionar"}
+                    </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                        mode="single"
+                        captionLayout="dropdown"
+                        localeCode="es"
+                        selected={value ? new Date(value as string) : undefined}
+                        onSelect={(date) => {
+                            if (date) stage(format(date, "yyyy-M-d"));
+                        }}
+                    />
+                </PopoverContent>
+            </Popover>
+        ),
         enableHiding: true,
         enableSorting: true,
     },
@@ -191,7 +240,7 @@ const columns: ColumnDef<UserData>[] = [
                         <Pencil className="h-4 w-4" />
                     </Button>
                     <Button
-                        variant="destructive"
+                        variant="destructiveWarm"
                         size="icon"
                         onClick={() => alert(`Eliminar usuario ${user.id}`)}
                     >
@@ -234,6 +283,7 @@ export default function DataTableAllFunctionality() {
     const [pageCount, setPageCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [idSearch, setIdSearch] = useState<string>("");
+    const [cellErrors, setCellErrors] = useState<Record<string, Record<string, string>>>({});
     const tableState = useDataTable<UserData>({ pageSize: 7 });
 
     // Data fetching effect
@@ -306,6 +356,24 @@ export default function DataTableAllFunctionality() {
         });
     }, 300);
 
+    // Edición: se llama al pulsar "Guardar cambios" en DataTableEditBar.
+    const handleCellsEdited = async ({ data: nextData }: CellsEditedPayload<UserData>) => {
+        // Validación (consumidor): el correo debe contener "@".
+        const errors: Record<string, Record<string, string>> = {};
+        for (const u of nextData) {
+            if (!u.email.includes("@")) {
+                errors[String(u.id)] = { email: "Correo inválido (falta @)" };
+            }
+        }
+        if (Object.keys(errors).length > 0) {
+            setCellErrors(errors);
+            return Promise.reject(new Error("Hay celdas inválidas"));
+        }
+        // Actualización optimista del estado local (en producción persistirías a tu API).
+        setData(nextData);
+        setCellErrors({});
+    };
+
     return (
         <DataTable
             data={data}
@@ -315,6 +383,10 @@ export default function DataTableAllFunctionality() {
             enableRowSelection
             rowSelectionKey={(row) => String(row.id)}
             enableColumnReordering
+            enableCellEditing
+            onCellsEdited={handleCellsEdited}
+            onDiscardEdits={() => setCellErrors({})}
+            cellErrors={cellErrors}
             {...tableState}
         >
             <DataTableToolbar>
@@ -407,6 +479,9 @@ export default function DataTableAllFunctionality() {
                     Eliminar
                 </Button>
             </DataTableSelectionBar>
+
+            {/* Barra de edición: aparece al haber celdas con cambios sin guardar. */}
+            <DataTableEditBar />
         </DataTable>
     );
 }

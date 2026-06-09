@@ -1,8 +1,8 @@
 {
   "name": "DataTable",
   "slug": "datatable",
-  "packageVersion": "0.14.0",
-  "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
+  "packageVersion": "0.16.0",
+  "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, inline cell editing, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
   "tags": [
     "datatable",
     "table",
@@ -16,7 +16,10 @@
     "compound-component",
     "drag-and-drop",
     "column-reorder",
-    "row-selection"
+    "row-selection",
+    "cell-editing",
+    "editable",
+    "inline-edit"
   ],
   "sections": [
     {
@@ -325,6 +328,61 @@
           "type": "code",
           "language": "tsx",
           "content": "<DataTable\n  columns={columns}\n  data={data}\n  pageCount={pageCount}\n  enableRowSelection\n  rowSelectionKey={(row) => String(row.id)}\n  {...tableState}\n>\n  <DataTableToolbar>...</DataTableToolbar>\n  <DataTableContent />\n  {!isLoading && <DataTablePagination />}\n  <DataTableSelectionBar>\n    <Button variant=\"destructive\" size=\"sm\" onClick={handleBulkDelete}>\n      <Trash className=\"mr-1 h-4 w-4\" /> Delete\n    </Button>\n    <Button variant=\"outline\" size=\"sm\" onClick={handleExport}>\n      <Download className=\"mr-1 h-4 w-4\" /> Export\n    </Button>\n  </DataTableSelectionBar>\n</DataTable>"
+        },
+        {
+          "type": "text",
+          "content": "### DataTableEditBar\n\nFixed bottom bar shown when there are pending (unsaved) cell edits. Displays the count ('N changes made') and Save / Discard buttons. 'Save changes' commits all pending edits via onCellsEdited; if that callback rejects (e.g. validation failed) the bar stays open and the edits are kept. 'Discard changes' clears the pending edits and triggers onDiscardEdits. Auto-hides when there are no pending edits. Responsive (two rows on mobile, single row on desktop). Place inside <DataTable> after <DataTablePagination>. Only relevant when enableCellEditing is true."
+        }
+      ]
+    },
+    {
+      "title": "Cell Editing",
+      "blocks": [
+        {
+          "type": "text",
+          "content": "Inline cell editing lets users edit values directly in the table. It is opt-in: set `enableCellEditing` on `<DataTable>` and mark editable columns with `enableEditing: true`. Requires `rowSelectionKey` (the row identity used to track edits). All edits flow through a single save action — nothing reaches your `data` until the user clicks 'Save changes' in DataTableEditBar."
+        },
+        {
+          "type": "text",
+          "content": "### Enabling\n\n- `enableCellEditing` on `<DataTable>` turns the feature on.\n- `enableEditing: true` on a column makes its cells editable — a column-level flag at the same level as `enableSorting` / `enableHiding` (NOT inside `meta`).\n- Add `<DataTableEditBar />` inside `<DataTable>` so the user can save/discard.\n- Provide `rowSelectionKey` (required when editing is enabled)."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "// Default text editor — edits in place (no form chrome)\n{ header: \"Name\", accessorKey: \"firstName\", enableEditing: true }\n\n// Custom editor via editCell (e.g. a Select). Style the control to blend into\n// the cell using the inline recipe on the trigger className.\n{\n  header: \"Role\",\n  accessorKey: \"role\",\n  enableEditing: true,\n  editCell: ({ value, stage, cancel }) => (\n    <Select\n      defaultOpen\n      value={value as string}\n      onValueChange={(v) => stage(v)}\n      onOpenChange={(open) => { if (!open) cancel(); }}\n    >\n      <SelectTrigger className=\"h-auto border-0 px-0 py-0 shadow-none focus:ring-0\">\n        <SelectValue />\n      </SelectTrigger>\n      <SelectContent>\n        <SelectItem value=\"admin\">admin</SelectItem>\n        <SelectItem value=\"user\">user</SelectItem>\n      </SelectContent>\n    </Select>\n  ),\n}"
+        },
+        {
+          "type": "text",
+          "content": "### Interaction model\n\n- **Double click** a cell to edit it.\n- **Enter** or **leaving the cell** stages the change as pending (highlighted with a faint primary tint). **Escape** cancels.\n- Pending changes accumulate across cells. Nothing is applied to `data` until the user presses **Save changes** in DataTableEditBar.\n- **Save changes** calls `onCellsEdited({ data, changes })`. **Discard changes** clears the pending buffer and calls `onDiscardEdits()`."
+        },
+        {
+          "type": "text",
+          "content": "### editCell context\n\nThe `editCell` renderer fully controls commit via the functions it receives (no automatic key/blur handling, so portal-based editors like Select don't commit prematurely)."
+        },
+        {
+          "type": "table",
+          "headers": ["Field", "Type", "Description"],
+          "rows": [
+            ["value", "TValue", "Current draft value of the cell."],
+            ["onChange", "(value) => void", "Updates the draft value (does not commit)."],
+            ["stage", "(value) => void", "Stages `value` as a pending change. Pass the value explicitly to avoid stale-closure bugs (e.g. onValueChange={(v) => stage(v)})."],
+            ["cancel", "() => void", "Cancels the edit and reverts to the value in data."],
+            ["row", "Row<TData>", "TanStack row being edited."],
+            ["column", "Column<TData, TValue>", "TanStack column being edited."]
+          ]
+        },
+        {
+          "type": "text",
+          "content": "### Saving and validation\n\nValidation is the consumer's responsibility. Validate inside `onCellsEdited`; to reject a save, set `cellErrors` and return a rejected Promise — the pending edits are kept and the invalid cells turn destructive (message shown in a tooltip). Clear `cellErrors` on a successful save AND in `onDiscardEdits`, otherwise a stale error stays after the cell reverts. Use the `changes` diff to build your API request and the `data` payload for an optimistic setData."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "const [data, setData] = useState<User[]>([]);\nconst [cellErrors, setCellErrors] = useState<Record<string, Record<string, string>>>({});\n\nconst handleCellsEdited = async ({ data: nextData, changes }: CellsEditedPayload<User>) => {\n  const errors = validate(nextData); // your validation\n  if (Object.keys(errors).length > 0) {\n    setCellErrors(errors);\n    return Promise.reject(new Error(\"invalid\")); // keep pending edits\n  }\n  setData(nextData);          // optimistic local update\n  // persist `changes` to your API here (PATCH only what changed)\n  setCellErrors({});\n};\n\n<DataTable\n  columns={columns}\n  data={data}\n  pageCount={pageCount}\n  {...tableState}\n  enableCellEditing\n  rowSelectionKey={(row) => String(row.id)}\n  onCellsEdited={handleCellsEdited}\n  onDiscardEdits={() => setCellErrors({})}\n  cellErrors={cellErrors}\n>\n  <DataTableContent />\n  <DataTablePagination />\n  <DataTableEditBar />\n</DataTable>"
+        },
+        {
+          "type": "text",
+          "content": "### Constraints\n\n- **Single field per column.** Editing writes the new value to the column's `accessorKey`, so every editable column must have an `accessorKey`. A dev-only `console.warn` fires if `enableEditing` is set on a column without one.\n- **Composite cells are not editable.** Cells that render several data points without a single `accessorKey` cannot be edited in this model — do not set `enableEditing` on them. If you need to edit one of their fields, give that field its own editable column with an `accessorKey`.\n- **Custom editor styling is the consumer's job.** The default text editor already blends into the cell. For `editCell` editors, style the control to blend — e.g. a SelectTrigger with `className=\"h-auto border-0 px-0 py-0 shadow-none focus:ring-0\"`."
         }
       ]
     },
@@ -476,6 +534,30 @@
       "description": "Enables drag-and-drop column reordering. This is a config flag, NOT state — pass it directly (not from the hook). When true, columns with a string header automatically render a GripVertical drag handle."
     },
     {
+      "name": "enableCellEditing",
+      "type": "boolean",
+      "default": "false",
+      "description": "Enables inline cell editing. This is a config flag, NOT state — pass it directly. Columns opt in individually with enableEditing: true. Requires rowSelectionKey (used as the row identity). See the 'Cell Editing' section for the full model."
+    },
+    {
+      "name": "onCellsEdited",
+      "type": "(payload: { data: TData[]; changes: CellEdit<TData>[] }) => void | Promise<void>",
+      "default": "undefined",
+      "description": "Called ONLY when the user saves the pending edits via DataTableEditBar. Receives the current page `data` with the changes applied (pass to your setData) and the `changes` diff (build your API request — each entry has rowId, columnId, previousValue, value, row). Return a Promise to make the save transactional: if it rejects, the pending edits are kept so the user can correct them (typically you also set cellErrors)."
+    },
+    {
+      "name": "onDiscardEdits",
+      "type": "() => void",
+      "default": "undefined",
+      "description": "Called when the user discards the pending edits via DataTableEditBar. Use it to clear consumer-owned state derived from the edits — in particular cellErrors set during a previous failed save, which would otherwise remain after the cells revert to their original values."
+    },
+    {
+      "name": "cellErrors",
+      "type": "Record<string, Record<string, string>>",
+      "default": "undefined",
+      "description": "Marks cells as invalid from outside. Shape: { [rowId]: { [columnId]: message } } where rowId comes from rowSelectionKey. Invalid cells are painted with the destructive color and show the message in a tooltip. The consumer owns this state (set it from your validation, clear it in onDiscardEdits / on successful save)."
+    },
+    {
       "name": "isLoading",
       "type": "boolean",
       "default": "false",
@@ -532,7 +614,12 @@
       "Use DateRangePicker for date range filters in DataTableToolbar — it replaces the manual Calendar+Popover pattern with a single component.",
       "Use DatePicker for single-date filters in DataTableToolbar.",
       "Use TimePicker for time-of-day filters in DataTableToolbar or filter panels.",
-      "Never use <input type=\"date\"> or <input type=\"time\"> directly — always use DatePicker, DateRangePicker, or TimePicker."
+      "Never use <input type=\"date\"> or <input type=\"time\"> directly — always use DatePicker, DateRangePicker, or TimePicker.",
+      "Enable cell editing with enableCellEditing on DataTable + enableEditing: true per column. Always include <DataTableEditBar /> and rowSelectionKey when editing is enabled.",
+      "Validate edits inside onCellsEdited; to block a save, set cellErrors and return a rejected Promise — the invalid cells turn destructive and the pending edits are kept.",
+      "Clear cellErrors in onDiscardEdits and after a successful save, so a stale error doesn't persist once the cell reverts to its original value.",
+      "Use the `changes` diff from onCellsEdited to build your API request (PATCH only what changed); use the `data` payload for an optimistic setData.",
+      "For editCell custom editors, style the control to blend into the cell (e.g. a SelectTrigger with className 'h-auto border-0 px-0 py-0 shadow-none focus:ring-0'), and pass the value explicitly to stage(value)."
     ],
     "dont": [
       "Don't use DataTable for simple static tables — use the Table component instead",
@@ -544,7 +631,10 @@
       "Don't show DataTablePagination while isLoading is true — it will show stale data",
       "Don't use a render function header on columns that should be sortable or reorderable — render function headers bypass the automatic sort button and drag handle. Use a plain string header instead.",
       "Don't create separate columns for closely related data (city + state + country) — use a multi-line cell instead",
-      "Don't hardcode color values — use semantic Tailwind classes (text-muted-foreground, text-destructive, etc.)"
+      "Don't hardcode color values — use semantic Tailwind classes (text-muted-foreground, text-destructive, etc.)",
+      "Don't enable editing on composite/display columns or any column without an accessorKey — the edit has nowhere to be written (a dev warning is emitted). Editing is single-field-per-column; give an editable sub-field its own column with an accessorKey.",
+      "Don't expect edits to apply immediately — all edits are pending until the user saves via DataTableEditBar (onCellsEdited only fires on save, never on Enter alone).",
+      "Don't rely on editCell's `value` for the committed value in synchronous editors (e.g. Select) — pass the chosen value explicitly to stage(value) to avoid stale-closure bugs."
     ]
   },
   "dependencies": [

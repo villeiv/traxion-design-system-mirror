@@ -12,7 +12,8 @@ export const DataTableAnatomy = `
   <DataTableSelectionBar>
     // Botones de acciones masivas (solo visible con filas seleccionadas)
   </DataTableSelectionBar>
+  <DataTableEditBar />
 </DataTable>
 \`\`\`
-Puedes añadir múltiples campos de filtro dentro de DataTableToolbar según sea necesario. El componente **DataTableViewOptions** debe colocarse dentro del toolbar para mantener una estructura consistente y mejorar la experiencia de usuario. **DataTableSelectionBar** se coloca después de DataTablePagination y solo aparece cuando hay filas seleccionadas — muestra el conteo de selección, botones de acciones masivas y un botón de deseleccionar.
+Puedes añadir múltiples campos de filtro dentro de DataTableToolbar según sea necesario. El componente **DataTableViewOptions** debe colocarse dentro del toolbar para mantener una estructura consistente y mejorar la experiencia de usuario. **DataTableSelectionBar** se coloca después de DataTablePagination y solo aparece cuando hay filas seleccionadas — muestra el conteo de selección, botones de acciones masivas y un botón de deseleccionar. **DataTableEditBar** se coloca al final y solo aparece cuando hay celdas con cambios sin guardar (edición en línea); muestra el conteo de cambios y los botones Guardar / Descartar.
 `;

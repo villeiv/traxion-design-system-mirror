@@ -5,7 +5,6 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  type ColumnDef,
   type ColumnFiltersState,
   type OnChangeFn,
   type PaginationState,
@@ -16,6 +15,7 @@ import {
   type ColumnOrderState,
   type Table,
   type Column,
+  type ColumnDef as TanStackColumnDef,
 } from "@tanstack/react-table"
 import {
   DndContext,
@@ -75,6 +75,140 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./Dropdown-menu"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./Tooltip"
+
+/* ─────────────────────────────────────────────
+ * 0. Public types — cell editing
+ * ───────────────────────────────────────────── */
+
+/**
+ * Column definition re-exported from TanStack Table, augmented with
+ * DataTable-specific column options.
+ *
+ * - `enableEditing` makes the column's cells editable (mirrors the
+ *   `enableSorting` / `enableHiding` column flags). Requires
+ *   `enableCellEditing` on `<DataTable>`.
+ * - `editCell` renders a custom editor instead of the default text input.
+ *
+ * Editable columns must use `accessorKey` (string) so the new value can be
+ * written back into the row when committed.
+ */
+export type ColumnDef<TData, TValue = unknown> = TanStackColumnDef<
+  TData,
+  TValue
+> & {
+  /** Enables inline editing for this column's cells. */
+  enableEditing?: boolean
+  /** Custom editor renderer. Defaults to a text Input when omitted. */
+  editCell?: (context: EditCellContext<TData, TValue>) => React.ReactNode
+}
+
+/** Context passed to a column's `editCell` renderer. */
+export interface EditCellContext<TData = unknown, TValue = unknown> {
+  /** Current draft value of the cell while editing. */
+  value: TValue
+  /** Updates the draft value (does not commit). */
+  onChange: (value: TValue) => void
+  /** Stages `value` as a pending (yellow) change, accumulated until saved via DataTableEditBar. Pass the value explicitly to avoid stale-closure issues. */
+  stage: (value: TValue) => void
+  /** Cancels the edit (Escape semantics): reverts to the value in `data`. */
+  cancel: () => void
+  /** The TanStack row being edited. */
+  row: Row<TData>
+  /** The TanStack column being edited. */
+  column: Column<TData, TValue>
+}
+
+/** A single committed cell change. */
+export interface CellEdit<TData = unknown> {
+  /** Row identifier from `rowSelectionKey`. */
+  rowId: string
+  /** Column id of the edited cell. */
+  columnId: string
+  /** Value before the edit. */
+  previousValue: unknown
+  /** New value. */
+  value: unknown
+  /** The full row object with the change applied. */
+  row: TData
+}
+
+/** Payload delivered to `onCellsEdited` when the pending edits are saved. */
+export interface CellsEditedPayload<TData = unknown> {
+  /** Current page data with the saved change(s) applied — pass to your `setData`. */
+  data: TData[]
+  /** The saved change(s) — use to build your API request. */
+  changes: CellEdit<TData>[]
+}
+
+/* ─────────────────────────────────────────────
+ * 0.1. Cell-editing helpers (internal)
+ * ───────────────────────────────────────────── */
+
+type PendingEdits = Record<string, Record<string, unknown>>
+
+/** Reads a value from a (possibly dotted) accessor path. */
+function getByPath(obj: unknown, path: string): unknown {
+  return path
+    .split(".")
+    .reduce<unknown>(
+      (acc, key) =>
+        acc == null ? acc : (acc as Record<string, unknown>)[key],
+      obj
+    )
+}
+
+/** Immutably sets a value at a (possibly dotted) accessor path, cloning along the way. */
+function setByPath<T>(obj: T, path: string, value: unknown): T {
+  const keys = path.split(".")
+  const clone = (
+    Array.isArray(obj) ? [...obj] : { ...(obj as object) }
+  ) as Record<string, unknown>
+  let cursor = clone
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i]
+    const next = cursor[key]
+    cursor[key] =
+      next == null ? {} : Array.isArray(next) ? [...next] : { ...(next as object) }
+    cursor = cursor[key] as Record<string, unknown>
+  }
+  cursor[keys[keys.length - 1]] = value
+  return clone as T
+}
+
+/** Removes a single cell entry from the pending-edits map, pruning empty rows. */
+function removePendingEdit(
+  prev: PendingEdits,
+  rowId: string,
+  columnId: string
+): PendingEdits {
+  if (!prev[rowId] || !(columnId in prev[rowId])) return prev
+  const rowEdits = { ...prev[rowId] }
+  delete rowEdits[columnId]
+  const next = { ...prev }
+  if (Object.keys(rowEdits).length === 0) {
+    delete next[rowId]
+  } else {
+    next[rowId] = rowEdits
+  }
+  return next
+}
+
+/** Resolves the accessor path used to write a committed value back into a row. */
+function resolveAccessorPath<TData>(
+  table: Table<TData>,
+  columnId: string
+): string {
+  const accessorKey = (
+    table.getColumn(columnId)?.columnDef as { accessorKey?: string } | undefined
+  )?.accessorKey
+  return accessorKey ?? columnId
+}
 
 /* ─────────────────────────────────────────────
  * 1. i18n strings
@@ -98,6 +232,11 @@ const DATA_TABLE_TEXTS = {
     bulkActions: "Bulk actions",
     selected: (count: number) => `${count} selected`,
     deselect: "Deselect",
+    unsavedChanges: "Unsaved changes",
+    changesMade: (count: number) =>
+      `${count} change${count === 1 ? "" : "s"} made`,
+    saveChanges: "Save changes",
+    discardChanges: "Discard changes",
   },
   es: {
     dragToReorder: "Arrastrar para reordenar columna",
@@ -116,6 +255,11 @@ const DATA_TABLE_TEXTS = {
     bulkActions: "Acciones en masa",
     selected: (count: number) => `${count} seleccionado(s)`,
     deselect: "Deseleccionar",
+    unsavedChanges: "Cambios sin guardar",
+    changesMade: (count: number) =>
+      `${count} cambio${count === 1 ? "" : "s"} realizado${count === 1 ? "" : "s"}`,
+    saveChanges: "Guardar cambios",
+    discardChanges: "Descartar cambios",
   },
 } as const
 
@@ -133,6 +277,15 @@ interface DataTableContextValue<TData = unknown> {
   clearSelection: () => void
   columnTitles: React.RefObject<Map<string, string>>
   registerColumnTitle: (id: string, title: string) => void
+  // Cell editing
+  enableCellEditing: boolean
+  getRowKey?: (row: TData) => string
+  pendingEdits: PendingEdits
+  pendingEditCount: number
+  cellErrors?: Record<string, Record<string, string>>
+  stageCellEdit: (rowId: string, columnId: string, value: unknown) => void
+  saveCellEdits: () => Promise<void>
+  discardCellEdits: () => void
 }
 
 const DataTableContext = React.createContext<DataTableContextValue | null>(null)
@@ -453,14 +606,124 @@ export function DataTablePagination<TData>({
 DataTablePagination.displayName = "DataTablePagination"
 
 /* ─────────────────────────────────────────────
+ * 5.5. CellEditor (internal)
+ * ───────────────────────────────────────────── */
+
+interface CellEditorProps<TData, TValue> {
+  initialValue: TValue
+  editCell?: (context: EditCellContext<TData, TValue>) => React.ReactNode
+  row: Row<TData>
+  column: Column<TData, TValue>
+  onStage: (value: unknown) => void
+  onCancel: () => void
+}
+
+/**
+ * Mounted only while a cell is being edited. Owns the draft value locally so
+ * keystrokes don't re-render the whole table body. The `actionRef` guard
+ * prevents the trailing blur (fired when the editor unmounts after an explicit
+ * Enter/Escape/custom action) from double-committing the change.
+ */
+function CellEditor<TData, TValue>({
+  initialValue,
+  editCell,
+  row,
+  column,
+  onStage,
+  onCancel,
+}: CellEditorProps<TData, TValue>) {
+  const [draft, setDraft] = React.useState<TValue>(initialValue)
+  const actionRef = React.useRef<"stage" | "cancel" | null>(null)
+
+  const stage = React.useCallback(
+    (value: unknown) => {
+      actionRef.current = "stage"
+      onStage(value)
+    },
+    [onStage]
+  )
+  const cancel = React.useCallback(() => {
+    actionRef.current = "cancel"
+    onCancel()
+  }, [onCancel])
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      stage(draft)
+    } else if (event.key === "Escape") {
+      event.preventDefault()
+      cancel()
+    }
+  }
+
+  const handleBlur = () => {
+    // An explicit action already committed/cancelled — ignore the unmount blur.
+    if (actionRef.current) {
+      actionRef.current = null
+      return
+    }
+    stage(draft)
+  }
+
+  // Custom editors fully control commit via stage/cancel. We attach no wrapper
+  // key/blur handlers here: editors that render portals (e.g. Select) would
+  // otherwise commit prematurely when the dropdown opens/closes.
+  if (editCell) {
+    return (
+      <>
+        {editCell({
+          value: draft,
+          onChange: setDraft,
+          stage: (value) => stage(value),
+          cancel,
+          row,
+          column,
+        })}
+      </>
+    )
+  }
+
+  // Bare input styled to blend into the cell — it should look like the text is
+  // being edited in place, not like a separate form field. The cell's primary
+  // ring (applied while editing) provides the visible affordance.
+  return (
+    <input
+      autoFocus
+      value={draft == null ? "" : String(draft)}
+      onChange={(event) => setDraft(event.target.value as unknown as TValue)}
+      onKeyDown={handleKeyDown}
+      onBlur={handleBlur}
+      onFocus={(event) => event.target.select()}
+      className="m-0 w-full border-0 bg-transparent p-0 text-sm text-foreground outline-none focus:outline-none focus:ring-0"
+    />
+  )
+}
+
+CellEditor.displayName = "CellEditor"
+
+/* ─────────────────────────────────────────────
  * 6. DataTableContent (NEW)
  * ───────────────────────────────────────────── */
 
 export function DataTableContent() {
-  const { table, isLoading, loadingRowCount, emptyState } =
-    useDataTableInstance()
+  const {
+    table,
+    isLoading,
+    loadingRowCount,
+    emptyState,
+    enableCellEditing,
+    getRowKey,
+    pendingEdits,
+    cellErrors,
+    stageCellEdit,
+  } = useDataTableInstance()
   const language = useDesignSystemLanguage()
   const t = DATA_TABLE_TEXTS[language]
+
+  // Ephemeral editing UI state — only one cell is selected/editing at a time.
+  const [selectedKey, setSelectedKey] = React.useState<string | null>(null)
+  const [editingKey, setEditingKey] = React.useState<string | null>(null)
 
   if (isLoading) {
     return (
@@ -524,18 +787,122 @@ export function DataTableContent() {
               </TableCell>
             </TableRow>
           ) : (
-            rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
+            rows.map((row) => {
+              const rowId =
+                enableCellEditing && getRowKey ? getRowKey(row.original) : row.id
+              return (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    const columnId = cell.column.id
+                    const columnDef = cell.column.columnDef as ColumnDef<
+                      unknown,
+                      unknown
+                    >
+                    const editable =
+                      enableCellEditing && Boolean(columnDef.enableEditing)
+
+                    if (!editable) {
+                      return (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      )
+                    }
+
+                    const cellKey = `${rowId}:${columnId}`
+                    const errorMessage = cellErrors?.[rowId]?.[columnId]
+                    const hasPending = Boolean(
+                      pendingEdits[rowId] && columnId in pendingEdits[rowId]
+                    )
+                    const pendingValue = hasPending
+                      ? pendingEdits[rowId][columnId]
+                      : undefined
+                    const selected = selectedKey === cellKey
+                    const editing = editingKey === cellKey
+                    const dataValue = cell.getValue()
+
+                    const stateClass = errorMessage
+                      ? "ring-1 ring-inset ring-destructive bg-destructive/10"
+                      : editing || selected
+                        ? "ring-1 ring-inset ring-primary bg-primary/10"
+                        : hasPending
+                          ? "ring-1 ring-inset ring-primary/40 bg-primary/5"
+                          : ""
+
+                    const startEdit = () => {
+                      setSelectedKey(cellKey)
+                      setEditingKey(cellKey)
+                    }
+
+                    const display = hasPending
+                      ? String(pendingValue ?? "")
+                      : flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )
+
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        tabIndex={editing ? -1 : 0}
+                        onClick={() => {
+                          if (!editing) setSelectedKey(cellKey)
+                        }}
+                        onDoubleClick={startEdit}
+                        onKeyDown={(event) => {
+                          if (editing) return
+                          if (event.key === "Enter" || event.key === "F2") {
+                            event.preventDefault()
+                            startEdit()
+                          } else if (event.key === "Escape") {
+                            setSelectedKey(null)
+                          }
+                        }}
+                        className={cn(
+                          "cursor-pointer select-none outline-none transition-shadow",
+                          stateClass
+                        )}
+                      >
+                        {editing ? (
+                          <CellEditor
+                            key={cellKey}
+                            initialValue={hasPending ? pendingValue : dataValue}
+                            editCell={columnDef.editCell}
+                            row={row}
+                            column={cell.column}
+                            onStage={(value) => {
+                              // Enter and blur both stage the change (yellow);
+                              // it's applied only when saved via DataTableEditBar.
+                              stageCellEdit(rowId, columnId, value)
+                              setEditingKey(null)
+                              setSelectedKey(null)
+                            }}
+                            onCancel={() => setEditingKey(null)}
+                          />
+                        ) : errorMessage ? (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="block w-full">{display}</span>
+                              </TooltipTrigger>
+                              <TooltipContent>{errorMessage}</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        ) : (
+                          display
+                        )}
+                      </TableCell>
+                    )
+                  })}
+                </TableRow>
+              )
+            })
           )}
         </TableBody>
       </UITable>
@@ -621,6 +988,99 @@ export function DataTableSelectionBar({
 DataTableSelectionBar.displayName = "DataTableSelectionBar"
 
 /* ─────────────────────────────────────────────
+ * 6.6. DataTableEditBar
+ * ───────────────────────────────────────────── */
+
+export type DataTableEditBarProps = React.HTMLAttributes<HTMLDivElement>
+
+/**
+ * Fixed bottom bar that appears when there are pending (yellow) cell edits.
+ * Shows the count of unsaved changes and Save / Discard actions. "Save changes"
+ * commits all pending edits via `onCellsEdited({ trigger: "save" })`; the bar
+ * stays open if that callback rejects (e.g. validation failed). Place inside
+ * `<DataTable>` after `<DataTablePagination>`.
+ */
+export function DataTableEditBar({
+  className,
+  ...props
+}: DataTableEditBarProps) {
+  const { pendingEditCount, saveCellEdits, discardCellEdits } =
+    useDataTableInstance()
+  const language = useDesignSystemLanguage()
+  const t = DATA_TABLE_TEXTS[language]
+  const [isSaving, setIsSaving] = React.useState(false)
+
+  if (pendingEditCount === 0) return null
+
+  const handleSave = async () => {
+    setIsSaving(true)
+    try {
+      await saveCellEdits()
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  return (
+    <div
+      className={cn(
+        "fixed z-50",
+        "bottom-2 left-2 right-2 rounded-lg border sm:bottom-6 sm:left-1/2 sm:right-auto sm:-translate-x-1/2",
+        "bg-secondary px-4 py-3 shadow-lg",
+        "animate-in fade-in-0 slide-in-from-bottom-4 duration-300",
+        className
+      )}
+      role="toolbar"
+      aria-label={t.unsavedChanges}
+      {...props}
+    >
+      {/* Mobile: two rows / Desktop: single row */}
+      <div className="flex items-center justify-center sm:hidden">
+        <span className="text-sm font-medium text-secondary-foreground">
+          {t.changesMade(pendingEditCount)}
+        </span>
+      </div>
+      <div className="mt-2 flex items-center justify-center gap-2 sm:hidden">
+        <Button size="sm" onClick={handleSave} disabled={isSaving}>
+          {t.saveChanges}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={discardCellEdits}
+          disabled={isSaving}
+        >
+          {t.discardChanges}
+        </Button>
+      </div>
+
+      {/* Desktop: single row */}
+      <div className="hidden sm:flex sm:items-center sm:gap-4">
+        <span className="text-sm font-medium text-secondary-foreground whitespace-nowrap">
+          {t.changesMade(pendingEditCount)}
+        </span>
+        <div className="h-4 w-px bg-border" />
+        <div className="flex items-center gap-2">
+          <Button size="sm" onClick={handleSave} disabled={isSaving}>
+            {t.saveChanges}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={discardCellEdits}
+            disabled={isSaving}
+          >
+            {t.discardChanges}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+DataTableEditBar.displayName = "DataTableEditBar"
+
+/* ─────────────────────────────────────────────
  * 7. DataTable (main component)
  * ───────────────────────────────────────────── */
 
@@ -643,6 +1103,30 @@ export interface DataTableProps<TData, TValue = unknown> {
   columnOrder?: ColumnOrderState
   onColumnOrderChange?: OnChangeFn<ColumnOrderState>
   enableColumnReordering?: boolean
+  /**
+   * Enables inline cell editing. Columns opt in with `enableEditing: true`.
+   * Requires `rowSelectionKey` (used as the row identity). Default false.
+   */
+  enableCellEditing?: boolean
+  /**
+   * Called when the user saves the pending edits via DataTableEditBar. Receives
+   * the updated page `data` (pass to your setData) and the `changes` diff (build
+   * your API request). Return a Promise to make the save transactional — if it
+   * rejects, the pending edits are kept so the user can correct them.
+   */
+  onCellsEdited?: (payload: CellsEditedPayload<TData>) => void | Promise<void>
+  /**
+   * Called when the user discards the pending edits via DataTableEditBar. Use it
+   * to clear any consumer-owned state derived from the edits — in particular
+   * `cellErrors` set during a previous failed save, which would otherwise remain
+   * after the cells revert to their original values.
+   */
+  onDiscardEdits?: () => void
+  /**
+   * Marks cells as invalid from outside. Shape: { [rowId]: { [columnId]: message } }.
+   * Invalid cells are painted with the destructive color and show the message in a tooltip.
+   */
+  cellErrors?: Record<string, Record<string, string>>
   className?: string
   emptyState?: React.ReactNode
   isLoading?: boolean
@@ -669,18 +1153,22 @@ export function DataTable<TData, TValue = unknown>({
   columnOrder: controlledColumnOrder,
   onColumnOrderChange,
   enableColumnReordering = false,
+  enableCellEditing = false,
+  onCellsEdited,
+  onDiscardEdits,
+  cellErrors,
   className,
   emptyState,
   isLoading = false,
   loadingRowCount = 5,
   children,
 }: DataTableProps<TData, TValue>) {
-  // Validate: rowSelectionKey is required when enableRowSelection is true
-  if (enableRowSelection && !rowSelectionKey) {
+  // Validate: rowSelectionKey is required when selection or cell editing is enabled
+  if ((enableRowSelection || enableCellEditing) && !rowSelectionKey) {
     throw new Error(
-      "DataTable: `rowSelectionKey` is required when `enableRowSelection` is true. " +
-        "Provide a function that returns a unique identifier for each row, " +
-        "e.g. rowSelectionKey={(row) => String(row.id)}"
+      "DataTable: `rowSelectionKey` is required when `enableRowSelection` or " +
+        "`enableCellEditing` is true. Provide a function that returns a unique " +
+        "identifier for each row, e.g. rowSelectionKey={(row) => String(row.id)}"
     )
   }
 
@@ -701,6 +1189,10 @@ export function DataTable<TData, TValue = unknown>({
     React.useState<VisibilityState>({})
   const [internalColumnOrder, setInternalColumnOrder] =
     React.useState<ColumnOrderState>([])
+
+  // Pending (yellow) cell edits accumulated until saved via DataTableEditBar.
+  // Kept internal — the consumer only deals with committed results via onCellsEdited.
+  const [pendingEdits, setPendingEdits] = React.useState<PendingEdits>({})
 
   // Drag-and-drop state
   const [activeColumnId, setActiveColumnId] = React.useState<string | null>(
@@ -845,6 +1337,107 @@ export function DataTable<TData, TValue = unknown>({
     columnTitles.current.set(id, title)
   }, [])
 
+  /* ── Cell editing handlers ── */
+
+  // Enter or blur: stage the change as a pending (yellow) edit. All edits go
+  // through DataTableEditBar — nothing reaches `data` until the user saves.
+  const stageCellEdit = React.useCallback(
+    (rowId: string, columnId: string, value: unknown) => {
+      if (!rowSelectionKey) return
+      const rowIndex = data.findIndex((row) => rowSelectionKey(row) === rowId)
+      if (rowIndex === -1) return
+      const previousValue = getByPath(
+        data[rowIndex],
+        resolveAccessorPath(table, columnId)
+      )
+      setPendingEdits((prev) => {
+        // Editing back to the original value clears the pending mark.
+        if (Object.is(previousValue, value)) {
+          return removePendingEdit(prev, rowId, columnId)
+        }
+        return {
+          ...prev,
+          [rowId]: { ...(prev[rowId] ?? {}), [columnId]: value },
+        }
+      })
+    },
+    [data, rowSelectionKey, table]
+  )
+
+  const discardCellEdits = React.useCallback(() => {
+    setPendingEdits({})
+    onDiscardEdits?.()
+  }, [onDiscardEdits])
+
+  // Save changes: commit every pending edit at once. Transactional — if
+  // onCellsEdited rejects, the buffer is preserved so the user can correct.
+  const saveCellEdits = React.useCallback(async () => {
+    if (!rowSelectionKey) return
+    const changes: CellEdit<TData>[] = []
+    let newData = data
+    for (const [rowId, cols] of Object.entries(pendingEdits)) {
+      const rowIndex = newData.findIndex((row) => rowSelectionKey(row) === rowId)
+      if (rowIndex === -1) continue
+      for (const [columnId, value] of Object.entries(cols)) {
+        const path = resolveAccessorPath(table, columnId)
+        const previousValue = getByPath(newData[rowIndex], path)
+        const updatedRow = setByPath(newData[rowIndex], path, value)
+        newData = newData === data ? [...data] : newData
+        newData[rowIndex] = updatedRow
+        changes.push({ rowId, columnId, previousValue, value, row: updatedRow })
+      }
+    }
+    if (changes.length === 0) return
+    try {
+      await onCellsEdited?.({ data: newData, changes })
+      setPendingEdits({})
+    } catch {
+      // Keep the pending buffer so the user can fix invalid cells
+      // (the consumer can flag them via the `cellErrors` prop).
+    }
+  }, [data, pendingEdits, rowSelectionKey, table, onCellsEdited])
+
+  const pendingEditCount = React.useMemo(
+    () =>
+      Object.values(pendingEdits).reduce(
+        (sum, cols) => sum + Object.keys(cols).length,
+        0
+      ),
+    [pendingEdits]
+  )
+
+  // Dev guard: editing writes the new value to the column's `accessorKey`. A
+  // column with `enableEditing` but no `accessorKey` (e.g. a composite/display
+  // column) has nowhere to write — the edit would silently fail to update the
+  // data — so warn the developer once per offending column.
+  const warnedEditableColumnsRef = React.useRef<Set<string>>(new Set())
+  React.useEffect(() => {
+    if (!enableCellEditing) return
+    const isProduction =
+      typeof process !== "undefined" &&
+      process.env &&
+      process.env.NODE_ENV === "production"
+    if (isProduction) return
+    for (const column of columns as Array<{
+      id?: string
+      accessorKey?: string
+      enableEditing?: boolean
+    }>) {
+      if (!column.enableEditing) continue
+      if (typeof column.accessorKey === "string") continue
+      const key = column.accessorKey ?? column.id ?? "(unknown)"
+      if (warnedEditableColumnsRef.current.has(key)) continue
+      warnedEditableColumnsRef.current.add(key)
+      console.warn(
+        `DataTable: column "${key}" has \`enableEditing\` but no \`accessorKey\`. ` +
+          `Cell editing writes the new value to the column's \`accessorKey\`, so ` +
+          `without it the edit has nowhere to be written and will not update your ` +
+          `data. Add an \`accessorKey\`, or remove \`enableEditing\` from this column ` +
+          `(composite/display columns are not editable in the single-field model).`
+      )
+    }
+  }, [columns, enableCellEditing])
+
   const contextValue: DataTableContextValue<TData> = React.useMemo(
     () => ({
       table,
@@ -856,8 +1449,16 @@ export function DataTable<TData, TValue = unknown>({
       clearSelection,
       columnTitles,
       registerColumnTitle,
+      enableCellEditing,
+      getRowKey: rowSelectionKey,
+      pendingEdits,
+      pendingEditCount,
+      cellErrors,
+      stageCellEdit,
+      saveCellEdits,
+      discardCellEdits,
     }),
-    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering, selectedRowsCount, clearSelection, registerColumnTitle]
+    [table, isLoading, loadingRowCount, emptyState, enableColumnReordering, selectedRowsCount, clearSelection, registerColumnTitle, enableCellEditing, rowSelectionKey, pendingEdits, pendingEditCount, cellErrors, stageCellEdit, saveCellEdits, discardCellEdits]
   )
 
   // Only enable DndContext after hydration AND if prop is true

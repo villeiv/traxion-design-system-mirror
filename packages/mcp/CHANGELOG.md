@@ -1,5 +1,10 @@
 # Changelog
 
+### [0.16.0] - 2026-06-09
+
+### Changed
+- **DataTable.json**: documentada la edición de celdas en línea. Nuevas props `enableCellEditing`, `onCellsEdited`, `onDiscardEdits` y `cellErrors`; nuevo sub-componente `DataTableEditBar`; tipos `EditCellContext`/`CellEdit`/`CellsEditedPayload`. Añadida la sección **Cell Editing** (cómo activar, flags por columna `enableEditing`/`editCell`, modelo de interacción, tabla del contexto de `editCell`, validación con `cellErrors`, ejemplo completo y restricciones: un campo por columna, `accessorKey` requerido con warning en dev, y celdas compuestas no editables). Añadido `DataTableEditBar` a la anatomía/sub-componentes y recomendaciones do/don't. `packageVersion` actualizado a `0.16.0`.
+
 ### [0.15.0] - 2026-06-08
 
 ### Changed

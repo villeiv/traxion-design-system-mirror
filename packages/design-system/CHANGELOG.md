@@ -1,5 +1,17 @@
 # Changelog
 
+### [0.16.0] - 2026-06-09
+
+### Added
+- **DataTable**: edición de celdas en línea, activable con la prop `enableCellEditing` (por defecto desactivada). Las columnas habilitan la edición con `enableEditing: true` a nivel de columna (al mismo nivel que `enableSorting`/`enableHiding`). Requiere `rowSelectionKey` como identidad de fila.
+- **DataTable**: editor de texto por defecto (edición en la propia celda) y editor personalizado por columna con `editCell` (recibe `{ value, onChange, stage, cancel, row, column }`). El tipo `ColumnDef` re-exportado se amplió con `enableEditing` y `editCell`.
+- **DataTable**: nuevo sub-componente **`DataTableEditBar`** — barra inferior fija que aparece cuando hay cambios sin guardar; muestra el conteo ("N cambios realizados") y los botones Guardar / Descartar.
+- **DataTable**: nuevas props `onCellsEdited(payload)` (se llama al guardar; recibe `{ data, changes }`, soporta `Promise` para guardado transaccional), `onDiscardEdits()` (para limpiar estado del consumidor al descartar) y `cellErrors` (marca celdas inválidas desde fuera, con color destructive y tooltip).
+- Nuevos tipos exportados: `EditCellContext`, `CellEdit`, `CellsEditedPayload`, `DataTableEditBarProps`.
+
+### Notes
+- Modelo de edición: Enter o salir de una celda deja el cambio pendiente (resaltado `primary` tenue); Escape cancela. Los cambios se acumulan y solo se aplican al pulsar "Guardar cambios" en `DataTableEditBar`. La edición escribe en el `accessorKey` de la columna, por lo que las columnas editables deben tener `accessorKey` (se emite un warning en desarrollo si falta). Las celdas compuestas (varios datos sin un `accessorKey` único) no son editables en este modelo.
+
 ### [0.15.0] - 2026-06-08
 
 ### Added

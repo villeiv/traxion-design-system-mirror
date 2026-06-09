@@ -44,5 +44,7 @@ export * from "./components/Tooltip";
 export * from "./lib/use-data-table";
 export * from "./lib/use-debounced-callback";
 
-// Re-export TanStack Table types so consumers never need @tanstack/react-table
-export type { ColumnDef, Row, Column } from "@tanstack/react-table";
+// Re-export TanStack Table types so consumers never need @tanstack/react-table.
+// ColumnDef is the DataTable-augmented version (adds enableEditing / editCell),
+// re-exported from ./components/DataTable via `export *` above.
+export type { Row, Column } from "@tanstack/react-table";

@@ -21,6 +21,8 @@ import DataTableFiltering from "./sources/DataTable.filtering";
 import DataTableFilteringCode from "./sources/DataTable.filtering?raw";
 import DataTableAllFunctionality from "./sources/DataTable.allFunctionality";
 import DataTableAllFunctionalityCode from "./sources/DataTable.allFunctionality?raw";
+import DataTableEditable from "./sources/DataTable.editable";
+import DataTableEditableCode from "./sources/DataTable.editable?raw";
 
 export default {
     title: "DataTable",
@@ -168,6 +170,32 @@ export const Filtering = {
     },
 }
 
+export const Editable = {
+    name: "Celdas editables",
+    render: DataTableEditable,
+    parameters: {
+        docs: {
+            source: { code: DataTableEditableCode },
+            description: {
+                story:
+                    "Ejemplo de **DataTable** con edición de celdas en línea. Se activa con `enableCellEditing` " +
+                    "(requiere `rowSelectionKey`), y cada columna habilita la edición con `enableEditing: true` " +
+                    "(al mismo nivel que `enableSorting`/`enableHiding`).\n\n" +
+                    "**Interacción:** doble clic en una celda para editar. Tanto **Enter** como **salir de la celda** " +
+                    "dejan el cambio *pendiente* (resaltado primary tenue); **Escape** cancela. Los cambios se acumulan " +
+                    "y solo se aplican al pulsar **Guardar cambios** en la **DataTableEditBar**, que llama a `onCellsEdited` " +
+                    "con la página ya actualizada (`data`) y el diff (`changes`).\n\n" +
+                    "**Editor por defecto vs custom:** las columnas Nombre y Correo usan el editor de texto por defecto " +
+                    "(se edita en la propia celda); la columna Rol usa un editor custom con `editCell` (un `Select` " +
+                    "estilizado para mezclarse con la celda).\n\n" +
+                    "**Validación externa:** el correo se valida al guardar; si es inválido, la celda se marca con color " +
+                    "destructive vía `cellErrors` y el guardado se conserva (transaccional). `onDiscardEdits` permite " +
+                    "limpiar esos errores al descartar.",
+            },
+        },
+    },
+};
+
 export const AllFunctionality = {
     name: "Todas las funcionalidades",
     render: DataTableAllFunctionality,
@@ -178,8 +206,9 @@ export const AllFunctionality = {
                 story: "Ejemplo completo de **DataTable** combinando todas las funcionalidades disponibles: " +
                     "selección de filas con checkboxes y acción masiva, ordenamiento por columnas, botones de acción con variantes " +
                     "(editar/eliminar), filtrado con búsqueda debounced, visibilidad de columnas configurada dentro del " +
-                    "toolbar, reordenamiento de columnas mediante drag-and-drop, estado de carga con skeleton y " +
-                    "paginación del lado del servidor.\n\n" +
+                    "toolbar, reordenamiento de columnas mediante drag-and-drop, edición de celdas en línea " +
+                    "(Email con editor de texto, Rol con un Select y Nacimiento con un editor custom de fecha " +
+                    "Popover + Calendar), estado de carga con skeleton y paginación del lado del servidor.\n\n" +
                     "**Nota sobre contenido mixto:** La columna 'Ubicación' utiliza contenido mixto (múltiples líneas de texto) " +
                     "porque combina información relacionada (ciudad, estado, país) que es útil tener visible pero no justifica " +
                     "crear columnas separadas. Usa este patrón cuando la información sea un 'nice-to-have' que no amerita " +

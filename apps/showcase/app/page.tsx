@@ -24,8 +24,9 @@ import {
     DatePicker, DateRangePicker, DateTimePicker, DateTimeRangePicker, TimePicker,
     type DateRange,
     StatCard, FileDropZone, NoDataMessage, InlineLoader, FullPageOverlayLoader, SortableBoard,
-    DataTable, DataTablePagination, DataTableSelectionBar, DataTableToolbar, DataTableViewOptions, DataTableContent,
+    DataTable, DataTablePagination, DataTableSelectionBar, DataTableToolbar, DataTableViewOptions, DataTableContent, DataTableEditBar,
     type ColumnDef,
+    type CellsEditedPayload,
     LanguageProvider,
     Chat, ChatTrigger, ChatPanel, ChatHeader, ChatMessages, ChatDateSeparator,
     ChatBubble, ChatBubbleAvatar, ChatBubbleMessage, ChatBubbleTimestamp, ChatInput, ChatSendButton,
@@ -1510,6 +1511,13 @@ export default function DesignSystemShowcase() {
                     <DataTableURLDemo />
                 </Suspense>
             </Section>
+            {/* DataTable — Celdas editables */}
+            <Section
+                title="DataTable — Celdas editables"
+                description="Edición de celdas en línea. Doble clic en una celda para editar; Enter o salir deja el cambio pendiente (primary tenue), Escape cancela. Los cambios se acumulan y se aplican al pulsar 'Guardar cambios'. El monto se valida al guardar: si es inválido, la celda se marca en destructive."
+            >
+                <DataTableEditableDemo />
+            </Section>
             {/* Loaders */}
             <Section
                 title="Loaders"
@@ -2064,7 +2072,7 @@ function DataTableURLDemo() {
                 <DataTableSelectionBar>
                     <Button variant="destructive" size="sm" onClick={() =>{
                         const selectedIds = Object.keys(tableState.selectedRows);
-                        alert(`Eliminar envíos con IDs: ${selectedIds.join(", ")}`) 
+                        alert(`Eliminar envíos con IDs: ${selectedIds.join(", ")}`)
                     }}>
                         <Trash2 className="mr-1 h-4 w-4" />
                         Eliminar
@@ -2079,5 +2087,127 @@ function DataTableURLDemo() {
                 </DataTableSelectionBar>
             </DataTable>
         </div>
+    )
+}
+
+// DataTable — Editable cells demo
+function DataTableEditableDemo() {
+    const [shipments, setShipments] = useState<Shipment[]>(sampleShipments)
+    const [cellErrors, setCellErrors] = useState<Record<string, Record<string, string>>>({})
+
+    const tableState = useDataTable<Shipment>({ pageSize: 5 })
+
+    // Paginación simulada del lado del cliente (en producción la haría tu API).
+    const { pageData, pageCount } = React.useMemo(() => {
+        const { pageIndex, pageSize } = tableState.pagination
+        const start = pageIndex * pageSize
+        return {
+            pageData: shipments.slice(start, start + pageSize),
+            pageCount: Math.ceil(shipments.length / pageSize),
+        }
+    }, [shipments, tableState.pagination])
+
+    // enableEditing por columna; la edición escribe en el accessorKey de la columna.
+    const columns: ColumnDef<Shipment>[] = [
+        {
+            accessorKey: "tracking",
+            header: "Tracking #",
+            enableEditing: true,
+            cell: ({ row }) => (
+                <span className="font-mono text-sm">{String(row.getValue("tracking"))}</span>
+            ),
+        },
+        { accessorKey: "origin", header: "Origen" },
+        { accessorKey: "destination", header: "Destino" },
+        {
+            // Editor custom: Select estilizado para mezclarse con la celda.
+            accessorKey: "status",
+            header: "Estado",
+            enableEditing: true,
+            editCell: ({ value, stage, cancel }) => (
+                <Select
+                    defaultOpen
+                    value={value as string}
+                    onValueChange={(v) => stage(v)}
+                    onOpenChange={(open) => {
+                        if (!open) cancel()
+                    }}
+                >
+                    <SelectTrigger className="h-auto border-0 px-0 py-0 shadow-none focus:ring-0">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="pending">pending</SelectItem>
+                        <SelectItem value="in-transit">in-transit</SelectItem>
+                        <SelectItem value="delivered">delivered</SelectItem>
+                        <SelectItem value="delayed">delayed</SelectItem>
+                    </SelectContent>
+                </Select>
+            ),
+        },
+        {
+            accessorKey: "amount",
+            header: "Monto (USD)",
+            enableEditing: true,
+            cell: ({ row }) => `$${Number(row.getValue("amount")).toLocaleString()}`,
+        },
+    ]
+
+    const handleCellsEdited = async ({ changes }: CellsEditedPayload<Shipment>) => {
+        // Validación del consumidor: monto numérico > 0 y tracking no vacío.
+        const errors: Record<string, Record<string, string>> = {}
+        for (const change of changes) {
+            if (change.columnId === "amount") {
+                const n = Number(change.value)
+                if (Number.isNaN(n) || n <= 0) {
+                    const rowErrors = errors[change.rowId] ?? {}
+                    rowErrors.amount = "Monto inválido"
+                    errors[change.rowId] = rowErrors
+                }
+            }
+            if (change.columnId === "tracking" && !String(change.value).trim()) {
+                const rowErrors = errors[change.rowId] ?? {}
+                rowErrors.tracking = "El tracking es obligatorio"
+                errors[change.rowId] = rowErrors
+            }
+        }
+        if (Object.keys(errors).length > 0) {
+            setCellErrors(errors)
+            return Promise.reject(new Error("Hay celdas inválidas"))
+        }
+        // Aplicamos los cambios al dataset completo usando el diff `changes`
+        // (en producción aquí persistirías solo lo que cambió a tu API).
+        setShipments((prev) =>
+            prev.map((s) => {
+                const rowChanges = changes.filter((c) => c.rowId === s.id)
+                if (rowChanges.length === 0) return s
+                const updated: Shipment = { ...s }
+                for (const c of rowChanges) {
+                    if (c.columnId === "amount") updated.amount = Number(c.value)
+                    else if (c.columnId === "status") updated.status = c.value as Shipment["status"]
+                    else if (c.columnId === "tracking") updated.tracking = String(c.value)
+                }
+                return updated
+            })
+        )
+        setCellErrors({})
+    }
+
+    return (
+        <DataTable
+            data={pageData}
+            columns={columns}
+            pageCount={pageCount}
+            {...tableState}
+            enableCellEditing
+            rowSelectionKey={(row) => row.id}
+            onCellsEdited={handleCellsEdited}
+            onDiscardEdits={() => setCellErrors({})}
+            cellErrors={cellErrors}
+        >
+            <DataTableContent />
+            <DataTablePagination />
+            <DataTableEditBar />
+        </DataTable>
     )
 }
