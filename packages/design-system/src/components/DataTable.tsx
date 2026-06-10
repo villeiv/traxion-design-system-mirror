@@ -833,7 +833,8 @@ export function DataTableContent() {
                         ? "ring-1 ring-inset ring-primary bg-primary/10"
                         : hasPending
                           ? "ring-1 ring-inset ring-primary/40 bg-primary/5"
-                          : ""
+                          : // Idle: hint editability on hover (accent box), lowest priority
+                            "hover:bg-accent/60 hover:ring-1 hover:ring-inset hover:ring-accent-foreground/20"
 
                     const startEdit = () => {
                       setSelectedKey(cellKey)
