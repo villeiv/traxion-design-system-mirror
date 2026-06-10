@@ -725,6 +725,28 @@ export function DataTableContent() {
   const [selectedKey, setSelectedKey] = React.useState<string | null>(null)
   const [editingKey, setEditingKey] = React.useState<string | null>(null)
 
+  // Keyboard navigation: refs to editable cells so arrows can move DOM focus.
+  const cellRefs = React.useRef(new Map<string, HTMLTableCellElement>())
+  React.useEffect(() => {
+    // Move focus to the selected cell — but not while editing (the editor owns focus).
+    if (!selectedKey || editingKey) return
+    cellRefs.current.get(selectedKey)?.focus()
+  }, [selectedKey, editingKey])
+
+  // Clear the selection when the user clicks/taps outside the table. Disabled while
+  // editing so clicks inside portal editors (Select, Calendar) don't deselect the cell.
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  React.useEffect(() => {
+    if (!selectedKey || editingKey) return
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setSelectedKey(null)
+      }
+    }
+    document.addEventListener("pointerdown", handlePointerDown)
+    return () => document.removeEventListener("pointerdown", handlePointerDown)
+  }, [selectedKey, editingKey])
+
   if (isLoading) {
     return (
       <div className="rounded-md border">
@@ -761,8 +783,48 @@ export function DataTableContent() {
   const rows = table.getRowModel().rows
   const showEmptyState = rows.length === 0
 
+  // Navigable grid for keyboard navigation: editable visible columns × current page rows.
+  const editableColumnIds = enableCellEditing
+    ? table
+        .getVisibleLeafColumns()
+        .filter((column) =>
+          Boolean(
+            (column.columnDef as ColumnDef<unknown, unknown>).enableEditing
+          )
+        )
+        .map((column) => column.id)
+    : []
+  const rowKeys =
+    enableCellEditing && getRowKey
+      ? rows.map((row) => getRowKey(row.original))
+      : []
+  // The first editable cell is tabbable when nothing is selected (roving tabindex entry point).
+  const firstCellKey =
+    rowKeys.length > 0 && editableColumnIds.length > 0
+      ? `${rowKeys[0]}:${editableColumnIds[0]}`
+      : null
+
+  const moveSelection = (
+    currentKey: string,
+    direction: "up" | "down" | "left" | "right"
+  ) => {
+    const separator = currentKey.lastIndexOf(":")
+    const currentRowKey = currentKey.slice(0, separator)
+    const currentColumnId = currentKey.slice(separator + 1)
+    let rowIndex = rowKeys.indexOf(currentRowKey)
+    let columnIndex = editableColumnIds.indexOf(currentColumnId)
+    if (rowIndex === -1 || columnIndex === -1) return
+    if (direction === "up") rowIndex = Math.max(0, rowIndex - 1)
+    else if (direction === "down")
+      rowIndex = Math.min(rowKeys.length - 1, rowIndex + 1)
+    else if (direction === "left") columnIndex = Math.max(0, columnIndex - 1)
+    else columnIndex = Math.min(editableColumnIds.length - 1, columnIndex + 1)
+    // The focus effect moves DOM focus to the newly selected cell.
+    setSelectedKey(`${rowKeys[rowIndex]}:${editableColumnIds[columnIndex]}`)
+  }
+
   return (
-    <div className="rounded-md border">
+    <div ref={containerRef} className="rounded-md border">
       <UITable>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -848,21 +910,56 @@ export function DataTableContent() {
                           cell.getContext()
                         )
 
+                    // Roving tabindex: only the selected cell is tabbable; if nothing
+                    // is selected, the first editable cell is the entry point.
+                    const tabbable =
+                      !editing &&
+                      (selected ||
+                        (selectedKey === null && cellKey === firstCellKey))
+
                     return (
                       <TableCell
                         key={cell.id}
-                        tabIndex={editing ? -1 : 0}
+                        ref={(el) => {
+                          if (el) cellRefs.current.set(cellKey, el)
+                          else cellRefs.current.delete(cellKey)
+                        }}
+                        data-cell-key={cellKey}
+                        tabIndex={tabbable ? 0 : -1}
                         onClick={() => {
+                          if (!editing) setSelectedKey(cellKey)
+                        }}
+                        onFocus={() => {
                           if (!editing) setSelectedKey(cellKey)
                         }}
                         onDoubleClick={startEdit}
                         onKeyDown={(event) => {
                           if (editing) return
-                          if (event.key === "Enter" || event.key === "F2") {
-                            event.preventDefault()
-                            startEdit()
-                          } else if (event.key === "Escape") {
-                            setSelectedKey(null)
+                          switch (event.key) {
+                            case "Enter":
+                            case "F2":
+                              event.preventDefault()
+                              startEdit()
+                              break
+                            case "Escape":
+                              setSelectedKey(null)
+                              break
+                            case "ArrowUp":
+                              event.preventDefault()
+                              moveSelection(cellKey, "up")
+                              break
+                            case "ArrowDown":
+                              event.preventDefault()
+                              moveSelection(cellKey, "down")
+                              break
+                            case "ArrowLeft":
+                              event.preventDefault()
+                              moveSelection(cellKey, "left")
+                              break
+                            case "ArrowRight":
+                              event.preventDefault()
+                              moveSelection(cellKey, "right")
+                              break
                           }
                         }}
                         className={cn(
@@ -878,11 +975,11 @@ export function DataTableContent() {
                             row={row}
                             column={cell.column}
                             onStage={(value) => {
-                              // Enter and blur both stage the change (yellow);
+                              // Enter and blur both stage the change (pending);
                               // it's applied only when saved via DataTableEditBar.
+                              // Keep the cell selected so keyboard navigation can continue.
                               stageCellEdit(rowId, columnId, value)
                               setEditingKey(null)
-                              setSelectedKey(null)
                             }}
                             onCancel={() => setEditingKey(null)}
                           />

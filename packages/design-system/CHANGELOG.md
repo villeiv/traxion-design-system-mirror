@@ -1,5 +1,14 @@
 # Changelog
 
+### [0.17.0] - 2026-06-09
+
+### Added
+- **DataTable**: las celdas editables muestran una pista al **hover** (caja con borde en `accent`) para indicar su editabilidad cuando no todas las columnas son editables.
+- **DataTable**: **navegación por teclado** entre celdas editables con las flechas (roving tabindex, acotada a la página actual). Enter/F2 inician la edición, Escape cancela/deselecciona, y un clic fuera de la tabla limpia la selección.
+
+### Notes
+- Mejoras de usabilidad sobre la edición de celdas introducida en 0.16.0. Sin cambios de API ni breaking changes.
+
 ### [0.16.0] - 2026-06-09
 
 ### Added

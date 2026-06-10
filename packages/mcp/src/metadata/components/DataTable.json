@@ -1,7 +1,7 @@
 {
   "name": "DataTable",
   "slug": "datatable",
-  "packageVersion": "0.16.0",
+  "packageVersion": "0.17.0",
   "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, inline cell editing, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
   "tags": [
     "datatable",
@@ -353,7 +353,7 @@
         },
         {
           "type": "text",
-          "content": "### Interaction model\n\n- **Double click** a cell to edit it.\n- **Enter** or **leaving the cell** stages the change as pending (highlighted with a faint primary tint). **Escape** cancels.\n- Pending changes accumulate across cells. Nothing is applied to `data` until the user presses **Save changes** in DataTableEditBar.\n- **Save changes** calls `onCellsEdited({ data, changes })`. **Discard changes** clears the pending buffer and calls `onDiscardEdits()`."
+          "content": "### Interaction model\n\n- **Click** or **Tab** into an editable cell to select it (a faint box on hover hints which cells are editable). Use the **arrow keys** to move the selection between editable cells (roving tabindex; clamped to the current page).\n- **Double click**, or **Enter** / **F2** on a selected cell, to edit it.\n- **Enter** or **leaving the cell** stages the change as pending (highlighted with a faint primary tint). **Escape** cancels.\n- Pending changes accumulate across cells. Nothing is applied to `data` until the user presses **Save changes** in DataTableEditBar.\n- **Save changes** calls `onCellsEdited({ data, changes })`. **Discard changes** clears the pending buffer and calls `onDiscardEdits()`."
         },
         {
           "type": "text",
@@ -590,7 +590,7 @@
   ],
   "accessibility": {
     "role": "table (native HTML semantics via the underlying Table component)",
-    "keyboard": "Tab navigates through interactive elements (sort buttons, checkboxes, action buttons, pagination controls). Sort buttons toggle direction on Enter/Space. Drag handles support keyboard reordering via arrow keys. Pagination buttons are keyboard accessible with sr-only labels.",
+    "keyboard": "Tab navigates through interactive elements (sort buttons, checkboxes, action buttons, pagination controls). Sort buttons toggle direction on Enter/Space. Drag handles support keyboard reordering via arrow keys. Pagination buttons are keyboard accessible with sr-only labels. When cell editing is enabled, editable cells use a roving tabindex: Tab enters the editable grid, arrow keys move the selection between editable cells (clamped to the current page), Enter/F2 start editing a selected cell, and Escape cancels editing or deselects.",
     "aria": "Row selection state conveyed via data-[state=selected] on TableRow. Checkbox columns use aria-label for screen readers. Drag handles use aria-label='Drag to reorder column'. Pagination buttons have sr-only text ('Go to first page', 'Go to previous page', etc.). Sort direction indicated visually via icons (ChevronUp for asc, ChevronDown for desc, ChevronsUpDown for unsorted).",
     "notes": "The table renders inside a 'rounded-md border' container. Loading state preserves table headers and renders animated skeleton bars for body cells. Empty state renders a full-width NoDataMessage inside the table body — headers remain visible so users understand the page context. When enableColumnReordering is true, DndContext is only initialized after client-side hydration to prevent SSR mismatches."
   },

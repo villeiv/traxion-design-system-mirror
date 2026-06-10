@@ -1,5 +1,10 @@
 # Changelog
 
+### [0.17.0] - 2026-06-09
+
+### Changed
+- **DataTable.json**: documentada la navegación por teclado de la edición de celdas — el modelo de interacción ahora describe selección con click/Tab, movimiento con flechas (roving tabindex, acotado a la página) y Enter/F2/Escape; el campo `accessibility.keyboard` refleja lo mismo. `packageVersion` actualizado a `0.17.0`.
+
 ### [0.16.0] - 2026-06-09
 
 ### Changed
