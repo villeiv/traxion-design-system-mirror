@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.18.0] - 2026-06-22
+
+### Changed
+- **Layout**: el ancho estándar del `container` (tope en el breakpoint `2xl`) pasa de `87.5rem` (1400px) a `100rem` (1600px). El container sigue siendo fluido hasta el tope y ahí se centra (`center: true`, `padding: 1rem`); ese comportamiento no cambia. El default más ancho da más aire a apps data-dense (tablas junto a paneles laterales, dashboards, espacios multi-columna), que se sentían apretadas a 1400px.
+
+### Notes
+- No hay cambios de API ni de props. **Impacto visual:** los consumidores que usan la clase `container` verán su contenido ensancharse hasta 200px en pantallas grandes (a partir del breakpoint `2xl`). Para contenido que deba mantenerse más angosto, hacer override local en vez de cambiar el default global.
+
 ### [0.17.0] - 2026-06-09
 
 ### Added

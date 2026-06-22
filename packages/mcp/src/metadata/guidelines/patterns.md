@@ -167,6 +167,29 @@ Use semantic Tailwind classes — never hardcoded hex or rgb:
 <AlertCircle className="h-4 w-4 text-red-600" />
 ```
 
+## Layout & Container Width
+
+The design system ships a single source of truth for page width via the Tailwind `container` config in the preset. **Use the `container` class — do not hardcode `max-w-*` values for top-level page layout.**
+
+```tsx
+// Good: uses the design system container
+<div className="container">
+  {/* page content */}
+</div>
+```
+
+**Behavior:**
+
+| Property        | Value     | Meaning                                                    |
+|-----------------|-----------|------------------------------------------------------------|
+| Max width       | `100rem` (1600px) | The standard width cap at the `2xl` breakpoint     |
+| Centering       | `center: true` | Content centers horizontally once it hits the cap     |
+| Horizontal padding | `1rem` | Gutter applied at all breakpoints                          |
+
+The container is **fluid up to 1600px**, then centers with a 1rem gutter on each side. Below the `2xl` breakpoint it spans the full viewport (minus padding).
+
+**Rationale:** 1600px (100rem) is the default rather than a narrower 1400px because data-dense apps — tables alongside side panels, dashboards, multi-column workspaces — feel cramped at 1400px. The wider default gives those layouts more breathing room while still centering on very large displays. For unusually wide or full-bleed content, override locally rather than changing the global default.
+
 ## Import Patterns
 
 ### Component Imports
