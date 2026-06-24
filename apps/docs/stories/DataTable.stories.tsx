@@ -29,10 +29,6 @@ export default {
     component: DataTable,
     tags: ["autodocs"],
     parameters: {
-        // Las tablas deben renderizarse a lo ancho (no centradas en un contenedor flex):
-        // el layout 'centered' envuelve la story en un flex cuyo hijo no se encoge por
-        // debajo del contenido, rompiendo el scroll horizontal de las columnas fijadas.
-        layout: "padded",
         a11y: { disable: true },
         controls: { disable: true },
         actions: { disable: true },
