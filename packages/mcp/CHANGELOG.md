@@ -1,5 +1,10 @@
 # Changelog
 
+### [0.19.0] - 2026-06-23
+
+### Changed
+- **DataTable.json**: documentado el **fijado de columnas (pinning)** — nueva sección "Column Pinning" (propiedad de columna `pin: "left" | "right"`, agrupación consecutiva en los bordes, sombra de costura, `min-width` + `table-layout: fixed`, y truncación por columna), tags `column-pinning`/`sticky-columns`/`frozen-columns`, recomendaciones do/dont, y descripción ampliada. `packageVersion` actualizado a `0.19.0`.
+
 ### [0.17.0] - 2026-06-09
 
 ### Changed

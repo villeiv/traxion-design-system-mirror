@@ -40,6 +40,11 @@ interface UserData {
     email: string;
     role: string;
     birthDate: string;
+    age: number;
+    username: string;
+    phone: string;
+    gender: string;
+    university: string;
     company: {
         name: string;
         department: string;
@@ -55,6 +60,16 @@ interface FetchResponse {
     users: UserData[];
     total: number;
 }
+
+// La truncación con elipsis es responsabilidad de cada columna (presentación),
+// no del DataTable. Funciona porque la columna tiene un ancho acotado —aquí, por
+// el table-layout fixed que activa el pin de columnas—. Se añade title para ver
+// el valor completo al pasar el cursor.
+const truncatedTextCell = (value: string) => (
+    <div className="truncate" title={value}>
+        {value}
+    </div>
+);
 
 const columns: ColumnDef<UserData>[] = [
     {
@@ -82,6 +97,9 @@ const columns: ColumnDef<UserData>[] = [
         enableSorting: false,
         enableHiding: false,
         size: 50,
+        // Columna fijada al borde izquierdo: permanece visible al hacer scroll horizontal.
+        // Las columnas con pin se agrupan consecutivamente en su borde (nunca en el medio).
+        pin: "left",
     },
     {
         id: "ID",
@@ -89,6 +107,7 @@ const columns: ColumnDef<UserData>[] = [
         header: "ID",
         enableHiding: false,
         size: 50,
+        pin: "left",
     },
     {
         id: "firstName",
@@ -114,6 +133,7 @@ const columns: ColumnDef<UserData>[] = [
         header: "Email",
         enableSorting: true,
         enableHiding: true,
+        cell: ({ row }) => truncatedTextCell(row.original.email),
         // Celda editable con el editor de texto por defecto (se edita en la propia celda).
         enableEditing: true,
     },
@@ -157,7 +177,7 @@ const columns: ColumnDef<UserData>[] = [
                 </SelectContent>
             </Select>
         ),
-        size:80,
+        size: 120,
         enableHiding: true,
     },
     {
@@ -166,6 +186,8 @@ const columns: ColumnDef<UserData>[] = [
         header: "Empresa",
         enableHiding: true,
         enableSorting: true,
+        cell: ({ row }) => truncatedTextCell(row.original.company.name),
+        enableEditing: true,
     },
     {
         id: "Ubicación",
@@ -186,6 +208,50 @@ const columns: ColumnDef<UserData>[] = [
         enableSorting: false,
     },
     {
+        id: "age",
+        accessorKey: "age",
+        header: "Edad",
+        size: 70,
+        enableSorting: true,
+        enableHiding: true,
+        enableEditing: true,
+    },
+    {
+        id: "username",
+        accessorKey: "username",
+        header: "Usuario",
+        enableSorting: true,
+        enableHiding: true,
+        cell: ({ row }) => truncatedTextCell(row.original.username),
+        enableEditing: true,
+    },
+    {
+        id: "phone",
+        accessorKey: "phone",
+        header: "Teléfono",
+        enableSorting: false,
+        enableHiding: true,
+        enableEditing: true,
+    },
+    {
+        id: "gender",
+        accessorKey: "gender",
+        header: "Género",
+        size: 90,
+        enableSorting: false,
+        enableHiding: true,
+        enableEditing: true,
+    },
+    {
+        id: "university",
+        accessorKey: "university",
+        header: "Universidad",
+        enableSorting: false,
+        enableHiding: true,
+        cell: ({ row }) => truncatedTextCell(row.original.university),
+        enableEditing: true,
+    },
+    {
         id: "birthDate",
         accessorKey: "birthDate",
         header: "Nacimiento",
@@ -193,7 +259,11 @@ const columns: ColumnDef<UserData>[] = [
             //use fns
             const date = row.original.birthDate;
             if (!date) return null;
-            return format(new Date(date), "dd/MM/yyyy");
+            return (
+                <div className="flex justify-end">
+                    {format(new Date(date), "dd/MM/yyyy")}
+                </div>
+            )
         },
         // Celda editable con editor custom de fecha: Popover + Calendar, con control
         // total del commit vía stage/cancel. Se abre al entrar en edición (defaultOpen);
@@ -274,7 +344,9 @@ const columns: ColumnDef<UserData>[] = [
         },
         enableSorting: false,
         enableHiding: false,
-        size: 150,
+        size: 125,
+        // Columna fijada al borde derecho: las acciones quedan siempre accesibles.
+        pin: "right",
     },
 ];
 
@@ -375,6 +447,8 @@ export default function DataTableAllFunctionality() {
     };
 
     return (
+        // max-w acota la tabla dentro del viewport para que las columnas desborden
+        // y se aprecie el scroll horizontal con las columnas fijadas (pin).
         <DataTable
             data={data}
             columns={columns}
@@ -387,6 +461,7 @@ export default function DataTableAllFunctionality() {
             onCellsEdited={handleCellsEdited}
             onDiscardEdits={() => setCellErrors({})}
             cellErrors={cellErrors}
+            className="mx-auto max-w-4xl"
             {...tableState}
         >
             <DataTableToolbar>

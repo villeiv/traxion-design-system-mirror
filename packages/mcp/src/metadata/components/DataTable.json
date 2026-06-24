@@ -1,8 +1,8 @@
 {
   "name": "DataTable",
   "slug": "datatable",
-  "packageVersion": "0.17.0",
-  "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, inline cell editing, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
+  "packageVersion": "0.19.0",
+  "description": "A powerful compound data table component built on TanStack Table with server-side pagination, sorting, filtering, column visibility, row selection, column reordering via drag-and-drop, column pinning (freezing columns to an edge), inline cell editing, and loading states. Uses the useDataTable hook for centralized state management. Designed for complex backoffice tables that require advanced interactivity — for simple static tables, use the Table component instead.",
   "tags": [
     "datatable",
     "table",
@@ -19,7 +19,10 @@
     "row-selection",
     "cell-editing",
     "editable",
-    "inline-edit"
+    "inline-edit",
+    "column-pinning",
+    "sticky-columns",
+    "frozen-columns"
   ],
   "sections": [
     {
@@ -387,6 +390,31 @@
       ]
     },
     {
+      "title": "Column Pinning",
+      "blocks": [
+        {
+          "type": "text",
+          "content": "Pin (freeze) columns to an edge so they stay visible while the rest of the table scrolls horizontally. Set `pin: \"left\"` or `pin: \"right\"` on a column definition — a column-level flag at the same level as `enableSorting` / `enableEditing`. It is fully declarative: there is no DataTable-level prop to enable it and no extra state to manage."
+        },
+        {
+          "type": "text",
+          "content": "### Behavior\n\n- Pinned columns are anchored to their edge with `position: sticky`; the center columns scroll between them.\n- Left- and right-pinned columns are grouped **consecutively** at their edge in declaration order. You cannot pin a lone middle column — the TanStack model always pulls pinned columns to an edge, so non-consecutive / middle pinning is impossible by construction.\n- A subtle shadow appears on the seam **only while there is scrolled-away content** on that side (it fades out at the start/end of the scroll).\n- When any column is pinned, the table is given a `min-width` (sum of column widths) and `table-layout: fixed` so it reliably overflows and the sticky offsets line up to the pixel. Tables with **no** pinned columns are unaffected.\n- Pinned columns don't show the drag handle (they can't be reordered), and keyboard navigation between editable cells scrolls the selected cell clear of the pinned edges."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "const columns: ColumnDef<User>[] = [\n  // Left edge — identity / selection stays in view\n  { id: \"select\", header: ({ table }) => <Checkbox ... />, size: 50, pin: \"left\" },\n  { accessorKey: \"id\", header: \"ID\", size: 50, pin: \"left\" },\n  // Center — scrolls horizontally\n  { accessorKey: \"firstName\", header: \"Name\" },\n  { accessorKey: \"email\", header: \"Email\" },\n  { accessorKey: \"company.name\", header: \"Company\" },\n  // Right edge — actions stay accessible\n  { id: \"actions\", header: () => <span className=\"sr-only\">Actions</span>, size: 120, pin: \"right\" },\n];\n\n// Pinning is meaningful only when the table overflows its container. Give\n// columns enough width (TanStack `size`, default 150px) that the total exceeds\n// the container; truncate long text per-column with a `truncate` cell so columns\n// keep their width:\n{\n  accessorKey: \"email\",\n  header: \"Email\",\n  cell: ({ row }) => (\n    <div className=\"truncate\" title={row.original.email}>{row.original.email}</div>\n  ),\n}"
+        },
+        {
+          "type": "table",
+          "headers": ["Field", "Type", "Default", "Description"],
+          "rows": [
+            ["pin", "\"left\" | \"right\"", "undefined", "Freezes the column to the left or right edge. Requires the column to have a stable `id` or string `accessorKey`. Pinned columns are grouped consecutively at their edge."]
+          ]
+        }
+      ]
+    },
+    {
       "title": "Column Definitions",
       "blocks": [
         {
@@ -619,7 +647,10 @@
       "Validate edits inside onCellsEdited; to block a save, set cellErrors and return a rejected Promise — the invalid cells turn destructive and the pending edits are kept.",
       "Clear cellErrors in onDiscardEdits and after a successful save, so a stale error doesn't persist once the cell reverts to its original value.",
       "Use the `changes` diff from onCellsEdited to build your API request (PATCH only what changed); use the `data` payload for an optimistic setData.",
-      "For editCell custom editors, style the control to blend into the cell (e.g. a SelectTrigger with className 'h-auto border-0 px-0 py-0 shadow-none focus:ring-0'), and pass the value explicitly to stage(value)."
+      "For editCell custom editors, style the control to blend into the cell (e.g. a SelectTrigger with className 'h-auto border-0 px-0 py-0 shadow-none focus:ring-0'), and pass the value explicitly to stage(value).",
+      "Pin columns with pin: 'left' or pin: 'right' to keep identity/selection columns and action columns visible while wide tables scroll horizontally. Pinned columns must have a stable id or string accessorKey.",
+      "When pinning, give columns enough width (TanStack size) that the total exceeds the container, otherwise the table fits and there is nothing to scroll. Truncate long text per-column with a `truncate` cell so columns keep their width.",
+      "Truncation is a per-column concern: add a cell renderer with a `truncate` div (and a title attribute for the full value) on text columns that can overflow — the DataTable does not truncate for you."
     ],
     "dont": [
       "Don't use DataTable for simple static tables — use the Table component instead",
@@ -634,7 +665,9 @@
       "Don't hardcode color values — use semantic Tailwind classes (text-muted-foreground, text-destructive, etc.)",
       "Don't enable editing on composite/display columns or any column without an accessorKey — the edit has nowhere to be written (a dev warning is emitted). Editing is single-field-per-column; give an editable sub-field its own column with an accessorKey.",
       "Don't expect edits to apply immediately — all edits are pending until the user saves via DataTableEditBar (onCellsEdited only fires on save, never on Enter alone).",
-      "Don't rely on editCell's `value` for the committed value in synchronous editors (e.g. Select) — pass the chosen value explicitly to stage(value) to avoid stale-closure bugs."
+      "Don't rely on editCell's `value` for the committed value in synchronous editors (e.g. Select) — pass the chosen value explicitly to stage(value) to avoid stale-closure bugs.",
+      "Don't try to pin a non-consecutive or middle column — pinning only groups columns at the left or right edge. Set pin only on columns that belong at an edge.",
+      "Don't pin a column without a stable id or string accessorKey — the pinning state is derived from the column id and won't resolve otherwise."
     ]
   },
   "dependencies": [

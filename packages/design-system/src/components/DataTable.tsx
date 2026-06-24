@@ -13,6 +13,7 @@ import {
   type SortingState,
   type VisibilityState,
   type ColumnOrderState,
+  type ColumnPinningState,
   type Table,
   type Column,
   type ColumnDef as TanStackColumnDef,
@@ -94,6 +95,9 @@ import {
  *   `enableSorting` / `enableHiding` column flags). Requires
  *   `enableCellEditing` on `<DataTable>`.
  * - `editCell` renders a custom editor instead of the default text input.
+ * - `pin` freezes the column to the `"left"` or `"right"` edge while the
+ *   remaining columns scroll horizontally. Pinned columns are always grouped
+ *   consecutively at their edge (the model cannot pin a lone middle column).
  *
  * Editable columns must use `accessorKey` (string) so the new value can be
  * written back into the row when committed.
@@ -106,6 +110,13 @@ export type ColumnDef<TData, TValue = unknown> = TanStackColumnDef<
   enableEditing?: boolean
   /** Custom editor renderer. Defaults to a text Input when omitted. */
   editCell?: (context: EditCellContext<TData, TValue>) => React.ReactNode
+  /**
+   * Freezes (pins) the column to an edge so it stays visible while the rest of
+   * the table scrolls horizontally. `"left"` and `"right"` columns are grouped
+   * at their respective edges in declaration order. Requires the column to have
+   * a stable `id` or string `accessorKey`.
+   */
+  pin?: "left" | "right"
 }
 
 /** Context passed to a column's `editCell` renderer. */
@@ -264,6 +275,97 @@ const DATA_TABLE_TEXTS = {
 } as const
 
 /* ─────────────────────────────────────────────
+ * 1.5. Column pinning helpers (internal)
+ * ───────────────────────────────────────────── */
+
+/** Tracks whether content is hidden behind the left / right pinned columns. */
+interface PinShadow {
+  left: boolean
+  right: boolean
+}
+
+/**
+ * Resolves the id TanStack assigns to a column from its raw definition, so the
+ * declarative `pin` flags can be turned into a `columnPinning` state before the
+ * table instance exists. Mirrors TanStack: explicit `id`, else string `accessorKey`.
+ */
+function resolveColumnId(column: {
+  id?: string
+  accessorKey?: unknown
+}): string | undefined {
+  if (typeof column.id === "string") return column.id
+  if (typeof column.accessorKey === "string") return column.accessorKey
+  return undefined
+}
+
+/**
+ * Inline styles that make a pinned column sticky at its edge. Returns `undefined`
+ * for unpinned columns. The sticky offset uses TanStack's size-aware
+ * `getStart`/`getAfter`; `zIndex: 1` lifts the column (and its seam gradient)
+ * above the scrolling cells.
+ */
+function getPinStyles<TData>(
+  column: Column<TData, unknown>
+): React.CSSProperties | undefined {
+  const pinned = column.getIsPinned()
+  if (!pinned) return undefined
+
+  return {
+    position: "sticky",
+    left: pinned === "left" ? column.getStart("left") : undefined,
+    right: pinned === "right" ? column.getAfter("right") : undefined,
+    zIndex: 1,
+    width: column.getSize(),
+  }
+}
+
+/**
+ * Seam gradient for the pinned/scrolling boundary, drawn as a `::before` /
+ * `::after` pseudo-element just outside the seam column's inner edge. A real
+ * painted element (not a `box-shadow`, which is unreliable on sticky table
+ * cells) so it reliably sits above the scrolling content — reading as the pinned
+ * column casting a shadow onto it. Shown only while content is scrolled away on
+ * that side. Returns `false` (cn-friendly) when no seam shadow applies.
+ */
+function getPinSeamClassName<TData>(
+  column: Column<TData, unknown>,
+  shadow: PinShadow
+): string | false {
+  const pinned = column.getIsPinned()
+  if (!pinned) return false
+  if (pinned === "left" && shadow.left && column.getIsLastColumn("left")) {
+    return "after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-2 after:translate-x-full after:content-[''] after:bg-gradient-to-r after:from-[hsl(var(--foreground)/0.18)] after:to-transparent"
+  }
+  if (pinned === "right" && shadow.right && column.getIsFirstColumn("right")) {
+    return "before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-2 before:-translate-x-full before:content-[''] before:bg-gradient-to-l before:from-[hsl(var(--foreground)/0.18)] before:to-transparent"
+  }
+  return false
+}
+
+/**
+ * Background classes for a pinned body cell. Pinned cells need an opaque
+ * background so scrolled-away content doesn't bleed through, while still
+ * matching the row's hover / selected state (via the `group/row` marker on
+ * TableRow). Unpinned cells get no class.
+ *
+ * Hover is the tricky case: regular rows use a translucent `bg-muted/50`, which
+ * can't be reused here (it would let scrolled content show through). Instead we
+ * paint a uniform 50%-muted gradient *over* the opaque `bg-background` — the
+ * composited color is identical to `bg-muted/50` on the background, but opaque.
+ * Selected rows are already opaque (`bg-muted`), so we match them directly.
+ */
+function getPinCellClassName<TData>(
+  column: Column<TData, unknown>
+): string | false {
+  if (!column.getIsPinned()) return false
+  return cn(
+    "bg-background",
+    "group-hover/row:bg-gradient-to-r group-hover/row:from-[hsl(var(--muted)/0.5)] group-hover/row:to-[hsl(var(--muted)/0.5)]",
+    "group-data-[state=selected]/row:bg-muted group-data-[state=selected]/row:bg-none"
+  )
+}
+
+/* ─────────────────────────────────────────────
  * 2. Internal Context (not exported)
  * ───────────────────────────────────────────── */
 
@@ -349,7 +451,9 @@ function ColumnHeaderWrapper<TData, TValue>({
   ...props
 }: ColumnHeaderWrapperProps<TData, TValue>) {
   const ctx = useOptionalDataTableInstance()
-  const isReorderingEnabled = ctx?.enableColumnReordering ?? false
+  // Pinned columns are anchored to an edge, so they can't be dragged to reorder.
+  const isReorderingEnabled =
+    (ctx?.enableColumnReordering ?? false) && !column.getIsPinned()
   const language = useDesignSystemLanguage()
   const t = DATA_TABLE_TEXTS[language]
 
@@ -725,13 +829,85 @@ export function DataTableContent() {
   const [selectedKey, setSelectedKey] = React.useState<string | null>(null)
   const [editingKey, setEditingKey] = React.useState<string | null>(null)
 
+  // Pinned-column shadows: the seam shadow shows only when there is content
+  // scrolled away behind the pinned columns. We watch the scroll viewport.
+  const pinningState = table.getState().columnPinning
+  const hasPinnedColumns =
+    (pinningState.left?.length ?? 0) > 0 || (pinningState.right?.length ?? 0) > 0
+  // With pinned columns we force the table to keep the sum of its column widths
+  // as a minimum. Otherwise `table-layout: auto` shrinks columns to fit the
+  // viewport (no overflow → nothing to scroll → pinning never engages). With the
+  // min-width, the table overflows whenever it's wider than its container and the
+  // sticky columns work; when it fits, it still stretches to full width as before.
+  //
+  // `table-layout: fixed` makes column widths exact instead of content-driven
+  // hints, so the sticky offsets (computed from each column's configured size via
+  // `getStart`/`getAfter`) line up to the pixel — without it, sub-pixel rounding
+  // leaves a transparent seam between adjacent pinned columns.
+  const tableStyle: React.CSSProperties | undefined = hasPinnedColumns
+    ? { minWidth: table.getTotalSize(), tableLayout: "fixed" }
+    : undefined
+  const viewportRef = React.useRef<HTMLDivElement>(null)
+  const [pinShadow, setPinShadow] = React.useState<PinShadow>({
+    left: false,
+    right: false,
+  })
+  React.useEffect(() => {
+    if (!hasPinnedColumns) return
+    const el = viewportRef.current
+    if (!el) return
+    const update = () => {
+      const left = el.scrollLeft > 0
+      const right = Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth
+      // Only re-render when a boundary is actually crossed — not on every scroll
+      // tick. Returning the previous object lets React bail out of the update.
+      setPinShadow((prev) =>
+        prev.left === left && prev.right === right ? prev : { left, right }
+      )
+    }
+    update()
+    el.addEventListener("scroll", update, { passive: true })
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => {
+      el.removeEventListener("scroll", update)
+      observer.disconnect()
+    }
+  }, [hasPinnedColumns, isLoading])
+
   // Keyboard navigation: refs to editable cells so arrows can move DOM focus.
   const cellRefs = React.useRef(new Map<string, HTMLTableCellElement>())
   React.useEffect(() => {
     // Move focus to the selected cell — but not while editing (the editor owns focus).
     if (!selectedKey || editingKey) return
-    cellRefs.current.get(selectedKey)?.focus()
-  }, [selectedKey, editingKey])
+    const cell = cellRefs.current.get(selectedKey)
+    if (!cell) return
+    cell.focus()
+
+    // The browser's focus scroll treats a cell hidden behind a sticky pinned
+    // column as "visible", so arrow-key navigation can leave the selected cell
+    // tucked under a pinned edge. Nudge the horizontal scroll by the minimum
+    // needed for the cell to clear the pinned columns (plus a small gap). No-op
+    // when the cell is already fully in view.
+    const viewport = viewportRef.current
+    if (!viewport) return
+    const leftPinned = table
+      .getLeftLeafColumns()
+      .reduce((sum, col) => sum + col.getSize(), 0)
+    const rightPinned = table
+      .getRightLeafColumns()
+      .reduce((sum, col) => sum + col.getSize(), 0)
+    const gap = 8
+    const vp = viewport.getBoundingClientRect()
+    const rect = cell.getBoundingClientRect()
+    const leftBound = vp.left + leftPinned + gap
+    const rightBound = vp.right - rightPinned - gap
+    if (rect.left < leftBound) {
+      viewport.scrollBy({ left: rect.left - leftBound })
+    } else if (rect.right > rightBound) {
+      viewport.scrollBy({ left: rect.right - rightBound })
+    }
+  }, [selectedKey, editingKey, table])
 
   // Clear the selection when the user clicks/taps outside the table. Disabled while
   // editing so clicks inside portal editors (Select, Calendar) don't deselect the cell.
@@ -750,12 +926,22 @@ export function DataTableContent() {
   if (isLoading) {
     return (
       <div className="rounded-md border">
-        <UITable>
+        <UITable viewportRef={viewportRef} style={tableStyle}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    style={{
+                      width: header.getSize(),
+                      ...getPinStyles(header.column),
+                    }}
+                    className={cn(
+                      header.column.getIsPinned() && "bg-background",
+                      getPinSeamClassName(header.column, pinShadow)
+                    )}
+                  >
                     {header.isPlaceholder ? null : typeof header.column.columnDef.header === "string"
                       ? <ColumnHeaderWrapper column={header.column} title={header.column.columnDef.header} />
                       : flexRender(header.column.columnDef.header, header.getContext())}
@@ -766,9 +952,16 @@ export function DataTableContent() {
           </TableHeader>
           <TableBody>
             {Array.from({ length: loadingRowCount }).map((_, index) => (
-              <TableRow key={index}>
+              <TableRow key={index} className="group/row">
                 {table.getVisibleLeafColumns().map((column) => (
-                  <TableCell key={column.id}>
+                  <TableCell
+                    key={column.id}
+                    style={getPinStyles(column)}
+                    className={cn(
+                      getPinCellClassName(column),
+                      getPinSeamClassName(column, pinShadow)
+                    )}
+                  >
                     <div className="h-4 w-full animate-pulse rounded bg-muted" />
                   </TableCell>
                 ))}
@@ -825,12 +1018,22 @@ export function DataTableContent() {
 
   return (
     <div ref={containerRef} className="rounded-md border">
-      <UITable>
+      <UITable viewportRef={viewportRef} style={tableStyle}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} style={{ width: header.getSize() }}>
+                <TableHead
+                  key={header.id}
+                  style={{
+                    width: header.getSize(),
+                    ...getPinStyles(header.column),
+                  }}
+                  className={cn(
+                    header.column.getIsPinned() && "bg-background",
+                    getPinSeamClassName(header.column, pinShadow)
+                  )}
+                >
                   {header.isPlaceholder ? null : typeof header.column.columnDef.header === "string"
                     ? <ColumnHeaderWrapper column={header.column} title={header.column.columnDef.header} />
                     : flexRender(header.column.columnDef.header, header.getContext())}
@@ -856,6 +1059,7 @@ export function DataTableContent() {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="group/row"
                 >
                   {row.getVisibleCells().map((cell) => {
                     const columnId = cell.column.id
@@ -868,7 +1072,14 @@ export function DataTableContent() {
 
                     if (!editable) {
                       return (
-                        <TableCell key={cell.id}>
+                        <TableCell
+                          key={cell.id}
+                          style={getPinStyles(cell.column)}
+                          className={cn(
+                            getPinCellClassName(cell.column),
+                            getPinSeamClassName(cell.column, pinShadow)
+                          )}
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -925,6 +1136,7 @@ export function DataTableContent() {
                           else cellRefs.current.delete(cellKey)
                         }}
                         data-cell-key={cellKey}
+                        style={getPinStyles(cell.column)}
                         tabIndex={tabbable ? 0 : -1}
                         onClick={() => {
                           if (!editing) setSelectedKey(cellKey)
@@ -964,6 +1176,8 @@ export function DataTableContent() {
                         }}
                         className={cn(
                           "cursor-pointer select-none outline-none transition-shadow",
+                          getPinCellClassName(cell.column),
+                          getPinSeamClassName(cell.column, pinShadow),
                           stateClass
                         )}
                       >
@@ -1304,6 +1518,24 @@ export function DataTable<TData, TValue = unknown>({
   const columnVisibility = controlledColumnVisibility ?? internalColumnVisibility
   const columnOrder = controlledColumnOrder ?? internalColumnOrder
 
+  // Derive the column-pinning state from each column's declarative `pin` flag.
+  // Pinned columns are grouped at their edge in declaration order; TanStack then
+  // renders left → center → right, so a "middle" column declared as pinned is
+  // pulled to its edge rather than leaving a gap.
+  const columnPinning = React.useMemo<ColumnPinningState>(() => {
+    const left: string[] = []
+    const right: string[] = []
+    for (const column of columns) {
+      const pin = column.pin
+      if (!pin) continue
+      const id = resolveColumnId(column)
+      if (!id) continue
+      if (pin === "left") left.push(id)
+      else right.push(id)
+    }
+    return { left, right }
+  }, [columns])
+
   // Derive TanStack's RowSelectionState (Record<string, boolean>) from selectedRows
   const tanstackRowSelection = React.useMemo<RowSelectionState>(
     () =>
@@ -1363,6 +1595,7 @@ export function DataTable<TData, TValue = unknown>({
       rowSelection: tanstackRowSelection,
       columnVisibility,
       columnOrder,
+      columnPinning,
     },
     enableRowSelection,
     onPaginationChange,
@@ -1570,7 +1803,7 @@ export function DataTable<TData, TValue = unknown>({
 
     return (
       <DataTableContext.Provider value={contextValue as DataTableContextValue}>
-        <div className={cn("space-y-4", className)}>
+        <div className={cn("space-y-4 min-w-0", className)}>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

@@ -1,5 +1,18 @@
 # Changelog
 
+### [0.19.0] - 2026-06-23
+
+### Added
+- **DataTable**: **fijado de columnas (pinning)** con la nueva propiedad `pin: "left" | "right"` a nivel de columna (al mismo nivel que `enableSorting`/`enableEditing`). Las columnas fijadas quedan ancladas a su borde mediante `position: sticky` mientras el resto se desplaza horizontalmente. El tipo `ColumnDef` re-exportado se amplió con `pin`.
+- **DataTable**: las columnas fijadas se agrupan consecutivamente en su borde (izquierdo o derecho) — el modelo de TanStack impide fijar una columna suelta del medio. Una sombra sutil aparece en la costura solo cuando hay contenido oculto de ese lado, y la navegación por teclado entre celdas editables desplaza el scroll lo mínimo para que la celda seleccionada quede libre de las columnas fijadas.
+
+### Changed
+- **DataTable**: cuando hay columnas fijadas, la tabla aplica `min-width` (suma de anchos de columna) y `table-layout: fixed` para que desborde y haga scroll horizontal de forma fiable, y para que los offsets sticky cuadren al píxel. El wrapper raíz añade `min-w-0` para integrarse correctamente dentro de contenedores flex.
+- **Table**: el wrapper expone una prop opcional `viewportRef` para acceder al viewport scrolleable (usada internamente por DataTable para las sombras de pinning).
+
+### Notes
+- Adición no disruptiva: las tablas sin columnas `pin` se comportan exactamente igual que antes. La truncación de texto sigue siendo responsabilidad de cada columna (vía `cell`), no del componente.
+
 ### [0.18.0] - 2026-06-22
 
 ### Changed

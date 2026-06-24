@@ -1917,6 +1917,8 @@ function DataTableURLDemo() {
             ),
             enableSorting: false,
             enableHiding: false,
+            // Columna fijada al borde izquierdo: queda visible al hacer scroll horizontal.
+            pin: "left",
         },
         {
             accessorKey: "tracking",
@@ -2000,6 +2002,8 @@ function DataTableURLDemo() {
             },
             enableSorting: false,
             enableHiding: false,
+            // Columna fijada al borde derecho: las acciones quedan siempre accesibles.
+            pin: "right",
         },
     ]
 
