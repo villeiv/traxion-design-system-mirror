@@ -27,6 +27,12 @@ export interface StatCardProps
     value: string | number;
     icon?: React.ReactNode;
     iconPosition?: "left" | "right";
+    /**
+     * Wraps the icon badge with a parent-controlled element (Tooltip, Popover, link, …).
+     * Receives the badge element so it can be used directly as an `asChild` trigger.
+     * Called once per breakpoint variant of the badge (desktop and mobile).
+     */
+    iconWrapper?: (badge: React.ReactElement) => React.ReactNode;
     trend?: number;
     trendSentiment?: "positive" | "negative" | "neutral";
     trendLabel?: string;
@@ -40,7 +46,7 @@ const sentimentColor = {
 } as const;
 
 const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
-    ({ className, label, value, icon, iconPosition = "right", trend, trendSentiment, trendLabel, loading, iconVariant, ...props }, ref) => {
+    ({ className, label, value, icon, iconPosition = "right", iconWrapper, trend, trendSentiment, trendLabel, loading, iconVariant, ...props }, ref) => {
         const iconOnLeft = iconPosition === "left";
 
         const renderTrend = () => {
@@ -94,14 +100,20 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
             );
         }
 
+        const wrapIcon = (badge: React.ReactElement) => (iconWrapper ? iconWrapper(badge) : badge);
+
         const iconBadge = icon ? (
             <>
-                <div className={cn(iconVariants({ iconVariant }), "hidden sm:flex shrink-0")}>
-                    {icon}
-                </div>
-                <div className={cn(iconVariants({ iconVariant }), "sm:hidden h-auto w-auto rounded-none bg-transparent p-0")}>
-                    {icon}
-                </div>
+                {wrapIcon(
+                    <div className={cn(iconVariants({ iconVariant }), "hidden sm:flex shrink-0")}>
+                        {icon}
+                    </div>
+                )}
+                {wrapIcon(
+                    <div className={cn(iconVariants({ iconVariant }), "sm:hidden h-auto w-auto rounded-none bg-transparent p-0")}>
+                        {icon}
+                    </div>
+                )}
             </>
         ) : null;
 

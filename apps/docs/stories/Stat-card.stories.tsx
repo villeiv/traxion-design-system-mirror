@@ -18,6 +18,8 @@ import StatCardIconVariants from "./sources/StatCard.iconVariants";
 import StatCardIconVariantsCode from "./sources/StatCard.iconVariants?raw";
 import StatCardIconPosition from "./sources/StatCard.iconPosition";
 import StatCardIconPositionCode from "./sources/StatCard.iconPosition?raw";
+import StatCardIconTooltip from "./sources/StatCard.iconTooltip";
+import StatCardIconTooltipCode from "./sources/StatCard.iconTooltip?raw";
 import StatCardTrendUp from "./sources/StatCard.trendUp";
 import StatCardTrendUpCode from "./sources/StatCard.trendUp?raw";
 import StatCardTrendDown from "./sources/StatCard.trendDown";
@@ -71,6 +73,11 @@ const meta = {
             options: ["left", "right"],
             description: "Posición del ícono dentro de la tarjeta. Por defecto `right`.",
             table: { type: { summary: "string" }, defaultValue: { summary: "right" } },
+        },
+        iconWrapper: {
+            description: "Función que envuelve el badge del ícono con un elemento controlado por el padre (Tooltip, Popover, enlace). Recibe el badge ya construido para usarlo como trigger con `asChild`. StatCard no gestiona ninguna lógica de tooltip.",
+            control: false,
+            table: { type: { summary: "(badge: React.ReactElement) => React.ReactNode" } },
         },
         trend: {
             description: "Porcentaje de cambio. Positivo sube, negativo baja, cero es neutro. El color se deriva automáticamente a menos que se especifique `trendSentiment`.",
@@ -149,7 +156,22 @@ export const IconPosition: Story = {
         docs: {
             source: { code: StatCardIconPositionCode },
             description: {
-                story: "Con `iconPosition=\"left\"` el ícono se coloca antes del texto y el contenido se alinea a la izquierda. El valor por defecto es `right`.",
+                story: "Con la prop `iconPosition` en `left` el ícono se coloca antes del texto y el contenido se alinea a la izquierda. El valor por defecto es `right`.",
+            },
+        },
+    },
+};
+
+// ─── Tooltip en el ícono ──────────────────────────────────────────────────────
+
+export const IconTooltip: Story = {
+    name: "Tooltip en el ícono",
+    render: StatCardIconTooltip,
+    parameters: {
+        docs: {
+            source: { code: StatCardIconTooltipCode },
+            description: {
+                story: "StatCard no incluye lógica de tooltip. Cuando necesites uno sobre el ícono, usa `iconWrapper`: recibe el badge ya construido (el círculo completo, no solo el glifo) y lo devuelves envuelto en el trigger que quieras. Así el padre controla el contenido, el delay y el `TooltipProvider`, y el área de interacción es todo el círculo. Se invoca una vez por cada variante responsiva del badge (escritorio y móvil), así que se crean dos instancias independientes de Tooltip de las cuales solo una está visible. Recuerda envolver el conjunto en un `TooltipProvider`.",
             },
         },
     },

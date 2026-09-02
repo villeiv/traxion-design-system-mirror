@@ -1,6 +1,6 @@
 {
   "name": "StatCard",
-  "packageVersion": "0.20.0",
+  "packageVersion": "0.21.0",
   "slug": "stat-card",
   "description": "A KPI tile that displays a metric label, a bold value, an optional icon inside a colored circular badge, and an optional trend indicator (up/down/neutral with percentage change). Built on top of Card and CardContent.",
   "tags": [
@@ -37,6 +37,12 @@
       "type": "\"left\" | \"right\"",
       "default": "\"right\"",
       "description": "Placement of the icon relative to the label/value block. \"right\" (default) keeps the text on the left and pushes the icon to the opposite edge; \"left\" renders the icon first, immediately followed by the text. Also applies to the loading skeleton."
+    },
+    {
+      "name": "iconWrapper",
+      "type": "(badge: React.ReactElement) => React.ReactNode",
+      "default": "undefined",
+      "description": "Render prop that wraps the icon badge with a parent-controlled element. StatCard builds the circular badge and hands it to this function, so the returned element can use it directly as an `asChild` trigger. This is the supported way to attach a Tooltip, Popover or link to the icon — StatCard itself contains no tooltip logic. Called once per responsive badge variant (desktop and mobile), producing two independent instances of which only one is visible at a time."
     },
     {
       "name": "iconVariant",
@@ -81,7 +87,8 @@
     "withTrend": "<StatCard\n  label=\"Total Revenue\"\n  value=\"$12,400\"\n  icon={<DollarSign className=\"h-6 w-6\" />}\n  iconVariant=\"green\"\n  trend={12.5}\n  trendLabel=\"vs last month\"\n/>",
     "loading": "<StatCard label=\"Total Revenue\" value=\"$0\" loading />",
     "dashboard": "<div className=\"grid gap-4 sm:grid-cols-2\">\n  <StatCard label=\"Revenue\" value=\"$45,231\" icon={<DollarSign className=\"h-6 w-6\" />} iconVariant=\"green\" trend={20.1} trendLabel=\"vs last month\" />\n  <StatCard label=\"Users\" value=\"2,350\" icon={<Users className=\"h-6 w-6\" />} iconVariant=\"primary\" trend={15.3} trendLabel=\"vs last month\" />\n</div>",
-    "iconLeft": "<StatCard\n  label=\"Active Users\"\n  value=\"2,350\"\n  icon={<Users className=\"h-6 w-6\" />}\n  iconPosition=\"left\"\n  trend={15.3}\n  trendLabel=\"vs last month\"\n/>"
+    "iconLeft": "<StatCard\n  label=\"Active Users\"\n  value=\"2,350\"\n  icon={<Users className=\"h-6 w-6\" />}\n  iconPosition=\"left\"\n  trend={15.3}\n  trendLabel=\"vs last month\"\n/>",
+    "iconWithTooltip": "// Recommended pattern when the icon needs a tooltip on hover/click.\n// StatCard does not manage the tooltip: the parent owns the content, the delay and the TooltipProvider.\n<TooltipProvider delayDuration={200}>\n  <StatCard\n    label=\"Active Users\"\n    value=\"2,350\"\n    icon={<Users className=\"h-6 w-6\" />}\n    iconVariant=\"primary\"\n    trend={15.3}\n    trendLabel=\"vs last month\"\n    iconWrapper={(badge) => (\n      <Tooltip>\n        <TooltipTrigger asChild>{badge}</TooltipTrigger>\n        <TooltipContent>Users with at least one session in the last 30 days</TooltipContent>\n      </Tooltip>\n    )}\n  />\n</TooltipProvider>"
   },
   "dependencies": [
     "lucide-react",
@@ -95,42 +102,55 @@
     "role": "Inherits from Card component (rendered as a div).",
     "keyboard": "No interactive elements; purely presentational.",
     "aria": "No explicit ARIA attributes. Label and value are conveyed through visible text. Consider wrapping in a region with aria-label when grouping multiple StatCards in a dashboard.",
-    "notes": "The icon circle badge is hidden on small screens to maintain compact layout. Trend icon is decorative and does not have aria-hidden — screen readers will announce the trend percentage text."
+    "notes": "The icon circle badge is hidden on small screens to maintain compact layout. Trend icon is decorative and does not have aria-hidden — screen readers will announce the trend percentage text. When using `iconWrapper` to turn the icon badge into a tooltip trigger, give the trigger an accessible name (e.g. aria-label on the icon wrapper) since the icon itself is decorative, and remember tooltips are not reachable on touch devices — never place information there that is not available elsewhere."
   },
-  "recommendations": [
-    {
-      "type": "do",
-      "description": "Use StatCard for KPI metrics that benefit from a trend indicator (revenue, user counts, order volumes)."
-    },
-    {
-      "type": "do",
-      "description": "Match iconVariant color to the metric sentiment: green for positive KPIs, red for negative, secondary for neutral."
-    },
-    {
-      "type": "do",
-      "description": "Always provide a trendLabel to give context to the percentage (e.g. 'vs last month', 'this week')."
-    },
-    {
-      "type": "do",
-      "description": "Use loading={true} while fetching data to preserve layout and prevent cumulative layout shift."
-    },
-    {
-      "type": "dont",
-      "description": "Do not use StatCard without any trend data if the metric has no historical context — omit the trend prop entirely rather than forcing a meaningless 0%."
-    },
-    {
-      "type": "dont",
-      "description": "Do not place interactive controls inside StatCard — it is purely presentational."
-    },
-    {
-      "type": "do",
-      "description": "Keep iconPosition consistent across all StatCards in the same dashboard grid so the cards read as one row of tiles."
-    }
-  ],
+  "recommendations": {
+    "do": [
+      "Use StatCard for KPI metrics that benefit from a trend indicator (revenue, user counts, order volumes).",
+      "Match iconVariant color to the metric sentiment: green for positive KPIs, red for negative, secondary for neutral.",
+      "Always provide a trendLabel to give context to the percentage (e.g. 'vs last month', 'this week').",
+      "Use loading={true} while fetching data to preserve layout and prevent cumulative layout shift.",
+      "Keep iconPosition consistent across all StatCards in the same dashboard grid so the cards read as one row of tiles.",
+      "When a StatCard icon needs a tooltip (or popover, or any interactive affordance), use the `iconWrapper` render prop with `TooltipTrigger asChild` and wrap the dashboard in a `TooltipProvider`. This is the recommended pattern: the whole circular badge becomes the trigger and the parent keeps full control of the tooltip content and timing. See usage example `iconWithTooltip`."
+    ],
+    "dont": [
+      "Do not use StatCard without any trend data if the metric has no historical context — omit the trend prop entirely rather than forcing a meaningless 0%.",
+      "Do not place interactive controls inside StatCard — it is purely presentational.",
+      "Do not wrap the node passed to `icon` in a Tooltip to achieve this — the trigger area would be only the glyph, not the circular badge that StatCard renders around it. Use `iconWrapper` instead.",
+      "Do not request or expect tooltip props (tooltipContent, tooltipSide, …) on StatCard. The component deliberately owns no tooltip state; composition through `iconWrapper` is the intended API."
+    ]
+  },
   "commonlyUsedWith": [
     "badge",
     "card",
     "data-table",
-    "progress"
+    "progress",
+    "tooltip"
+  ],
+  "sections": [
+    {
+      "title": "Tooltip or popover on the icon (recommended pattern)",
+      "blocks": [
+        {
+          "type": "text",
+          "content": "StatCard intentionally owns no tooltip state and exposes no tooltip props. When a user asks for a tooltip (or popover, or any interactive affordance) on the StatCard icon, use the `iconWrapper` render prop: StatCard builds the circular icon badge and hands it to your function, which returns it wrapped in whatever trigger you need. The parent keeps full control of the content, the delay and the `TooltipProvider`, and the entire circular badge — not just the glyph — becomes the trigger."
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "content": "import {\n  StatCard,\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from '@traxion-global/design-system/react';\nimport { Users } from 'lucide-react';\n\n<TooltipProvider delayDuration={200}>\n  <StatCard\n    label=\"Active Users\"\n    value=\"2,350\"\n    icon={<Users className=\"h-6 w-6\" />}\n    iconVariant=\"primary\"\n    trend={15.3}\n    trendLabel=\"vs last month\"\n    iconWrapper={(badge) => (\n      <Tooltip>\n        <TooltipTrigger asChild>{badge}</TooltipTrigger>\n        <TooltipContent>\n          Users with at least one session in the last 30 days\n        </TooltipContent>\n      </Tooltip>\n    )}\n  />\n</TooltipProvider>"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Do NOT wrap the node passed to `icon` in a Tooltip: the trigger would be only the glyph, not the badge StatCard renders around it.",
+            "Do NOT add tooltip props to StatCard or fork the component; composition through `iconWrapper` is the intended API.",
+            "`iconWrapper` is called once per responsive badge variant (desktop and mobile), so two independent Tooltip instances are created and only one is visible at a time. This is expected.",
+            "Wrap the dashboard (or the app) in a single `TooltipProvider`; every Tooltip needs one as an ancestor.",
+            "Tooltips are not reachable on touch devices — never put information there that is not available elsewhere, and give the trigger an accessible name since the icon is decorative."
+          ]
+        }
+      ]
+    }
   ]
 }
