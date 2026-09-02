@@ -81,15 +81,6 @@
       "description": "Additional CSS classes applied to the root Card element."
     }
   ],
-  "usage": {
-    "import": "import { StatCard } from '@traxion-global/design-system/react';",
-    "basic": "<StatCard label=\"Total Revenue\" value=\"$12,400\" />",
-    "withTrend": "<StatCard\n  label=\"Total Revenue\"\n  value=\"$12,400\"\n  icon={<DollarSign className=\"h-6 w-6\" />}\n  iconVariant=\"green\"\n  trend={12.5}\n  trendLabel=\"vs last month\"\n/>",
-    "loading": "<StatCard label=\"Total Revenue\" value=\"$0\" loading />",
-    "dashboard": "<div className=\"grid gap-4 sm:grid-cols-2\">\n  <StatCard label=\"Revenue\" value=\"$45,231\" icon={<DollarSign className=\"h-6 w-6\" />} iconVariant=\"green\" trend={20.1} trendLabel=\"vs last month\" />\n  <StatCard label=\"Users\" value=\"2,350\" icon={<Users className=\"h-6 w-6\" />} iconVariant=\"primary\" trend={15.3} trendLabel=\"vs last month\" />\n</div>",
-    "iconLeft": "<StatCard\n  label=\"Active Users\"\n  value=\"2,350\"\n  icon={<Users className=\"h-6 w-6\" />}\n  iconPosition=\"left\"\n  trend={15.3}\n  trendLabel=\"vs last month\"\n/>",
-    "iconWithTooltip": "// Recommended pattern when the icon needs a tooltip on hover/click.\n// StatCard does not manage the tooltip: the parent owns the content, the delay and the TooltipProvider.\n<TooltipProvider delayDuration={200}>\n  <StatCard\n    label=\"Active Users\"\n    value=\"2,350\"\n    icon={<Users className=\"h-6 w-6\" />}\n    iconVariant=\"primary\"\n    trend={15.3}\n    trendLabel=\"vs last month\"\n    iconWrapper={(badge) => (\n      <Tooltip>\n        <TooltipTrigger asChild>{badge}</TooltipTrigger>\n        <TooltipContent>Users with at least one session in the last 30 days</TooltipContent>\n      </Tooltip>\n    )}\n  />\n</TooltipProvider>"
-  },
   "dependencies": [
     "lucide-react",
     "./Card"
@@ -104,22 +95,48 @@
     "aria": "No explicit ARIA attributes. Label and value are conveyed through visible text. Consider wrapping in a region with aria-label when grouping multiple StatCards in a dashboard.",
     "notes": "The icon circle badge is hidden on small screens to maintain compact layout. Trend icon is decorative and does not have aria-hidden — screen readers will announce the trend percentage text. When using `iconWrapper` to turn the icon badge into a tooltip trigger, give the trigger an accessible name (e.g. aria-label on the icon wrapper) since the icon itself is decorative, and remember tooltips are not reachable on touch devices — never place information there that is not available elsewhere."
   },
-  "recommendations": {
-    "do": [
-      "Use StatCard for KPI metrics that benefit from a trend indicator (revenue, user counts, order volumes).",
-      "Match iconVariant color to the metric sentiment: green for positive KPIs, red for negative, secondary for neutral.",
-      "Always provide a trendLabel to give context to the percentage (e.g. 'vs last month', 'this week').",
-      "Use loading={true} while fetching data to preserve layout and prevent cumulative layout shift.",
-      "Keep iconPosition consistent across all StatCards in the same dashboard grid so the cards read as one row of tiles.",
-      "When a StatCard icon needs a tooltip (or popover, or any interactive affordance), use the `iconWrapper` render prop with `TooltipTrigger asChild` and wrap the dashboard in a `TooltipProvider`. This is the recommended pattern: the whole circular badge becomes the trigger and the parent keeps full control of the tooltip content and timing. See usage example `iconWithTooltip`."
-    ],
-    "dont": [
-      "Do not use StatCard without any trend data if the metric has no historical context — omit the trend prop entirely rather than forcing a meaningless 0%.",
-      "Do not place interactive controls inside StatCard — it is purely presentational.",
-      "Do not wrap the node passed to `icon` in a Tooltip to achieve this — the trigger area would be only the glyph, not the circular badge that StatCard renders around it. Use `iconWrapper` instead.",
-      "Do not request or expect tooltip props (tooltipContent, tooltipSide, …) on StatCard. The component deliberately owns no tooltip state; composition through `iconWrapper` is the intended API."
-    ]
-  },
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use StatCard for KPI metrics that benefit from a trend indicator (revenue, user counts, order volumes)."
+    },
+    {
+      "type": "do",
+      "description": "Match iconVariant color to the metric sentiment: green for positive KPIs, red for negative, secondary for neutral."
+    },
+    {
+      "type": "do",
+      "description": "Always provide a trendLabel to give context to the percentage (e.g. 'vs last month', 'this week')."
+    },
+    {
+      "type": "do",
+      "description": "Use loading={true} while fetching data to preserve layout and prevent cumulative layout shift."
+    },
+    {
+      "type": "do",
+      "description": "Keep iconPosition consistent across all StatCards in the same dashboard grid so the cards read as one row of tiles."
+    },
+    {
+      "type": "do",
+      "description": "When a StatCard icon needs a tooltip (or popover, or any interactive affordance), use the `iconWrapper` render prop with `TooltipTrigger asChild` and wrap the dashboard in a `TooltipProvider`. This is the recommended pattern: the whole circular badge becomes the trigger and the parent keeps full control of the tooltip content and timing. See usage example `iconWithTooltip`."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use StatCard without any trend data if the metric has no historical context — omit the trend prop entirely rather than forcing a meaningless 0%."
+    },
+    {
+      "type": "dont",
+      "description": "Do not place interactive controls inside StatCard — it is purely presentational."
+    },
+    {
+      "type": "dont",
+      "description": "Do not wrap the node passed to `icon` in a Tooltip to achieve this — the trigger area would be only the glyph, not the circular badge that StatCard renders around it. Use `iconWrapper` instead."
+    },
+    {
+      "type": "dont",
+      "description": "Do not request or expect tooltip props (tooltipContent, tooltipSide, …) on StatCard. The component deliberately owns no tooltip state; composition through `iconWrapper` is the intended API."
+    }
+  ],
   "commonlyUsedWith": [
     "badge",
     "card",

@@ -1,6 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/index.js';
 import { z } from 'zod';
-import { ComponentRegistry } from '../registry.js';
+import { ComponentRegistry, type ComponentRecommendation } from '../registry.js';
 
 export function registerGetComponent(server: McpServer, registry: ComponentRegistry): void {
   server.tool(
@@ -69,6 +69,7 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
       if (entry.meta.sections && entry.meta.sections.length > 0) {
         for (const section of entry.meta.sections) {
           response += `## ${section.title}\n\n`;
+          if (!Array.isArray(section.blocks)) continue;
           for (const block of section.blocks) {
             switch (block.type) {
               case 'text':
@@ -140,24 +141,26 @@ export function registerGetComponent(server: McpServer, registry: ComponentRegis
       }
 
       // Usage Recommendations
-      if (entry.meta.recommendations) {
-        const recs = entry.meta.recommendations;
-        if ((recs.do && recs.do.length > 0) || (recs.dont && recs.dont.length > 0)) {
+      if (entry.meta.recommendations && entry.meta.recommendations.length > 0) {
+        const dos = entry.meta.recommendations.filter(r => r.type === 'do');
+        const donts = entry.meta.recommendations.filter(r => r.type === 'dont');
+
+        const renderGroup = (title: string, items: ComponentRecommendation[]): void => {
+          if (items.length === 0) return;
+          response += `### ${title}\n\n`;
+          for (const item of items) {
+            response += `- ${item.description}\n`;
+            if (item.code) {
+              response += `\n\`\`\`tsx\n${item.code}\n\`\`\`\n\n`;
+            }
+          }
+          response += '\n';
+        };
+
+        if (dos.length > 0 || donts.length > 0) {
           response += `## Best Practices\n\n`;
-          if (recs.do && recs.do.length > 0) {
-            response += `### DO\n\n`;
-            for (const item of recs.do) {
-              response += `- ${item}\n`;
-            }
-            response += '\n';
-          }
-          if (recs.dont && recs.dont.length > 0) {
-            response += `### DON'T\n\n`;
-            for (const item of recs.dont) {
-              response += `- ${item}\n`;
-            }
-            response += '\n';
-          }
+          renderGroup('DO', dos);
+          renderGroup("DON'T", donts);
         }
       }
 

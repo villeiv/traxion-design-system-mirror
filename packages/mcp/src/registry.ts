@@ -18,9 +18,10 @@ export interface ComponentExample {
   code: string;
 }
 
-export interface ComponentRecommendations {
-  do: string[];
-  dont: string[];
+export interface ComponentRecommendation {
+  type: 'do' | 'dont';
+  description: string;
+  code?: string;
 }
 
 export interface SectionBlock {
@@ -56,7 +57,7 @@ export interface ComponentMeta {
   peerDependencies: string[];
   accessibility: ComponentAccessibility;
   examples?: ComponentExample[];
-  recommendations?: ComponentRecommendations;
+  recommendations?: ComponentRecommendation[];
   commonlyUsedWith?: string[];
   sections?: MetadataSection[];
 }
@@ -232,7 +233,11 @@ export class ComponentRegistry {
           })),
         };
 
-        this.stories.set(parsed.component, { meta, sources });
+        if (parsed.stories.length === 0) {
+          console.error(`[MCP Registry] ${storyFile} parsed 0 stories — check the story export format`);
+        }
+
+        this.stories.set(this.normalizeStoryKey(parsed.component), { meta, sources });
       } catch (err) {
         console.error(`[MCP Registry] Failed to load stories from ${storyFile}:`, err);
       }
@@ -266,15 +271,32 @@ export class ComponentRegistry {
     return Array.from(this.guidelines.keys());
   }
 
+  /**
+   * Story files are keyed by their Storybook `title`, which does not match the
+   * kebab-case slug used by component metadata (e.g. title "StatCard" vs slug
+   * "stat-card"). Both sides are normalized to the same alphanumeric key so the
+   * two indexes line up. Titles with a path prefix ("System/LanguageProvider")
+   * keep only their last segment.
+   */
+  private normalizeStoryKey(value: string): string {
+    const lastSegment = value.split('/').pop() ?? value;
+    return lastSegment.toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
+
   getStories(slug: string): ComponentStoryData | undefined {
-    return this.stories.get(slug);
+    return this.stories.get(this.normalizeStoryKey(slug));
   }
 
   hasStories(slug: string): boolean {
-    return this.stories.has(slug);
+    return this.stories.has(this.normalizeStoryKey(slug));
   }
 
   listComponentsWithStories(): string[] {
-    return Array.from(this.stories.keys());
+    // Prefer the metadata slug so suggestions are values the tools accept.
+    const slugsByKey = new Map<string, string>();
+    for (const slug of this.components.keys()) {
+      slugsByKey.set(this.normalizeStoryKey(slug), slug);
+    }
+    return Array.from(this.stories.keys()).map(key => slugsByKey.get(key) ?? key);
   }
 }

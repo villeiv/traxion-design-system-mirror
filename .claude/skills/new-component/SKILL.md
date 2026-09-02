@@ -44,6 +44,7 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 - For compound components: create anatomy file at `apps/docs/stories/sources/ComponentName.anatomy.tsx`
 - **Every story must have its JSX extracted to a separate source file** at `apps/docs/stories/sources/ComponentName.variant.tsx` — this is mandatory, not optional. Each source file exports a default function component. Import it twice: once as the component (`render: ComponentNameVariant`) and once as raw string (`source: { code: ComponentNameVariantCode }`). The stories file must contain no inline JSX in render functions.
 - Write high-quality code in source files — they serve as reference implementations for AI agents and are shown verbatim in Storybook docs
+- The `title` in the story meta must be the component name — it is what links the stories to the MCP metadata (matched against the `slug`, normalized). Story exports may be typed (`export const X: Story = {`); prefer that form
 - Verify with `npm run dev --workspace=docs`
 
 ### Phase 4: Showcase Example
@@ -54,16 +55,17 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 - Verify with `npm run dev --workspace=showcase`
 
 ### Phase 5: Package Version Bump
-- Determine version: PATCH for additions, MINOR for breaking changes
+- Determine version: MINOR for new components and features, PATCH for bug fixes with no API change (while on `0.x.y`, breaking changes also go in a MINOR)
 - Bump `packages/design-system/package.json`
 - Update `packages/design-system/CHANGELOG.md` with new entry (Spanish)
 
 ### Phase 6: MCP Registration
 - Create `packages/mcp/src/metadata/components/ComponentName.json`
 - Fill all required fields: name, slug, packageVersion, description, tags, props, dependencies, peerDependencies, accessibility
-- Add recommended fields: commonlyUsedWith, recommendations (do/dont)
-- For complex components: add sections with documentation blocks
-- Use the Badge.json and DataTable.json examples in the codebase as references
+- Add recommended fields: commonlyUsedWith, recommendations — always an array of `{ type: "do" | "dont", description, code? }`, never a `{ do: [], dont: [] }` object
+- For complex components: add sections with documentation blocks (each section needs `blocks` as an array; `{ title, content }` renders nothing)
+- Use the Badge.json and DataTable.json examples in the codebase as references — Badge for the baseline shape, DataTable for `sections`, which is what makes documentation rich enough for AI agents
+- Add the entry to `packages/mcp/CHANGELOG.md` (Spanish)
 - **Bump the MCP version in three places in sync** (adding metadata = MINOR bump):
   - `packages/mcp/package.json` → `"version"`
   - `packages/mcp/src/index.ts` → `version:` inside `new McpServer({…})`
@@ -71,7 +73,7 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 
 ### Phase 7: Build & Verify
 - Run full build: `npm run build`
-- Verify MCP: test `get_component("slug")` with MCP dev server
+- Verify MCP: test `get_component("slug")` with the MCP dev server — it must include `## Usage Examples` (stories reached the registry) and `## Best Practices` (recommendations were read). Check the startup log too: `parsed 0 stories` means the story file was not readable
 - Verify Storybook renders correctly
 - Rebuild MCP after the version bump: `npm run build --workspace=@traxion-global/mcp`
 - Do NOT publish here — publishing is the last step (Phase 9)

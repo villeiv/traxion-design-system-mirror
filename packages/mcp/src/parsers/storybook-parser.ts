@@ -265,6 +265,42 @@ export class StorybookParser {
   }
 
   /**
+   * Read a quoted string literal that follows `prefix`, honouring escape
+   * sequences. A plain regex capture such as `["']([^"']+)["']` stops at the
+   * first apostrophe or escaped quote inside the text, silently truncating
+   * descriptions like `Con \`captionLayout="dropdown"\` el encabezado…`.
+   */
+  private static extractQuotedValue(content: string, prefix: RegExp): string | null {
+    const anchored = new RegExp(prefix.source + `(["'\`])`);
+    const match = anchored.exec(content);
+    if (!match || match.index === undefined) return null;
+
+    const quote = match[1]!;
+    let i = match.index + match[0].length;
+    let value = '';
+
+    while (i < content.length) {
+      const ch = content[i]!;
+
+      if (ch === '\\') {
+        const next = content[i + 1];
+        if (next === 'n') value += '\n';
+        else if (next === 't') value += '\t';
+        else if (next !== undefined) value += next;
+        i += 2;
+        continue;
+      }
+
+      if (ch === quote) return value;
+
+      value += ch;
+      i++;
+    }
+
+    return null;
+  }
+
+  /**
    * Extract all story exports from the file
    */
   private static extractStories(content: string, storiesDir: string): ParsedStory[] {
@@ -274,15 +310,15 @@ export class StorybookParser {
     const dsImports = this.extractDesignSystemImports(content);
 
     // Find all named exports (stories) using brace counting for proper nesting support
-    // Pattern: export const StoryName = { ... };
-    const exportPattern = /export\s+const\s+(\w+)\s*=\s*{/g;
+    // Pattern: export const StoryName = { ... }; or export const StoryName: Story = { ... };
+    const exportPattern = /export\s+const\s+(\w+)\s*(?::\s*[A-Za-z_][\w<>,.|[\]\s]*?)?=\s*{/g;
 
     let match;
     while ((match = exportPattern.exec(content)) !== null) {
       const exportName = match[1];
 
       // Skip if this is not a story (e.g., default export)
-      if (!exportName || exportName === 'default') {
+      if (!exportName || exportName === 'default' || exportName === 'meta') {
         continue;
       }
 
@@ -306,14 +342,10 @@ export class StorybookParser {
       const storyBody = content.substring(startPos + 1, endPos - 1);
 
       // Extract story name
-      const nameMatch = storyBody.match(/name:\s*["']([^"']+)["']/);
-      const storyName = nameMatch?.[1] ?? exportName;
+      const storyName = this.extractQuotedValue(storyBody, /name:\s*/) ?? exportName;
 
       // Extract description from parameters.docs.description.story
-      // Use [\s\S] instead of /s flag for ES2017 compatibility
-      const descMatch = storyBody.match(/description:\s*{\s*story:\s*["']([^"']+)["']/);
-      const description = descMatch?.[1]?.trim() ?? '';
-
+      const description = this.extractQuotedValue(storyBody, /description:\s*{\s*story:\s*/)?.trim() ?? '';
       // Find the corresponding source file import
       // Pattern: import StoryName from "./sources/Component.variant"
       const importPattern = new RegExp(`import\\s+${exportName}\\s+from\\s+["']\\.\/sources\/([^"']+)["']`);

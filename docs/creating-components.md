@@ -406,6 +406,8 @@ ${ComponentNameAnatomy}
 **Every story that uses a custom `render` function must extract its JSX to a separate source file.** This is required — not optional — so that Storybook users can read the full implementation directly from the docs page.
 
 > **Args-based stories are exempt.** A story that only sets props on the meta component (e.g. `args: { variant: "secondary" }`, with no `render`) has no JSX to extract, so it needs no source file — Storybook autogenerates its code snippet. This pattern is common for simple, variant-only components (see `Button.stories.tsx`). When **editing** an existing story file, follow the pattern it already uses instead of mixing both.
+>
+> **Trade-off to know:** the MCP parser can only surface stories it can read source for, so args-only stories are invisible to `get_component` and `get_component_stories` (this is why `no-data-message` ships no examples to AI agents). If the component's examples matter as AI teaching material, give each story a `render` plus its source file.
 
 **Naming convention:** `apps/docs/stories/sources/ComponentName.variant.tsx`
 
@@ -440,6 +442,8 @@ export const Variant: Story = {
 ```
 
 **Rule:** The stories file (`ComponentName.stories.tsx`) must contain **no inline JSX** inside story `render` functions. All JSX lives in the `sources/` files. The stories file is only meta, imports, and story descriptors.
+
+Story exports may be written either way — `export const Variant = {` or `export const Variant: Story = {` — the MCP parser reads both. Prefer the typed form: it type-checks `args` and `render` against the meta.
 
 See `apps/docs/stories/DataTable.stories.tsx` and `apps/docs/stories/Chat.stories.tsx` as reference implementations.
 
@@ -584,6 +588,8 @@ File naming: match the component file name but with `.json` extension. Use kebab
 
 ### 6.3 Recommended Fields
 
+`recommendations` is **always an array** of `{ type, description, code? }` — there is no object form. `get_component` groups the entries into DO / DON'T lists and renders `code`, when present, as a tsx block under its bullet.
+
 ```json
 {
   "commonlyUsedWith": ["button", "card"],
@@ -627,6 +633,8 @@ For components that need documentation beyond props and examples (hook APIs, sub
 }
 ```
 
+Every section needs `blocks` as an **array**; a bare `{ title, content }` is not a valid section and its content will not render.
+
 Most simple components do **not** need `sections`. See `packages/mcp/src/metadata/components/DataTable.json` for a full example.
 
 ### 6.5 Slug Convention
@@ -636,6 +644,8 @@ The slug is the kebab-case version of the component name, used as the lookup key
 - `DataTable` → `datatable`
 - `AlertDialog` → `alert-dialog`
 - `NoDataMessage` → `no-data-message`
+
+**How stories are matched to metadata:** the MCP indexes each story file by the `title` in its Storybook meta, and the tools are queried by the metadata `slug`. The two are compared after normalizing both to lowercase alphanumerics, so `title: "StatCard"` matches `slug: "stat-card"`, and a path prefix (`title: "System/LanguageProvider"`) keeps only its last segment. You do not need to match them by hand — but a title that is not the component name will silently detach the stories from the component.
 
 ### 6.6 MCP Version Bump
 
@@ -682,8 +692,10 @@ npm run dev --workspace=@traxion-global/mcp
 ```
 
 Test these queries:
-- `get_component("component-slug")` — should return full metadata with stories
+- `get_component("component-slug")` — should return full metadata **including a `## Usage Examples` section**; if that section is missing, the stories are not reaching the registry
 - `get_component_stories("component-slug")` — should list all stories with source
+
+Also read the registry lines the server prints on startup. `parsed 0 stories` for your file means the parser could not read its story exports, and the component will ship to AI agents with no examples.
 
 ### 7.3 Verify Storybook
 

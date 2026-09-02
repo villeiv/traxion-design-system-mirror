@@ -227,9 +227,9 @@ File: `packages/mcp/src/metadata/components/MyComponent.json`
 
 **Key fields for AI code quality:**
 - `packageVersion` — must match the design system version this component ships in (the bumped version), even if it has not been published yet
-- `recommendations` — shown as "Best Practices" (do/don't patterns)
+- `recommendations` — shown as "Best Practices" (do/don't patterns). Always an **array** of `{ type, description, code? }`; there is no `{ do: [], dont: [] }` form. The tool groups the entries by `type` and renders `code`, when present, as a tsx block
 - `commonlyUsedWith` — the AI will see links to companion components and suggest them together
-- `sections` — generic documentation blocks for complex components that need additional documentation beyond props and examples (e.g., hook APIs, sub-component guides, column definition patterns). Most simple components don't need this field. See `DataTable.json` for a full example
+- `sections` — generic documentation blocks for complex components that need additional documentation beyond props and examples (e.g., hook APIs, sub-component guides, column definition patterns). Each section needs `blocks` as an array — a bare `{ title, content }` renders nothing. Most simple components don't need this field. See `DataTable.json` for a full example
 
 ### Step 2: Bump the MCP version (if applicable)
 
@@ -254,10 +254,14 @@ The registry auto-discovers everything:
 - Source in `design-system/src/components/` -> loaded as `source`
 - `.stories.tsx` in `apps/docs/stories/` -> parsed by `StorybookParser`
 
+**How stories reach a component:** story files are indexed by the `title` of their Storybook meta, the tools are queried by the metadata `slug`, and both are normalized to lowercase alphanumerics before matching — so `title: "StatCard"` resolves to `slug: "stat-card"`, and a path prefix such as `"System/LanguageProvider"` keeps only its last segment. A story is only readable if the parser can find its source: an external file (`render: X` plus `import X from "./sources/…"`) or an inline `render` body. Stories that only set `args`, with no `render`, produce no example and are invisible to the tools.
+
 **Verification:**
 - `version()` -> confirm component count increased by 1
 - `get_component("my-component")` -> should show stories inline with real code
 - `get_component_stories("my-component")` -> should list all stories with source
+
+If examples are missing, check the registry lines printed on startup. `parsed 0 stories` names the file the parser could not read; `No stories found for "slug"` from the tool means the story file's title does not resolve to that slug.
 
 ### Checklist
 

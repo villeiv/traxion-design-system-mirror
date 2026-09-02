@@ -40,7 +40,7 @@ import {
     Truck, Package, Warehouse, Map, Navigation, Compass, Route, Clipboard, ClipboardCheck, ShoppingCart, ShoppingBag, CreditCard, Percent, Bookmark, Gift, Smartphone,
     Tablet, Laptop, Monitor, Printer, Camera, Headphones, Speaker, AlertCircle, AlertTriangle, CheckCircle, XCircle, Info, HelpCircle, ThumbsUp, ThumbsDown,
     Lock, Unlock, Shield, Key, Fingerprint, Heart, Activity, Stethoscope, Pill, AmbulanceIcon as FirstAid, Coffee, Zap, Award, Flag,
-    Star, SquareArrowOutUpRight, PanelRightOpen, MoreHorizontal, ArrowUpDown
+    Star, SquareArrowOutUpRight, PanelRightOpen, MoreHorizontal, ArrowUpDown, TrendingUp
 } from "lucide-react";
 
 import { useDataTable, useDebouncedCallback } from "@traxion-global/design-system/react";
@@ -437,7 +437,7 @@ export default function DesignSystemShowcase() {
             {/* Stat Cards */}
             <Section
                 title="Stat Cards"
-                description="KPI tiles con etiqueta, valor, ícono y señal de tendencia para dashboards."
+                description="KPI tiles con etiqueta, valor, ícono y señal de tendencia para dashboards. El ícono puede ir a la derecha (por defecto) o a la izquierda con iconPosition, y iconWrapper permite envolver el badge para añadirle un tooltip sin que StatCard gestione esa lógica."
             >
                 <div className="grid gap-4 sm:grid-cols-2">
                     <StatCard
@@ -471,6 +471,29 @@ export default function DesignSystemShowcase() {
                         iconVariant="secondary"
                         trend={0}
                         trendLabel="sin cambios"
+                    />
+                    <StatCard
+                        label="Ícono a la izquierda"
+                        value="98.2%"
+                        icon={<TrendingUp className="h-6 w-6" />}
+                        iconVariant="green"
+                        iconPosition="left"
+                        trend={2.4}
+                        trendLabel="vs mes anterior"
+                    />
+                    <StatCard
+                        label="Con tooltip en el ícono"
+                        value="18.4%"
+                        icon={<Info className="h-6 w-6" />}
+                        iconVariant="primary"
+                        iconWrapper={(badge) => (
+                            <Tooltip>
+                                <TooltipTrigger asChild>{badge}</TooltipTrigger>
+                                <TooltipContent>
+                                    Utilidad operativa entre ingresos totales del periodo
+                                </TooltipContent>
+                            </Tooltip>
+                        )}
                     />
                 </div>
             </Section>

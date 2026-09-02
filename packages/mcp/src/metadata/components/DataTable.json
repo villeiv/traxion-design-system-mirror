@@ -364,14 +364,42 @@
         },
         {
           "type": "table",
-          "headers": ["Field", "Type", "Description"],
+          "headers": [
+            "Field",
+            "Type",
+            "Description"
+          ],
           "rows": [
-            ["value", "TValue", "Current draft value of the cell."],
-            ["onChange", "(value) => void", "Updates the draft value (does not commit)."],
-            ["stage", "(value) => void", "Stages `value` as a pending change. Pass the value explicitly to avoid stale-closure bugs (e.g. onValueChange={(v) => stage(v)})."],
-            ["cancel", "() => void", "Cancels the edit and reverts to the value in data."],
-            ["row", "Row<TData>", "TanStack row being edited."],
-            ["column", "Column<TData, TValue>", "TanStack column being edited."]
+            [
+              "value",
+              "TValue",
+              "Current draft value of the cell."
+            ],
+            [
+              "onChange",
+              "(value) => void",
+              "Updates the draft value (does not commit)."
+            ],
+            [
+              "stage",
+              "(value) => void",
+              "Stages `value` as a pending change. Pass the value explicitly to avoid stale-closure bugs (e.g. onValueChange={(v) => stage(v)})."
+            ],
+            [
+              "cancel",
+              "() => void",
+              "Cancels the edit and reverts to the value in data."
+            ],
+            [
+              "row",
+              "Row<TData>",
+              "TanStack row being edited."
+            ],
+            [
+              "column",
+              "Column<TData, TValue>",
+              "TanStack column being edited."
+            ]
           ]
         },
         {
@@ -407,9 +435,19 @@
         },
         {
           "type": "table",
-          "headers": ["Field", "Type", "Default", "Description"],
+          "headers": [
+            "Field",
+            "Type",
+            "Default",
+            "Description"
+          ],
           "rows": [
-            ["pin", "\"left\" | \"right\"", "undefined", "Freezes the column to the left or right edge. Requires the column to have a stable `id` or string `accessorKey`. Pinned columns are grouped consecutively at their edge."]
+            [
+              "pin",
+              "\"left\" | \"right\"",
+              "undefined",
+              "Freezes the column to the left or right edge. Requires the column to have a stable `id` or string `accessorKey`. Pinned columns are grouped consecutively at their edge."
+            ]
           ]
         }
       ]
@@ -622,54 +660,176 @@
     "aria": "Row selection state conveyed via data-[state=selected] on TableRow. Checkbox columns use aria-label for screen readers. Drag handles use aria-label='Drag to reorder column'. Pagination buttons have sr-only text ('Go to first page', 'Go to previous page', etc.). Sort direction indicated visually via icons (ChevronUp for asc, ChevronDown for desc, ChevronsUpDown for unsorted).",
     "notes": "The table renders inside a 'rounded-md border' container. Loading state preserves table headers and renders animated skeleton bars for body cells. Empty state renders a full-width NoDataMessage inside the table body — headers remain visible so users understand the page context. When enableColumnReordering is true, DndContext is only initialized after client-side hydration to prevent SSR mismatches."
   },
-  "recommendations": {
-    "do": [
-      "Use the useDataTable() hook for state management — it handles pagination, sorting, filters, column visibility, column order, and row selection. Spread it onto DataTable: {...tableState}",
-      "Always include <DataTablePagination /> — every backoffice table must have pagination",
-      "Hide pagination during loading: {!isLoading && <DataTablePagination />}",
-      "Reset pagination to page 0 when filters change: useEffect(() => { tableState.setPagination(prev => ({ ...prev, pageIndex: 0 })); }, [tableState.columnFilters])",
-      "Use useDebouncedCallback for text filter inputs to avoid excessive API calls while the user types. This is the only filter type that needs local useState — the local state intentionally lags behind the actual filter for debounce. All other filter controls (Select, DateRangePicker, TimePicker) should derive their value directly from tableState.columnFilters.",
-      "Set enableSorting: false and enableHiding: false on action and checkbox columns",
-      "Columns are non-sortable by default. Add `enableSorting: true` on any column that should be sortable — the table automatically renders the sort button. Only use a render function header for fully custom headers (like select checkboxes or action buttons).",
-      "Use the column `id` field to match the API field name used for sorting and filtering (e.g., id: 'firstName'). The string `header` value is used as the display label everywhere (ViewOptions menu, drag overlay) — so id and header can differ.",
-      "Include tableState.sorting and tableState.columnFilters in your useEffect dependencies when they are used",
-      "Use the cell render function with row.original to access the full row data object for custom cell content",
-      "Use mixed-content cells (multiple lines in one cell) for related data that doesn't justify its own column",
-      "Use icons from lucide-react only — never emoji, unicode, or other icon libraries",
-      "Place DataTableViewOptions inside DataTableToolbar for consistent layout",
-      "Access selected rows via Object.values(tableState.selectedRows) for full row data, or Object.keys(tableState.selectedRows) for IDs — no separate useState needed. Always provide rowSelectionKey when enableRowSelection is true.",
-      "Use DataTableSelectionBar for bulk actions on selected rows — it provides a fixed bottom bar with selection count, action buttons, and a Deselect button. Place it inside <DataTable> after <DataTablePagination>.",
-      "Use DateRangePicker for date range filters in DataTableToolbar — it replaces the manual Calendar+Popover pattern with a single component.",
-      "Use DatePicker for single-date filters in DataTableToolbar.",
-      "Use TimePicker for time-of-day filters in DataTableToolbar or filter panels.",
-      "Never use <input type=\"date\"> or <input type=\"time\"> directly — always use DatePicker, DateRangePicker, or TimePicker.",
-      "Enable cell editing with enableCellEditing on DataTable + enableEditing: true per column. Always include <DataTableEditBar /> and rowSelectionKey when editing is enabled.",
-      "Validate edits inside onCellsEdited; to block a save, set cellErrors and return a rejected Promise — the invalid cells turn destructive and the pending edits are kept.",
-      "Clear cellErrors in onDiscardEdits and after a successful save, so a stale error doesn't persist once the cell reverts to its original value.",
-      "Use the `changes` diff from onCellsEdited to build your API request (PATCH only what changed); use the `data` payload for an optimistic setData.",
-      "For editCell custom editors, style the control to blend into the cell (e.g. a SelectTrigger with className 'h-auto border-0 px-0 py-0 shadow-none focus:ring-0'), and pass the value explicitly to stage(value).",
-      "Pin columns with pin: 'left' or pin: 'right' to keep identity/selection columns and action columns visible while wide tables scroll horizontally. Pinned columns must have a stable id or string accessorKey.",
-      "When pinning, give columns enough width (TanStack size) that the total exceeds the container, otherwise the table fits and there is nothing to scroll. Truncate long text per-column with a `truncate` cell so columns keep their width.",
-      "Truncation is a per-column concern: add a cell renderer with a `truncate` div (and a title attribute for the full value) on text columns that can overflow — the DataTable does not truncate for you."
-    ],
-    "dont": [
-      "Don't use DataTable for simple static tables — use the Table component instead",
-      "Don't create separate useState() calls for pagination, sorting, filters, column visibility, column order, or selected rows — useDataTable() manages all of these. If you prefer custom handlers, you can pass props individually instead of using the hook",
-      "Don't create a separate useState to track the current value of filter controls like Select, DateRangePicker, or TimePicker. Derive their value directly from tableState.columnFilters — it's already the source of truth. Example: value={tableState.columnFilters.find(f => f.id === 'role')?.value as string ?? 'all'}. The only exception is text inputs using useDebouncedCallback, where local state is intentional so the input lags behind the actual filter.",
-      "Don't import from @tanstack/react-table directly — import ColumnDef, Row, Column from @traxion-global/design-system/react",
-      "Don't use client-side pagination — DataTable is designed for server-side (manual) pagination only",
-      "Don't forget to pass pageCount — it is required for server-side pagination to work",
-      "Don't show DataTablePagination while isLoading is true — it will show stale data",
-      "Don't use a render function header on columns that should be sortable or reorderable — render function headers bypass the automatic sort button and drag handle. Use a plain string header instead.",
-      "Don't create separate columns for closely related data (city + state + country) — use a multi-line cell instead",
-      "Don't hardcode color values — use semantic Tailwind classes (text-muted-foreground, text-destructive, etc.)",
-      "Don't enable editing on composite/display columns or any column without an accessorKey — the edit has nowhere to be written (a dev warning is emitted). Editing is single-field-per-column; give an editable sub-field its own column with an accessorKey.",
-      "Don't expect edits to apply immediately — all edits are pending until the user saves via DataTableEditBar (onCellsEdited only fires on save, never on Enter alone).",
-      "Don't rely on editCell's `value` for the committed value in synchronous editors (e.g. Select) — pass the chosen value explicitly to stage(value) to avoid stale-closure bugs.",
-      "Don't try to pin a non-consecutive or middle column — pinning only groups columns at the left or right edge. Set pin only on columns that belong at an edge.",
-      "Don't pin a column without a stable id or string accessorKey — the pinning state is derived from the column id and won't resolve otherwise."
-    ]
-  },
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use the useDataTable() hook for state management — it handles pagination, sorting, filters, column visibility, column order, and row selection. Spread it onto DataTable: {...tableState}"
+    },
+    {
+      "type": "do",
+      "description": "Always include <DataTablePagination /> — every backoffice table must have pagination"
+    },
+    {
+      "type": "do",
+      "description": "Hide pagination during loading: {!isLoading && <DataTablePagination />}"
+    },
+    {
+      "type": "do",
+      "description": "Reset pagination to page 0 when filters change: useEffect(() => { tableState.setPagination(prev => ({ ...prev, pageIndex: 0 })); }, [tableState.columnFilters])"
+    },
+    {
+      "type": "do",
+      "description": "Use useDebouncedCallback for text filter inputs to avoid excessive API calls while the user types. This is the only filter type that needs local useState — the local state intentionally lags behind the actual filter for debounce. All other filter controls (Select, DateRangePicker, TimePicker) should derive their value directly from tableState.columnFilters."
+    },
+    {
+      "type": "do",
+      "description": "Set enableSorting: false and enableHiding: false on action and checkbox columns"
+    },
+    {
+      "type": "do",
+      "description": "Columns are non-sortable by default. Add `enableSorting: true` on any column that should be sortable — the table automatically renders the sort button. Only use a render function header for fully custom headers (like select checkboxes or action buttons)."
+    },
+    {
+      "type": "do",
+      "description": "Use the column `id` field to match the API field name used for sorting and filtering (e.g., id: 'firstName'). The string `header` value is used as the display label everywhere (ViewOptions menu, drag overlay) — so id and header can differ."
+    },
+    {
+      "type": "do",
+      "description": "Include tableState.sorting and tableState.columnFilters in your useEffect dependencies when they are used"
+    },
+    {
+      "type": "do",
+      "description": "Use the cell render function with row.original to access the full row data object for custom cell content"
+    },
+    {
+      "type": "do",
+      "description": "Use mixed-content cells (multiple lines in one cell) for related data that doesn't justify its own column"
+    },
+    {
+      "type": "do",
+      "description": "Use icons from lucide-react only — never emoji, unicode, or other icon libraries"
+    },
+    {
+      "type": "do",
+      "description": "Place DataTableViewOptions inside DataTableToolbar for consistent layout"
+    },
+    {
+      "type": "do",
+      "description": "Access selected rows via Object.values(tableState.selectedRows) for full row data, or Object.keys(tableState.selectedRows) for IDs — no separate useState needed. Always provide rowSelectionKey when enableRowSelection is true."
+    },
+    {
+      "type": "do",
+      "description": "Use DataTableSelectionBar for bulk actions on selected rows — it provides a fixed bottom bar with selection count, action buttons, and a Deselect button. Place it inside <DataTable> after <DataTablePagination>."
+    },
+    {
+      "type": "do",
+      "description": "Use DateRangePicker for date range filters in DataTableToolbar — it replaces the manual Calendar+Popover pattern with a single component."
+    },
+    {
+      "type": "do",
+      "description": "Use DatePicker for single-date filters in DataTableToolbar."
+    },
+    {
+      "type": "do",
+      "description": "Use TimePicker for time-of-day filters in DataTableToolbar or filter panels."
+    },
+    {
+      "type": "do",
+      "description": "Never use <input type=\"date\"> or <input type=\"time\"> directly — always use DatePicker, DateRangePicker, or TimePicker."
+    },
+    {
+      "type": "do",
+      "description": "Enable cell editing with enableCellEditing on DataTable + enableEditing: true per column. Always include <DataTableEditBar /> and rowSelectionKey when editing is enabled."
+    },
+    {
+      "type": "do",
+      "description": "Validate edits inside onCellsEdited; to block a save, set cellErrors and return a rejected Promise — the invalid cells turn destructive and the pending edits are kept."
+    },
+    {
+      "type": "do",
+      "description": "Clear cellErrors in onDiscardEdits and after a successful save, so a stale error doesn't persist once the cell reverts to its original value."
+    },
+    {
+      "type": "do",
+      "description": "Use the `changes` diff from onCellsEdited to build your API request (PATCH only what changed); use the `data` payload for an optimistic setData."
+    },
+    {
+      "type": "do",
+      "description": "For editCell custom editors, style the control to blend into the cell (e.g. a SelectTrigger with className 'h-auto border-0 px-0 py-0 shadow-none focus:ring-0'), and pass the value explicitly to stage(value)."
+    },
+    {
+      "type": "do",
+      "description": "Pin columns with pin: 'left' or pin: 'right' to keep identity/selection columns and action columns visible while wide tables scroll horizontally. Pinned columns must have a stable id or string accessorKey."
+    },
+    {
+      "type": "do",
+      "description": "When pinning, give columns enough width (TanStack size) that the total exceeds the container, otherwise the table fits and there is nothing to scroll. Truncate long text per-column with a `truncate` cell so columns keep their width."
+    },
+    {
+      "type": "do",
+      "description": "Truncation is a per-column concern: add a cell renderer with a `truncate` div (and a title attribute for the full value) on text columns that can overflow — the DataTable does not truncate for you."
+    },
+    {
+      "type": "dont",
+      "description": "Don't use DataTable for simple static tables — use the Table component instead"
+    },
+    {
+      "type": "dont",
+      "description": "Don't create separate useState() calls for pagination, sorting, filters, column visibility, column order, or selected rows — useDataTable() manages all of these. If you prefer custom handlers, you can pass props individually instead of using the hook"
+    },
+    {
+      "type": "dont",
+      "description": "Don't create a separate useState to track the current value of filter controls like Select, DateRangePicker, or TimePicker. Derive their value directly from tableState.columnFilters — it's already the source of truth. Example: value={tableState.columnFilters.find(f => f.id === 'role')?.value as string ?? 'all'}. The only exception is text inputs using useDebouncedCallback, where local state is intentional so the input lags behind the actual filter."
+    },
+    {
+      "type": "dont",
+      "description": "Don't import from @tanstack/react-table directly — import ColumnDef, Row, Column from @traxion-global/design-system/react"
+    },
+    {
+      "type": "dont",
+      "description": "Don't use client-side pagination — DataTable is designed for server-side (manual) pagination only"
+    },
+    {
+      "type": "dont",
+      "description": "Don't forget to pass pageCount — it is required for server-side pagination to work"
+    },
+    {
+      "type": "dont",
+      "description": "Don't show DataTablePagination while isLoading is true — it will show stale data"
+    },
+    {
+      "type": "dont",
+      "description": "Don't use a render function header on columns that should be sortable or reorderable — render function headers bypass the automatic sort button and drag handle. Use a plain string header instead."
+    },
+    {
+      "type": "dont",
+      "description": "Don't create separate columns for closely related data (city + state + country) — use a multi-line cell instead"
+    },
+    {
+      "type": "dont",
+      "description": "Don't hardcode color values — use semantic Tailwind classes (text-muted-foreground, text-destructive, etc.)"
+    },
+    {
+      "type": "dont",
+      "description": "Don't enable editing on composite/display columns or any column without an accessorKey — the edit has nowhere to be written (a dev warning is emitted). Editing is single-field-per-column; give an editable sub-field its own column with an accessorKey."
+    },
+    {
+      "type": "dont",
+      "description": "Don't expect edits to apply immediately — all edits are pending until the user saves via DataTableEditBar (onCellsEdited only fires on save, never on Enter alone)."
+    },
+    {
+      "type": "dont",
+      "description": "Don't rely on editCell's `value` for the committed value in synchronous editors (e.g. Select) — pass the chosen value explicitly to stage(value) to avoid stale-closure bugs."
+    },
+    {
+      "type": "dont",
+      "description": "Don't try to pin a non-consecutive or middle column — pinning only groups columns at the left or right edge. Set pin only on columns that belong at an edge."
+    },
+    {
+      "type": "dont",
+      "description": "Don't pin a column without a stable id or string accessorKey — the pinning state is derived from the column id and won't resolve otherwise."
+    }
+  ],
   "dependencies": [
     "@tanstack/react-table",
     "@dnd-kit/core",

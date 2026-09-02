@@ -81,15 +81,17 @@ Components follow a consistent structure:
 
 Located in `packages/mcp/`. Provides 7 tools: `list_components`, `get_component`, `get_component_stories`, `get_design_tokens`, `get_guideline`, `install_design_system`, `version`. Component metadata JSON files live in `packages/mcp/src/metadata/components/`. **Key principle**: MCP generates code that *imports from* the package, never copies source code.
 
-## Adding New Components
+## Creating or Editing Components
 
-Follow the methodology in `docs/creating-components.md`.
-Use `/new-component ComponentName` to walk through the process interactively.
+**Any change to a file under `packages/design-system/src/components/` starts by invoking the `new-component` skill** — creating a component, adding a prop, changing a Tailwind class, fixing a bug. No exceptions: the skill carries the methodology in `docs/creating-components.md` (stories, showcase, CHANGELOG, MCP metadata, version bumps) and its phase gates, and its Edit Mode decides which phases a given change needs.
+
+This is enforced, not advisory: the `PreToolUse` hook in `.claude/settings.json` (`.claude/hooks/require-component-skill.mjs`) blocks Edit/Write on those files until the skill has been invoked in the session.
 
 ## Key Conventions
 
 - Versioning: SemVer. While on `0.x.y`, MINOR bumps may contain breaking changes
 - MCP versioning: bump the version in **three places** in sync whenever the MCP registry or tools change — `packages/mcp/package.json` → `"version"`, `packages/mcp/src/index.ts` → `version:` in McpServer config, and `packages/mcp/src/tools/version.ts` → `MCP_VERSION` constant. **Trigger rules:** adding/changing component metadata → MINOR bump; metadata corrections or MCP bug fixes → PATCH bump. Adding components to the design-system almost always requires an MCP bump (new metadata). Never skip this when metadata changes — `version()` is the only signal consumers have that the registry is current.
+- MCP metadata shapes are not validated at load time, so a wrong shape fails silently: `recommendations` is always an array of `{ type, description, code? }` (never `{ do: [], dont: [] }`), and every entry in `sections` needs `blocks` as an array. Stories are linked to a component by matching the Storybook meta `title` against the metadata `slug`, normalized to lowercase alphanumerics
 - ESLint 9 flat config with `--max-warnings 0` on design-system and showcase
 - TypeScript strict mode. Path alias `@/*` → `src/*` in design-system
 - Peer dependencies: React 18/19, lucide-react for icons

@@ -107,19 +107,42 @@
     "popover",
     "card"
   ],
-  "recommendations": {
-    "do": [
-      "Use DatePicker for single date selection in forms and filters — it wraps Calendar with a trigger button, popover, and date formatting.",
-      "Use DateRangePicker for date range selection in DataTableToolbar and filter panels — it replaces the manual Calendar+Popover+Button pattern.",
-      "Use DateTimePicker when the user must select both a date and a time in a single interaction.",
-      "Use Calendar directly when you need the modifiers system: custom styles for booked, highlighted, or disabled dates (e.g. booking interfaces, availability pickers).",
-      "Use Calendar directly for multiple date selection (mode='multiple') or when you want the calendar inline (not inside a popover).",
-      "Format selected dates with date-fns format() when displaying values outside the calendar."
-    ],
-    "dont": [
-      "Don't use Calendar + Popover + Button manually to build a basic date picker — use DatePicker or DateRangePicker instead.",
-      "Don't use Calendar inside DataTableToolbar for date range filters — use DateRangePicker which handles the Popover, trigger button, and Apply/Clear logic.",
-      "Don't format dates with toLocaleDateString() — use date-fns format() for consistent locale-aware output."
-    ]
-  }
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use DatePicker for single date selection in forms and filters — it wraps Calendar with a trigger button, popover, and date formatting."
+    },
+    {
+      "type": "do",
+      "description": "Use DateRangePicker for date range selection in DataTableToolbar and filter panels — it replaces the manual Calendar+Popover+Button pattern."
+    },
+    {
+      "type": "do",
+      "description": "Use DateTimePicker when the user must select both a date and a time in a single interaction."
+    },
+    {
+      "type": "do",
+      "description": "Use Calendar directly when you need the modifiers system: custom styles for booked, highlighted, or disabled dates (e.g. booking interfaces, availability pickers)."
+    },
+    {
+      "type": "do",
+      "description": "Use Calendar directly for multiple date selection (mode='multiple') or when you want the calendar inline (not inside a popover)."
+    },
+    {
+      "type": "do",
+      "description": "Format selected dates with date-fns format() when displaying values outside the calendar."
+    },
+    {
+      "type": "dont",
+      "description": "Don't use Calendar + Popover + Button manually to build a basic date picker — use DatePicker or DateRangePicker instead."
+    },
+    {
+      "type": "dont",
+      "description": "Don't use Calendar inside DataTableToolbar for date range filters — use DateRangePicker which handles the Popover, trigger button, and Apply/Clear logic."
+    },
+    {
+      "type": "dont",
+      "description": "Don't format dates with toLocaleDateString() — use date-fns format() for consistent locale-aware output."
+    }
+  ]
 }

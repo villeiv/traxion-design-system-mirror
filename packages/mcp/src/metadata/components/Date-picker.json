@@ -395,26 +395,70 @@
     "calendar",
     "time-picker"
   ],
-  "recommendations": {
-    "do": [
-      "Use DateTimeRangePicker for dashboard report filters and any UI that needs hour-level precision on both ends of a period (e.g. 'Show data from Feb 26 08:00 to Mar 1 18:00').",
-      "Use DateRangePicker (not DateTimeRangePicker) when time precision is not needed — it is simpler and more familiar to users.",
-      "Use DatePicker or DateRangePicker everywhere a user needs to select a date: forms, filter panels, DataTableToolbar, report configuration, scheduling UIs.",
-      "Use DateRangePicker in DataTableToolbar for date range filters — it replaces the manual Calendar+Popover+Button pattern.",
-      "Use numberOfMonths=1 on DateTimeRangePicker when space is constrained (e.g. inside a sidebar or narrow panel) — the time row automatically stacks vertically.",
-      "Wrap the picker in a container that defines the width — the component stretches to fill its parent. Example: <div className=\"w-full\"><DateTimeRangePicker ... /></div>",
-      "Use captionLayout=\"dropdown\" when selecting dates far from today (e.g. birth dates, historical records).",
-      "Import the DateRange type from the design system: import type { DateRange } from \"@traxion-global/design-system/react\"",
-      "Use date-fns format() instead of toLocaleDateString() when displaying selected dates in your app."
-    ],
-    "dont": [
-      "Do not use DateTimeRangePicker when you only need a date range without time — use DateRangePicker instead.",
-      "Do not use DateTimeRangePicker when you only need a single datetime — use DateTimePicker instead.",
-      "Do not use Calendar + Popover + Button manually for standard date selection — DatePicker and DateRangePicker already do this.",
-      "Do not set a fixed width on the picker directly — control width from the parent container.",
-      "Do not use DateTimePicker when only a date is needed — use DatePicker to keep the UX simpler.",
-      "Do not use DateTimePicker when only a time is needed — use the standalone TimePicker component instead.",
-      "Do not install react-day-picker as a direct dependency in your app — DateRange is re-exported from the design system."
-    ]
-  }
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use DateTimeRangePicker for dashboard report filters and any UI that needs hour-level precision on both ends of a period (e.g. 'Show data from Feb 26 08:00 to Mar 1 18:00')."
+    },
+    {
+      "type": "do",
+      "description": "Use DateRangePicker (not DateTimeRangePicker) when time precision is not needed — it is simpler and more familiar to users."
+    },
+    {
+      "type": "do",
+      "description": "Use DatePicker or DateRangePicker everywhere a user needs to select a date: forms, filter panels, DataTableToolbar, report configuration, scheduling UIs."
+    },
+    {
+      "type": "do",
+      "description": "Use DateRangePicker in DataTableToolbar for date range filters — it replaces the manual Calendar+Popover+Button pattern."
+    },
+    {
+      "type": "do",
+      "description": "Use numberOfMonths=1 on DateTimeRangePicker when space is constrained (e.g. inside a sidebar or narrow panel) — the time row automatically stacks vertically."
+    },
+    {
+      "type": "do",
+      "description": "Wrap the picker in a container that defines the width — the component stretches to fill its parent. Example: <div className=\"w-full\"><DateTimeRangePicker ... /></div>"
+    },
+    {
+      "type": "do",
+      "description": "Use captionLayout=\"dropdown\" when selecting dates far from today (e.g. birth dates, historical records)."
+    },
+    {
+      "type": "do",
+      "description": "Import the DateRange type from the design system: import type { DateRange } from \"@traxion-global/design-system/react\""
+    },
+    {
+      "type": "do",
+      "description": "Use date-fns format() instead of toLocaleDateString() when displaying selected dates in your app."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use DateTimeRangePicker when you only need a date range without time — use DateRangePicker instead."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use DateTimeRangePicker when you only need a single datetime — use DateTimePicker instead."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use Calendar + Popover + Button manually for standard date selection — DatePicker and DateRangePicker already do this."
+    },
+    {
+      "type": "dont",
+      "description": "Do not set a fixed width on the picker directly — control width from the parent container."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use DateTimePicker when only a date is needed — use DatePicker to keep the UX simpler."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use DateTimePicker when only a time is needed — use the standalone TimePicker component instead."
+    },
+    {
+      "type": "dont",
+      "description": "Do not install react-day-picker as a direct dependency in your app — DateRange is re-exported from the design system."
+    }
+  ]
 }

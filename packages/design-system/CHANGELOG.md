@@ -1,5 +1,25 @@
 # Changelog
 
+### [0.21.0] - 2026-09-02
+
+### Added
+- **StatCard**: nueva prop `iconWrapper` — render prop que envuelve el badge del ícono con un elemento controlado por el consumidor (Tooltip, Popover, enlace). StatCard construye el círculo y se lo entrega a la función, que puede usarlo directamente como trigger con `asChild`, de modo que toda el área del círculo dispara la interacción. El componente no incorpora lógica ni estado de tooltip.
+
+### Notes
+- `iconWrapper` se invoca una vez por cada variante responsiva del badge (escritorio y móvil), así que se crean dos instancias independientes de las cuales solo una está visible a la vez.
+- Adición no disruptiva: sin `iconWrapper` el render es idéntico al anterior.
+
+### [0.20.0] - 2026-09-02
+
+### Added
+- **StatCard**: nueva prop `iconPosition: "left" | "right"` (por defecto `"right"`). Con `"left"` el ícono se renderiza antes del bloque de etiqueta/valor y el contenido se alinea a la izquierda (`justify-start`) en lugar de repartirse entre los extremos. El skeleton de `loading` respeta la misma posición.
+
+### Changed
+- **StatCard**: la variante de ícono `primary` usa ahora el token `primary-dark` para el glifo (`text-primary-dark`), manteniendo el fondo `bg-primary/10`, para mejorar el contraste sobre fondos claros.
+
+### Notes
+- Adición no disruptiva: el valor por defecto de `iconPosition` reproduce el comportamiento anterior. **Impacto visual:** las StatCard con `iconVariant="primary"` verán el ícono en un verde más oscuro.
+
 ### [0.19.0] - 2026-06-23
 
 ### Added

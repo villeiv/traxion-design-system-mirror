@@ -66,18 +66,38 @@
     "datatable",
     "date-picker"
   ],
-  "recommendations": {
-    "do": [
-      "Use TimePicker everywhere a user needs to enter a time: forms, filter panels, DataTableToolbar time-of-day filters, report scheduling, shift start/end times, and any other time input in the UI.",
-      "Always pair with a Label using htmlFor/id: <Label htmlFor=\"hora\">Hora</Label><TimePicker id=\"hora\" />",
-      "Use DateTimePicker when the user needs to select both a date and a time in the same interaction.",
-      "Control width from the parent container — the input is w-full by default.",
-      "Prefer TimePicker over <input type=\"time\"> — it is styled consistently with the design system."
-    ],
-    "dont": [
-      "Do not use <input type=\"time\"> directly — use TimePicker for consistent styling and design system integration.",
-      "Do not use TimePicker when date selection is also needed — use DateTimePicker instead.",
-      "Do not try to display seconds — the step is fixed at 60s (1 minute precision)."
-    ]
-  }
+  "recommendations": [
+    {
+      "type": "do",
+      "description": "Use TimePicker everywhere a user needs to enter a time: forms, filter panels, DataTableToolbar time-of-day filters, report scheduling, shift start/end times, and any other time input in the UI."
+    },
+    {
+      "type": "do",
+      "description": "Always pair with a Label using htmlFor/id: <Label htmlFor=\"hora\">Hora</Label><TimePicker id=\"hora\" />"
+    },
+    {
+      "type": "do",
+      "description": "Use DateTimePicker when the user needs to select both a date and a time in the same interaction."
+    },
+    {
+      "type": "do",
+      "description": "Control width from the parent container — the input is w-full by default."
+    },
+    {
+      "type": "do",
+      "description": "Prefer TimePicker over <input type=\"time\"> — it is styled consistently with the design system."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use <input type=\"time\"> directly — use TimePicker for consistent styling and design system integration."
+    },
+    {
+      "type": "dont",
+      "description": "Do not use TimePicker when date selection is also needed — use DateTimePicker instead."
+    },
+    {
+      "type": "dont",
+      "description": "Do not try to display seconds — the step is fixed at 60s (1 minute precision)."
+    }
+  ]
 }

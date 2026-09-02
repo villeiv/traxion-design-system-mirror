@@ -62,15 +62,30 @@
   "sections": [
     {
       "title": "Components affected",
-      "content": "The following components read the active language from LanguageProvider and adapt their internal UI strings accordingly:\n\n- **DataTable** — column drag tooltip, view options, pagination controls, empty states, selection bar\n- **DatePicker** / **DateRangePicker** / **DateTimePicker** / **DateTimeRangePicker** — placeholders, clear/apply buttons, time labels\n- **Pagination** — navigation aria-labels, ellipsis label\n- **Dialog** — close button aria-label\n- **Sheet** — close button aria-label\n- **Stepper** — step indicator aria-labels\n- **AiInsight** — collapse/expand button aria-labels\n- **FileDropZone** — drop zone aria-label and instruction text\n- **SortableBoard** — empty column placeholder text"
+      "blocks": [
+        {
+          "type": "text",
+          "content": "The following components read the active language from LanguageProvider and adapt their internal UI strings accordingly:\n\n- **DataTable** — column drag tooltip, view options, pagination controls, empty states, selection bar\n- **DatePicker** / **DateRangePicker** / **DateTimePicker** / **DateTimeRangePicker** — placeholders, clear/apply buttons, time labels\n- **Pagination** — navigation aria-labels, ellipsis label\n- **Dialog** — close button aria-label\n- **Sheet** — close button aria-label\n- **Stepper** — step indicator aria-labels\n- **AiInsight** — collapse/expand button aria-labels\n- **FileDropZone** — drop zone aria-label and instruction text\n- **SortableBoard** — empty column placeholder text"
+        }
+      ]
     },
     {
       "title": "useDesignSystemLanguage hook",
-      "content": "Use this hook to read the active language from a custom component inside a LanguageProvider:\n\n```tsx\nimport { useDesignSystemLanguage } from '@traxion-global/design-system/react';\n\nfunction MyComponent() {\n  const language = useDesignSystemLanguage(); // 'es' | 'en'\n  return <span>{language === 'es' ? 'Hola' : 'Hello'}</span>;\n}\n```\n\nWithout a LanguageProvider ancestor, the hook returns `'es'` (the context default)."
+      "blocks": [
+        {
+          "type": "text",
+          "content": "Use this hook to read the active language from a custom component inside a LanguageProvider:\n\n```tsx\nimport { useDesignSystemLanguage } from '@traxion-global/design-system/react';\n\nfunction MyComponent() {\n  const language = useDesignSystemLanguage(); // 'es' | 'en'\n  return <span>{language === 'es' ? 'Hola' : 'Hello'}</span>;\n}\n```\n\nWithout a LanguageProvider ancestor, the hook returns `'es'` (the context default)."
+        }
+      ]
     },
     {
       "title": "DatePicker localeCode interaction",
-      "content": "DatePicker components have a separate `localeCode` prop that controls date formatting via date-fns. When `localeCode` is not explicitly set, it defaults to the active `language` from the provider. You can always override it independently:\n\n```tsx\n// Uses 'en' formatting because localeCode is not set, inherits from provider\n<LanguageProvider language=\"en\">\n  <DatePicker />\n</LanguageProvider>\n\n// Forces Spanish date format even inside an English LanguageProvider\n<LanguageProvider language=\"en\">\n  <DatePicker localeCode=\"es\" />\n</LanguageProvider>\n```"
+      "blocks": [
+        {
+          "type": "text",
+          "content": "DatePicker components have a separate `localeCode` prop that controls date formatting via date-fns. When `localeCode` is not explicitly set, it defaults to the active `language` from the provider. You can always override it independently:\n\n```tsx\n// Uses 'en' formatting because localeCode is not set, inherits from provider\n<LanguageProvider language=\"en\">\n  <DatePicker />\n</LanguageProvider>\n\n// Forces Spanish date format even inside an English LanguageProvider\n<LanguageProvider language=\"en\">\n  <DatePicker localeCode=\"es\" />\n</LanguageProvider>\n```"
+        }
+      ]
     }
   ]
 }

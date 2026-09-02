@@ -1,5 +1,35 @@
 # Changelog
 
+### [0.22.0] - 2026-09-02
+
+### Changed
+- **Formato de `recommendations` estandarizado** al array documentado `[{ type, description, code? }]`. Migrados los cinco archivos que usaban la forma `{ do: [], dont: [] }` (Calendar, DataTable, Date-picker, StatCard, TimePicker); los 13 componentes con recomendaciones comparten ahora un único formato.
+- `get_component` vuelve a agrupar DO/DON'T desde el array y renderiza el bloque `code` opcional de cada recomendación, como describe el esquema documentado.
+
+### Fixed
+- **Las recomendaciones de 8 componentes no llegaban a la IA**: el renderer solo entendía la forma objeto, así que "Best Practices" se emitía para 4 de 13 componentes. Ahora se emite para los 13 (Ai-insight, Badge, Button, Chat, Input, Language-provider, Stepper y Textarea estaban silenciados).
+- **`get_component("language-provider")` fallaba entero** con `section.blocks is not iterable` — sus `sections` usaban `{ title, content }` en vez de `{ title, blocks: [...] }`. Normalizado, y el renderer ahora ignora una sección malformada en vez de tumbar la respuesta completa.
+- **Los ejemplos de 14 componentes eran inalcanzables**: las stories se indexaban por el `title` de Storybook (`statcard`) y las tools se consultan por el slug de metadata (`stat-card`). Ambos lados se normalizan ahora a la misma clave alfanumérica.
+- **5 archivos de stories parseaban 0 stories**: el parser exigía `export const X = {` y los ignoraba al llevar anotación de tipo (`export const X: Story = {`). Recuperadas 29 stories en AiInsight, Chat, DatePicker, Stat-card y TimePicker.
+- **6 descripciones de stories llegaban truncadas** al cortarse en el primer apóstrofe o comilla escapada del texto. La extracción respeta ahora las secuencias de escape.
+
+### Added
+- **StatCard.json**: sección "Tooltip or popover on the icon (recommended pattern)" y prop `iconWrapper` — el patrón recomendado cuando el ícono necesita un tooltip, junto con lo que no se debe hacer (envolver `icon`, o pedir props de tooltip en el componente). `tooltip` añadido a `commonlyUsedWith`.
+- El registry avisa por consola cuando un archivo de stories parsea 0 stories, para que este tipo de fallo silencioso se vea en el arranque.
+
+### Removed
+- Campo `usage` de `StatCard.json` — único archivo que lo tenía y ninguna tool lo ha leído nunca. Los ejemplos viven en las stories.
+
+### [0.21.0] - 2026-09-02
+
+### Changed
+- **StatCard.json**: documentada la prop `iconWrapper`. `packageVersion` actualizado a `0.21.0`.
+
+### [0.20.0] - 2026-09-02
+
+### Changed
+- **StatCard.json**: documentada la prop `iconPosition` (`"left" | "right"`, por defecto `"right"`) y precisada la descripción de `iconVariant` — la variante `primary` usa el token `primary-dark` para el glifo. `packageVersion` actualizado a `0.20.0`.
+
 ### [0.19.0] - 2026-06-23
 
 ### Changed
