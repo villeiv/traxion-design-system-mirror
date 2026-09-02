@@ -1,6 +1,6 @@
 {
   "name": "StatCard",
-  "packageVersion": "0.9.0",
+  "packageVersion": "0.20.0",
   "slug": "stat-card",
   "description": "A KPI tile that displays a metric label, a bold value, an optional icon inside a colored circular badge, and an optional trend indicator (up/down/neutral with percentage change). Built on top of Card and CardContent.",
   "tags": [
@@ -30,13 +30,19 @@
       "name": "icon",
       "type": "ReactNode",
       "default": "undefined",
-      "description": "Optional React node (typically a Lucide icon) displayed inside a colored circular badge on desktop, hidden on mobile."
+      "description": "Optional React node (typically a Lucide icon) displayed inside a colored circular badge on desktop; on mobile it renders without the badge."
+    },
+    {
+      "name": "iconPosition",
+      "type": "\"left\" | \"right\"",
+      "default": "\"right\"",
+      "description": "Placement of the icon relative to the label/value block. \"right\" (default) keeps the text on the left and pushes the icon to the opposite edge; \"left\" renders the icon first, immediately followed by the text. Also applies to the loading skeleton."
     },
     {
       "name": "iconVariant",
       "type": "\"primary\" | \"secondary\" | \"green\" | \"yellow\" | \"red\"",
       "default": "\"primary\"",
-      "description": "Determines the background and text color of the icon circle badge."
+      "description": "Determines the background and text color of the icon circle badge. `primary` uses the brand tint background with the `primary-dark` token for the icon itself to keep contrast on light backgrounds."
     },
     {
       "name": "trend",
@@ -74,7 +80,8 @@
     "basic": "<StatCard label=\"Total Revenue\" value=\"$12,400\" />",
     "withTrend": "<StatCard\n  label=\"Total Revenue\"\n  value=\"$12,400\"\n  icon={<DollarSign className=\"h-6 w-6\" />}\n  iconVariant=\"green\"\n  trend={12.5}\n  trendLabel=\"vs last month\"\n/>",
     "loading": "<StatCard label=\"Total Revenue\" value=\"$0\" loading />",
-    "dashboard": "<div className=\"grid gap-4 sm:grid-cols-2\">\n  <StatCard label=\"Revenue\" value=\"$45,231\" icon={<DollarSign className=\"h-6 w-6\" />} iconVariant=\"green\" trend={20.1} trendLabel=\"vs last month\" />\n  <StatCard label=\"Users\" value=\"2,350\" icon={<Users className=\"h-6 w-6\" />} iconVariant=\"primary\" trend={15.3} trendLabel=\"vs last month\" />\n</div>"
+    "dashboard": "<div className=\"grid gap-4 sm:grid-cols-2\">\n  <StatCard label=\"Revenue\" value=\"$45,231\" icon={<DollarSign className=\"h-6 w-6\" />} iconVariant=\"green\" trend={20.1} trendLabel=\"vs last month\" />\n  <StatCard label=\"Users\" value=\"2,350\" icon={<Users className=\"h-6 w-6\" />} iconVariant=\"primary\" trend={15.3} trendLabel=\"vs last month\" />\n</div>",
+    "iconLeft": "<StatCard\n  label=\"Active Users\"\n  value=\"2,350\"\n  icon={<Users className=\"h-6 w-6\" />}\n  iconPosition=\"left\"\n  trend={15.3}\n  trendLabel=\"vs last month\"\n/>"
   },
   "dependencies": [
     "lucide-react",
@@ -114,6 +121,10 @@
     {
       "type": "dont",
       "description": "Do not place interactive controls inside StatCard — it is purely presentational."
+    },
+    {
+      "type": "do",
+      "description": "Keep iconPosition consistent across all StatCards in the same dashboard grid so the cards read as one row of tiles."
     }
   ],
   "commonlyUsedWith": [

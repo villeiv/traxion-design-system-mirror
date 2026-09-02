@@ -16,6 +16,8 @@ const ICONS: Record<string, React.ReactNode> = {
 
 import StatCardIconVariants from "./sources/StatCard.iconVariants";
 import StatCardIconVariantsCode from "./sources/StatCard.iconVariants?raw";
+import StatCardIconPosition from "./sources/StatCard.iconPosition";
+import StatCardIconPositionCode from "./sources/StatCard.iconPosition?raw";
 import StatCardTrendUp from "./sources/StatCard.trendUp";
 import StatCardTrendUpCode from "./sources/StatCard.trendUp?raw";
 import StatCardTrendDown from "./sources/StatCard.trendDown";
@@ -64,6 +66,12 @@ const meta = {
             description: "Color del círculo de fondo del ícono.",
             table: { type: { summary: "string" } },
         },
+        iconPosition: {
+            control: "radio",
+            options: ["left", "right"],
+            description: "Posición del ícono dentro de la tarjeta. Por defecto `right`.",
+            table: { type: { summary: "string" }, defaultValue: { summary: "right" } },
+        },
         trend: {
             description: "Porcentaje de cambio. Positivo sube, negativo baja, cero es neutro. El color se deriva automáticamente a menos que se especifique `trendSentiment`.",
             control: { type: "number" },
@@ -86,6 +94,7 @@ const meta = {
         label: "Ingresos Totales",
         value: "$12,400",
         iconVariant: "primary",
+        iconPosition: "right",
         loading: false,
     },
 } satisfies Meta<typeof StatCard>;
@@ -126,6 +135,21 @@ export const IconVariants: Story = {
             source: { code: StatCardIconVariantsCode },
             description: {
                 story: "Las cinco variantes de color disponibles para el círculo del ícono: **primary**, **secondary**, **green**, **yellow** y **red**.",
+            },
+        },
+    },
+};
+
+// ─── Posición del ícono ───────────────────────────────────────────────────────
+
+export const IconPosition: Story = {
+    name: "Posición del ícono",
+    render: StatCardIconPosition,
+    parameters: {
+        docs: {
+            source: { code: StatCardIconPositionCode },
+            description: {
+                story: "Con `iconPosition=\"left\"` el ícono se coloca antes del texto y el contenido se alinea a la izquierda. El valor por defecto es `right`.",
             },
         },
     },

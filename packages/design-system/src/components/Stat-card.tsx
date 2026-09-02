@@ -9,7 +9,7 @@ const iconVariants = cva(
     {
         variants: {
             iconVariant: {
-                primary: "bg-primary/10 text-primary",
+                primary: "bg-primary/10 text-primary-dark",
                 secondary: "bg-gray-500/10 text-gray-500",
                 green: "bg-green-500/10 text-green-500",
                 yellow: "bg-yellow-500/10 text-yellow-500",
@@ -26,6 +26,7 @@ export interface StatCardProps
     label: string;
     value: string | number;
     icon?: React.ReactNode;
+    iconPosition?: "left" | "right";
     trend?: number;
     trendSentiment?: "positive" | "negative" | "neutral";
     trendLabel?: string;
@@ -39,7 +40,9 @@ const sentimentColor = {
 } as const;
 
 const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
-    ({ className, label, value, icon, trend, trendSentiment, trendLabel, loading, iconVariant, ...props }, ref) => {
+    ({ className, label, value, icon, iconPosition = "right", trend, trendSentiment, trendLabel, loading, iconVariant, ...props }, ref) => {
+        const iconOnLeft = iconPosition === "left";
+
         const renderTrend = () => {
             if (trend === undefined) return null;
 
@@ -61,39 +64,68 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
         };
 
         if (loading) {
+            const skeletonIcon = <div className="hidden sm:block h-12 w-12 rounded-full bg-muted shrink-0" />;
+            const skeletonText = (
+                <div className="flex-1 space-y-2">
+                    <div className="h-3 w-24 rounded bg-muted" />
+                    <div className="h-7 w-32 rounded bg-muted" />
+                    <div className="h-3 w-20 rounded bg-muted" />
+                </div>
+            );
+
             return (
                 <Card ref={ref} className={className} {...props}>
                     <CardContent className="p-2 sm:px-4 sm:py-3">
                         <div className="flex items-center justify-between gap-4 animate-pulse">
-                            <div className="flex-1 space-y-2">
-                                <div className="h-3 w-24 rounded bg-muted" />
-                                <div className="h-7 w-32 rounded bg-muted" />
-                                <div className="h-3 w-20 rounded bg-muted" />
-                            </div>
-                            <div className="hidden sm:block h-12 w-12 rounded-full bg-muted shrink-0" />
+                            {iconOnLeft ? (
+                                <>
+                                    {skeletonIcon}
+                                    {skeletonText}
+                                </>
+                            ) : (
+                                <>
+                                    {skeletonText}
+                                    {skeletonIcon}
+                                </>
+                            )}
                         </div>
                     </CardContent>
                 </Card>
             );
         }
 
+        const iconBadge = icon ? (
+            <>
+                <div className={cn(iconVariants({ iconVariant }), "hidden sm:flex shrink-0")}>
+                    {icon}
+                </div>
+                <div className={cn(iconVariants({ iconVariant }), "sm:hidden h-auto w-auto rounded-none bg-transparent p-0")}>
+                    {icon}
+                </div>
+            </>
+        ) : null;
+
+        const content = (
+            <div>
+                <p className="text-[0.65rem] sm:text-sm text-muted-foreground">{label}</p>
+                <p className="text-base sm:text-2xl font-bold">{value}</p>
+                {renderTrend()}
+            </div>
+        );
+
         return (
             <Card ref={ref} className={className} {...props}>
                 <CardContent className="p-2 sm:px-4 sm:py-3">
-                    <div className="flex items-center justify-between gap-4">
-                        <div>
-                            <p className="text-[0.65rem] sm:text-sm text-muted-foreground">{label}</p>
-                            <p className="text-base sm:text-2xl font-bold">{value}</p>
-                            {renderTrend()}
-                        </div>
-                        {icon && (
+                    <div className={cn("flex items-center gap-4", iconOnLeft ? "justify-start" : "justify-between")}>
+                        {iconOnLeft ? (
                             <>
-                                <div className={cn(iconVariants({ iconVariant }), "hidden sm:flex shrink-0")}>
-                                    {icon}
-                                </div>
-                                <div className={cn(iconVariants({ iconVariant }), "sm:hidden h-auto w-auto rounded-none bg-transparent p-0")}>
-                                    {icon}
-                                </div>
+                                {iconBadge}
+                                {content}
+                            </>
+                        ) : (
+                            <>
+                                {content}
+                                {iconBadge}
                             </>
                         )}
                     </div>
