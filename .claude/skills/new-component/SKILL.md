@@ -86,6 +86,7 @@ Walk through each phase sequentially, applying the Phase Gate Rule at every boun
 ### Phase 9: Publish (final step)
 - Single source of truth: the **"Proceso de Release"** section in the root `README.md`
 - In short: commit & push everything to `main` → create a GitHub Release tagged `vX.Y.Z` → verify the `build` and `publish-gpr` jobs are green in the Actions tab
+- Storybook needs no Release: the push to `main` redeploys it on Vercel (root README → "Publicación del Storybook"). Confirm the deploy went green
 - Never publish locally with `npm publish`
 
 ## Edit Mode

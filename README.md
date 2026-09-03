@@ -67,6 +67,62 @@ Para ejecutarlo:
 
 Esto abre la documentación del Design System, incluyendo ejemplos, playgrounds y especificaciones de componentes.
 
+### Publicación del Storybook
+
+El Storybook se publica en **Vercel**, y el despliegue es **automático**: cada push a `main` lo redespliega. No hay que ejecutar nada a mano.
+
+**Por qué hay un repo espejo.** Vercel no permite conectar directamente el repositorio `traxion-global/design-system` (la GitHub App de Vercel no está autorizada en esa organización). El proyecto de Vercel está conectado a un **mirror** en una cuenta personal:
+
+    https://github.com/villeiv/traxion-design-system-mirror
+
+El repositorio de la organización sigue siendo la fuente de verdad y el que publica el paquete npm. El mirror solo existe para que Vercel tenga algo que observar.
+
+**Cómo se mantiene sincronizado.** El remoto `origin` tiene dos `pushurl`, así que un solo `git push` escribe en los dos repositorios. Esta configuración vive en `.git/config`, que **no está versionado**, de modo que cada clon nuevo tiene que aplicarla:
+
+```bash
+# El orden importa: al añadir el primer pushurl, el implícito desaparece
+git remote set-url --add --push origin https://github.com/traxion-global/design-system.git
+git remote set-url --add --push origin https://github.com/villeiv/traxion-design-system-mirror.git
+
+# Remoto aparte, para operar solo sobre el mirror cuando haga falta
+git remote add mirror https://github.com/villeiv/traxion-design-system-mirror.git
+```
+
+Verifica con `git remote -v`: debe haber un `origin (fetch)` y **dos** `origin (push)`. Si solo aparece uno, los pushes no están llegando al mirror y el Storybook publicado se queda atrás sin avisar.
+
+Si algún día el mirror diverge, se recupera forzando **solo** ese lado, nunca con `--force` sobre `origin` (que escribiría también en el repo de la organización):
+
+```bash
+git push --force mirror main
+```
+
+**Configuración del proyecto en Vercel.** El monorepo obliga a construir el design system antes que el Storybook, y a instalar desde la raíz (una instalación aislada en `apps/docs` resuelve una segunda copia de `@types/react` y rompe la generación de tipos):
+
+| Campo | Valor |
+|-------|-------|
+| Framework Preset | Other |
+| Root Directory | *(vacío — la raíz del repositorio)* |
+| Install Command | `npm install` |
+| Build Command | `npm run build --workspace=@traxion-global/design-system && npm run build-storybook --workspace=docs` |
+| Output Directory | `apps/docs/storybook-static` |
+| Production Branch | `main` |
+
+Opcional, para no reconstruir en cada commit del monorepo — en *Settings → Git → Ignored Build Step*:
+
+```bash
+git diff --quiet HEAD^ HEAD -- apps/docs packages/design-system
+```
+
+Vercel salta el build cuando ese comando termina con éxito, es decir cuando el commit no tocó ni las stories ni el design system.
+
+**Ojo con `npm run build`.** El pipeline de Turborepo **no** incluye el Storybook: `turbo.json` no define una tarea `build-storybook` y `apps/docs` no tiene script `build`. Por eso el Build Command encadena los dos pasos a mano, y por eso `npm run build` en local no valida las stories. Para comprobarlas antes de subir:
+
+```bash
+npm run build-storybook --workspace=docs
+```
+
+**Relación con la publicación del paquete.** Son procesos independientes: el Storybook se despliega con cada push a `main`, mientras que el paquete npm solo se publica al crear un GitHub Release (ver [Proceso de Release](#proceso-de-release)).
+
 ## Servidor MCP (Model Context Protocol)
 
 El servidor MCP está en:
@@ -160,6 +216,8 @@ Flujo para promover una nueva versión:
 5. **Verifica en la pestaña Actions** que los jobs `build` y `publish-gpr` terminen en verde. La nueva versión aparecerá en GitHub Packages.
 
 > **Por qué el workflow instala desde la raíz:** el workflow instala y compila desde la **raíz del monorepo**, no desde `packages/design-system` en aislamiento. Una instalación aislada resuelve una segunda copia de `@types/react`; como Radix augmenta `CSSProperties` con `--radix-${string}`, las dos copias divergen y la generación de tipos (`.d.ts`) falla. Instalar desde la raíz replica la build local y evita el problema.
+
+> **El Storybook no se publica aquí.** Se despliega solo en Vercel con cada push a `main`, sin esperar a una Release — ver [Publicación del Storybook](#publicación-del-storybook). Ten en cuenta que `npm run build` del paso 2 no compila el Storybook; para validar las stories usa `npm run build-storybook --workspace=docs`.
 
 El proceso completo de creación/edición de componentes (del que la publicación es el paso final) vive en [`docs/creating-components.md`](./docs/creating-components.md).
 

@@ -743,6 +743,8 @@ Publishing is the **final step**. Everything above (component, stories, showcase
 
 **The publish process is documented as the single source of truth in the root [`README.md` → "Proceso de Release"](../README.md#proceso-de-release).** In short: push to `main` → create a GitHub Release tagged `vX.Y.Z` → confirm the `build` and `publish-gpr` jobs are green in the Actions tab.
 
+**Storybook ships separately and needs no Release.** The push to `main` in the step above already redeploys it on Vercel, provided your clone pushes to the mirror too — see [`README.md` → "Publicación del Storybook"](../README.md#publicación-del-storybook). Confirm the deploy succeeded; your stories are the documentation consumers actually read.
+
 ---
 
 ## Editing an Existing Component
