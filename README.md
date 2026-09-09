@@ -123,6 +123,46 @@ npm run build-storybook --workspace=docs
 
 **Relación con la publicación del paquete.** Son procesos independientes: el Storybook se despliega con cada push a `main`, mientras que el paquete npm solo se publica al crear un GitHub Release (ver [Proceso de Release](#proceso-de-release)).
 
+## Showcase (Next.js)
+
+`apps/showcase` es la app de demostración que consume el Design System como lo haría cualquier proyecto real. En local:
+
+```bash
+npm run dev --workspace=showcase   # http://localhost:3000
+```
+
+### Publicación del Showcase
+
+El Showcase también se publica en **Vercel** y se redespliega solo con cada push a `main`. Es un **segundo proyecto de Vercel** conectado al **mismo repo mirror** que el Storybook (ver [Publicación del Storybook](#publicación-del-storybook) para el porqué del mirror y cómo mantenerlo sincronizado). Lo que separa un proyecto del otro es el *Root Directory*: un repo puede alimentar tantos proyectos de Vercel como apps tenga el monorepo, cada uno con su propia URL.
+
+**Configuración del proyecto en Vercel.**
+
+| Campo | Valor |
+|-------|-------|
+| Framework Preset | Next.js |
+| Root Directory | `apps/showcase` |
+| Include source files outside of the Root Directory | activado (valor por defecto) |
+| Install Command | `npm install` |
+| Build Command | `npx turbo run build --filter=showcase` |
+| Output Directory | *(default de Next.js, no tocar)* |
+| Production Branch | `main` |
+
+Por qué esos valores:
+
+- **Root Directory `apps/showcase`** indica dónde vive la app Next. Con la opción de incluir archivos fuera del root, Vercel detecta los `workspaces` del `package.json` raíz y ejecuta `npm install` desde la raíz del monorepo, igual que el Storybook. Así se evita la doble copia de `@types/react`.
+- **Build con Turborepo** en vez de `next build` directo, porque el Showcase importa `@traxion-global/design-system` desde `dist/`, que no existe hasta compilar el paquete. `turbo.json` declara `dependsOn: ["^build"]`, así que el filtro por `showcase` compila primero el design system y después la app. Turbo localiza la raíz del monorepo aunque el comando corra dentro de `apps/showcase`. Si Vercel propone un comando con turbo al detectar `turbo.json`, se puede dejar.
+- **Framework Next.js** (y no *Other*) para que Vercel sirva la app como servidor y no como sitio estático.
+
+Opcional, para no reconstruir en cada commit del monorepo — en *Settings → Git → Ignored Build Step*:
+
+```bash
+git diff --quiet HEAD^ HEAD -- apps/showcase packages/design-system
+```
+
+**Requisitos.** Next 16 necesita Node 20.9 o superior; Vercel usa Node 22 por defecto en proyectos nuevos, así que no hay que cambiar nada salvo que se haya fijado una versión menor.
+
+**Relación con los otros despliegues.** Storybook y Showcase son proyectos de Vercel independientes que observan el mismo repo: un push a `main` redespliega ambos (salvo que el *Ignored Build Step* lo salte). El paquete npm sigue publicándose solo al crear un GitHub Release (ver [Proceso de Release](#proceso-de-release)).
+
 ## Servidor MCP (Model Context Protocol)
 
 El servidor MCP está en:
